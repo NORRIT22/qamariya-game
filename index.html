@@ -282,15 +282,15 @@
                             <button onclick="selectMode('canvas')" class="w-full flex items-start gap-3 p-2.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-start transition-colors">
                                 <svg class="w-4 h-4 text-paper-text dark:text-matte-text mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
                                 <div>
-                                    <div class="text-xs font-semibold text-paper-text dark:text-matte-text">Canvas Studio</div>
-                                    <p class="text-[11px] text-paper-muted dark:text-matte-muted mt-0.5 leading-relaxed">كتابة الأكواد ومعاينتها مباشرة في مساحة عمل مقسمة.</p>
+                                    <div class="text-xs font-semibold text-paper-text dark:text-matte-text">Jomo Code & Canvas</div>
+                                    <p class="text-[11px] text-paper-muted dark:text-matte-muted mt-0.5 leading-relaxed">هندسة البرمجيات ومعاينة الأكواد الحية في مساحة مقسمة.</p>
                                 </div>
                             </button>
 
                             <button onclick="selectMode('image')" class="w-full flex items-start gap-3 p-2.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-start transition-colors">
                                 <svg class="w-4 h-4 text-paper-text dark:text-matte-text mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
                                 <div>
-                                    <div class="text-xs font-semibold text-paper-text dark:text-matte-text">استوديو الصور</div>
+                                    <div class="text-xs font-semibold text-paper-text dark:text-matte-text">توليد صورة</div>
                                     <p class="text-[11px] text-paper-muted dark:text-matte-muted mt-0.5 leading-relaxed">توليد الصور والرسوم التوضيحية من الوصف النصي.</p>
                                 </div>
                             </button>
@@ -299,8 +299,8 @@
                 </div>
 
                 <!-- Right Header Actions -->
-                <div class="flex items-center gap-2">
-                    <button onclick="exportCurrentChat()" class="p-2 rounded-lg text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors" title="تصدير المحادثة (Markdown)">
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <button onclick="exportCurrentChat('md')" class="p-2 rounded-lg text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors" title="تصدير المحادثة (Markdown)">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                     </button>
                     <button onclick="toggleCanvasPanel()" id="headerCanvasToggleBtn" class="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-text dark:text-matte-text border border-paper-border dark:border-matte-border transition-colors" title="فتح/إغلاق Canvas">
@@ -311,37 +311,42 @@
             </header>
 
             <!-- Scrollable Chat Messages Area -->
-            <div id="messagesContainer" class="flex-1 overflow-y-auto px-4 sm:px-8 pt-8 pb-44 scroll-smooth">
+            <div id="messagesContainer" class="flex-1 overflow-y-auto px-4 sm:px-8 pt-8 pb-52 scroll-smooth">
                 <div class="max-w-3xl mx-auto space-y-8" id="messagesList">
                     <!-- Quiet Minimalist Welcome State -->
-                    <div id="welcomeHero" class="py-12 sm:py-20 flex flex-col items-start animate-fade-in">
-                        <h1 class="text-2xl sm:text-4xl font-semibold tracking-tight text-paper-text dark:text-matte-text mb-2.5" data-i18n="heroGreeting">
+                    <div id="welcomeHero" class="py-10 sm:py-16 flex flex-col items-start animate-fade-in">
+                        <div class="w-10 h-10 rounded-xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border flex items-center justify-center mb-5 text-paper-text dark:text-matte-text">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/>
+                            </svg>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl font-semibold tracking-tight text-paper-text dark:text-matte-text mb-2" data-i18n="heroGreeting">
                             أهلاً بك، أنا جومو.
                         </h1>
-                        <p class="text-base sm:text-lg font-normal text-paper-muted dark:text-matte-muted mb-10" data-i18n="heroSubtitle">
+                        <p class="text-sm sm:text-base font-normal text-paper-muted dark:text-matte-muted mb-8" data-i18n="heroSubtitle">
                             مساحتك الهادئة للتفكير، البرمجة، والبحث. بماذا نبدأ اليوم؟
                         </p>
 
-                        <!-- 4 Clean Solid Minimalist Prompts -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-                            <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                                <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">بناء تطبيق تفاعلي في ملف واحد مع معاينة حية</span>
-                                <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Canvas Studio</span>
+                        <!-- 4 Clean Understated Single-Line Prompt Chips -->
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-2.5 w-full">
+                            <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                                <span>بناء آلة حاسبة علمية في Canvas</span>
                             </button>
 
-                            <button onclick="useStarterPrompt('اشرح لي مفارقة فيرمي (Fermi Paradox) بأسلوب فلسفي وعلمي رصين ومقارن.', 'pro')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                                <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">تحليل فلسفي وعلمي لمفارقة فيرمي والكون</span>
-                                <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Jomo Pro</span>
+                            <button onclick="useStarterPrompt('اشرح لي مفارقة فيرمي (Fermi Paradox) بأسلوب فلسفي وعلمي رصين ومقارن.', 'pro')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                                <span>تحليل فلسفي وعلمي لمفارقة فيرمي</span>
                             </button>
 
-                            <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                                <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">توليد تصور معماري لمكتبة هادئة وسط الطبيعة</span>
-                                <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Image Studio</span>
+                            <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                                <span>توليد تصور معماري لمكتبة هادئة</span>
                             </button>
 
-                            <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                                <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">ملخص موجز لمبادئ Clean Architecture في جدول</span>
-                                <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Jomo Flash</span>
+                            <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                                <span>ملخص Clean Architecture في جدول</span>
                             </button>
                         </div>
                     </div>
@@ -349,15 +354,18 @@
             </div>
 
             <!-- Solid Matte Input Composer -->
-            <div class="absolute bottom-0 inset-x-0 bg-paper-bg dark:bg-matte-bg pt-3 pb-4 px-4 sm:px-8 z-20">
+            <div id="composerDropZone" class="absolute bottom-0 inset-x-0 bg-paper-bg dark:bg-matte-bg pt-2.5 pb-4 px-4 sm:px-8 z-20">
                 <div class="max-w-3xl mx-auto">
                     
-                    <!-- Attachment Preview Bar -->
+                    <!-- Attachment Preview Bar (Supports Image & Document/Code files) -->
                     <div id="attachmentPreviewContainer" class="hidden mb-2.5 flex items-center gap-3 p-2 rounded-xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border w-fit animate-fade-in">
-                        <img id="attachmentThumb" src="" alt="Preview" class="w-10 h-10 rounded-lg object-cover border border-paper-border dark:border-matte-border">
+                        <img id="attachmentThumb" src="" alt="Preview" class="hidden w-10 h-10 rounded-lg object-cover border border-paper-border dark:border-matte-border">
+                        <div id="attachmentDocIcon" class="hidden w-10 h-10 rounded-lg bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border flex items-center justify-center text-paper-muted dark:text-matte-muted font-mono text-[10px]">
+                            FILE
+                        </div>
                         <div class="text-xs pe-2">
-                            <p id="attachmentName" class="font-medium text-paper-text dark:text-matte-text truncate max-w-[160px]">image.png</p>
-                            <p class="text-paper-muted dark:text-matte-muted text-[11px]">مرفق للتحليل</p>
+                            <p id="attachmentName" class="font-medium text-paper-text dark:text-matte-text truncate max-w-[180px]">file.txt</p>
+                            <p id="attachmentMeta" class="text-paper-muted dark:text-matte-muted text-[11px]">مرفق للتحليل</p>
                         </div>
                         <button onclick="clearAttachment()" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-muted dark:text-matte-muted transition-colors" title="إزالة">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -368,14 +376,14 @@
                     <div class="rounded-2xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border focus-within:border-paper-muted dark:focus-within:border-matte-muted transition-colors">
                         <div class="flex items-end gap-1.5 p-2">
                             
-                            <!-- Upload Image Button -->
-                            <input type="file" id="imageFileInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                            <button onclick="document.getElementById('imageFileInput').click()" class="p-2.5 rounded-xl text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors shrink-0" title="إرفاق صورة">
+                            <!-- Unified Attachment Button (Images + Code/Docs) -->
+                            <input type="file" id="universalFileInput" accept="image/*,.txt,.md,.js,.html,.css,.py,.json,.csv,.xml,.sql,.ts,.jsx,.tsx" class="hidden" onchange="handleUniversalFileUpload(event)">
+                            <button onclick="document.getElementById('universalFileInput').click()" class="p-2.5 rounded-xl text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors shrink-0" title="إرفاق صورة أو ملف نصي/برمجي">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
                             </button>
 
-                            <!-- Auto-Resizing Textarea -->
-                            <textarea id="promptInput" rows="1" placeholder="اكتب رسالتك لجومو..." class="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-paper-text dark:text-matte-text placeholder-paper-muted dark:placeholder-matte-muted text-sm sm:text-base resize-none py-2 max-h-40 leading-relaxed" oninput="autoResizeTextarea(this)" onkeydown="handlePromptKeydown(event)"></textarea>
+                            <!-- Auto-Resizing Textarea (Supports Ctrl+V image paste) -->
+                            <textarea id="promptInput" rows="1" placeholder="اكتب رسالتك لجومو أو ألصق صورة..." class="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-paper-text dark:text-matte-text placeholder-paper-muted dark:placeholder-matte-muted text-sm sm:text-base resize-none py-2 max-h-40 leading-relaxed" oninput="autoResizeTextarea(this)" onkeydown="handlePromptKeydown(event)" onpaste="handlePromptPaste(event)"></textarea>
 
                             <!-- Voice Input Button -->
                             <button id="micBtn" onclick="toggleVoiceInput()" class="p-2.5 rounded-xl text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors shrink-0" title="الإملاء الصوتي">
@@ -387,6 +395,30 @@
                                 <svg id="sendIcon" class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
                                 <svg id="stopIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>
                             </button>
+                        </div>
+
+                        <!-- Bottom Capability Pills inside Composer -->
+                        <div class="flex items-center justify-between px-3 py-1.5 border-t border-paper-border dark:border-matte-borderSubtle text-[11px]">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <!-- Deep Thinking Toggle -->
+                                <button id="thinkingToggleBtn" onclick="toggleThinkingMode()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-transparent text-paper-muted dark:text-matte-muted hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                                    <span>التفكير العميق</span>
+                                </button>
+
+                                <!-- Web Search Grounding Toggle -->
+                                <button id="searchToggleBtn" onclick="toggleSearchGrounding()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-transparent text-paper-muted dark:text-matte-muted hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+                                    <span>بحث الويب المباشر</span>
+                                </button>
+
+                                <!-- Image Gen Shortcut Pill -->
+                                <button id="imageModePillBtn" onclick="selectMode(state.mode === 'image' ? 'pro' : 'image')" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-transparent text-paper-muted dark:text-matte-muted hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                                    <span>توليد صورة</span>
+                                </button>
+                            </div>
+                            <span class="hidden sm:inline text-paper-muted dark:text-matte-muted font-mono text-[10px]">Shift + Enter لسطر جديد</span>
                         </div>
                     </div>
 
@@ -400,26 +432,25 @@
         <!-- Split-Screen Canvas / Code Studio -->
         <section id="canvasPanel" class="hidden fixed inset-0 lg:static lg:w-[52%] xl:w-[55%] h-full bg-paper-bg dark:bg-matte-bg border-s border-paper-border dark:border-matte-border flex-col z-30">
             <!-- Canvas Toolbar -->
-            <div class="h-14 px-4 flex items-center justify-between border-b border-paper-border dark:border-matte-border bg-paper-surface dark:bg-matte-surface shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <span id="canvasTitle" class="text-xs font-semibold text-paper-text dark:text-matte-text">Canvas</span>
-                    <span class="text-paper-border dark:text-matte-border">|</span>
-                    <span id="canvasLangBadge" class="text-[11px] text-paper-muted dark:text-matte-muted font-mono">HTML</span>
+            <div class="h-14 px-3 sm:px-4 flex items-center justify-between border-b border-paper-border dark:border-matte-border bg-paper-surface dark:bg-matte-surface shrink-0 gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span id="canvasTitle" class="text-xs font-semibold text-paper-text dark:text-matte-text truncate">Canvas</span>
+                    <span id="canvasLangBadge" class="text-[10px] px-1.5 py-0.5 rounded bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border text-paper-muted dark:text-matte-muted font-mono">HTML</span>
                 </div>
 
-                <!-- View Switcher Tabs & Actions -->
-                <div class="flex items-center gap-1.5">
+                <!-- 3 Working Tabs + Responsive Toggles + Iterate Button -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <!-- 3-Tab Switcher: Preview | Editor | Export -->
                     <div class="flex bg-paper-bg dark:bg-matte-bg p-0.5 rounded-lg border border-paper-border dark:border-matte-border text-xs font-medium">
-                        <button id="tabPreviewBtn" onclick="switchCanvasTab('preview')" class="px-2.5 py-1 rounded-md bg-paper-surface dark:bg-matte-active text-paper-text dark:text-matte-text transition-colors">معاينة</button>
-                        <button id="tabCodeBtn" onclick="switchCanvasTab('code')" class="px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors">الكود</button>
+                        <button id="tabPreviewBtn" onclick="switchCanvasTab('preview')" class="px-2.5 py-1 rounded-md bg-paper-surface dark:bg-matte-active text-paper-text dark:text-matte-text transition-colors">المعاينة الحية</button>
+                        <button id="tabCodeBtn" onclick="switchCanvasTab('code')" class="px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors">المحرر</button>
+                        <button id="tabExportBtn" onclick="switchCanvasTab('export')" class="px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors">تصدير</button>
                     </div>
 
-                    <button onclick="copyCanvasCode()" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors" title="نسخ الكود">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>
-                    </button>
-
-                    <button onclick="downloadCanvasFile()" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors" title="تحميل الملف">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                    <!-- Iterate on Canvas Button -->
+                    <button onclick="iterateOnCanvas()" class="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg bg-paper-bg dark:bg-matte-bg hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-[11px] font-medium text-paper-text dark:text-matte-text transition-colors" title="إرسال الكود الحالي للمحادثة لتطويره">
+                        <svg class="w-3.5 h-3.5 text-paper-muted dark:text-matte-muted" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/></svg>
+                        <span>تطوير الكود</span>
                     </button>
 
                     <button onclick="toggleCanvasPanel(false)" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors" title="إغلاق">
@@ -428,11 +459,63 @@
                 </div>
             </div>
 
+            <!-- Sub-Toolbar for Preview Viewport & Editor Run -->
+            <div id="canvasPreviewSubbar" class="h-10 px-4 flex items-center justify-between border-b border-paper-border dark:border-matte-borderSubtle bg-paper-bg dark:bg-matte-bg text-xs shrink-0">
+                <div class="flex items-center gap-1">
+                    <button onclick="setCanvasViewport('100%')" id="vpDesktop" class="px-2 py-1 rounded bg-paper-surface dark:bg-matte-surface text-paper-text dark:text-matte-text font-medium text-[11px]">سطح المكتب</button>
+                    <button onclick="setCanvasViewport('768px')" id="vpTablet" class="px-2 py-1 rounded text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text text-[11px]">جهاز لوحي</button>
+                    <button onclick="setCanvasViewport('390px')" id="vpMobile" class="px-2 py-1 rounded text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text text-[11px]">هاتف</button>
+                </div>
+                <button onclick="refreshCanvasPreview()" class="flex items-center gap-1 px-2 py-1 rounded hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text text-[11px]">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                    <span>تحديث</span>
+                </button>
+            </div>
+
+            <div id="canvasEditorSubbar" class="hidden h-10 px-4 flex items-center justify-between border-b border-paper-border dark:border-matte-borderSubtle bg-paper-bg dark:bg-matte-bg text-xs shrink-0">
+                <span class="text-paper-muted dark:text-matte-muted text-[11px] font-mono">محرر مباشر - عدّل الكود ثم اضغط تشغيل</span>
+                <button onclick="applyEditedCanvasCode()" class="px-3 py-1 rounded-md bg-paper-text text-paper-bg dark:bg-matte-text dark:text-matte-bg font-medium text-[11px] hover:opacity-85">
+                    تحديث المعاينة (Run)
+                </button>
+            </div>
+
             <!-- Canvas Content Body -->
-            <div class="flex-1 relative overflow-hidden bg-white dark:bg-[#18191A]">
-                <iframe id="canvasIframe" sandbox="allow-scripts allow-modals allow-forms allow-same-origin" class="w-full h-full border-0 bg-white"></iframe>
-                <div id="canvasCodeView" class="hidden w-full h-full overflow-auto p-5 font-mono text-xs sm:text-sm text-matte-text bg-[#18191A]" dir="ltr">
-                    <pre><code id="canvasCodeBlock" class="language-html"></code></pre>
+            <div class="flex-1 relative overflow-hidden bg-paper-surface dark:bg-[#18191A] flex justify-center">
+                <!-- Tab 1: Live Preview Iframe -->
+                <iframe id="canvasIframe" sandbox="allow-scripts allow-modals allow-forms allow-same-origin" class="w-full h-full border-0 bg-white transition-all duration-200"></iframe>
+
+                <!-- Tab 2: Interactive Code Editor with Line Numbers -->
+                <div id="canvasCodeView" class="hidden w-full h-full flex bg-[#18191A] text-matte-text font-mono text-xs sm:text-sm" dir="ltr">
+                    <div id="canvasLineNumbers" class="py-4 px-3 text-right select-none text-matte-muted/50 bg-[#131314] border-r border-[#282A2C] overflow-hidden leading-6">1</div>
+                    <textarea id="canvasCodeEditor" spellcheck="false" oninput="updateCanvasLineNumbers()" onscroll="syncCanvasEditorScroll()" class="flex-1 p-4 bg-transparent text-matte-text focus:outline-none resize-none leading-6 overflow-auto whitespace-pre"></textarea>
+                </div>
+
+                <!-- Tab 3: Export & Actions Panel -->
+                <div id="canvasExportView" class="hidden w-full h-full p-6 sm:p-10 flex flex-col items-center justify-center bg-paper-bg dark:bg-matte-bg">
+                    <div class="max-w-md w-full space-y-3">
+                        <h3 class="text-base font-semibold text-paper-text dark:text-matte-text mb-1">تصدير ومشاركة المشروع</h3>
+                        <p class="text-xs text-paper-muted dark:text-matte-muted mb-4">احفظ الكود البرمجي أو افتحه في نافذة مستقلة.</p>
+                        
+                        <button onclick="copyCanvasCode()" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-xs font-medium text-paper-text dark:text-matte-text transition-colors">
+                            <span>نسخ الكود الكامل إلى الحافظة</span>
+                            <span class="font-mono text-paper-muted dark:text-matte-muted">Copy</span>
+                        </button>
+
+                        <button onclick="downloadCanvasFile()" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-xs font-medium text-paper-text dark:text-matte-text transition-colors">
+                            <span>تحميل كملف مستقل (index.html)</span>
+                            <span class="font-mono text-paper-muted dark:text-matte-muted">Download</span>
+                        </button>
+
+                        <button onclick="openCanvasInNewTab()" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-xs font-medium text-paper-text dark:text-matte-text transition-colors">
+                            <span>فتح المعاينة في تبويب متصفح جديد</span>
+                            <span class="font-mono text-paper-muted dark:text-matte-muted">New Tab</span>
+                        </button>
+
+                        <button onclick="iterateOnCanvas()" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-xs font-medium text-paper-text dark:text-matte-text transition-colors">
+                            <span>إرسال الكود إلى المحادثة لطلب تعديلات</span>
+                            <span class="font-mono text-paper-muted dark:text-matte-muted">Iterate</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -455,8 +538,18 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-paper-muted dark:text-matte-muted mb-1.5">مفتاح Gemini API مخصص (اختياري)</label>
+                    <label class="block text-xs font-medium text-paper-muted dark:text-matte-muted mb-1.5">مفتاح Gemini API مخصص (للتشغيل المستقل أو GitHub Pages)</label>
                     <input id="customApiKeyInput" type="password" dir="ltr" class="w-full rounded-xl bg-paper-surface dark:bg-matte-bg border border-paper-border dark:border-matte-border px-3.5 py-2 text-xs font-mono text-paper-text dark:text-matte-text focus:outline-none focus:border-paper-muted dark:focus:border-matte-muted" placeholder="AIzaSy...">
+                    <p class="text-[11px] text-paper-muted dark:text-matte-muted mt-1">يُحفظ محلياً في متصفحك فقط، ويُستخدم تلقائياً عند التشغيل خارج بيئة التطوير.</p>
+                </div>
+
+                <!-- Data Management -->
+                <div class="pt-2 flex items-center justify-between border-t border-paper-border dark:border-matte-borderSubtle">
+                    <span class="text-xs text-paper-muted dark:text-matte-muted">إدارة البيانات المحلية</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportAllChatsJSON()" class="px-3 py-1.5 rounded-lg text-xs bg-paper-surface dark:bg-matte-bg border border-paper-border dark:border-matte-border hover:bg-paper-hover dark:hover:bg-matte-hover">نسخ احتياطي JSON</button>
+                        <button onclick="clearAllLocalData()" class="px-3 py-1.5 rounded-lg text-xs bg-paper-surface dark:bg-matte-bg border border-paper-border dark:border-matte-border hover:bg-paper-hover dark:hover:bg-matte-hover text-red-400">مسح السجل</button>
+                    </div>
                 </div>
             </div>
 
@@ -488,11 +581,13 @@
             chats: JSON.parse(localStorage.getItem('jomo_chats') || '[]'),
             currentChatId: null,
             mode: 'pro', // 'pro' | 'flash' | 'canvas' | 'image'
+            deepThinking: false,
+            webSearch: false,
             theme: localStorage.getItem('jomo_theme') || 'dark',
             lang: localStorage.getItem('jomo_lang') || 'ar',
             systemPrompt: localStorage.getItem('jomo_system_prompt') || DEFAULT_SYSTEM_PROMPT,
             customApiKey: localStorage.getItem('jomo_api_key') || '',
-            attachedImage: null,
+            attachedFile: null, // { type: 'image'|'text', base64?, mimeType?, content?, name, previewUrl? }
             isGenerating: false,
             abortController: null,
             currentCanvasCode: '',
@@ -517,6 +612,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             applyTheme(state.theme);
             applyLanguage(state.lang);
+            setupDragAndDrop();
             
             if (state.chats.length > 0) {
                 loadChat(state.chats[0].id);
@@ -527,7 +623,7 @@
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('modeDropdown');
                 const btn = document.getElementById('modeSelectorBtn');
-                if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+                if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
                     dropdown.classList.add('hidden');
                 }
             });
@@ -539,6 +635,16 @@
                 }
             });
         });
+
+        function getEffectiveApiKey() {
+            if (state.customApiKey && state.customApiKey.trim().length > 0) {
+                return state.customApiKey.trim();
+            }
+            if (typeof window.__GEMINI_API_KEY__ === 'string' && window.__GEMINI_API_KEY__.trim().length > 0) {
+                return window.__GEMINI_API_KEY__.trim();
+            }
+            return "";
+        }
 
         function showToast(message) {
             const container = document.getElementById('toastContainer');
@@ -594,7 +700,7 @@
                     heroGreeting: 'أهلاً بك، أنا جومو.',
                     heroSubtitle: 'مساحتك الهادئة للتفكير، البرمجة، والبحث. بماذا نبدأ اليوم؟',
                     searchPlaceholder: 'البحث في المحادثات...',
-                    inputPlaceholder: 'اكتب رسالتك لجومو...'
+                    inputPlaceholder: 'اكتب رسالتك لجومو أو ألصق صورة...'
                 },
                 en: {
                     newChat: 'New chat',
@@ -602,7 +708,7 @@
                     heroGreeting: 'Hello, I am Jomo.',
                     heroSubtitle: 'Your quiet workspace for reasoning, code, and research. Where shall we begin?',
                     searchPlaceholder: 'Search conversations...',
-                    inputPlaceholder: 'Message Jomo...'
+                    inputPlaceholder: 'Message Jomo or paste an image...'
                 }
             };
 
@@ -645,16 +751,47 @@
             const labels = {
                 pro: 'Jomo Pro',
                 flash: 'Jomo Flash',
-                canvas: 'Canvas Studio',
-                image: 'استوديو الصور'
+                canvas: 'Jomo Code & Canvas',
+                image: 'توليد صورة'
             };
 
             document.getElementById('currentModeLabel').textContent = labels[mode];
+
+            const imgPill = document.getElementById('imageModePillBtn');
+            if (mode === 'image') {
+                imgPill.classList.add('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+            } else {
+                imgPill.classList.remove('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+            }
 
             if (mode === 'canvas') {
                 toggleCanvasPanel(true);
             }
             showToast(`الوضع الحالي: ${labels[mode]}`);
+        }
+
+        function toggleThinkingMode() {
+            state.deepThinking = !state.deepThinking;
+            const btn = document.getElementById('thinkingToggleBtn');
+            if (state.deepThinking) {
+                btn.classList.add('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+                showToast('تم تفعيل التفكير العميق التحليلي');
+            } else {
+                btn.classList.remove('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+                showToast('تم إيقاف التفكير العميق');
+            }
+        }
+
+        function toggleSearchGrounding() {
+            state.webSearch = !state.webSearch;
+            const btn = document.getElementById('searchToggleBtn');
+            if (state.webSearch) {
+                btn.classList.add('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+                showToast('تم تفعيل بحث الويب المباشر');
+            } else {
+                btn.classList.remove('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text', 'border-paper-border', 'dark:border-matte-border');
+                showToast('تم إيقاف بحث الويب المباشر');
+            }
         }
 
         function autoResizeTextarea(el) {
@@ -696,30 +833,35 @@
         function createWelcomeHeroElement() {
             const div = document.createElement('div');
             div.id = 'welcomeHero';
-            div.className = 'py-12 sm:py-20 flex flex-col items-start animate-fade-in';
+            div.className = 'py-10 sm:py-16 flex flex-col items-start animate-fade-in';
             div.innerHTML = `
-                <h1 class="text-2xl sm:text-4xl font-semibold tracking-tight text-paper-text dark:text-matte-text mb-2.5">
+                <div class="w-10 h-10 rounded-xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border flex items-center justify-center mb-5 text-paper-text dark:text-matte-text">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/>
+                    </svg>
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-semibold tracking-tight text-paper-text dark:text-matte-text mb-2">
                     ${state.lang === 'ar' ? 'أهلاً بك، أنا جومو.' : 'Hello, I am Jomo.'}
                 </h1>
-                <p class="text-base sm:text-lg font-normal text-paper-muted dark:text-matte-muted mb-10">
+                <p class="text-sm sm:text-base font-normal text-paper-muted dark:text-matte-muted mb-8">
                     ${state.lang === 'ar' ? 'مساحتك الهادئة للتفكير، البرمجة، والبحث. بماذا نبدأ اليوم؟' : 'Your quiet workspace for reasoning, code, and research. Where shall we begin?'}
                 </p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-                    <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                        <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">بناء تطبيق تفاعلي في ملف واحد مع معاينة حية</span>
-                        <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Canvas Studio</span>
+                <div class="flex flex-col sm:flex-row flex-wrap gap-2.5 w-full">
+                    <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                        <span>بناء آلة حاسبة علمية في Canvas</span>
                     </button>
-                    <button onclick="useStarterPrompt('اشرح لي مفارقة فيرمي (Fermi Paradox) بأسلوب فلسفي وعلمي رصين ومقارن.', 'pro')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                        <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">تحليل فلسفي وعلمي لمفارقة فيرمي والكون</span>
-                        <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Jomo Pro</span>
+                    <button onclick="useStarterPrompt('اشرح لي مفارقة فيرمي (Fermi Paradox) بأسلوب فلسفي وعلمي رصين ومقارن.', 'pro')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                        <span>تحليل فلسفي وعلمي لمفارقة فيرمي</span>
                     </button>
-                    <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                        <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">توليد تصور معماري لمكتبة هادئة وسط الطبيعة</span>
-                        <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Image Studio</span>
+                    <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                        <span>توليد تصور معماري لمكتبة هادئة</span>
                     </button>
-                    <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="p-4 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start transition-colors flex flex-col justify-between h-24">
-                        <span class="text-sm font-medium text-paper-text dark:text-matte-text leading-snug">ملخص موجز لمبادئ Clean Architecture في جدول</span>
-                        <span class="text-[11px] font-mono text-paper-muted dark:text-matte-muted">Jomo Flash</span>
+                    <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
+                        <span>ملخص Clean Architecture في جدول</span>
                     </button>
                 </div>
             `;
@@ -748,6 +890,41 @@
                 chat.pinned = !chat.pinned;
                 saveChatsToStorage();
             }
+        }
+
+        function renameChatPrompt(e, chatId) {
+            e.stopPropagation();
+            const chat = state.chats.find(c => c.id === chatId);
+            if (!chat) return;
+            const titleEl = document.getElementById(`chat-title-${chatId}`);
+            if (!titleEl) return;
+
+            const currentTitle = chat.title;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentTitle;
+            input.className = 'w-full bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border rounded px-1.5 py-0.5 text-xs text-paper-text dark:text-matte-text focus:outline-none';
+            input.onclick = (ev) => ev.stopPropagation();
+            
+            const finishRename = () => {
+                const newVal = input.value.trim();
+                if (newVal) {
+                    chat.title = newVal;
+                    saveChatsToStorage();
+                } else {
+                    renderChatList();
+                }
+            };
+
+            input.onkeydown = (ev) => {
+                if (ev.key === 'Enter') finishRename();
+                if (ev.key === 'Escape') renderChatList();
+            };
+            input.onblur = finishRename;
+
+            titleEl.replaceWith(input);
+            input.focus();
+            input.select();
         }
 
         function deleteChat(e, chatId) {
@@ -793,8 +970,11 @@
             const isActive = chat.id === state.currentChatId;
             return `
                 <div onclick="loadChat('${chat.id}')" class="group flex items-center justify-between px-2.5 py-2 rounded-lg cursor-pointer text-xs sm:text-[13px] transition-colors ${isActive ? 'bg-paper-active dark:bg-matte-active text-paper-text dark:text-matte-text font-medium' : 'text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover'}">
-                    <span class="truncate flex-1 pe-2">${escapeHTML(chat.title)}</span>
+                    <span id="chat-title-${chat.id}" class="truncate flex-1 pe-2">${escapeHTML(chat.title)}</span>
                     <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                        <button onclick="renameChatPrompt(event, '${chat.id}')" class="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10" title="إعادة تسمية">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"/></svg>
+                        </button>
                         <button onclick="togglePinChat(event, '${chat.id}')" class="p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 ${chat.pinned ? 'opacity-100 text-paper-text dark:text-matte-text' : ''}" title="تثبيت">
                             <svg class="w-3.5 h-3.5" fill="${chat.pinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg>
                         </button>
@@ -806,10 +986,16 @@
             `;
         }
 
-        function exportCurrentChat() {
+        function exportCurrentChat(format = 'md') {
             const chat = state.chats.find(c => c.id === state.currentChatId);
             if (!chat || chat.messages.length === 0) {
                 showToast('لا توجد رسائل لتصديرها');
+                return;
+            }
+            if (format === 'json') {
+                const blob = new Blob([JSON.stringify(chat, null, 2)], { type: 'application/json;charset=utf-8' });
+                triggerDownload(blob, `jomo-chat-${Date.now()}.json`);
+                showToast('تم تصدير المحادثة بصيغة JSON');
                 return;
             }
             let md = `# ${chat.title}\n\n`;
@@ -817,43 +1003,109 @@
                 md += `### ${m.role === 'user' ? 'المستخدم' : 'Jomo'}\n${m.text}\n\n---\n\n`;
             });
             const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `jomo-chat-${Date.now()}.md`;
-            a.click();
-            URL.revokeObjectURL(url);
+            triggerDownload(blob, `jomo-chat-${Date.now()}.md`);
             showToast('تم تصدير المحادثة بصيغة Markdown');
         }
 
+        function triggerDownload(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
         // ==========================================
-        // 4. MULTIMODAL INPUT (IMAGE & VOICE)
+        // 4. MULTIMODAL INPUT (IMAGES, DOCS, PASTE, VOICE)
         // ==========================================
-        function handleImageUpload(event) {
+        function setupDragAndDrop() {
+            const dropZone = document.body;
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    processUploadedFile(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        function handleUniversalFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const dataUrl = e.target.result;
-                const base64Data = dataUrl.split(',')[1];
-                state.attachedImage = {
-                    base64: base64Data,
-                    mimeType: file.type,
-                    name: file.name,
-                    previewUrl: dataUrl
-                };
-
-                document.getElementById('attachmentThumb').src = dataUrl;
-                document.getElementById('attachmentName').textContent = file.name;
-                document.getElementById('attachmentPreviewContainer').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
+            processUploadedFile(file);
             event.target.value = '';
         }
 
+        function handlePromptPaste(event) {
+            const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            for (let index in items) {
+                const item = items[index];
+                if (item.kind === 'file' && item.type.startsWith('image/')) {
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        processUploadedFile(blob);
+                        showToast('تم لصق الصورة من الحافظة');
+                    }
+                }
+            }
+        }
+
+        function processUploadedFile(file) {
+            const previewContainer = document.getElementById('attachmentPreviewContainer');
+            const thumb = document.getElementById('attachmentThumb');
+            const docIcon = document.getElementById('attachmentDocIcon');
+            const nameEl = document.getElementById('attachmentName');
+            const metaEl = document.getElementById('attachmentMeta');
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    const base64Data = dataUrl.split(',')[1];
+                    state.attachedFile = {
+                        type: 'image',
+                        base64: base64Data,
+                        mimeType: file.type,
+                        name: file.name || 'pasted-image.png',
+                        previewUrl: dataUrl
+                    };
+
+                    thumb.src = dataUrl;
+                    thumb.classList.remove('hidden');
+                    docIcon.classList.add('hidden');
+                    nameEl.textContent = state.attachedFile.name;
+                    metaEl.textContent = 'صورة للتحليل البصري';
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const textContent = e.target.result;
+                    const ext = (file.name.split('.').pop() || 'TXT').toUpperCase();
+                    state.attachedFile = {
+                        type: 'text',
+                        content: textContent,
+                        name: file.name,
+                        ext: ext
+                    };
+
+                    thumb.classList.add('hidden');
+                    docIcon.textContent = ext.slice(0, 4);
+                    docIcon.classList.remove('hidden');
+                    nameEl.textContent = file.name;
+                    metaEl.textContent = `${Math.round(textContent.length / 1024 * 10) / 10} KB • ملف نصي/برمجي`;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsText(file);
+            }
+        }
+
         function clearAttachment() {
-            state.attachedImage = null;
+            state.attachedFile = null;
             document.getElementById('attachmentPreviewContainer').classList.add('hidden');
         }
 
@@ -871,7 +1123,7 @@
 
             const recognition = new SpeechRecognition();
             state.recognition = recognition;
-            recognition.lang = state.lang === 'ar' ? 'ar-SA' : 'en-US';
+            recognition.lang = state.lang === 'ar' ? 'ar-DZ' : 'en-US';
             recognition.interimResults = true;
 
             const micBtn = document.getElementById('micBtn');
@@ -880,7 +1132,7 @@
             recognition.onstart = () => {
                 state.isRecording = true;
                 micBtn.classList.add('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text');
-                showToast('جاري الاستماع...');
+                showToast('جاري الاستماع... تحدث الآن');
             };
 
             recognition.onresult = (event) => {
@@ -906,7 +1158,7 @@
         }
 
         // ==========================================
-        // 5. GEMINI API INTEGRATION
+        // 5. GEMINI API INTEGRATION (FULL CAPACITY)
         // ==========================================
         function setGeneratingUI(isGen) {
             state.isGenerating = isGen;
@@ -929,8 +1181,14 @@
             }
 
             const input = document.getElementById('promptInput');
-            const text = input.value.trim();
-            if (!text && !state.attachedImage) return;
+            let text = input.value.trim();
+            if (!text && !state.attachedFile) return;
+
+            let isImageGenCommand = false;
+            if (text.toLowerCase().startsWith('/imagine ')) {
+                text = text.slice(9).trim();
+                isImageGenCommand = true;
+            }
 
             const hero = document.getElementById('welcomeHero');
             if (hero) hero.remove();
@@ -938,7 +1196,7 @@
             if (!state.currentChatId) {
                 const newChat = {
                     id: 'chat_' + Date.now(),
-                    title: text ? text.slice(0, 42) : 'تحليل صورة',
+                    title: text ? text.slice(0, 42) : (state.attachedFile ? state.attachedFile.name : 'محادثة جديدة'),
                     pinned: false,
                     messages: []
                 };
@@ -951,7 +1209,7 @@
             const userMsg = {
                 role: 'user',
                 text: text,
-                image: state.attachedImage ? { ...state.attachedImage } : null,
+                attachment: state.attachedFile ? { ...state.attachedFile } : null,
                 timestamp: Date.now()
             };
 
@@ -964,7 +1222,7 @@
             saveChatsToStorage();
             scrollToBottom();
 
-            await generateJomoResponse(currentChat);
+            await generateJomoResponse(currentChat, isImageGenCommand);
         }
 
         async function fetchWithRetry(url, options, maxRetries = 3) {
@@ -984,13 +1242,15 @@
             }
         }
 
-        async function generateJomoResponse(chat) {
+        async function generateJomoResponse(chat, forceImageGen = false) {
             setGeneratingUI(true);
             state.abortController = new AbortController();
 
             const aiMsg = {
                 role: 'model',
                 text: '',
+                thoughtProcess: '',
+                sources: [],
                 generatedImage: null,
                 isStreaming: true
             };
@@ -999,18 +1259,18 @@
             const bubbleEl = appendMessageDOM(aiMsg, msgIndex);
             scrollToBottom();
 
-            const apiKey = state.customApiKey.trim() || "";
+            const apiKey = getEffectiveApiKey();
             const lastUserMsg = chat.messages[msgIndex - 1];
 
             try {
-                if (state.mode === 'image') {
+                if (state.mode === 'image' || forceImageGen) {
                     const imgModel = 'gemini-3.1-flash-image';
                     const imgUrl = `https://generativelanguage.googleapis.com/v1beta/models/${imgModel}:generateContent?key=${apiKey}`;
                     
                     const payload = {
                         contents: [{
                             role: 'user',
-                            parts: [{ text: lastUserMsg.text || "Generate an architectural minimalist illustration" }]
+                            parts: [{ text: lastUserMsg.text || "Generate a high-resolution minimalist architectural illustration" }]
                         }],
                         generationConfig: {
                             responseModalities: ['TEXT', 'IMAGE']
@@ -1046,15 +1306,25 @@
 
                     const contents = chat.messages.slice(0, msgIndex).map(m => {
                         const parts = [];
-                        if (m.text) parts.push({ text: m.text });
-                        if (m.image && m.image.base64) {
-                            parts.push({
-                                inlineData: {
-                                    mimeType: m.image.mimeType,
-                                    data: m.image.base64
-                                }
-                            });
+                        let msgText = m.text || '';
+
+                        if (m.attachment) {
+                            if (m.attachment.type === 'text' && m.attachment.content) {
+                                msgText += `\n\n--- محتوى الملف المرفق (${m.attachment.name}) ---\n\`\`\`\n${m.attachment.content}\n\`\`\``;
+                            } else if (m.attachment.type === 'image' && m.attachment.base64) {
+                                parts.push({
+                                    inlineData: {
+                                        mimeType: m.attachment.mimeType,
+                                        data: m.attachment.base64
+                                    }
+                                });
+                            }
                         }
+
+                        if (msgText) {
+                            parts.unshift({ text: msgText });
+                        }
+
                         return {
                             role: m.role === 'user' ? 'user' : 'model',
                             parts: parts
@@ -1063,9 +1333,13 @@
 
                     let effectiveSystemPrompt = state.systemPrompt;
                     if (state.mode === 'canvas') {
-                        effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Canvas Studio): قدم الكود الكامل في كتلة كود واحدة واضحة (يفضل HTML متكامل يحتوي على CSS و JS) ليتم عرضه وتشغيله مباشرة في نافذة المعاينة.`;
+                        effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Jomo Code & Canvas): قدم الكود الكامل في كتلة كود واحدة واضحة (يفضل HTML متكامل يحتوي على CSS و JS) ليتم عرضه وتشغيله مباشرة في نافذة المعاينة.`;
                     } else if (state.mode === 'flash') {
                         effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Jomo Flash): قدم إجابة موجزة، دقيقة، ومباشرة.`;
+                    }
+
+                    if (state.deepThinking) {
+                        effectiveSystemPrompt += `\nملاحظة التفكير العميق: ابدأ إجابتك دائماً بقسم تفكير تحليلي منظم محصور تماماً بين الوسمين <thought> و </thought> تشرح فيه خطوات استنتاجك المنطقي، ثم اكتب الإجابة النهائية الشاملة بعد وسم </thought>.`;
                     }
 
                     const payload = {
@@ -1074,6 +1348,10 @@
                             parts: [{ text: effectiveSystemPrompt }]
                         }
                     };
+
+                    if (state.webSearch) {
+                        payload.tools = [{ google_search: {} }];
+                    }
 
                     const response = await fetchWithRetry(apiUrl, {
                         method: 'POST',
@@ -1085,10 +1363,31 @@
                     const result = await response.json();
                     if (result.error) throw new Error(result.error.message);
 
-                    const fullText = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'عذراً، لم يصلني رد واضح.';
-                    
-                    await streamTextEffect(bubbleEl, aiMsg, fullText, msgIndex);
-                    extractAndOpenCanvasIfNeeded(fullText);
+                    const candidate = result?.candidates?.[0];
+                    let rawText = candidate?.content?.parts?.[0]?.text || 'عذراً، لم يصلني رد واضح.';
+
+                    // Extract Grounding Search Citations if available
+                    const groundingChunks = candidate?.groundingMetadata?.groundingChunks || [];
+                    const extractedSources = [];
+                    groundingChunks.forEach(chunk => {
+                        if (chunk.web && chunk.web.uri && chunk.web.title) {
+                            if (!extractedSources.some(s => s.uri === chunk.web.uri)) {
+                                extractedSources.push({ title: chunk.web.title, uri: chunk.web.uri });
+                            }
+                        }
+                    });
+                    aiMsg.sources = extractedSources;
+
+                    // Parse <thought> block if Deep Thinking is enabled
+                    let finalAnswer = rawText;
+                    const thoughtMatch = rawText.match(/<thought>([\s\S]*?)<\/thought>/i);
+                    if (thoughtMatch) {
+                        aiMsg.thoughtProcess = thoughtMatch[1].trim();
+                        finalAnswer = rawText.replace(/<thought>[\s\S]*?<\/thought>/i, '').trim();
+                    }
+
+                    await streamTextEffect(bubbleEl, aiMsg, finalAnswer, msgIndex);
+                    extractAndOpenCanvasIfNeeded(finalAnswer);
                 }
             } catch (error) {
                 if (error.name === 'AbortError') {
@@ -1107,7 +1406,7 @@
 
         async function streamTextEffect(bubbleEl, aiMsg, fullText, msgIndex) {
             const totalLen = fullText.length;
-            const step = totalLen > 1200 ? 32 : totalLen > 400 ? 16 : 8;
+            const step = totalLen > 1200 ? 36 : totalLen > 400 ? 18 : 9;
             let currentIdx = 0;
 
             while (currentIdx < totalLen && state.isGenerating) {
@@ -1124,7 +1423,7 @@
         }
 
         // ==========================================
-        // 6. MINIMALIST MESSAGE RENDERING
+        // 6. MINIMALIST MESSAGE RENDERING & BRANCHING
         // ==========================================
         function detectDirection(text) {
             if (!text) return state.lang === 'ar' ? 'rtl' : 'ltr';
@@ -1136,6 +1435,7 @@
             const list = document.getElementById('messagesList');
             const wrapper = document.createElement('div');
             wrapper.className = 'animate-fade-in';
+            wrapper.dataset.msgIndex = index;
             list.appendChild(wrapper);
             updateMessageDOM(wrapper, msg, index);
             return wrapper;
@@ -1145,15 +1445,49 @@
             const dir = detectDirection(msg.text);
 
             if (msg.role === 'user') {
+                let attachmentBadge = '';
+                if (msg.attachment) {
+                    if (msg.attachment.type === 'image' && msg.attachment.previewUrl) {
+                        attachmentBadge = `<img src="${msg.attachment.previewUrl}" class="max-h-60 rounded-xl mb-2.5 border border-paper-border dark:border-matte-border object-contain">`;
+                    } else if (msg.attachment.type === 'text') {
+                        attachmentBadge = `
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 mb-2 rounded-lg bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border text-xs font-mono text-paper-muted dark:text-matte-muted">
+                                <span>📄 ${escapeHTML(msg.attachment.name)}</span>
+                            </div>
+                        `;
+                    }
+                }
+
                 wrapper.innerHTML = `
-                    <div class="flex justify-end">
+                    <div class="group flex flex-col items-end">
                         <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border px-4 py-3 text-paper-text dark:text-matte-text" dir="${dir}">
-                            ${msg.image ? `<img src="${msg.image.previewUrl}" class="max-h-60 rounded-xl mb-2.5 border border-paper-border dark:border-matte-border object-contain">` : ''}
-                            <div class="whitespace-pre-wrap text-sm sm:text-[15px] leading-relaxed">${escapeHTML(msg.text)}</div>
+                            ${attachmentBadge}
+                            <div id="user-msg-text-${index}" class="whitespace-pre-wrap text-sm sm:text-[15px] leading-relaxed">${escapeHTML(msg.text)}</div>
+                        </div>
+                        <div class="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="startEditUserMessage(${index})" class="p-1.5 rounded-lg text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors" title="تعديل الرسالة وإعادة التوليد">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"/></svg>
+                            </button>
+                            <button onclick="copyMessageText(${index}, this)" class="p-1.5 rounded-lg text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors" title="نسخ">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>
+                            </button>
                         </div>
                     </div>
                 `;
                 return;
+            }
+
+            let thoughtHTML = '';
+            if (msg.thoughtProcess) {
+                thoughtHTML = `
+                    <details class="mb-3 rounded-xl bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border text-xs">
+                        <summary class="px-3.5 py-2 cursor-pointer font-medium text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text select-none flex items-center justify-between">
+                            <span>عملية التفكير التحليلي</span>
+                            <span class="font-mono text-[10px]">Thought Process</span>
+                        </summary>
+                        <div class="px-3.5 py-2.5 border-t border-paper-border dark:border-matte-borderSubtle text-paper-muted dark:text-matte-muted whitespace-pre-wrap leading-relaxed" dir="${dir}">${escapeHTML(msg.thoughtProcess)}</div>
+                    </details>
+                `;
             }
 
             let contentHTML = '';
@@ -1176,16 +1510,33 @@
                         <img src="${msg.generatedImage}" alt="Generated Image" class="rounded-xl max-h-96 border border-paper-border dark:border-matte-border">
                         <a href="${msg.generatedImage}" download="jomo-image-${Date.now()}.png" class="absolute bottom-3 end-3 px-3 py-1.5 rounded-lg bg-matte-bg/90 text-matte-text border border-matte-border text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                            تحميل
+                            تحميل PNG
                         </a>
+                    </div>
+                `;
+            }
+
+            let sourcesHTML = '';
+            if (msg.sources && msg.sources.length > 0 && !msg.isStreaming) {
+                sourcesHTML = `
+                    <div class="mt-3 pt-2.5 border-t border-paper-border dark:border-matte-borderSubtle">
+                        <div class="text-[11px] font-medium text-paper-muted dark:text-matte-muted mb-1.5">المصادر المستشهد بها:</div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${msg.sources.map((s, i) => `
+                                <a href="${escapeHTML(s.uri)}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-[11px] text-paper-text dark:text-matte-text truncate max-w-[220px] transition-colors">
+                                    [${i + 1}] ${escapeHTML(s.title)}
+                                </a>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             }
 
             const actionsHTML = !msg.isStreaming ? `
                 <div class="flex items-center gap-1 mt-2 pt-1 text-paper-muted dark:text-matte-muted">
-                    <button onclick="copyMessageText(${index})" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text transition-colors" title="نسخ">
+                    <button onclick="copyMessageText(${index}, this)" class="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text text-[11px] transition-colors" title="نسخ">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>
+                        <span>نسخ</span>
                     </button>
                     <button onclick="speakText(${index})" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text transition-colors" title="استماع">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"/></svg>
@@ -1198,16 +1549,15 @@
 
             wrapper.innerHTML = `
                 <div class="flex items-start gap-3.5">
-                    <!-- Minimalist Solid Geometric Mark -->
                     <div class="w-7 h-7 rounded-lg bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border flex items-center justify-center shrink-0 mt-0.5 text-paper-text dark:text-matte-text">
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/>
                         </svg>
                     </div>
-
-                    <!-- Message Body -->
                     <div class="flex-1 min-w-0">
+                        ${thoughtHTML}
                         ${contentHTML}
+                        ${sourcesHTML}
                         ${actionsHTML}
                     </div>
                 </div>
@@ -1216,6 +1566,40 @@
             if (!msg.isStreaming) {
                 enhanceCodeBlocks(wrapper);
             }
+        }
+
+        function startEditUserMessage(index) {
+            if (state.isGenerating) return;
+            const chat = state.chats.find(c => c.id === state.currentChatId);
+            if (!chat || !chat.messages[index]) return;
+
+            const textEl = document.getElementById(`user-msg-text-${index}`);
+            if (!textEl) return;
+
+            const originalText = chat.messages[index].text;
+            const container = textEl.parentElement;
+
+            container.innerHTML = `
+                <textarea id="edit-textarea-${index}" rows="3" class="w-full min-w-[260px] sm:min-w-[380px] bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border rounded-xl p-2.5 text-sm text-paper-text dark:text-matte-text focus:outline-none resize-y">${escapeHTML(originalText)}</textarea>
+                <div class="flex items-center justify-end gap-2 mt-2">
+                    <button onclick="loadChat('${chat.id}')" class="px-3 py-1 rounded-lg text-xs bg-paper-bg dark:bg-matte-bg border border-paper-border dark:border-matte-border hover:bg-paper-hover dark:hover:bg-matte-hover">إلغاء</button>
+                    <button onclick="saveAndRegenerateEdit(${index})" class="px-3 py-1 rounded-lg text-xs font-medium bg-paper-text text-paper-bg dark:bg-matte-text dark:text-matte-bg hover:opacity-85">حفظ وإرسال</button>
+                </div>
+            `;
+        }
+
+        async function saveAndRegenerateEdit(index) {
+            const chat = state.chats.find(c => c.id === state.currentChatId);
+            if (!chat) return;
+            const editBox = document.getElementById(`edit-textarea-${index}`);
+            const updatedText = editBox ? editBox.value.trim() : '';
+            if (!updatedText) return;
+
+            chat.messages[index].text = updatedText;
+            chat.messages = chat.messages.slice(0, index + 1);
+            saveChatsToStorage();
+            loadChat(chat.id);
+            await generateJomoResponse(chat);
         }
 
         function enhanceCodeBlocks(container) {
@@ -1238,7 +1622,7 @@
                     <span class="uppercase text-[11px]">${lang}</span>
                     <div class="flex items-center gap-2">
                         <button class="open-canvas-btn px-2 py-0.5 rounded hover:bg-[#282A2C] text-matte-text transition-colors font-sans text-[11px]">
-                            فتح في Canvas
+                            معاينة في Canvas
                         </button>
                         <button class="copy-code-btn px-2 py-0.5 rounded hover:bg-[#282A2C] text-matte-muted hover:text-matte-text transition-colors font-sans text-[11px]">
                             نسخ
@@ -1246,9 +1630,11 @@
                     </div>
                 `;
 
-                header.querySelector('.copy-code-btn').onclick = () => {
+                const copyBtn = header.querySelector('.copy-code-btn');
+                copyBtn.onclick = () => {
                     copyToClipboard(rawCode);
-                    showToast('تم نسخ الكود');
+                    copyBtn.textContent = '✓ تم النسخ';
+                    setTimeout(() => { copyBtn.textContent = 'نسخ'; }, 1800);
                 };
 
                 header.querySelector('.open-canvas-btn').onclick = () => {
@@ -1259,11 +1645,17 @@
             });
         }
 
-        function copyMessageText(index) {
+        function copyMessageText(index, btnEl) {
             const chat = state.chats.find(c => c.id === state.currentChatId);
             if (chat && chat.messages[index]) {
                 copyToClipboard(chat.messages[index].text);
-                showToast('تم نسخ النص');
+                if (btnEl) {
+                    const origHTML = btnEl.innerHTML;
+                    btnEl.innerHTML = `<span class="text-[11px] font-medium text-paper-text dark:text-matte-text">✓ تم النسخ</span>`;
+                    setTimeout(() => { btnEl.innerHTML = origHTML; }, 1800);
+                } else {
+                    showToast('تم نسخ النص');
+                }
             }
         }
 
@@ -1290,7 +1682,7 @@
         }
 
         // ==========================================
-        // 7. CANVAS / LIVE CODE STUDIO
+        // 7. INTERACTIVE CANVAS STUDIO (3 TABS)
         // ==========================================
         function toggleCanvasPanel(forceState) {
             const panel = document.getElementById('canvasPanel');
@@ -1311,10 +1703,16 @@
             state.currentCanvasLang = lang;
 
             document.getElementById('canvasLangBadge').textContent = lang.toUpperCase();
-            const codeBlock = document.getElementById('canvasCodeBlock');
-            codeBlock.textContent = code;
-            hljs.highlightElement(codeBlock);
+            const editor = document.getElementById('canvasCodeEditor');
+            editor.value = code;
+            updateCanvasLineNumbers();
 
+            renderCanvasIframe(code, lang);
+            toggleCanvasPanel(true);
+            switchCanvasTab('preview');
+        }
+
+        function renderCanvasIframe(code, lang) {
             const iframe = document.getElementById('canvasIframe');
             let runnableHTML = code;
 
@@ -1325,8 +1723,62 @@
             }
 
             iframe.srcdoc = runnableHTML;
-            toggleCanvasPanel(true);
+        }
+
+        function applyEditedCanvasCode() {
+            const editor = document.getElementById('canvasCodeEditor');
+            state.currentCanvasCode = editor.value;
+            renderCanvasIframe(state.currentCanvasCode, state.currentCanvasLang);
             switchCanvasTab('preview');
+            showToast('تم تحديث المعاينة بالكود المعدّل');
+        }
+
+        function updateCanvasLineNumbers() {
+            const editor = document.getElementById('canvasCodeEditor');
+            const lines = editor.value.split('\n').length;
+            const lineNumsEl = document.getElementById('canvasLineNumbers');
+            lineNumsEl.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join('<br>');
+        }
+
+        function syncCanvasEditorScroll() {
+            const editor = document.getElementById('canvasCodeEditor');
+            const lineNumsEl = document.getElementById('canvasLineNumbers');
+            lineNumsEl.scrollTop = editor.scrollTop;
+        }
+
+        function setCanvasViewport(width) {
+            const iframe = document.getElementById('canvasIframe');
+            iframe.style.width = width;
+            ['vpDesktop', 'vpTablet', 'vpMobile'].forEach(id => {
+                const btn = document.getElementById(id);
+                btn.className = 'px-2 py-1 rounded text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text text-[11px]';
+            });
+            const activeId = width === '100%' ? 'vpDesktop' : width === '768px' ? 'vpTablet' : 'vpMobile';
+            document.getElementById(activeId).className = 'px-2 py-1 rounded bg-paper-surface dark:bg-matte-surface text-paper-text dark:text-matte-text font-medium text-[11px]';
+        }
+
+        function refreshCanvasPreview() {
+            renderCanvasIframe(state.currentCanvasCode, state.currentCanvasLang);
+            showToast('تم تحديث المعاينة');
+        }
+
+        function iterateOnCanvas() {
+            if (!state.currentCanvasCode) {
+                showToast('لا يوجد كود في Canvas حالياً');
+                return;
+            }
+            const input = document.getElementById('promptInput');
+            input.value = `قم بتطوير وتحسين هذا الكود الموجود في Canvas:\n\`\`\`${state.currentCanvasLang}\n${state.currentCanvasCode}\n\`\`\`\nالتعديل المطلوب: `;
+            autoResizeTextarea(input);
+            input.focus();
+            showToast('تم إرفاق كود Canvas في مربع المحادثة');
+        }
+
+        function openCanvasInNewTab() {
+            if (!state.currentCanvasCode) return;
+            const blob = new Blob([state.currentCanvasCode], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
         }
 
         function extractAndOpenCanvasIfNeeded(markdownText) {
@@ -1344,38 +1796,53 @@
         function switchCanvasTab(tab) {
             const iframe = document.getElementById('canvasIframe');
             const codeView = document.getElementById('canvasCodeView');
-            const previewBtn = document.getElementById('tabPreviewBtn');
-            const codeBtn = document.getElementById('tabCodeBtn');
+            const exportView = document.getElementById('canvasExportView');
+            const previewSub = document.getElementById('canvasPreviewSubbar');
+            const editorSub = document.getElementById('canvasEditorSubbar');
+
+            const tabs = {
+                preview: document.getElementById('tabPreviewBtn'),
+                code: document.getElementById('tabCodeBtn'),
+                export: document.getElementById('tabExportBtn')
+            };
+
+            Object.keys(tabs).forEach(k => {
+                tabs[k].className = k === tab
+                    ? 'px-2.5 py-1 rounded-md bg-paper-surface dark:bg-matte-active text-paper-text dark:text-matte-text transition-colors'
+                    : 'px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors';
+            });
+
+            iframe.classList.add('hidden');
+            codeView.classList.add('hidden');
+            exportView.classList.add('hidden');
+            previewSub.classList.add('hidden');
+            editorSub.classList.add('hidden');
 
             if (tab === 'preview') {
                 iframe.classList.remove('hidden');
-                codeView.classList.add('hidden');
-                previewBtn.className = 'px-2.5 py-1 rounded-md bg-paper-surface dark:bg-matte-active text-paper-text dark:text-matte-text transition-colors';
-                codeBtn.className = 'px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors';
-            } else {
-                iframe.classList.add('hidden');
+                previewSub.classList.remove('hidden');
+            } else if (tab === 'code') {
                 codeView.classList.remove('hidden');
-                codeBtn.className = 'px-2.5 py-1 rounded-md bg-paper-surface dark:bg-matte-active text-paper-text dark:text-matte-text transition-colors';
-                previewBtn.className = 'px-2.5 py-1 rounded-md text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors';
+                editorSub.classList.remove('hidden');
+                updateCanvasLineNumbers();
+            } else if (tab === 'export') {
+                exportView.classList.remove('hidden');
             }
         }
 
         function copyCanvasCode() {
             if (!state.currentCanvasCode) return;
             copyToClipboard(state.currentCanvasCode);
-            showToast('تم نسخ الكود');
+            showToast('✓ تم نسخ الكود الكامل');
         }
 
         function downloadCanvasFile() {
             if (!state.currentCanvasCode) return;
             const ext = state.currentCanvasLang === 'javascript' ? 'js' : state.currentCanvasLang || 'html';
+            const filename = ext === 'html' ? 'index.html' : `jomo-canvas.${ext}`;
             const blob = new Blob([state.currentCanvasCode], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `jomo-canvas.${ext}`;
-            a.click();
-            URL.revokeObjectURL(url);
+            triggerDownload(blob, filename);
+            showToast(`تم تحميل ${filename}`);
         }
 
         // ==========================================
@@ -1404,6 +1871,20 @@
             document.getElementById('customSystemPromptInput').value = DEFAULT_SYSTEM_PROMPT;
             document.getElementById('customApiKeyInput').value = '';
             showToast('تمت استعادة الإعدادات الافتراضية');
+        }
+
+        function exportAllChatsJSON() {
+            const blob = new Blob([JSON.stringify(state.chats, null, 2)], { type: 'application/json;charset=utf-8' });
+            triggerDownload(blob, `jomo-backup-${Date.now()}.json`);
+            showToast('تم تصدير جميع المحادثات');
+        }
+
+        function clearAllLocalData() {
+            localStorage.removeItem('jomo_chats');
+            state.chats = [];
+            createNewChat();
+            closeSettingsModal();
+            showToast('تم مسح سجل المحادثات');
         }
 
         function copyToClipboard(text) {
