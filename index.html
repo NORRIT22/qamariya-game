@@ -2,877 +2,892 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LAGHOUAT: HAYY (حيّ) — وثيقة تصميم اللعبة والمخطط الهندسي</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LAGHOUAT: HAYY (حيّ) — اللعبة التفاعلية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-primary: #0d0c0b;
-      --bg-secondary: #161412;
-      --bg-tertiary: #1f1c19;
-      --border-subtle: #2e2924;
-      --border-accent: #c87d4b;
-      --text-primary: #f2ece4;
-      --text-secondary: #a89f94;
-      --text-muted: #6e665d;
-      --accent-sunset: #d97736;
-      --accent-amber: #e5a93c;
-      --accent-oasis: #3d7a68;
-      --font-sans: 'IBM Plex Sans Arabic', sans-serif;
-      --font-serif: 'Amiri', serif;
-      --font-mono: 'IBM Plex Mono', monospace;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #0c0a09; font-family: 'IBM Plex Sans Arabic', sans-serif; color: #f5efe6; }
+    canvas { display: block; width: 100%; height: 100%; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    /* Minimalist Diegetic HUD */
+    #hud { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; z-index: 10; }
+    .top-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .district-badge { background: rgba(18, 15, 13, 0.78); backdrop-filter: blur(8px); border: 1px solid rgba(217, 119, 54, 0.35); padding: 10px 16px; border-radius: 10px; pointer-events: auto; }
+    .district-name { font-family: 'Amiri', serif; font-size: 1.35rem; color: #f5efe6; line-height: 1.2; }
+    .district-sub { font-size: 0.78rem; color: #c89d7c; font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
 
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      line-height: 1.7;
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 100vh;
-    }
+    .stats-cluster { display: flex; gap: 8px; flex-wrap: wrap; pointer-events: auto; }
+    .pill { background: rgba(18, 15, 13, 0.78); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 999px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; }
+    .pill:hover { border-color: #d97736; background: rgba(35, 28, 24, 0.9); }
+    .pill span.val { font-family: 'IBM Plex Mono', monospace; color: #e5a93c; font-weight: 600; }
 
-    /* Sidebar Navigation */
-    aside {
-      background-color: var(--bg-secondary);
-      border-left: 1px solid var(--border-subtle);
-      padding: 2rem 1.5rem;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+    /* Bottom Controls & Prompt */
+    .bottom-bar { display: flex; justify-content: space-between; align-items: flex-end; }
+    .controls-hint { background: rgba(18, 15, 13, 0.72); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 8px; font-size: 0.8rem; color: #b8aea3; line-height: 1.6; }
+    .key { display: inline-block; background: #26211d; border: 1px solid #453c34; padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #f5efe6; margin: 0 2px; }
 
-    .brand-header {
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
+    /* Interaction Prompt */
+    #interact-prompt { position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); background: rgba(217, 119, 54, 0.92); color: #fff; padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; box-shadow: 0 8px 24px rgba(0,0,0,0.45); display: none; z-index: 15; }
 
-    .brand-tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      color: var(--accent-sunset);
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 0.4rem;
-    }
+    /* Notification Toast */
+    #toast { position: fixed; top: 82px; left: 50%; transform: translateX(-50%); background: rgba(18, 15, 13, 0.92); border: 1px solid #e5a93c; color: #f5efe6; padding: 10px 22px; border-radius: 10px; font-size: 0.92rem; opacity: 0; transition: opacity 0.35s; pointer-events: none; z-index: 30; text-align: center; }
 
-    .brand-title {
-      font-family: var(--font-serif);
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.2;
-    }
+    /* Modals (Start Screen, Smartphone, Dialogue, Photo Mode) */
+    .overlay-screen { position: fixed; inset: 0; background: rgba(10, 8, 7, 0.88); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+    .modal-box { background: #171412; border: 1px solid #332c26; border-radius: 16px; max-width: 680px; width: 100%; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.65); }
+    .modal-title { font-family: 'Amiri', serif; font-size: 2rem; color: #f5efe6; margin-bottom: 6px; }
+    .modal-desc { color: #a89f94; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
 
-    .brand-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-top: 0.3rem;
-    }
+    .archetype-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px; }
+    .arch-card { background: #211c18; border: 2px solid #2e2722; border-radius: 12px; padding: 14px; cursor: pointer; transition: 0.2s; text-align: right; }
+    .arch-card:hover, .arch-card.selected { border-color: #d97736; background: #2a221c; }
+    .arch-card h4 { color: #e5a93c; font-size: 1.05rem; margin-bottom: 4px; }
+    .arch-card p { font-size: 0.8rem; color: #b5aba0; line-height: 1.45; }
 
-    nav ul {
-      list-style: none;
-    }
+    .primary-btn { width: 100%; background: #d97736; color: #fff; border: none; padding: 13px; border-radius: 10px; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .primary-btn:hover { background: #e68442; }
 
-    nav li {
-      margin-bottom: 0.4rem;
-    }
+    /* Smartphone Diegetic UI */
+    #phone-modal { display: none; }
+    .phone-frame { background: #141210; border: 2px solid #38302a; border-radius: 28px; width: 380px; max-width: 100%; height: 600px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
+    .phone-header { padding: 16px 20px; background: #1c1815; border-bottom: 1px solid #2e2722; display: flex; justify-content: space-between; align-items: center; }
+    .phone-tabs { display: flex; background: #1c1815; border-bottom: 1px solid #2e2722; }
+    .phone-tab { flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; cursor: pointer; color: #9c9288; border-bottom: 2px solid transparent; }
+    .phone-tab.active { color: #e5a93c; border-bottom-color: #e5a93c; font-weight: 700; }
+    .phone-body { flex: 1; overflow-y: auto; padding: 16px; }
+    .feed-item { background: #1f1b18; border: 1px solid #2e2722; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .feed-author { font-size: 0.82rem; color: #e5a93c; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .feed-text { font-size: 0.88rem; color: #dfd7ce; line-height: 1.5; }
+    .feed-img { width: 100%; border-radius: 6px; margin-top: 8px; border: 1px solid #38302a; }
 
-    nav a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      padding: 0.55rem 0.75rem;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-    }
+    /* Dialogue Box */
+    #dialogue-box { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: 640px; max-width: 92vw; background: rgba(20, 17, 15, 0.95); border: 1px solid #d97736; border-radius: 14px; padding: 20px; display: none; z-index: 40; box-shadow: 0 16px 40px rgba(0,0,0,0.7); }
+    .npc-name { color: #e5a93c; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; }
+    .npc-line { color: #f2ece4; font-size: 0.96rem; line-height: 1.65; margin-bottom: 14px; }
+    .dialogue-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-sm { background: #29231e; color: #f2ece4; border: 1px solid #453b33; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.85rem; }
+    .btn-sm.accent { background: #d97736; border-color: #d97736; color: #fff; }
 
-    nav a:hover, nav a.active {
-      background-color: var(--bg-tertiary);
-      color: var(--text-primary);
-      border-right: 3px solid var(--accent-sunset);
-    }
+    /* Photo Mode Overlay */
+    #photo-hud { position: fixed; inset: 0; border: 12px solid rgba(255,255,255,0.12); pointer-events: none; display: none; z-index: 25; flex-direction: column; justify-content: space-between; padding: 24px; }
+    .photo-controls { pointer-events: auto; background: rgba(15,13,11,0.85); border: 1px solid #38302a; padding: 12px 20px; border-radius: 12px; display: flex; gap: 12px; align-items: center; align-self: center; }
 
-    nav a span.num {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .sidebar-footer {
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 1rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    /* Main Content Area */
-    main {
-      padding: 3rem 4rem;
-      max-width: 1200px;
-    }
-
-    header.hero {
-      background: linear-gradient(135deg, #1d1612 0%, #12100e 60%, #1e130c 100%);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 3rem;
-      margin-bottom: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header.hero::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -10%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(217, 119, 54, 0.14) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-meta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .badge {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      background-color: var(--bg-tertiary);
-      border: 1px solid var(--border-subtle);
-      color: var(--accent-amber);
-    }
-
-    .hero h1 {
-      font-family: var(--font-serif);
-      font-size: 2.8rem;
-      margin-bottom: 0.75rem;
-      color: var(--text-primary);
-    }
-
-    .hero p.lead {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      max-width: 780px;
-      margin-bottom: 1.5rem;
-    }
-
-    .quote-banner {
-      border-right: 3px solid var(--accent-sunset);
-      padding: 0.75rem 1.25rem;
-      background-color: rgba(217, 119, 54, 0.06);
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-style: italic;
-      color: var(--text-primary);
-    }
-
-    section {
-      margin-bottom: 4rem;
-      scroll-margin-top: 2rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .section-num {
-      font-family: var(--font-mono);
-      font-size: 0.95rem;
-      color: var(--accent-sunset);
-      font-weight: 600;
-    }
-
-    h2 {
-      font-size: 1.65rem;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    h3 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--accent-amber);
-      margin-bottom: 0.6rem;
-    }
-
-    p {
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-    }
-
-    /* Grid Cards */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .card {
-      background-color: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 1.5rem;
-      transition: border-color 0.2s ease;
-    }
-
-    .card:hover {
-      border-color: var(--border-accent);
-    }
-
-    .card-tag {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--accent-oasis);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    ul.clean-list {
-      list-style: none;
-      margin-top: 0.5rem;
-    }
-
-    ul.clean-list li {
-      position: relative;
-      padding-right: 1.25rem;
-      margin-bottom: 0.45rem;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-
-    ul.clean-list li::before {
-      content: "▪";
-      position: absolute;
-      right: 0;
-      color: var(--accent-sunset);
-    }
-
-    /* Tables */
-    .table-wrapper {
-      overflow-x: auto;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      background-color: var(--bg-secondary);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: right;
-    }
-
-    th, td {
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: 0.92rem;
-    }
-
-    th {
-      background-color: var(--bg-tertiary);
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    td {
-      color: var(--text-secondary);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .mono {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--accent-amber);
-    }
-
-    /* Interactive Tabs & JSON Inspector */
-    .toolbar {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-
-    button.btn {
-      background-color: var(--bg-tertiary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-subtle);
-      padding: 0.55rem 1.1rem;
-      border-radius: 6px;
-      font-family: var(--font-sans);
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    button.btn:hover, button.btn.active {
-      background-color: var(--accent-sunset);
-      border-color: var(--accent-sunset);
-      color: #fff;
-    }
-
-    pre.json-viewer {
-      background-color: #090807;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      line-height: 1.6;
-      color: #d6cfc7;
-      direction: ltr;
-      text-align: left;
-      max-height: 600px;
-      overflow: auto;
-    }
-
-    /* Budget Bar */
-    .budget-row {
-      margin-bottom: 1rem;
-    }
-
-    .budget-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 8px;
-      background-color: var(--bg-tertiary);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-sunset), var(--accent-amber));
-      border-radius: 4px;
-    }
-
-    /* Responsive */
-    @media (max-width: 960px) {
-      body {
-        grid-template-columns: 1fr;
-      }
-      aside {
-        position: static;
-        height: auto;
-        border-left: none;
-        border-bottom: 1px solid var(--border-subtle);
-      }
-      main {
-        padding: 2rem 1.25rem;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-    }
+    /* Mobile Touch Pad */
+    #touch-controls { display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; justify-content: space-between; z-index: 20; pointer-events: none; }
+    .touch-cluster { display: flex; gap: 10px; pointer-events: auto; }
+    .t-btn { width: 54px; height: 54px; border-radius: 50%; background: rgba(25,21,18,0.8); border: 1px solid rgba(217,119,54,0.5); color: #fff; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 820px) { #touch-controls { display: flex; } .controls-hint { display: none; } }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar Navigation -->
-  <aside>
-    <div>
-      <div class="brand-header">
-        <span class="brand-tag">GDD MASTER BLUEPRINT v1.0</span>
-        <div class="brand-title">LAGHOUAT: HAYY</div>
-        <div class="brand-subtitle">حيّ — المدينة الحية (التوأم الرقمي)</div>
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="top-bar">
+      <div class="district-badge">
+        <div class="district-name" id="hud-district">الأقواس — وسط المدينة</div>
+        <div class="district-sub" id="hud-time">18:15 • غروب الأغواط (Golden Hour)</div>
       </div>
 
-      <nav>
-        <ul>
-          <li><a href="#vision" class="active"><span>الرؤية والهوية البصرية</span><span class="num">01</span></a></li>
-          <li><a href="#world"><span>جغرافيا التوأم الرقمي</span><span class="num">02</span></a></li>
-          <li><a href="#creatures"><span>الكائنات غير البشرية</span><span class="num">03</span></a></li>
-          <li><a href="#gameplay"><span>أنظمة اللعب والاستكشاف</span><span class="num">04</span></a></li>
-          <li><a href="#social"><span>الشبكة وـ City Feed</span><span class="num">05</span></a></li>
-          <li><a href="#tech"><span>البنية التقنية (UE5 + GIS)</span><span class="num">06</span></a></li>
-          <li><a href="#budget"><span>الميزانية وخارطة الإنتاج</span><span class="num">07</span></a></li>
-          <li><a href="#json-schema"><span>المخطط البرمجي (JSON)</span><span class="num">08</span></a></li>
-        </ul>
-      </nav>
+      <div class="stats-cluster">
+        <div class="pill" onclick="cycleTime()" title="تغيير الوقت">🌓 <span id="hud-phase">الغروب</span></div>
+        <div class="pill" onclick="cycleWeather()" title="تغيير الطقس">🌤️ <span id="hud-weather">سماء صافية</span></div>
+        <div class="pill">🪙 <span class="val" id="hud-tokens">25</span></div>
+        <div class="pill">🧭 <span class="val" id="hud-discovery">1/8</span></div>
+        <div class="pill" onclick="togglePhotoMode()">📷 تصوير <span class="key">P</span></div>
+        <div class="pill" onclick="togglePhone()">📱 الهاتف <span class="key">Tab</span></div>
+      </div>
     </div>
 
-    <div class="sidebar-footer">
-      <div>المحرك: Unreal Engine 5.4+</div>
-      <div>المنصات: PC / iOS / Android</div>
-      <div>إعداد التصميم: طه صليعة</div>
+    <div class="bottom-bar">
+      <div class="controls-hint">
+        الحركة: <span class="key">WASD</span> أو <span class="key">الأسهم</span> &nbsp;|&nbsp;
+        القدرة الخاصة / التسلق: <span class="key">Space</span> &nbsp;|&nbsp;
+        تفاعل: <span class="key">E</span> &nbsp;|&nbsp;
+        تصوير: <span class="key">P</span> &nbsp;|&nbsp;
+        الهاتف والخريطة: <span class="key">Tab</span>
+      </div>
     </div>
-  </aside>
+  </div>
 
-  <!-- Main Content -->
-  <main>
-    <!-- Hero Banner -->
-    <header class="hero">
-      <div class="hero-meta">
-        <span class="badge">DIGITAL TWIN SANDBOX</span>
-        <span class="badge">NON-COMBAT EXPLORATION</span>
-        <span class="badge">STYLIZED REALISM</span>
-        <span class="badge">CROSS-PLAY</span>
+  <div id="interact-prompt">اضغط <span class="key">E</span> للتفاعل</div>
+  <div id="toast"></div>
+
+  <!-- Photo Mode HUD -->
+  <div id="photo-hud">
+    <div style="text-align:center; font-family:'IBM Plex Mono', monospace; color:#e5a93c; background:rgba(0,0,0,0.6); padding:6px 14px; border-radius:6px; align-self:center;">
+      PHOTO MODE — الكاميرا الحرة مفعّلة (حرّك بالأسهم / التكبير بالماوس)
+    </div>
+    <div class="photo-controls">
+      <button class="btn-sm" onclick="cycleFilter()">الفلتر: <span id="filter-name">دافئ (غروب)</span></button>
+      <button class="btn-sm accent" onclick="capturePhoto()">📸 التقاط ونشر في City Feed</button>
+      <button class="btn-sm" onclick="togglePhotoMode()">إغلاق [P]</button>
+    </div>
+  </div>
+
+  <!-- Dialogue Box -->
+  <div id="dialogue-box">
+    <div class="npc-name" id="dlg-name">اسم الشخصية</div>
+    <div class="npc-line" id="dlg-text">نص الحوار...</div>
+    <div class="dialogue-actions">
+      <button class="btn-sm accent" id="dlg-quest-btn" style="display:none;" onclick="acceptOrCompleteQuest()">قبول المهمة</button>
+      <button class="btn-sm" onclick="closeDialogue()">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- Smartphone Modal -->
+  <div class="overlay-screen" id="phone-modal">
+    <div class="phone-frame">
+      <div class="phone-header">
+        <span style="font-weight:700; color:#e5a93c;">هاتف حيّ — LAGHOUAT OS</span>
+        <button class="btn-sm" onclick="togglePhone()">✕</button>
       </div>
-      <h1>LAGHOUAT: HAYY (حيّ)</h1>
-      <p class="lead">
-        عالم مفتوح مصغّر يحاكي مدينة الأغواط الحقيقية بدقة معمارية وجغرافية، تسكنه كائنات خيالية ذات طابع أدبي وحضري، حيث يتحول التجول اليومي، مراقبة الغروب، واكتشاف الأسرار إلى تجربة اجتماعية هادئة.
-      </p>
-      <div class="quote-banner">
-        «مدينة تعرفها، لكنك لم ترها هكذا من قبل.»
+      <div class="phone-tabs">
+        <div class="phone-tab active" onclick="switchPhoneTab('feed', this)">City Feed</div>
+        <div class="phone-tab" onclick="switchPhoneTab('map', this)">المعالم</div>
+        <div class="phone-tab" onclick="switchPhoneTab('quests', this)">المهام</div>
       </div>
-    </header>
+      <div class="phone-body" id="phone-content"></div>
+    </div>
+  </div>
 
-    <!-- 01. Vision & Art Direction -->
-    <section id="vision">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <h2>الرؤية الجوهرية والهوية الفنية</h2>
+  <!-- Intro / Character Selection Screen -->
+  <div class="overlay-screen" id="start-screen">
+    <div class="modal-box">
+      <div class="modal-title">LAGHOUAT: HAYY (حيّ)</div>
+      <div class="modal-desc">
+        «مدينة تعرفها، لكنك لم ترها هكذا من قبل.»<br>
+        اختر الكائن الذي ستتجول به داخل التوأم الرقمي لمدينة الأغواط. لا قتال، لا بشر؛ فقط الاستكشاف، الأسطح، المقاهي، وأجواء الغروب.
       </div>
-      <div class="grid-2">
-        <div class="card">
-          <span class="card-tag">ART DIRECTION</span>
-          <h3>الواقعية المنمّقة (Stylized Realism)</h3>
-          <p>
-            الحفاظ على النسب العمرانية الحقيقية لشوارع الأغواط وأقواسها وارتفاع مبانيها، مع استبدال الخامات الفوتوغرافية الثقيلة بأسلوب بصري فني مرسوم بعناية (Painterly PBR) يبرز ملمس الحجر الجيري، الطين، والظلال الحادة.
-          </p>
-          <ul class="clean-list">
-            <li>أداء سلس (60 إطارًا) على الحواسيب والهواتف الذكية.</li>
-            <li>هوية بصرية دافئة تبتعد عن البرودة الرقمية المعتادة.</li>
-          </ul>
-        </div>
+      <div class="archetype-grid" id="archetype-list"></div>
+      <button class="primary-btn" onclick="startGame()">ابدأ التجول في الأغواط</button>
+    </div>
+  </div>
 
-        <div class="card">
-          <span class="card-tag">ATMOSPHERE & LIGHTING</span>
-          <h3>نظام الغروب والطقس الديناميكي</h3>
-          <p>
-            تتغير المدينة عبر 6 مراحل زمنية و4 فصول. يمثل وقت الغروب ("الساعة الذهبية" في الأغواط) اللحظة البصرية الأبرز حيث تتدرج السماء من البرتقالي الدافئ إلى البنفسجي فوق واد مزي وأشجار النخيل.
-          </p>
-          <ul class="clean-list">
-            <li>الطقس: سماء صافية، غيوم، نسيم، مطر خفيف، ضباب شتوي، وعواصف رملية خفيفة.</li>
-            <li>تغيّر روتين الشخصيات وإضاءة الشوارع تلقائيًا مع الزمن والطقس.</li>
-          </ul>
-        </div>
+  <!-- Touch Controls for Mobile -->
+  <div id="touch-controls">
+    <div class="touch-cluster">
+      <button class="t-btn" ontouchstart="keys['ArrowRight']=true" ontouchend="keys['ArrowRight']=false">→</button>
+      <button class="t-btn" ontouchstart="keys['ArrowUp']=true" ontouchend="keys['ArrowUp']=false">↑</button>
+      <button class="t-btn" ontouchstart="keys['ArrowDown']=true" ontouchend="keys['ArrowDown']=false">↓</button>
+      <button class="t-btn" ontouchstart="keys['ArrowLeft']=true" ontouchend="keys['ArrowLeft']=false">←</button>
+    </div>
+    <div class="touch-cluster">
+      <button class="t-btn" onclick="triggerAbility()">⚡</button>
+      <button class="t-btn" onclick="triggerInteract()">E</button>
+    </div>
+  </div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// --- GAME DATA & DIGITAL TWIN MAP OF LAGHOUAT ---
+const ARCHETYPES = [
+  { id: 'nimble', name: 'الوثّاب (Nimble)', color: '#e5a93c', coat: '#3b4d3b', speed: 4.4, abilityName: 'اندفاع سريع وعبور الممرات الضيقة', desc: 'سريع الحركة، يقفز فوق الحواجز المنخفضة ويدخل الأزقة الضيقة.' },
+  { id: 'glider', name: 'المُحلّق (Glider)', color: '#d97736', coat: '#2b3a4a', speed: 3.8, abilityName: 'تحليق شراعي فوق الساحات', desc: 'يرتدي معطفًا مجنحًا يسمح له بالانزلاق السريع فوق الطرقات.' },
+  { id: 'nocturnal', name: 'الليلي (Nocturnal)', color: '#70a1ff', coat: '#1e1b24', speed: 4.0, abilityName: 'بصيرة ليلية لكشف الأسرار', desc: 'عيون مضيئة تكشف الرموز والمقتنيات المخفية في أرجاء المدينة.' },
+  { id: 'strange', name: 'الأثيري (Strange)', color: '#e056fd', coat: '#3d2c3e', speed: 3.9, abilityName: 'انتقال آني قصير (Phase Dash)', desc: 'كائن مقنّع يطفو قليلًا ويعبر المسافات القصيرة بلمح البصر.' }
+];
+
+let selectedArch = ARCHETYPES[0];
+
+const LANDMARKS = [
+  { id: 'arches', name: 'الأقواس — شارع الأمير عبد القادر', x: 1100, y: 1100, w: 320, h: 180, color: '#8c583a', discovered: true, lore: 'القلب النابض لوسط المدينة، حيث تتقاطع الظلال الطويلة وقت الغروب مع المقاهي العتيقة.' },
+  { id: 'moqawama', name: 'ساحة المقاومة', x: 1550, y: 1050, w: 340, h: 260, color: '#7a634b', discovered: false, lore: 'ساحة واسعة تتوسط المدينة، تتجمع فيها الكائنات لمراقبة السماء وتبادل الحكايات.' },
+  { id: 'mosque', name: 'المسجد العتيق والقصر القديم', x: 850, y: 720, w: 280, h: 220, color: '#9e6b43', discovered: false, lore: 'أزقة ضيقة وجدران طينية دافئة تحتفظ بذاكرة المدينة القديمة وأسرارها المعمارية.' },
+  { id: 'oued', name: 'ضفاف واد مزي والبساتين', x: 2100, y: 1450, w: 460, h: 360, color: '#3b6e52', discovered: false, lore: 'واحات النخيل ومجرى الوادي؛ أفضل مكان لمشاهدة انعكاس الغروب الذهبي.' },
+  { id: 'ensl', name: 'المدرسة العليا للأساتذة طالب عبد الرحمن', x: 650, y: 1650, w: 360, h: 240, color: '#58687a', discovered: false, lore: 'قطب المعرفة والهدوء، حيث تتجول الكائنات حاملة الكتب والمخطوطات.' },
+  { id: 'maqam', name: 'حي المقام العتيق', x: 1450, y: 650, w: 300, h: 210, color: '#875a42', discovered: false, lore: 'بيوت متلاصقة وأسطح منخفضة مثالية للتنقل العلوي.' },
+  { id: 'gardens', name: 'الحديقة العمومية', x: 1750, y: 1550, w: 260, h: 220, color: '#2f5e44', discovered: false, lore: 'ملاذ هادئ وسط المدينة مليء بالأشجار والمقاعد الخشبية.' },
+  { id: 'bab', name: 'باب الجزائر', x: 1150, y: 1520, w: 240, h: 170, color: '#7d4f38', discovered: false, lore: 'بوابة تاريخية تربط بين الأحياء القديمة والامتداد الحديث للأغواط.' }
+];
+
+// Decorative City Buildings (Stylized Architecture)
+const BUILDINGS = [
+  { x: 1020, y: 980, w: 140, h: 90, roof: '#a8643e' },
+  { x: 1190, y: 980, w: 160, h: 90, roof: '#965634' },
+  { x: 1020, y: 1290, w: 180, h: 100, roof: '#8c4f30' },
+  { x: 1230, y: 1290, w: 150, h: 100, roof: '#a15e3b' },
+  { x: 1520, y: 920, w: 170, h: 110, roof: '#7d563c' },
+  { x: 1720, y: 920, w: 160, h: 110, roof: '#8f6346' },
+  { x: 820, y: 610, w: 130, h: 95, roof: '#b07448' },
+  { x: 980, y: 610, w: 140, h: 95, roof: '#9c6238' },
+  { x: 620, y: 1520, w: 200, h: 110, roof: '#4e5d6e' },
+  { x: 850, y: 1520, w: 170, h: 110, roof: '#5a6b7d' },
+  { x: 1430, y: 530, w: 150, h: 100, roof: '#945d40' },
+  { x: 1610, y: 530, w: 140, h: 100, roof: '#824f35' }
+];
+
+// Palm Trees around Oued M'zi & Gardens
+const PALMS = [];
+for (let i = 0; i < 38; i++) {
+  PALMS.push({
+    x: 2050 + Math.random() * 520,
+    y: 1380 + Math.random() * 480,
+    size: 16 + Math.random() * 10
+  });
+}
+for (let i = 0; i < 14; i++) {
+  PALMS.push({
+    x: 1740 + Math.random() * 260,
+    y: 1530 + Math.random() * 220,
+    size: 14 + Math.random() * 8
+  });
+}
+
+// Secrets & Collectibles
+const SECRETS = [
+  { id: 'sec1', name: 'مخطوطة الأقواس القديمة', x: 1080, y: 1075, found: false, tokens: 15 },
+  { id: 'sec2', name: 'عدسة الغروب الذهبية', x: 2320, y: 1620, found: false, tokens: 20 },
+  { id: 'sec3', name: 'رمز القصر المخفي', x: 910, y: 780, found: false, tokens: 15 },
+  { id: 'sec4', name: 'مذكرة طالب الأثير', x: 740, y: 1710, found: false, tokens: 20 },
+  { id: 'sec5', name: 'مفتاح سطح المقام', x: 1560, y: 710, found: false, tokens: 25 }
+];
+
+// Non-Human NPCs
+const NPCS = [
+  {
+    id: 'npc1', name: 'الراوي سُهيل (مقهى الأقواس)', x: 1260, y: 1160, color: '#e5a93c', cloak: '#5c3a21',
+    dialogue: 'أهلاً بك في قلب الأغواط! انظر كيف يصبغ الغروب جدران الأقواس بالذهب. هل يمكنك زيارة ضفاف واد مزي والتقاط صورة هناك؟',
+    quest: { id: 'q1', title: 'غروب واد مزي', desc: 'اكتشف ضفاف واد مزي والبساتين ثم عد إلى سهيل.', targetLandmark: 'oued', reward: 30, status: 'available' }
+  },
+  {
+    id: 'npc2', name: 'أمينة الورّاقة (قرب المدرسة العليا)', x: 820, y: 1760, color: '#70a1ff', cloak: '#2c3e50',
+    dialogue: 'أبحث عن مخطوطة قديمة سقطت قرب الأقواس في وسط المدينة. المدينة هادئة اليوم ومناسبة للتجول.',
+    quest: { id: 'q2', title: 'مخطوطة الأقواس', desc: 'اعثر على مخطوطة الأقواس القديمة في وسط المدينة.', targetSecret: 'sec1', reward: 35, status: 'available' }
+  },
+  {
+    id: 'npc3', name: 'حارس القصر القديم', x: 980, y: 830, color: '#ff7979', cloak: '#4a2c2a',
+    dialogue: 'هذه الأزقة تعرف كل خطوة. جرب استخدام قدرتك الخاصة [Space] لاستكشاف الأماكن المخفية حول حي المقام.',
+    quest: null
+  },
+  {
+    id: 'npc4', name: 'عازف البساتين', x: 2220, y: 1560, color: '#55efc4', cloak: '#1e3d2f',
+    dialogue: 'صوت الرياح بين النخيل هنا يساوي ألف لحن. افتح وضع التصوير [P] ووثّق هذه اللحظة في City Feed!',
+    quest: null
+  }
+];
+
+// City Feed Initial Posts
+const CITY_FEED = [
+  { author: 'الحيّ الآن • نشرة المدينة', time: 'منذ دقيقتين', text: 'الغروب يبلغ ذروته الآن فوق واد مزي والأقواس. الإضاءة مثالية للتصوير الفوتوغرافي!', img: null },
+  { author: 'أمينة الورّاقة', time: 'منذ 14 دقيقة', text: 'شوهدت رموز مضيئة قرب المسجد العتيق وحي المقام. الكائنات الليلية ستلاحظها بسهولة.', img: null },
+  { author: 'صدى الواقع • ثقافة الأغواط', time: 'منذ ساعة', text: 'معرض افتراضي مصغّر للعمارة التقليدية متاح الآن للاستكشاف في ساحة المقاومة.', img: null }
+];
+
+// --- GAME STATE ---
+const player = {
+  x: 1220,
+  y: 1200,
+  vx: 0,
+  vy: 0,
+  radius: 14,
+  facing: 0,
+  dashTimer: 0,
+  tokens: 25
+};
+
+const camera = { x: player.x, y: player.y, zoom: 1 };
+const keys = {};
+let gameStarted = false;
+let photoMode = false;
+let phoneOpen = false;
+let activeDialogueNpc = null;
+
+const TIME_PHASES = [
+  { name: 'الصباح', time: '08:30', tint: 'rgba(255, 245, 220, 0.06)', ground: '#c9b393' },
+  { name: 'الظهيرة', time: '13:00', tint: 'rgba(255, 255, 255, 0.0)', ground: '#d4be9e' },
+  { name: 'الغروب', time: '18:15', tint: 'rgba(217, 100, 36, 0.24)', ground: '#b89772' },
+  { name: 'الليل', time: '22:45', tint: 'rgba(14, 18, 38, 0.58)', ground: '#786855' }
+];
+let timeIdx = 2; // Start at Sunset (Hero Lighting)
+
+const WEATHERS = ['سماء صافية', 'نسيم صحراوي', 'ضباب خفيف', 'مطر دافئ'];
+let weatherIdx = 0;
+
+const FILTERS = ['دافئ (غروب)', 'سينمائي ليلي', 'أبيض وأسود كلاسيكي', 'طبيعي'];
+let filterIdx = 0;
+
+// Particles (Dust motes / Rain / Leaves)
+const particles = Array.from({ length: 70 }, () => ({
+  x: Math.random() * 2800,
+  y: Math.random() * 2200,
+  vx: -0.4 - Math.random() * 0.6,
+  vy: 0.2 + Math.random() * 0.4,
+  size: 1.5 + Math.random() * 2
+}));
+
+// --- INITIALIZE START SCREEN ---
+const archListEl = document.getElementById('archetype-list');
+ARCHETYPES.forEach((arch, idx) => {
+  const card = document.createElement('div');
+  card.className = 'arch-card' + (idx === 0 ? ' selected' : '');
+  card.innerHTML = `<h4>${arch.name}</h4><p>${arch.desc}</p>`;
+  card.onclick = () => {
+    document.querySelectorAll('.arch-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedArch = arch;
+  };
+  archListEl.appendChild(card);
+});
+
+function startGame() {
+  document.getElementById('start-screen').style.display = 'none';
+  gameStarted = true;
+  showToast('مرحباً بك في حيّ — الأغواط. تجول بحرية واستكشف المدينة.');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3400);
+}
+
+// --- CONTROLS ---
+window.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  keys[e.code] = true;
+  if (!gameStarted) return;
+
+  if (e.code === 'Space') {
+    e.preventDefault();
+    triggerAbility();
+  }
+  if (e.code === 'KeyE') triggerInteract();
+  if (e.code === 'KeyP') togglePhotoMode();
+  if (e.code === 'Tab') {
+    e.preventDefault();
+    togglePhone();
+  }
+  if (e.code === 'Escape') {
+    if (photoMode) togglePhotoMode();
+    if (phoneOpen) togglePhone();
+    closeDialogue();
+  }
+});
+
+window.addEventListener('keyup', e => {
+  keys[e.key] = false;
+  keys[e.code] = false;
+});
+
+window.addEventListener('wheel', e => {
+  if (photoMode) {
+    camera.zoom = Math.max(0.6, Math.min(2.2, camera.zoom - e.deltaY * 0.001));
+  }
+});
+
+function triggerAbility() {
+  if (photoMode || phoneOpen) return;
+  player.dashTimer = 16;
+  showToast(`تفعيل القدرة: ${selectedArch.abilityName}`);
+}
+
+function cycleTime() {
+  timeIdx = (timeIdx + 1) % TIME_PHASES.length;
+  const p = TIME_PHASES[timeIdx];
+  document.getElementById('hud-phase').textContent = p.name;
+  document.getElementById('hud-time').textContent = `${p.time} • ${p.name} في الأغواط`;
+}
+
+function cycleWeather() {
+  weatherIdx = (weatherIdx + 1) % WEATHERS.length;
+  document.getElementById('hud-weather').textContent = WEATHERS[weatherIdx];
+}
+
+function togglePhotoMode() {
+  if (phoneOpen) return;
+  photoMode = !photoMode;
+  document.getElementById('photo-hud').style.display = photoMode ? 'flex' : 'none';
+  document.getElementById('hud').style.opacity = photoMode ? '0' : '1';
+  if (!photoMode) {
+    camera.zoom = 1;
+    canvas.style.filter = 'none';
+  } else {
+    applyPhotoFilter();
+  }
+}
+
+function cycleFilter() {
+  filterIdx = (filterIdx + 1) % FILTERS.length;
+  document.getElementById('filter-name').textContent = FILTERS[filterIdx];
+  applyPhotoFilter();
+}
+
+function applyPhotoFilter() {
+  const f = FILTERS[filterIdx];
+  if (f === 'دافئ (غروب)') canvas.style.filter = 'sepia(0.22) saturate(1.35) contrast(1.06)';
+  else if (f === 'سينمائي ليلي') canvas.style.filter = 'contrast(1.18) brightness(0.92) hue-rotate(-8deg)';
+  else if (f === 'أبيض وأسود كلاسيكي') canvas.style.filter = 'grayscale(1) contrast(1.2)';
+  else canvas.style.filter = 'none';
+}
+
+function capturePhoto() {
+  const dataUrl = canvas.toDataURL('image/png');
+  const currentLoc = document.getElementById('hud-district').textContent;
+  CITY_FEED.unshift({
+    author: `أنت (${selectedArch.name})`,
+    time: 'الآن',
+    text: `لقطة جديدة من ${currentLoc} — ${TIME_PHASES[timeIdx].name}`,
+    img: dataUrl
+  });
+  player.tokens += 10;
+  document.getElementById('hud-tokens').textContent = player.tokens;
+  showToast('📸 تم التقاط الصورة ونشرها في City Feed (+10 دنانير حيّ)');
+  togglePhotoMode();
+}
+
+// --- SMARTPHONE UI ---
+function togglePhone() {
+  if (photoMode) return;
+  phoneOpen = !phoneOpen;
+  document.getElementById('phone-modal').style.display = phoneOpen ? 'flex' : 'none';
+  if (phoneOpen) renderPhoneTab('feed');
+}
+
+function switchPhoneTab(tab, el) {
+  document.querySelectorAll('.phone-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderPhoneTab(tab);
+}
+
+function renderPhoneTab(tab) {
+  const body = document.getElementById('phone-content');
+  if (tab === 'feed') {
+    body.innerHTML = CITY_FEED.map(post => `
+      <div class="feed-item">
+        <div class="feed-author"><span>${post.author}</span><span style="color:#7a7067;font-weight:400;">${post.time}</span></div>
+        <div class="feed-text">${post.text}</div>
+        ${post.img ? `<img src="${post.img}" class="feed-img" />` : ''}
       </div>
-    </section>
-
-    <!-- 02. World & Digital Twin -->
-    <section id="world">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <h2>جغرافيا التوأم الرقمي (مدينة الأغواط)</h2>
+    `).join('');
+  } else if (tab === 'map') {
+    body.innerHTML = LANDMARKS.map(lm => `
+      <div class="feed-item" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div class="feed-author">${lm.discovered ? '✅' : '🔒'} ${lm.name}</div>
+          <div class="feed-text" style="font-size:0.8rem;">${lm.discovered ? lm.lore : 'معلم غير مكتشف بعد — تجول في المدينة للوصول إليه.'}</div>
+        </div>
+        ${lm.discovered ? `<button class="btn-sm" onclick="fastTravel(${lm.x + lm.w/2}, ${lm.y + lm.h/2})">انتقال</button>` : ''}
       </div>
-      <p>
-        تُبنى المدينة انطلاقًا من بيانات <strong>OpenStreetMap</strong> وصور الأقمار الصناعية والمسح الميداني، وتُقسّم إلى 4 قطاعات رئيسية مترابطة عبر نظام التدفق السلس (World Partition):
-      </p>
-      <div class="grid-2">
-        <div class="card">
-          <span class="card-tag">DISTRICT 01</span>
-          <h3>القلب التاريخي (وسط المدينة)</h3>
-          <p>ساحة المقاومة، شارع الأمير عبد القادر، الأقواس، القصر القديم، المسجد العتيق، وباب الجزائر.</p>
-          <ul class="clean-list">
-            <li>كثافة عالية في التفاصيل المعمارية والأزقة الضيقة.</li>
-            <li>أسطح مترابطة تتيح التنقل العمودي واكتشاف المخابئ.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <span class="card-tag">DISTRICT 02</span>
-          <h3>الأحياء السكنية العتيقة والحديثة</h3>
-          <p>حي المقام، حي الوئام، حي المعمورة، وحي المصلى.</p>
-          <ul class="clean-list">
-            <li>تباين بصري بين البيوت ذات الأفنية الداخلية والعمارات الحديثة.</li>
-            <li>مقاهٍ شعبية وساحات مصغرة لتجمع الشخصيات.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <span class="card-tag">DISTRICT 03</span>
-          <h3>واد مزي والبساتين والحدائق</h3>
-          <p>ضفاف واد مزي، البساتين المحاذية، والحدائق العمومية.</p>
-          <ul class="clean-list">
-            <li>مسارات مفتوحة للتجول الهادئ ومراقبة الأفق وقت الغروب.</li>
-            <li>بيئة مثالية لظهور الكائنات الليلية والنادرة.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <span class="card-tag">DISTRICT 04</span>
-          <h3>الأقطاب المعرفية والتجارية</h3>
-          <p>محيط المدرسة العليا للأساتذة طالب عبد الرحمن، جامعة عمار ثليجي، الأسواق الشعبية، ومحطات النقل.</p>
-          <ul class="clean-list">
-            <li>نقاط التقاء اجتماعية نشطة نهارًا.</li>
-            <li>مكتبات ومحلات تحف قابلة للدخول دون شاشات تحميل.</li>
-          </ul>
-        </div>
+    `).join('');
+  } else if (tab === 'quests') {
+    const quests = NPCS.filter(n => n.quest).map(n => n.quest);
+    body.innerHTML = quests.map(q => `
+      <div class="feed-item">
+        <div class="feed-author"><span>${q.title}</span><span>+${q.reward} 🪙</span></div>
+        <div class="feed-text">${q.desc}</div>
+        <div style="margin-top:6px; font-size:0.78rem; color:#c89d7c;">الحالة: ${q.status === 'completed' ? 'مكتملة ✅' : q.status === 'active' ? 'قيد التنفيذ 🧭' : 'متاحة لدى السكان'}</div>
       </div>
-    </section>
+    `).join('');
+  }
+}
 
-    <!-- 03. Non-Human Creatures -->
-    <section id="creatures">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <h2>سكان المدينة: الكائنات غير البشرية</h2>
-      </div>
-      <p>
-        لا وجود للبشر في عالم اللعبة؛ يسكن المدينة كائنات خيالية ذات تصميم فني ناضج، ترتدي أزياءً حضرية (معاطف، نظارات، حقائب، قبعات) وتعيش روتينًا يوميًا مألوفًا.
-      </p>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>الفئة القابلة للعب</th>
-              <th>السمات الشكلية</th>
-              <th>القدرة الحركية (Traversal)</th>
-              <th>الميزة الاستكشافية</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>الوثّاب (The Nimble)</strong></td>
-              <td>صغير الحجم، أطراف مرنة، أذنان طويلتان، سترة استكشاف.</td>
-              <td>قفز مزدوج، تسلق الجدران، الانزلاق عبر الفتحات الضيقة.</td>
-              <td>الوصول إلى الأزقة المغلقة والممرات الجدارية السرية.</td>
-            </tr>
-            <tr>
-              <td><strong>المُحلّق (The Glider)</strong></td>
-              <td>بنية خفيفة، أجنحة غشائية مدمجة في معطفه الطويل.</td>
-              <td>الطيران الشراعي (Gliding) واستغلال التيارات الهوائية.</td>
-              <td>عبور الشوارع جوًا والتنقل بين الأسطح العالية المتباعدة.</td>
-            </tr>
-            <tr>
-              <td><strong>الرّاصد (The Tall)</strong></td>
-              <td>طويل القامة، خطوات واسعة، رقبة مرنة ونظارات دائرية.</td>
-              <td>تخطي الحواجز العالية، رؤية تلسكوبية بعيدة المدى.</td>
-              <td>رصد العلامات المخفية والمقتنيات من مسافات بعيدة.</td>
-            </tr>
-            <tr>
-              <td><strong>الليلي (The Nocturnal)</strong></td>
-              <td>فراء داكن يمتص الضوء، عيون كهرمانية مضيئة، عباءة.</td>
-              <td>رؤية ليلية فائقة، حركة صامتة تمامًا دون خطوات.</td>
-              <td>كشف الشخصيات والنقوش التي لا تظهر إلا بعد منتصف الليل.</td>
-            </tr>
-            <tr>
-              <td><strong>الأثيري (The Strange)</strong></td>
-              <td>قناع هندسي خزفي، يطفو قليلًا فوق سطح الأرض.</td>
-              <td>انتقال آني لمسافات قصيرة (Phase Dash).</td>
-              <td>استشعار الألغاز المعمارية واختراق بعض الحواجز الشبكية.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+function fastTravel(tx, ty) {
+  player.x = tx;
+  player.y = ty;
+  togglePhone();
+  showToast('تم الانتقال السريع عبر خريطة المدينة.');
+}
 
-    <!-- 04. Gameplay Systems -->
-    <section id="gameplay">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <h2>أنظمة اللعب والاستكشاف</h2>
-      </div>
-      <div class="grid-3">
-        <div class="card">
-          <span class="card-tag">DISCOVERY</span>
-          <h3>نظام City Discovery</h3>
-          <p>
-            تبدأ الخريطة كرسم معماري غير مكتمل. عند زيارة حي أو معلم، يتحول إلى مجسم ثلاثي الأبعاد ملون ويُفتح ملفه التاريخي والقصصي.
-          </p>
-        </div>
+// --- INTERACTION & DIALOGUE ---
+function getNearbyInteractable() {
+  for (const npc of NPCS) {
+    if (Math.hypot(player.x - npc.x, player.y - npc.y) < 55) return { type: 'npc', data: npc };
+  }
+  for (const sec of SECRETS) {
+    if (!sec.found && Math.hypot(player.x - sec.x, player.y - sec.y) < 48) return { type: 'secret', data: sec };
+  }
+  return null;
+}
 
-        <div class="card">
-          <span class="card-tag">PHOTOGRAPHY</span>
-          <h3>استوديو التصوير (Photo Mode)</h3>
-          <p>
-            إيقاف الزمن، تحريك الكاميرا بحرية، ضبط البعد البؤري وعمق الميدان، إضافة إضاءة ثلاثية النقاط، ونشر الصور بإحداثياتها الجغرافية.
-          </p>
-        </div>
+function triggerInteract() {
+  if (photoMode || phoneOpen) return;
+  const target = getNearbyInteractable();
+  if (!target) return;
 
-        <div class="card">
-          <span class="card-tag">HOUSING & ECONOMY</span>
-          <h3>المساحة الخاصة والاقتصاد</h3>
-          <p>
-            غرفة قابلة للتخصيص على سطح مبنى، تُزيّن بالصور الملتقطة والمقتنيات. العملة (دنانير حيّ) تُكتسب باللعب فقط دون أي أفضلية مدفوعة.
-          </p>
-        </div>
-      </div>
-    </section>
+  if (target.type === 'secret') {
+    target.data.found = true;
+    player.tokens += target.data.tokens;
+    document.getElementById('hud-tokens').textContent = player.tokens;
+    showToast(`✨ اكتشفت سرًا: ${target.data.name} (+${target.data.tokens} دنانير حيّ)`);
+  } else if (target.type === 'npc') {
+    openDialogue(target.data);
+  }
+}
 
-    <!-- 05. Social & City Feed -->
-    <section id="social">
-      <div class="section-header">
-        <span class="section-num">05</span>
-        <h2>التواصل والإنترنت الحي (City Feed)</h2>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <span class="card-tag">DIEGETIC SOCIAL FEED</span>
-          <h3>منصة City Feed داخل اللعبة</h3>
-          <ul class="clean-list">
-            <li><strong>الحيّ الآن:</strong> منشورات آلية من شخصيات اللعبة حول الطقس والشائعات والأسرار.</li>
-            <li><strong>عدسة المكتشفين:</strong> أفضل صور اللاعبين مع زر لتحديد موقع الالتقاط على الخريطة.</li>
-            <li><strong>صدى الواقع:</strong> انعكاس افتراضي مُراجع ومنقّح للفعاليات الثقافية الحقيقية في الأغواط.</li>
-          </ul>
-        </div>
+function openDialogue(npc) {
+  activeDialogueNpc = npc;
+  document.getElementById('dlg-name').textContent = npc.name;
+  const qBtn = document.getElementById('dlg-quest-btn');
 
-        <div class="card">
-          <span class="card-tag">MULTIPLAYER INSTANCES</span>
-          <h3>التفاعل الجماعي الهادئ</h3>
-          <ul class="clean-list">
-            <li>تقسيم الخوادم إلى غرف (Instances) تضم 30 إلى 40 لاعبًا للحفاظ على هدوء المدينة.</li>
-            <li>الجلوس في المقاهي، التصوير الجماعي، وحل الألغاز التعاونية التي تتطلب أكثر من لاعب.</li>
-            <li>ملف <strong>My Laghouat</strong> لتوثيق الأحياء المكتشفة وساعات التجول.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 06. Technical Architecture -->
-    <section id="tech">
-      <div class="section-header">
-        <span class="section-num">06</span>
-        <h2>البنية التقنية وخط الإنتاج</h2>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <span class="card-tag">ENGINE & GIS PIPELINE</span>
-          <h3>Unreal Engine 5.4+ & GIS</h3>
-          <ul class="clean-list">
-            <li>استخدام <strong>Blender GIS</strong> و<strong>Houdini</strong> لتحويل خرائط OpenStreetMap وبيانات الارتفاع إلى كتل ثلاثية الأبعاد دقيقة.</li>
-            <li>معالجة المعالم التاريخية والأقواس يدويًا لإبراز الهوية المعمارية للأغواط.</li>
-            <li>نظام <strong>World Partition</strong> لتحميل الأحياء ديناميكيًا دون شاشات انتظار.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <span class="card-tag">BACKEND & HYBRID AI</span>
-          <h3>الخوادم والذكاء الاصطناعي المقيد</h3>
-          <ul class="clean-list">
-            <li>قاعدة بيانات <strong>Supabase</strong> لإدارة الحسابات، الصور، ومنشورات City Feed.</li>
-            <li>خوادم مخصصة عبر <strong>Agones</strong> لدعم اللعب المشترك بين الحاسوب والهاتف.</li>
-            <li>ذكاء اصطناعي هجين: جداول روتين مبرمجة (24 ساعة) + نماذج لغوية مقيدة بسياق المدينة للشخصيات الرئيسية.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 07. Budget & Roadmap -->
-    <section id="budget">
-      <div class="section-header">
-        <span class="section-num">07</span>
-        <h2>توزيع الميزانية التخطيطية ($1,000,000)</h2>
-      </div>
-      <div class="card">
-        <div class="budget-row">
-          <div class="budget-label"><span>تطوير اللعبة والأنظمة الأساسية (Core Gameplay & UE5)</span><span class="mono">$250,000 (25%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 25%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>بناء العالم وبيانات GIS والبيئة ثلاثية الأبعاد</span><span class="mono">$180,000 (18%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 18%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>تصميم الشخصيات والرسوم والتحريك (Creatures & Animation)</span><span class="mono">$140,000 (14%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 14%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>الخوادم والبنية الشبكية (Multiplayer & Backend)</span><span class="mono">$100,000 (10%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 10%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>احتياطي الطوارئ والتشغيل المستمر (Live-Ops Reserve)</span><span class="mono">$75,000 (7.5%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 7.5%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>واجهة المستخدم وتجربة اللعب (UI/UX)</span><span class="mono">$60,000 (6%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 6%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>التسويق وإطلاق المجتمع (Marketing & Launch)</span><span class="mono">$60,000 (6%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 6%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>الاختبار والأمان وتحسين الأداء (QA & Optimization)</span><span class="mono">$55,000 (5.5%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 5.5%;"></div></div>
-        </div>
-        <div class="budget-row">
-          <div class="budget-label"><span>الذكاء الاصطناعي والسرد التفاعلي (Guardrailed AI)</span><span class="mono">$45,000 (4.5%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 4.5%;"></div></div>
-        </div>
-        <div class="budget-row" style="margin-bottom: 0;">
-          <div class="budget-label"><span>الهندسة الصوتية والموسيقى التصويرية (Audio & OST)</span><span class="mono">$35,000 (3.5%)</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width: 3.5%;"></div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 08. Interactive JSON Schema Viewer -->
-    <section id="json-schema">
-      <div class="section-header">
-        <span class="section-num">08</span>
-        <h2>المخطط البرمجي الموحد (JSON Schema)</h2>
-      </div>
-      <div class="toolbar">
-        <button class="btn" onclick="copyJson()">نسخ كود JSON</button>
-        <button class="btn" onclick="downloadJson()">تحميل ملف gdd_laghouat_hayy.json</button>
-      </div>
-      <pre class="json-viewer" id="json-output"></pre>
-    </section>
-  </main>
-
-  <script>
-    const gddData = {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "project_specification": {
-        "title": "LAGHOUAT: HAYY (حيّ) — Laghouat: The Living City",
-        "version": "1.0.0-GDD-MASTER",
-        "genre": "Cozy Exploration / Digital Twin Social Sandbox",
-        "core_philosophy": "A non-combat, atmospheric digital twin of Laghouat inhabited entirely by stylized non-human creatures, emphasizing architectural authenticity, daily slice-of-life routines, photography, and organic community discovery."
-      },
-      "technical_architecture": {
-        "game_engine": "Unreal Engine 5.4+",
-        "platforms": {
-          "pc": {
-            "os": ["Windows 10/11", "macOS (Apple Silicon)"],
-            "rendering": ["Nanite Virtualized Geometry", "Lumen Global Illumination", "Volumetric Clouds & Fog"],
-            "target_fps": 60
-          },
-          "mobile": {
-            "os": ["iOS 16+", "Android 12+"],
-            "rendering": ["Mobile Forward Renderer", "Baked Lightmaps", "Hierarchical LODs (HLOD)"],
-            "target_fps": 60
-          },
-          "cross_play": true
-        },
-        "gis_to_ue5_pipeline": {
-          "data_ingestion": ["OpenStreetMap (OSM) Vector Data", "High-Res Satellite Orthophotos", "SRTM Elevation Models", "Field Reference Photography"],
-          "procedural_generation": "Houdini Engine + Blender GIS modular greyboxing",
-          "manual_art_pass": "Hero landmarks, arches, mosques, and palm groves sculpted by environment artists"
-        },
-        "backend_and_networking": {
-          "database_and_auth": "Supabase (PostgreSQL, Auth, Realtime, Storage)",
-          "dedicated_servers": "Agones / Kubernetes auto-scaling Linux servers",
-          "max_players_per_instance": 40
-        }
-      },
-      "world_and_map_design": {
-        "spatial_fidelity": "1:1 Scale-Adjusted Digital Twin of Laghouat, Algeria",
-        "districts": [
-          {
-            "id": "dist_01_center",
-            "name": "القلب التاريخي (وسط المدينة)",
-            "key_landmarks": ["ساحة المقاومة", "شارع الأمير عبد القادر", "الأقواس", "القصر القديم", "المسجد العتيق", "باب الجزائر"]
-          },
-          {
-            "id": "dist_02_residential",
-            "name": "الأحياء السكنية العتيقة والحديثة",
-            "key_landmarks": ["حي المقام", "حي الوئام", "حي المعمورة", "حي المصلى"]
-          },
-          {
-            "id": "dist_03_oasis_river",
-            "name": "واد مزي والبساتين والحدائق",
-            "key_landmarks": ["ضفاف واد مزي", "البساتين المحاذية", "الحدائق العمومية"]
-          },
-          {
-            "id": "dist_04_academic_hubs",
-            "name": "الأقطاب المعرفية والتجارية",
-            "key_landmarks": ["المدرسة العليا للأساتذة طالب عبد الرحمن", "جامعة عمار ثليجي", "الأسواق الشعبية", "محطات النقل"]
-          }
-        ]
-      },
-      "playable_archetypes": [
-        { "id": "char_nimble", "name": "الوثّاب (The Nimble)", "abilities": ["Double Jump", "Wall Clamber", "Gap Squeeze"] },
-        { "id": "char_glider", "name": "المُحلّق (The Glider)", "abilities": ["Thermal Gliding", "Updraft Catching"] },
-        { "id": "char_tall", "name": "الرّاصد (The Tall)", "abilities": ["High Step-Up", "Telescopic Zoom Vision"] },
-        { "id": "char_nocturnal", "name": "الليلي (The Nocturnal)", "abilities": ["True Night Vision", "Zero-Footstep Stealth"] },
-        { "id": "char_strange", "name": "الأثيري (The Strange)", "abilities": ["Short-Range Phase Dash", "Anomaly Resonance"] }
-      ],
-      "negative_constraints": [
-        "No human characters or realistic human avatars anywhere in the game",
-        "No combat, weapons, violence, crime, or competitive racing mechanics",
-        "No predatory monetization, loot boxes, or pay-to-win advantages",
-        "No cluttered UI with excessive permanent on-screen buttons",
-        "No unmoderated scraping of private real-world social media content"
-      ]
-    };
-
-    const jsonOutput = document.getElementById('json-output');
-    jsonOutput.textContent = JSON.stringify(gddData, null, 2);
-
-    function copyJson() {
-      navigator.clipboard.writeText(JSON.stringify(gddData, null, 2)).then(() => {
-        alert('تم نسخ مخطط JSON إلى الحافظة بنجاح.');
-      });
+  if (npc.quest) {
+    // Check completion condition
+    let ready = false;
+    if (npc.quest.targetLandmark) {
+      const lm = LANDMARKS.find(l => l.id === npc.quest.targetLandmark);
+      if (lm && lm.discovered) ready = true;
+    }
+    if (npc.quest.targetSecret) {
+      const sc = SECRETS.find(s => s.id === npc.quest.targetSecret);
+      if (sc && sc.found) ready = true;
     }
 
-    function downloadJson() {
-      const blob = new Blob([JSON.stringify(gddData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'gdd_laghouat_hayy.json';
-      a.click();
-      URL.revokeObjectURL(url);
+    if (npc.quest.status === 'completed') {
+      document.getElementById('dlg-text').textContent = 'شكرًا لك يا صديقي! الأغواط أجمل بوجود مستكشفين مثلك.';
+      qBtn.style.display = 'none';
+    } else if (ready) {
+      document.getElementById('dlg-text').textContent = 'رائع! لقد أنجزت المطلوب بالفعل. تفضل مكافأتك!';
+      qBtn.textContent = `استلام المكافأة (+${npc.quest.reward} 🪙)`;
+      qBtn.style.display = 'inline-block';
+    } else if (npc.quest.status === 'active') {
+      document.getElementById('dlg-text').textContent = `${npc.dialogue} (المهمة قيد التنفيذ: ${npc.quest.desc})`;
+      qBtn.style.display = 'none';
+    } else {
+      document.getElementById('dlg-text').textContent = npc.dialogue;
+      qBtn.textContent = `قبول المهمة: ${npc.quest.title}`;
+      qBtn.style.display = 'inline-block';
     }
+  } else {
+    document.getElementById('dlg-text').textContent = npc.dialogue;
+    qBtn.style.display = 'none';
+  }
 
-    // Active link highlighting on scroll
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('nav a');
+  document.getElementById('dialogue-box').style.display = 'block';
+}
 
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (scrollY >= sectionTop) {
-          current = section.getAttribute('id');
-        }
-      });
+function acceptOrCompleteQuest() {
+  if (!activeDialogueNpc || !activeDialogueNpc.quest) return;
+  const q = activeDialogueNpc.quest;
 
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-          link.classList.add('active');
-        }
-      });
-    });
-  </script>
+  let ready = false;
+  if (q.targetLandmark && LANDMARKS.find(l => l.id === q.targetLandmark)?.discovered) ready = true;
+  if (q.targetSecret && SECRETS.find(s => s.id === q.targetSecret)?.found) ready = true;
+
+  if (ready && q.status !== 'completed') {
+    q.status = 'completed';
+    player.tokens += q.reward;
+    document.getElementById('hud-tokens').textContent = player.tokens;
+    showToast(`🎉 اكتملت المهمة: ${q.title} (+${q.reward} دنانير حيّ)`);
+  } else if (q.status === 'available') {
+    q.status = 'active';
+    showToast(`🧭 بدأت مهمة: ${q.title}`);
+  }
+  closeDialogue();
+}
+
+function closeDialogue() {
+  document.getElementById('dialogue-box').style.display = 'none';
+  activeDialogueNpc = null;
+}
+
+// --- UPDATE & RENDER LOOP ---
+function update() {
+  if (!gameStarted) return;
+
+  let dx = 0, dy = 0;
+  if (keys['KeyW'] || keys['ArrowUp']) dy -= 1;
+  if (keys['KeyS'] || keys['ArrowDown']) dy += 1;
+  if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
+  if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
+
+  if (dx !== 0 || dy !== 0) {
+    const len = Math.hypot(dx, dy);
+    dx /= len;
+    dy /= len;
+    player.facing = Math.atan2(dy, dx);
+  }
+
+  if (photoMode) {
+    // Free camera pan in Photo Mode
+    camera.x += dx * 7;
+    camera.y += dy * 7;
+    return;
+  }
+
+  if (phoneOpen) return;
+
+  const mult = player.dashTimer > 0 ? 2.3 : 1;
+  if (player.dashTimer > 0) player.dashTimer--;
+
+  const nextX = Math.max(200, Math.min(2650, player.x + dx * selectedArch.speed * mult));
+  const nextY = Math.max(200, Math.min(2050, player.y + dy * selectedArch.speed * mult));
+
+  // Simple building collision (Strange archetype phases through when dashing)
+  let blocked = false;
+  if (!(selectedArch.id === 'strange' && player.dashTimer > 0)) {
+    for (const b of BUILDINGS) {
+      if (nextX > b.x - 10 && nextX < b.x + b.w + 10 && nextY > b.y - 10 && nextY < b.y + b.h + 10) {
+        blocked = true;
+        break;
+      }
+    }
+  }
+
+  if (!blocked) {
+    player.x = nextX;
+    player.y = nextY;
+  }
+
+  // Smooth camera follow
+  camera.x += (player.x - camera.x) * 0.1;
+  camera.y += (player.y - camera.y) * 0.1;
+
+  // Landmark Discovery Check
+  let activeDistrict = 'شوارع الأغواط — تجول حر';
+  let discoveredCount = 0;
+  for (const lm of LANDMARKS) {
+    if (player.x > lm.x && player.x < lm.x + lm.w && player.y > lm.y && player.y < lm.y + lm.h) {
+      activeDistrict = lm.name;
+      if (!lm.discovered) {
+        lm.discovered = true;
+        player.tokens += 15;
+        document.getElementById('hud-tokens').textContent = player.tokens;
+        showToast(`🗺️ معلم جديد مكتشف: ${lm.name} (+15 دنانير حيّ)`);
+      }
+    }
+    if (lm.discovered) discoveredCount++;
+  }
+  document.getElementById('hud-district').textContent = activeDistrict;
+  document.getElementById('hud-discovery').textContent = `${discoveredCount}/${LANDMARKS.length}`;
+
+  // Nearby interaction prompt
+  const near = getNearbyInteractable();
+  const promptEl = document.getElementById('interact-prompt');
+  if (near) {
+    promptEl.style.display = 'block';
+    promptEl.innerHTML = near.type === 'npc'
+      ? `اضغط <span class="key">E</span> للتحدث مع ${near.data.name}`
+      : `اضغط <span class="key">E</span> لفحص ${near.data.name}`;
+  } else {
+    promptEl.style.display = 'none';
+  }
+
+  // Update ambient particles
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy + (WEATHERS[weatherIdx] === 'مطر دافئ' ? 3.5 : 0);
+    if (p.x < 200) p.x = 2650;
+    if (p.y > 2050) p.y = 200;
+  }
+}
+
+function draw() {
+  const phase = TIME_PHASES[timeIdx];
+  ctx.fillStyle = phase.ground;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.scale(camera.zoom, camera.zoom);
+  ctx.translate(-camera.x, -camera.y);
+
+  // 1. Oued M'zi Riverbed (Stylized Oasis Waterway)
+  ctx.fillStyle = '#5c7c78';
+  ctx.beginPath();
+  ctx.moveTo(2050, 1250);
+  ctx.quadraticCurveTo(2280, 1550, 2550, 1950);
+  ctx.lineTo(2680, 1950);
+  ctx.quadraticCurveTo(2400, 1500, 2180, 1250);
+  ctx.closePath();
+  ctx.fill();
+
+  // 2. Real-World Inspired Street Network (Boulevard Emir Abdelkader & Arteries)
+  ctx.strokeStyle = '#595149';
+  ctx.lineWidth = 46;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  // Main East-West Axis
+  ctx.moveTo(600, 1180);
+  ctx.lineTo(2150, 1180);
+  // North-South Historic Axis
+  ctx.moveTo(1220, 580);
+  ctx.lineTo(1220, 1850);
+  // Diagonal Boulevard
+  ctx.moveTo(750, 1750);
+  ctx.lineTo(1650, 1180);
+  ctx.lineTo(1650, 620);
+  ctx.stroke();
+
+  // Street Center Markings
+  ctx.strokeStyle = 'rgba(245, 239, 230, 0.25)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([14, 14]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 3. Landmark Zones (Digital Twin Plazas & Districts)
+  for (const lm of LANDMARKS) {
+    ctx.fillStyle = lm.discovered ? lm.color : 'rgba(90, 82, 74, 0.35)';
+    ctx.beginPath();
+    ctx.roundRect(lm.x, lm.y, lm.w, lm.h, 14);
+    ctx.fill();
+
+    ctx.strokeStyle = lm.discovered ? 'rgba(229, 169, 60, 0.6)' : 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Landmark Label on Ground
+    ctx.fillStyle = lm.discovered ? '#f5efe6' : 'rgba(245,239,230,0.45)';
+    ctx.font = '600 14px "IBM Plex Sans Arabic"';
+    ctx.textAlign = 'center';
+    ctx.fillText(lm.discovered ? lm.name : 'منطقة غير مكتشفة', lm.x + lm.w / 2, lm.y + lm.h / 2);
+  }
+
+  // 4. Stylized Buildings with Sunset Long Shadows
+  const shadowOffsetX = timeIdx === 2 ? 32 : timeIdx === 0 ? -26 : 12;
+  const shadowOffsetY = timeIdx === 2 ? 22 : 14;
+
+  for (const b of BUILDINGS) {
+    // Ground Shadow
+    ctx.fillStyle = 'rgba(15, 10, 8, 0.32)';
+    ctx.fillRect(b.x + shadowOffsetX, b.y + shadowOffsetY, b.w, b.h);
+
+    // Building Body & Stylized Rooftop
+    ctx.fillStyle = b.roof;
+    ctx.beginPath();
+    ctx.roundRect(b.x, b.y, b.w, b.h, 6);
+    ctx.fill();
+
+    ctx.strokeStyle = '#3d281c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner Rooftop Trim
+    ctx.strokeStyle = 'rgba(255, 225, 190, 0.22)';
+    ctx.strokeRect(b.x + 8, b.y + 8, b.w - 16, b.h - 16);
+  }
+
+  // 5. Palm Trees (Laghouat Oasis Signature)
+  for (const palm of PALMS) {
+    ctx.fillStyle = 'rgba(15, 10, 8, 0.25)';
+    ctx.beginPath();
+    ctx.arc(palm.x + 10, palm.y + 10, palm.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#2d5a3c';
+    for (let a = 0; a < 6; a++) {
+      const ang = (a * Math.PI) / 3;
+      ctx.beginPath();
+      ctx.ellipse(palm.x + Math.cos(ang) * 8, palm.y + Math.sin(ang) * 8, palm.size, 5, ang, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // 6. Secrets / Glowing Glyphs
+  for (const sec of SECRETS) {
+    if (sec.found) continue;
+    const isNocturnal = selectedArch.id === 'nocturnal';
+    const pulse = 6 + Math.sin(Date.now() * 0.006) * 3;
+    ctx.fillStyle = isNocturnal ? '#70a1ff' : 'rgba(229, 169, 60, 0.75)';
+    ctx.beginPath();
+    ctx.arc(sec.x, sec.y, isNocturnal ? pulse + 4 : pulse, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 7. Non-Human NPCs
+  for (const npc of NPCS) {
+    // Cloak
+    ctx.fillStyle = npc.cloak;
+    ctx.beginPath();
+    ctx.arc(npc.x, npc.y, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Stylized Creature Head
+    ctx.fillStyle = npc.color;
+    ctx.beginPath();
+    ctx.arc(npc.x, npc.y - 4, 9, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Quest Indicator
+    if (npc.quest && npc.quest.status !== 'completed') {
+      ctx.fillStyle = '#e5a93c';
+      ctx.font = 'bold 16px "IBM Plex Mono"';
+      ctx.textAlign = 'center';
+      ctx.fillText(npc.quest.status === 'available' ? '!' : '?', npc.x, npc.y - 22);
+    }
+  }
+
+  // 8. Player Creature (Stylized Non-Human Avatar)
+  ctx.save();
+  ctx.translate(player.x, player.y);
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.beginPath();
+  ctx.ellipse(0, 10, 14, 7, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Coat / Cloak
+  ctx.fillStyle = selectedArch.coat;
+  ctx.beginPath();
+  ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Creature Head & Ears/Mask
+  ctx.fillStyle = selectedArch.color;
+  ctx.beginPath();
+  ctx.arc(0, -4, 9.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Stylized Ears / Horns
+  ctx.beginPath();
+  ctx.moveTo(-6, -10);
+  ctx.lineTo(-10, -21);
+  ctx.lineTo(-1, -12);
+  ctx.moveTo(6, -10);
+  ctx.lineTo(10, -21);
+  ctx.lineTo(1, -12);
+  ctx.fill();
+
+  // Glowing Eyes
+  ctx.fillStyle = '#fff';
+  const lookX = Math.cos(player.facing) * 3;
+  const lookY = Math.sin(player.facing) * 2;
+  ctx.beginPath();
+  ctx.arc(-3 + lookX, -4 + lookY, 2, 0, Math.PI * 2);
+  ctx.arc(3 + lookX, -4 + lookY, 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // 9. Atmospheric Particles
+  ctx.fillStyle = WEATHERS[weatherIdx] === 'مطر دافئ' ? 'rgba(180, 210, 255, 0.5)' : 'rgba(255, 220, 170, 0.45)';
+  for (const p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+
+  // 10. Global Time-of-Day & Weather Lighting Tint
+  ctx.fillStyle = phase.tint;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (WEATHERS[weatherIdx] === 'ضباب خفيف') {
+    ctx.fillStyle = 'rgba(220, 215, 205, 0.25)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
 </body>
 </html>
