@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>صَدَى الظِّل | Echo of Shadow</title>
+    <!-- خطوط عربية أنيقة تناسب الطابع الغامض -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090d;
+            --light-glow: #38bdf8;
+            --shadow-glow: #c084fc;
+            --shard-gold: #fde047;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(10, 14, 23, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text-main);
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* طبقة واجهة المستخدم العلوية */
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .hud-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+        }
+
+        .hud-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+        }
+
+        .stage-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #f8fafc;
+        }
+
+        .shard-counter {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--shard-gold);
+            text-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+        }
+
+        .realm-indicator {
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            background: rgba(56, 189, 248, 0.12);
+            color: #bae6fd;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .realm-indicator.shadow-mode {
+            border-color: rgba(192, 132, 252, 0.5);
+            background: rgba(192, 132, 252, 0.16);
+            color: #e9d5ff;
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.25);
+        }
+
+        .icon-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* رسائل التلميحات العائمة داخل اللعبة */
+        #whisper-box {
+            position: fixed;
+            top: 84px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9;
+            pointer-events: none;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            max-width: 90%;
+        }
+
+        #whisper-box.visible {
+            opacity: 1;
+        }
+
+        .whisper-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            color: rgba(226, 232, 240, 0.85);
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+            background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.65), transparent);
+            padding: 8px 32px;
+            border-radius: 20px;
+        }
+
+        /* الشاشات المنبثقة (البداية، الفوز، الانتقال) */
+        .overlay-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.82) 0%, rgba(4, 6, 10, 0.96) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .overlay-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .game-logo {
+            font-family: 'Amiri', serif;
+            font-size: clamp(3rem, 8vw, 5.2rem);
+            font-weight: 700;
+            color: #f8fafc;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.45), 0 0 60px rgba(192, 132, 252, 0.25);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .game-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .controls-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            width: 100%;
+            max-width: 620px;
+            margin-bottom: 36px;
+        }
+
+        .guide-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .key-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            font-family: monospace;
+        }
+
+        .guide-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffffff;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 14px 44px;
+            border-radius: 999px;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 35px rgba(192, 132, 252, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+        }
+
+        /* أزرار التحكم باللمس للهواتف والأجهزة اللوحية */
+        #touch-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .touch-cluster {
+            display: flex;
+            gap: 14px;
+            pointer-events: auto;
+        }
+
+        .touch-btn {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            color: rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            touch-action: manipulation;
+            transition: transform 0.1s, background 0.15s;
+        }
+
+        .touch-btn:active, .touch-btn.active {
+            transform: scale(0.9);
+            background: rgba(56, 189, 248, 0.35);
+            border-color: rgba(56, 189, 248, 0.7);
+        }
+
+        .touch-btn.phase-btn {
+            width: 68px;
+            height: 68px;
+            border-color: rgba(192, 132, 252, 0.45);
+            background: rgba(88, 28, 135, 0.35);
+        }
+
+        .touch-btn.phase-btn:active, .touch-btn.phase-btn.active {
+            background: rgba(192, 132, 252, 0.5);
+            border-color: #e9d5ff;
+        }
+
+        /* إظهار أزرار اللمس على الشاشات الصغيرة أو الأجهزة اللمسية */
+        @media (min-width: 1025px) and (pointer: fine) {
+            #touch-controls {
+                opacity: 0.35;
+                transition: opacity 0.3s;
+            }
+            #touch-controls:hover {
+                opacity: 0.95;
+            }
+        }
+
+        @media (max-width: 640px) {
+            #hud {
+                padding: 10px 12px;
+            }
+            .hud-card {
+                padding: 6px 10px;
+                gap: 6px;
+            }
+            .stage-title {
+                font-size: 1rem;
+            }
+            .touch-btn {
+                width: 56px;
+                height: 56px;
+            }
+            .touch-btn.phase-btn {
+                width: 62px;
+                height: 62px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- لوحة الرسم الرئيسية للعبة -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- شريط المعلومات العلوي (HUD) -->
+    <header id="hud">
+        <div class="hud-group">
+            <div class="hud-card">
+                <span class="stage-title" id="hud-stage-name">الفصل الأول: غابة الهمس</span>
+            </div>
+            <div class="hud-card" title="شظايا الضوء المطلوبة لفتح البوابة">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fde047" stroke="#fef08a" stroke-width="1.5">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span class="shard-counter" id="hud-shards">0 / 3</span>
+            </div>
+        </div>
+
+        <div class="hud-group">
+            <div class="realm-indicator" id="hud-realm">
+                <span id="realm-dot">●</span>
+                <span id="realm-label">عالم النور الباهت</span>
+            </div>
+            <button class="icon-btn" id="btn-restart" title="إعادة المرحلة (R)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            </button>
+            <button class="icon-btn" id="btn-audio" title="كتم / تشغيل الصوت">
+                <svg id="icon-sound-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                </svg>
+                <svg id="icon-sound-off" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/>
+                    <line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- صندوق الهمسات والتلميحات الغامضة -->
+    <div id="whisper-box">
+        <div class="whisper-text" id="whisper-text">...</div>
+    </div>
+
+    <!-- أزرار التحكم باللمس -->
+    <div id="touch-controls">
+        <div class="touch-cluster">
+            <button class="touch-btn" id="touch-right" aria-label="يمين">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <button class="touch-btn" id="touch-left" aria-label="يسار">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+        </div>
+        <div class="touch-cluster">
+            <button class="touch-btn phase-btn" id="touch-phase" aria-label="تبديل البعد">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="touch-btn" id="touch-jump" aria-label="قفز">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة البداية -->
+    <div class="overlay-screen" id="start-screen">
+        <h1 class="game-logo">صَدَى الظِّل</h1>
+        <p class="game-subtitle">
+            في عالمٍ انقسم بين النور الباهت وظلال الذاكرة، احمل مصباحك الصغير، اجمع شظايا الضوء المفقودة، وبدّل بين الأبعاد لتعبر نحو البوابة الأبدية.
+        </p>
+
+        <div class="controls-guide">
+            <div class="guide-item">
+                <span class="key-badge">← → / A D</span>
+                <span class="guide-desc">الحركة في الظلام</span>
+            </div>
+            <div class="guide-item">
+                <span class="key-badge">Space / W / ↑</span>
+                <span class="guide-desc">قفز وقفز مزدوج</span>
+            </div>
+            <div class="guide-item">
+                <span class="key-badge">Shift / E</span>
+                <span class="guide-desc">تبديل البُعد (نور / ظل)</span>
+            </div>
+            <div class="guide-item">
+                <span class="key-badge">R</span>
+                <span class="guide-desc">إعادة إحياء المرحلة</span>
+            </div>
+        </div>
+
+        <button class="primary-btn" id="btn-start-game">ابدأ الرحلة</button>
+    </div>
+
+    <!-- شاشة نهاية اللعبة (الفوز الكامل) -->
+    <div class="overlay-screen hidden" id="victory-screen">
+        <h1 class="game-logo">اكتمل النور</h1>
+        <p class="game-subtitle" id="victory-stats">
+            لقد عبرت جميع الأبعاد وجمعت شظايا الذاكرة المفقودة. عاد التوازن إلى عالم الظلال.
+        </p>
+        <button class="primary-btn" id="btn-play-again">العب مجدداً</button>
+    </div>
+
+    <script>
+    /**
+     * ============================================================================
+     * لعبة "صَدَى الظِّل" (Echo of Shadow)
+     * محرك ألعاب منصات 2D متكامل مع إضاءة ديناميكية، تبديل أبعاد، وصوتيات توليدية
+     * ============================================================================
+     */
+
+    // ----------------------------------------------------------------------------
+    // 1. نظام الصوتيات التوليدي (Procedural Web Audio API Synthesizer)
+    // ----------------------------------------------------------------------------
+    class SoundEngine {
+        constructor() {
+            this.ctx = null;
+            this.muted = false;
+            this.ambientStarted = false;
+            this.masterGain = null;
+            this.droneNodes = [];
+        }
+
+        init() {
+            if (this.ctx) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                this.ctx = new AudioCtx();
+                this.masterGain = this.ctx.createGain();
+                this.masterGain.gain.value = this.muted ? 0 : 0.45;
+                this.masterGain.connect(this.ctx.destination);
+                this.startAmbientDrone();
+            } catch (e) {
+                console.warn("Web Audio API غير مدعوم:", e);
+            }
+        }
+
+        toggleMute() {
+            this.muted = !this.muted;
+            if (this.masterGain && this.ctx) {
+                this.masterGain.gain.setTargetAtTime(this.muted ? 0 : 0.45, this.ctx.currentTime, 0.1);
+            }
+            return this.muted;
+        }
+
+        // موسيقى خلفية محيطية غامضة (Dark Ambient Pad)
+        startAmbientDrone() {
+            if (!this.ctx || this.ambientStarted) return;
+            this.ambientStarted = true;
+
+            const now = this.ctx.currentTime;
+            // ترددات وترية غامضة (D minor / Dorian)
+            const freqs = [73.42, 110.00, 146.83, 174.61]; 
+
+            freqs.forEach((f, idx) => {
+                const osc = this.ctx.createOscillator();
+                const filter = this.ctx.createBiquadFilter();
+                const gain = this.ctx.createGain();
+
+                osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+                osc.frequency.value = f;
+
+                filter.type = 'lowpass';
+                filter.frequency.value = 280;
+
+                gain.gain.value = 0.045;
+
+                // تذبذب بطيء جداً لإعطاء إحساس بالتنفس والغموض
+                const lfo = this.ctx.createOscillator();
+                const lfoGain = this.ctx.createGain();
+                lfo.frequency.value = 0.08 + idx * 0.03;
+                lfoGain.gain.value = 0.025;
+                lfo.connect(lfoGain);
+                lfoGain.connect(gain.gain);
+                lfo.start(now);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(now);
+            });
+        }
+
+        playJump(isDouble = false) {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = isDouble ? 'sine' : 'triangle';
+            const startFreq = isDouble ? 280 : 170;
+            const endFreq = isDouble ? 540 : 340;
+
+            osc.frequency.setValueAtTime(startFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.18);
+
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.21);
+        }
+
+        playPhaseShift(toShadow) {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const filter = this.ctx.createBiquadFilter();
+            const gain = this.ctx.createGain();
+
+            osc.type = 'sawtooth';
+            filter.type = 'bandpass';
+            filter.Q.value = 4;
+
+            if (toShadow) {
+                osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                filter.frequency.setValueAtTime(800, now);
+                filter.frequency.exponentialRampToValueAtTime(200, now + 0.35);
+            } else {
+                osc.frequency.setValueAtTime(130, now);
+                osc.frequency.exponentialRampToValueAtTime(480, now + 0.35);
+                filter.frequency.setValueAtTime(250, now);
+                filter.frequency.exponentialRampToValueAtTime(950, now + 0.35);
+            }
+
+            gain.gain.setValueAtTime(0.22, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.38);
+        }
+
+        playShardCollect() {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const notes = [587.33, 880.00, 1174.66]; // D5, A5, D6
+            notes.forEach((freq, i) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + i * 0.06);
+
+                gain.gain.setValueAtTime(0.16, now + i * 0.06);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.45);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(now + i * 0.06);
+                osc.stop(now + i * 0.06 + 0.46);
+            });
+        }
+
+        playEnemyVanish() {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(220, now);
+            osc.frequency.exponentialRampToValueAtTime(55, now + 0.25);
+
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.27);
+        }
+
+        playCheckpoint() {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+
+            gain.gain.setValueAtTime(0.14, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.52);
+        }
+
+        playDeath() {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.linearRampToValueAtTime(42, now + 0.45);
+
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+
+            osc.connect(gain);
+            gain.connect(this.masterGain);
+            osc.start(now);
+            osc.stop(now + 0.5);
+        }
+
+        playPortalEnter() {
+            if (!this.ctx || this.muted) return;
+            const now = this.ctx.currentTime;
+            const freqs = [293.66, 440, 587.33, 880];
+            freqs.forEach((f, idx) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(f, now + idx * 0.08);
+                gain.gain.setValueAtTime(0.18, now + idx * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.8);
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(now + idx * 0.08);
+                osc.stop(now + idx * 0.08 + 0.82);
+            });
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    // 2. بيانات المراحل الثلاث (Level Designs)
+    // realm: 'both' (دائماً صلبة) | 'light' (عالم النور فقط) | 'shadow' (عالم الظل فقط)
+    // ----------------------------------------------------------------------------
+    const LEVELS = [
+        {
+            name: "الفصل الأول: غابة الهمس",
+            whisper: "بعض الجسور لا يراها إلا من يتجرأ على عبور الظلال... اضغط (Shift أو E) لتبديل البُعد.",
+            spawn: { x: 80, y: 420 },
+            deathY: 950,
+            platforms: [
+                // البداية
+                { x: 0, y: 500, w: 340, h: 120, realm: 'both' },
+                // أول لغز لتبديل الأبعاد
+                { x: 400, y: 460, w: 140, h: 24, realm: 'light' },
+                { x: 600, y: 410, w: 140, h: 24, realm: 'shadow' },
+                { x: 810, y: 450, w: 260, h: 150, realm: 'both' },
+                // منصة مرتفعة للشظية الأولى
+                { x: 860, y: 310, w: 120, h: 20, realm: 'shadow' },
+                // فجوة مع أشواك ومنصة متحركة
+                { x: 1140, y: 450, w: 180, h: 24, realm: 'both', moveX: 110, speed: 1.6 },
+                { x: 1480, y: 420, w: 320, h: 180, realm: 'both' },
+                // مسار متدرج بالأبعاد
+                { x: 1860, y: 370, w: 130, h: 22, realm: 'light' },
+                { x: 2050, y: 310, w: 130, h: 22, realm: 'shadow' },
+                { x: 2240, y: 250, w: 130, h: 22, realm: 'light' },
+                // منصة البوابة النهائية
+                { x: 2440, y: 280, w: 320, h: 240, realm: 'both' }
+            ],
+            spikes: [
+                { x: 920, y: 432, w: 60, h: 18, realm: 'both' },
+                { x: 1580, y: 402, w: 70, h: 18, realm: 'both' }
+            ],
+            shards: [
+                { x: 920, y: 265, realm: 'shadow' },
+                { x: 1230, y: 390, realm: 'both' },
+                { x: 2305, y: 200, realm: 'light' }
+            ],
+            enemies: [
+                { x: 1500, y: 384, minX: 1490, maxX: 1760, speed: 1.5, realm: 'both' }
+            ],
+            checkpoints: [
+                { x: 1520, y: 420 }
+            ],
+            portal: { x: 2660, y: 280 }
+        },
+        {
+            name: "الفصل الثاني: أطلال الصدى",
+            whisper: "الأرواح الهائمة تخشى النور الساطع... اقفز فوقها أو اختفِ في البُعد الآخر.",
+            spawn: { x: 70, y: 440 },
+            deathY: 980,
+            platforms: [
+                { x: 0, y: 520, w: 280, h: 140, realm: 'both' },
+                { x: 350, y: 470, w: 120, h: 22, realm: 'shadow' },
+                { x: 530, y: 420, w: 120, h: 22, realm: 'light' },
+                { x: 710, y: 370, w: 120, h: 22, realm: 'shadow' },
+                // جزيرة وسطى مع عدو
+                { x: 900, y: 420, w: 360, h: 180, realm: 'both' },
+                // منصة علوية سرية
+                { x: 980, y: 260, w: 160, h: 20, realm: 'light' },
+                // مصعد عمودي
+                { x: 1330, y: 420, w: 120, h: 22, realm: 'both', moveY: -170, speed: 1.8 },
+                // جسر مزدوج
+                { x: 1520, y: 250, w: 240, h: 24, realm: 'both' },
+                { x: 1830, y: 290, w: 130, h: 22, realm: 'shadow' },
+                { x: 2030, y: 340, w: 130, h: 22, realm: 'light' },
+                { x: 2230, y: 290, w: 130, h: 22, realm: 'shadow' },
+                // ساحة ما قبل البوابة
+                { x: 2430, y: 330, w: 420, h: 220, realm: 'both' }
+            ],
+            spikes: [
+                { x: 1040, y: 402, w: 60, h: 18, realm: 'both' },
+                { x: 2560, y: 312, w: 80, h: 18, realm: 'light' }
+            ],
+            shards: [
+                { x: 1060, y: 215, realm: 'light' },
+                { x: 1390, y: 200, realm: 'both' },
+                { x: 2295, y: 240, realm: 'shadow' }
+            ],
+            enemies: [
+                { x: 940, y: 384, minX: 910, maxX: 1220, speed: 2.0, realm: 'both' },
+                { x: 2480, y: 294, minX: 2440, maxX: 2800, speed: 2.3, realm: 'both' }
+            ],
+            checkpoints: [
+                { x: 1560, y: 250 }
+            ],
+            portal: { x: 2770, y: 330 }
+        },
+        {
+            name: "الفصل الثالث: معبد القمر المكسور",
+            whisper: "في قمة السكون، يتطلب العبور إيقاعاً متناغماً بين القفز المزدوج وتبديل الأبعاد.",
+            spawn: { x: 70, y: 460 },
+            deathY: 1020,
+            platforms: [
+                { x: 0, y: 540, w: 250, h: 150, realm: 'both' },
+                // قفزات متناوبة سريعة
+                { x: 320, y: 480, w: 105, h: 20, realm: 'light' },
+                { x: 490, y: 410, w: 105, h: 20, realm: 'shadow' },
+                { x: 660, y: 340, w: 105, h: 20, realm: 'light' },
+                // منصة شظية جانبية
+                { x: 470, y: 230, w: 110, h: 20, realm: 'light' },
+                // منصة استراحة وحفظ
+                { x: 840, y: 360, w: 280, h: 200, realm: 'both' },
+                // تحدي المنصات المتحركة المتبادلة
+                { x: 1190, y: 360, w: 120, h: 22, realm: 'shadow', moveX: 120, speed: 2.2 },
+                { x: 1480, y: 300, w: 120, h: 22, realm: 'light', moveY: -110, speed: 2.0 },
+                // جسر الظل الطويل
+                { x: 1680, y: 220, w: 360, h: 26, realm: 'both' },
+                { x: 1800, y: 110, w: 110, h: 18, realm: 'shadow' },
+                // الهاوية الأخيرة
+                { x: 2120, y: 280, w: 110, h: 20, realm: 'shadow' },
+                { x: 2310, y: 240, w: 110, h: 20, realm: 'light' },
+                { x: 2500, y: 200, w: 110, h: 20, realm: 'shadow' },
+                // الملاذ الأخير
+                { x: 2690, y: 240, w: 360, h: 280, realm: 'both' }
+            ],
+            spikes: [
+                { x: 940, y: 342, w: 70, h: 18, realm: 'shadow' },
+                { x: 1820, y: 202, w: 80, h: 18, realm: 'both' }
+            ],
+            shards: [
+                { x: 525, y: 185, realm: 'light' },
+                { x: 1855, y: 65, realm: 'shadow' },
+                { x: 2555, y: 155, realm: 'shadow' }
+            ],
+            enemies: [
+                { x: 880, y: 324, minX: 850, maxX: 1090, speed: 2.2, realm: 'both' },
+                { x: 1700, y: 184, minX: 1690, maxX: 2010, speed: 2.5, realm: 'both' }
+            ],
+            checkpoints: [
+                { x: 880, y: 360 },
+                { x: 1710, y: 220 }
+            ],
+            portal: { x: 2960, y: 240 }
+        }
+    ];
+
+    // ----------------------------------------------------------------------------
+    // 3. المتغيرات العامة وحالة اللعبة
+    // ----------------------------------------------------------------------------
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const sound = new SoundEngine();
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    // حالة الإدخال
+    const keys = {
+        left: false,
+        right: false,
+        up: false,
+        upPressedThisFrame: false
+    };
+
+    // حالة اللعبة
+    let gameState = 'START'; // 'START', 'PLAYING', 'TRANSITION', 'VICTORY'
+    let currentLevelIndex = 0;
+    let isShadowRealm = false; // false = عالم النور الباهت، true = عالم الظل
+    let phaseTransitionAlpha = 0;
+    let screenShake = 0;
+    let globalTime = 0;
+
+    // بيانات المرحلة الحالية
+    let platforms = [];
+    let spikes = [];
+    let shards = [];
+    let enemies = [];
+    let checkpoints = [];
+    let portal = null;
+    let activeCheckpoint = null;
+    let collectedShardsCount = 0;
+    let totalShardsInLevel = 0;
+
+    // جزيئات بصرية
+    let ambientParticles = [];
+    let burstParticles = [];
+    let capePoints = [];
+
+    // عناصر الخلفية متعددة الطبقات (Parallax)
+    let bgTreesFar = [];
+    let bgTreesNear = [];
+    let bgRuins = [];
+
+    // الكاميرا
+    const camera = { x: 0, y: 0 };
+
+    // كائن اللاعب
+    const player = {
+        x: 100,
+        y: 300,
+        w: 28,
+        h: 44,
+        vx: 0,
+        vy: 0,
+        speed: 5.2,
+        jumpForce: -12.6,
+        gravity: 0.56,
+        grounded: false,
+        jumpsRemaining: 2,
+        coyoteTimer: 0,
+        jumpBufferTimer: 0,
+        facing: 1, // 1 يمين، -1 يسار
+        lanternRadius: 190,
+        dead: false,
+        deathTimer: 0,
+        squashX: 1,
+        squashY: 1
+    };
+
+    // ----------------------------------------------------------------------------
+    // 4. تهيئة الأبعاد والخلفيات الفنية
+    // ----------------------------------------------------------------------------
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function generateParallaxScenery() {
+        bgTreesFar = [];
+        bgTreesNear = [];
+        bgRuins = [];
+        ambientParticles = [];
+
+        for (let i = -200; i < 4500; i += 140) {
+            bgTreesFar.push({
+                x: i + Math.random() * 60,
+                w: 18 + Math.random() * 24,
+                h: 350 + Math.random() * 250,
+                lean: (Math.random() - 0.5) * 30
+            });
+        }
+
+        for (let i = -200; i < 4500; i += 220) {
+            bgTreesNear.push({
+                x: i + Math.random() * 90,
+                w: 32 + Math.random() * 35,
+                h: 450 + Math.random() * 300,
+                branches: Math.floor(2 + Math.random() * 3)
+            });
+        }
+
+        for (let i = 150; i < 4200; i += 480) {
+            bgRuins.push({
+                x: i,
+                w: 50 + Math.random() * 40,
+                h: 120 + Math.random() * 140,
+                brokenTop: Math.random() > 0.4
+            });
+        }
+
+        for (let i = 0; i < 85; i++) {
+            ambientParticles.push({
+                x: Math.random() * 3200,
+                y: Math.random() * 800,
+                r: 1 + Math.random() * 2.4,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: -0.2 - Math.random() * 0.45,
+                alpha: 0.2 + Math.random() * 0.6,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    // 5. تحميل وإعادة تعيين المراحل
+    // ----------------------------------------------------------------------------
+    function loadLevel(index, keepCheckpoint = false) {
+        currentLevelIndex = index;
+        const data = LEVELS[index];
+
+        isShadowRealm = false;
+        updateRealmUI();
+
+        // نسخ المنصات
+        platforms = data.platforms.map(p => ({
+            ...p,
+            origX: p.x,
+            origY: p.y,
+            dx: 0,
+            dy: 0,
+            timeOffset: Math.random() * Math.PI * 2
+        }));
+
+        spikes = data.spikes.map(s => ({ ...s }));
+        shards = data.shards.map(s => ({ ...s, collected: false, bobOffset: Math.random() * Math.PI * 2 }));
+        enemies = data.enemies.map(e => ({ ...e, dir: 1, alive: true, vanishTimer: 0 }));
+        checkpoints = data.checkpoints.map(c => ({ ...c, activated: false }));
+        portal = { ...data.portal };
+
+        collectedShardsCount = 0;
+        totalShardsInLevel = shards.length;
+
+        if (!keepCheckpoint) {
+            activeCheckpoint = { x: data.spawn.x, y: data.spawn.y };
+        }
+
+        respawnPlayer();
+        updateHUD();
+        showWhisper(data.whisper, 5500);
+    }
+
+    function respawnPlayer() {
+        player.x = activeCheckpoint.x;
+        player.y = activeCheckpoint.y;
+        player.vx = 0;
+        player.vy = 0;
+        player.dead = false;
+        player.grounded = false;
+        player.jumpsRemaining = 2;
+        player.squashX = 1;
+        player.squashY = 1;
+
+        // تهيئة نقاط العباءة المتطايرة
+        capePoints = [];
+        for (let i = 0; i < 6; i++) {
+            capePoints.push({ x: player.x + player.w / 2, y: player.y + 14 + i * 4 });
+        }
+
+        camera.x = Math.max(0, player.x - width * 0.35);
+        camera.y = Math.max(0, player.y - height * 0.55);
+    }
+
+    // ----------------------------------------------------------------------------
+    // 6. آلية تبديل البُعد (Phase Shift)
+    // ----------------------------------------------------------------------------
+    function toggleDimension() {
+        if (gameState !== 'PLAYING' || player.dead) return;
+        isShadowRealm = !isShadowRealm;
+        phaseTransitionAlpha = 0.55;
+        screenShake = 5;
+        sound.playPhaseShift(isShadowRealm);
+        updateRealmUI();
+
+        // موجة جزيئات حول اللاعب عند تبديل البُعد
+        const color = isShadowRealm ? '#c084fc' : '#38bdf8';
+        spawnBurst(player.x + player.w / 2, player.y + player.h / 2, color, 18);
+    }
+
+    function isEntityActiveInCurrentRealm(realm) {
+        if (realm === 'both') return true;
+        if (realm === 'light' && !isShadowRealm) return true;
+        if (realm === 'shadow' && isShadowRealm) return true;
+        return false;
+    }
+
+    // ----------------------------------------------------------------------------
+    // 7. تحديث واجهة المستخدم (HUD & Whispers)
+    // ----------------------------------------------------------------------------
+    let whisperTimeout = null;
+    function showWhisper(text, duration = 4000) {
+        const box = document.getElementById('whisper-box');
+        const txt = document.getElementById('whisper-text');
+        txt.textContent = text;
+        box.classList.add('visible');
+
+        clearTimeout(whisperTimeout);
+        whisperTimeout = setTimeout(() => {
+            box.classList.remove('visible');
+        }, duration);
+    }
+
+    function updateHUD() {
+        document.getElementById('hud-stage-name').textContent = LEVELS[currentLevelIndex].name;
+        document.getElementById('hud-shards').textContent = `${collectedShardsCount} / ${totalShardsInLevel}`;
+    }
+
+    function updateRealmUI() {
+        const indicator = document.getElementById('hud-realm');
+        const label = document.getElementById('realm-label');
+        if (isShadowRealm) {
+            indicator.classList.add('shadow-mode');
+            label.textContent = 'بُعد الظلال';
+        } else {
+            indicator.classList.remove('shadow-mode');
+            label.textContent = 'عالم النور الباهت';
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    // 8. الجزيئات والتأثيرات البصرية
+    // ----------------------------------------------------------------------------
+    function spawnBurst(x, y, color, count = 14) {
+        for (let i = 0; i < count; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1.2 + Math.random() * 4.2;
+            burstParticles.push({
+                x,
+                y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 1,
+                r: 1.5 + Math.random() * 2.8,
+                color,
+                life: 1.0,
+                decay: 0.02 + Math.random() * 0.025
+            });
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    // 9. منطق الفيزياء والتحديث (Update Loop)
+    // ----------------------------------------------------------------------------
+    function update(dt) {
+        globalTime += 0.016;
+
+        if (phaseTransitionAlpha > 0) {
+            phaseTransitionAlpha = Math.max(0, phaseTransitionAlpha - 0.03);
+        }
+        if (screenShake > 0) {
+            screenShake = Math.max(0, screenShake - 0.4);
+        }
+
+        // تحديث الجزيئات المحيطة
+        ambientParticles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.y < -20) p.y = 820;
+            if (p.x < -100) p.x = 3200;
+            if (p.x > 3200) p.x = -100;
+        });
+
+        // تحديث جزيئات الانفجار
+        for (let i = burstParticles.length - 1; i >= 0; i--) {
+            const p = burstParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.08;
+            p.life -= p.decay;
+            if (p.life <= 0) burstParticles.splice(i, 1);
+        }
+
+        if (gameState !== 'PLAYING') return;
+
+        // تحديث المنصات المتحركة
+        platforms.forEach(p => {
+            const prevX = p.x;
+            const prevY = p.y;
+            if (p.moveX) {
+                p.x = p.origX + Math.sin(globalTime * p.speed + p.timeOffset) * p.moveX;
+            }
+            if (p.moveY) {
+                p.y = p.origY + Math.sin(globalTime * p.speed + p.timeOffset) * p.moveY;
+            }
+            p.dx = p.x - prevX;
+            p.dy = p.y - prevY;
+        });
+
+        // التعامل مع موت اللاعب وإعادة إحيائه
+        if (player.dead) {
+            player.deathTimer -= 0.016;
+            if (player.deathTimer <= 0) {
+                respawnPlayer();
+            }
+            return;
+        }
+
+        // استعادة التمدد والانضغاط (Squash & Stretch) تدريجياً
+        player.squashX += (1 - player.squashX) * 0.18;
+        player.squashY += (1 - player.squashY) * 0.18;
+
+        // الحركة الأفقية
+        let moveDir = 0;
+        if (keys.left) moveDir -= 1;
+        if (keys.right) moveDir += 1;
+
+        if (moveDir !== 0) {
+            player.vx += (moveDir * player.speed - player.vx) * 0.25;
+            player.facing = moveDir;
+        } else {
+            player.vx *= 0.78;
+            if (Math.abs(player.vx) < 0.1) player.vx = 0;
+        }
+
+        // مؤقتات القفز السلس (Coyote Time & Jump Buffering)
+        if (player.grounded) {
+            player.coyoteTimer = 0.12;
+            player.jumpsRemaining = 2;
+        } else {
+            player.coyoteTimer = Math.max(0, player.coyoteTimer - 0.016);
+        }
+
+        if (keys.upPressedThisFrame) {
+            player.jumpBufferTimer = 0.14;
+            keys.upPressedThisFrame = false;
+        } else {
+            player.jumpBufferTimer = Math.max(0, player.jumpBufferTimer - 0.016);
+        }
+
+        // تنفيذ القفز أو القفز المزدوج
+        if (player.jumpBufferTimer > 0) {
+            if (player.coyoteTimer > 0) {
+                player.vy = player.jumpForce;
+                player.grounded = false;
+                player.coyoteTimer = 0;
+                player.jumpBufferTimer = 0;
+                player.jumpsRemaining = 1;
+                player.squashX = 0.78;
+                player.squashY = 1.25;
+                sound.playJump(false);
+                spawnBurst(player.x + player.w / 2, player.y + player.h, '#94a3b8', 7);
+            } else if (player.jumpsRemaining > 0) {
+                player.vy = player.jumpForce * 0.92;
+                player.jumpsRemaining = 0;
+                player.jumpBufferTimer = 0;
+                player.squashX = 0.75;
+                player.squashY = 1.28;
+                sound.playJump(true);
+                const ringColor = isShadowRealm ? '#c084fc' : '#38bdf8';
+                spawnBurst(player.x + player.w / 2, player.y + player.h, ringColor, 12);
+            }
+        }
+
+        // الجاذبية
+        player.vy += player.gravity;
+        if (player.vy > 15) player.vy = 15;
+
+        // تطبيق الحركة الأفقية وفحص التصادم مع المنصات النشطة
+        player.x += player.vx;
+        if (player.x < 0) { player.x = 0; player.vx = 0; }
+
+        platforms.forEach(p => {
+            if (!isEntityActiveInCurrentRealm(p.realm)) return;
+            if (rectIntersect(player.x, player.y, player.w, player.h, p.x, p.y, p.w, p.h)) {
+                if (player.vx > 0) {
+                    player.x = p.x - player.w;
+                } else if (player.vx < 0) {
+                    player.x = p.x + p.w;
+                }
+                player.vx = 0;
+            }
+        });
+
+        // تطبيق الحركة العمودية وفحص التصادم
+        const wasGrounded = player.grounded;
+        player.grounded = false;
+        player.y += player.vy;
+
+        platforms.forEach(p => {
+            if (!isEntityActiveInCurrentRealm(p.realm)) return;
+            if (rectIntersect(player.x, player.y, player.w, player.h, p.x, p.y, p.w, p.h)) {
+                if (player.vy > 0) {
+                    player.y = p.y - player.h;
+                    player.vy = 0;
+                    player.grounded = true;
+                    // تحريك اللاعب مع المنصة المتحركة
+                    player.x += p.dx;
+                    if (!wasGrounded) {
+                        player.squashX = 1.24;
+                        player.squashY = 0.78;
+                    }
+                } else if (player.vy < 0) {
+                    player.y = p.y + p.h;
+                    player.vy = 0;
+                }
+            }
+        });
+
+        // السقوط في الهاوية
+        if (player.y > LEVELS[currentLevelIndex].deathY) {
+            killPlayer();
+            return;
+        }
+
+        // فحص الأشواك
+        spikes.forEach(s => {
+            if (!isEntityActiveInCurrentRealm(s.realm)) return;
+            if (rectIntersect(player.x + 4, player.y + 4, player.w - 8, player.h - 6, s.x + 3, s.y + 4, s.w - 6, s.h - 4)) {
+                killPlayer();
+            }
+        });
+
+        // فحص جمع شظايا الضوء
+        shards.forEach(s => {
+            if (s.collected) return;
+            if (!isEntityActiveInCurrentRealm(s.realm)) return;
+            const dist = Math.hypot((player.x + player.w / 2) - s.x, (player.y + player.h / 2) - s.y);
+            if (dist < 32) {
+                s.collected = true;
+                collectedShardsCount++;
+                player.lanternRadius = Math.min(280, player.lanternRadius + 25);
+                sound.playShardCollect();
+                spawnBurst(s.x, s.y, '#fde047', 22);
+                updateHUD();
+
+                if (collectedShardsCount === totalShardsInLevel) {
+                    showWhisper("اكتملت شظايا النور! البوابة الأبدية مفتوحة الآن.", 4000);
+                }
+            }
+        });
+
+        // تحديث الأعداء (أرواح الظل)
+        enemies.forEach(e => {
+            if (!e.alive) return;
+            e.x += e.speed * e.dir;
+            if (e.x <= e.minX) { e.x = e.minX; e.dir = 1; }
+            if (e.x + 32 >= e.maxX) { e.x = e.maxX - 32; e.dir = -1; }
+
+            if (!isEntityActiveInCurrentRealm(e.realm)) return;
+
+            if (rectIntersect(player.x + 3, player.y + 3, player.w - 6, player.h - 4, e.x, e.y, 32, 36)) {
+                // القفز فوق رأس العدو لتبديده (أسلوب سوبر ماريو)
+                const isStomping = player.vy > 0 && (player.y + player.h - player.vy) <= e.y + 14;
+                if (isStomping) {
+                    e.alive = false;
+                    player.vy = player.jumpForce * 0.85;
+                    player.jumpsRemaining = 1;
+                    screenShake = 6;
+                    sound.playEnemyVanish();
+                    spawnBurst(e.x + 16, e.y + 18, '#c084fc', 24);
+                } else {
+                    killPlayer();
+                }
+            }
+        });
+
+        // فحص نقاط الحفظ (Checkpoints)
+        checkpoints.forEach(cp => {
+            const dist = Math.hypot((player.x + player.w / 2) - cp.x, (player.y + player.h) - cp.y);
+            if (dist < 42 && !cp.activated) {
+                cp.activated = true;
+                activeCheckpoint = { x: cp.x - player.w / 2, y: cp.y - player.h - 4 };
+                sound.playCheckpoint();
+                spawnBurst(cp.x, cp.y - 25, '#38bdf8', 18);
+                showWhisper("تم حفظ أثرك في هذا الملاذ.", 2800);
+            }
+        });
+
+        // فحص البوابة النهائية
+        if (portal) {
+            const dist = Math.hypot((player.x + player.w / 2) - portal.x, (player.y + player.h / 2) - (portal.y - 45));
+            if (dist < 46) {
+                if (collectedShardsCount >= totalShardsInLevel) {
+                    completeLevel();
+                } else {
+                    showWhisper(`البوابة مغلقة... تحتاج إلى جمع كل شظايا الضوء (${collectedShardsCount}/${totalShardsInLevel}).`, 2500);
+                }
+            }
+        }
+
+        // تحديث فيزياء العباءة المتطايرة
+        updateCapePhysics();
+
+        // تحديث الكاميرا بسلاسة
+        const targetCamX = player.x + player.w / 2 - width * 0.42;
+        const targetCamY = player.y + player.h / 2 - height * 0.56;
+        camera.x += (Math.max(0, targetCamX) - camera.x) * 0.1;
+        camera.y += (Math.max(-150, Math.min(350, targetCamY)) - camera.y) * 0.08;
+    }
+
+    function updateCapePhysics() {
+        const anchorX = player.x + player.w / 2 - player.facing * 4;
+        const anchorY = player.y + 15;
+        capePoints[0].x = anchorX;
+        capePoints[0].y = anchorY;
+
+        for (let i = 1; i < capePoints.length; i++) {
+            const prev = capePoints[i - 1];
+            const curr = capePoints[i];
+            const windX = -player.facing * 4.5 + Math.sin(globalTime * 7 + i) * 1.4 - player.vx * 0.4;
+            const windY = 4.2 - player.vy * 0.15;
+
+            curr.x += (prev.x + windX - curr.x) * 0.35;
+            curr.y += (prev.y + windY - curr.y) * 0.35;
+        }
+    }
+
+    function killPlayer() {
+        if (player.dead) return;
+        player.dead = true;
+        player.deathTimer = 0.75;
+        screenShake = 10;
+        sound.playDeath();
+        spawnBurst(player.x + player.w / 2, player.y + player.h / 2, '#f8fafc', 28);
+    }
+
+    function completeLevel() {
+        sound.playPortalEnter();
+        spawnBurst(portal.x, portal.y - 45, '#fde047', 35);
+
+        if (currentLevelIndex + 1 < LEVELS.length) {
+            gameState = 'TRANSITION';
+            setTimeout(() => {
+                loadLevel(currentLevelIndex + 1, false);
+                gameState = 'PLAYING';
+            }, 650);
+        } else {
+            gameState = 'VICTORY';
+            document.getElementById('victory-screen').classList.remove('hidden');
+        }
+    }
+
+    function rectIntersect(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
+    }
+
+    // ----------------------------------------------------------------------------
+    // 10. محرك الرسم والإضاءة السينمائية (Render Loop)
+    // ----------------------------------------------------------------------------
+    function render() {
+        ctx.save();
+
+        // اهتزاز الشاشة عند التأثيرات القوية
+        if (screenShake > 0) {
+            const sx = (Math.random() - 0.5) * screenShake;
+            const sy = (Math.random() - 0.5) * screenShake;
+            ctx.translate(sx, sy);
+        }
+
+        // 1. السماء الضبابية المتدرجة حسب البُعد الحالي
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
+        if (isShadowRealm) {
+            skyGrad.addColorStop(0, '#090514');
+            skyGrad.addColorStop(0.55, '#160d2b');
+            skyGrad.addColorStop(1, '#07040e');
+        } else {
+            skyGrad.addColorStop(0, '#060911');
+            skyGrad.addColorStop(0.55, '#0f172a');
+            skyGrad.addColorStop(1, '#05070c');
+        }
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, width, height);
+
+        // 2. القمر العملاق في الخلفية البعيدة
+        const moonX = width * 0.72 - camera.x * 0.04;
+        const moonY = height * 0.22 - camera.y * 0.03;
+        const moonGlow = ctx.createRadialGradient(moonX, moonY, 15, moonX, moonY, 180);
+        if (isShadowRealm) {
+            moonGlow.addColorStop(0, 'rgba(233, 213, 255, 0.85)');
+            moonGlow.addColorStop(0.25, 'rgba(192, 132, 252, 0.25)');
+            moonGlow.addColorStop(1, 'rgba(192, 132, 252, 0)');
+        } else {
+            moonGlow.addColorStop(0, 'rgba(241, 245, 249, 0.9)');
+            moonGlow.addColorStop(0.25, 'rgba(56, 189, 248, 0.2)');
+            moonGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+        }
+        ctx.fillStyle = moonGlow;
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, 180, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = isShadowRealm ? '#f3e8ff' : '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, 36, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. طبقات الخلفية متعددة الحركة (Parallax Layers)
+        drawParallaxLayer(bgTreesFar, 0.18, isShadowRealm ? '#130b24' : '#0b111e');
+        drawRuinsLayer(bgRuins, 0.32, isShadowRealm ? '#1a1030' : '#0f1626');
+        drawParallaxLayer(bgTreesNear, 0.48, isShadowRealm ? '#0d071a' : '#080c16');
+
+        // الانتقال إلى إحداثيات العالم (الكاميرا)
+        ctx.save();
+        ctx.translate(-camera.x, -camera.y);
+
+        // 4. جزيئات الغبار المضيء العائمة
+        ambientParticles.forEach(p => {
+            const pulse = 0.5 + 0.5 * Math.sin(globalTime * 2 + p.phase);
+            ctx.fillStyle = isShadowRealm
+                ? `rgba(216, 180, 254, ${p.alpha * pulse})`
+                : `rgba(186, 230, 253, ${p.alpha * pulse})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // 5. رسم البوابة النهائية
+        if (portal) drawPortal(portal);
+
+        // 6. رسم نقاط الحفظ
+        checkpoints.forEach(cp => drawCheckpoint(cp));
+
+        // 7. رسم المنصات (النشطة وغير النشطة كأشباح)
+        platforms.forEach(p => drawPlatform(p));
+
+        // 8. رسم الأشواك
+        spikes.forEach(s => drawSpikes(s));
+
+        // 9. رسم شظايا الضوء
+        shards.forEach(s => {
+            if (!s.collected) drawShard(s);
+        });
+
+        // 10. رسم الأعداء
+        enemies.forEach(e => {
+            if (e.alive) drawEnemy(e);
+        });
+
+        // 11. رسم اللاعب والمصباح
+        if (!player.dead) {
+            drawPlayer();
+        }
+
+        // 12. رسم جزيئات الانفجار والتأثيرات
+        burstParticles.forEach(p => {
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+
+        ctx.restore(); // الخروج من إحداثيات الكاميرا
+
+        // 13. قناع الظلام الدرامي وإضاءة المصباح (Chiaroscuro Lighting)
+        drawAtmosphericLighting();
+
+        // 14. وميض انتقال البُعد
+        if (phaseTransitionAlpha > 0) {
+            ctx.fillStyle = isShadowRealm
+                ? `rgba(192, 132, 252, ${phaseTransitionAlpha * 0.35})`
+                : `rgba(56, 189, 248, ${phaseTransitionAlpha * 0.35})`;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        ctx.restore();
+    }
+
+    function drawParallaxLayer(trees, factor, color) {
+        ctx.fillStyle = color;
+        trees.forEach(t => {
+            const screenX = t.x - camera.x * factor;
+            if (screenX < -100 || screenX > width + 100) return;
+            ctx.beginPath();
+            ctx.moveTo(screenX - t.w / 2, height);
+            ctx.lineTo(screenX - t.w * 0.25 + t.lean, height - t.h);
+            ctx.lineTo(screenX + t.w * 0.25 + t.lean, height - t.h);
+            ctx.lineTo(screenX + t.w / 2, height);
+            ctx.closePath();
+            ctx.fill();
+        });
+    }
+
+    function drawRuinsLayer(ruins, factor, color) {
+        ctx.fillStyle = color;
+        ruins.forEach(r => {
+            const screenX = r.x - camera.x * factor;
+            if (screenX < -120 || screenX > width + 120) return;
+            const topY = height - r.h;
+            ctx.fillRect(screenX, topY, r.w, r.h);
+            // تاج العمود الأثري
+            ctx.fillRect(screenX - 6, topY, r.w + 12, 12);
+        });
+    }
+
+    function drawPlatform(p) {
+        const active = isEntityActiveInCurrentRealm(p.realm);
+        ctx.save();
+
+        if (!active) {
+            // رسم المنصة كطيف باهت متقطع في البُعد الآخر
+            ctx.strokeStyle = p.realm === 'shadow'
+                ? 'rgba(192, 132, 252, 0.28)'
+                : 'rgba(56, 189, 248, 0.28)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 6]);
+            ctx.strokeRect(p.x, p.y, p.w, p.h);
+            ctx.restore();
+            return;
+        }
+
+        // جسم المنصة الداكن
+        ctx.fillStyle = '#04060a';
+        ctx.beginPath();
+        ctx.roundRect(p.x, p.y, p.w, p.h, 6);
+        ctx.fill();
+
+        // حافة علوية مضيئة تميز نوع البُعد
+        let edgeColor = '#64748b';
+        let glowColor = 'rgba(148, 163, 184, 0.25)';
+
+        if (p.realm === 'light') {
+            edgeColor = '#38bdf8';
+            glowColor = 'rgba(56, 189, 248, 0.55)';
+        } else if (p.realm === 'shadow') {
+            edgeColor = '#c084fc';
+            glowColor = 'rgba(192, 132, 252, 0.55)';
+        }
+
+        ctx.shadowColor = glowColor;
+        ctx.shadowBlur = 10;
+        ctx.strokeStyle = edgeColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(p.x + 4, p.y + 1);
+        ctx.lineTo(p.x + p.w - 4, p.y + 1);
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    function drawSpikes(s) {
+        const active = isEntityActiveInCurrentRealm(s.realm);
+        ctx.save();
+        ctx.globalAlpha = active ? 1.0 : 0.22;
+
+        const spikeCount = Math.floor(s.w / 14);
+        const step = s.w / spikeCount;
+
+        ctx.fillStyle = '#030407';
+        ctx.strokeStyle = active ? '#fb7185' : '#64748b';
+        ctx.lineWidth = 1.5;
+
+        for (let i = 0; i < spikeCount; i++) {
+            const sx = s.x + i * step;
+            ctx.beginPath();
+            ctx.moveTo(sx, s.y + s.h);
+            ctx.lineTo(sx + step / 2, s.y);
+            ctx.lineTo(sx + step, s.y + s.h);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    function drawShard(s) {
+        const active = isEntityActiveInCurrentRealm(s.realm);
+        const bobY = s.y + Math.sin(globalTime * 3.5 + s.bobOffset) * 6;
+
+        ctx.save();
+        ctx.globalAlpha = active ? 1.0 : 0.2;
+
+        // هالة الشظية
+        const grad = ctx.createRadialGradient(s.x, bobY, 2, s.x, bobY, 26);
+        grad.addColorStop(0, 'rgba(253, 224, 71, 0.85)');
+        grad.addColorStop(1, 'rgba(253, 224, 71, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(s.x, bobY, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        // شكل البلورة الماسية
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.moveTo(s.x, bobY - 11);
+        ctx.lineTo(s.x + 8, bobY);
+        ctx.lineTo(s.x, bobY + 11);
+        ctx.lineTo(s.x - 8, bobY);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function drawEnemy(e) {
+        const active = isEntityActiveInCurrentRealm(e.realm);
+        const cx = e.x + 16;
+        const cy = e.y + 18 + Math.sin(globalTime * 5 + e.x) * 3;
+
+        ctx.save();
+        ctx.globalAlpha = active ? 0.95 : 0.2;
+
+        // هالة شبحية داكنة
+        ctx.fillStyle = '#05030a';
+        ctx.shadowColor = '#a855f7';
+        ctx.shadowBlur = 14;
+        ctx.beginPath();
+        ctx.arc(cx, cy - 4, 15, Math.PI, 0);
+        ctx.lineTo(cx + 16, cy + 16);
+        ctx.lineTo(cx + 8, cy + 11);
+        ctx.lineTo(cx, cy + 17);
+        ctx.lineTo(cx - 8, cy + 11);
+        ctx.lineTo(cx - 16, cy + 16);
+        ctx.closePath();
+        ctx.fill();
+
+        // عينان متوهجتان للروح الظلية
+        ctx.fillStyle = '#f43f5e';
+        ctx.beginPath();
+        ctx.arc(cx + e.dir * 5 - 3, cy - 4, 2.3, 0, Math.PI * 2);
+        ctx.arc(cx + e.dir * 5 + 3, cy - 4, 2.3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function drawCheckpoint(cp) {
+        ctx.save();
+        // عمود حجري صغير
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(cp.x - 4, cp.y - 38, 8, 38);
+
+        // شعلة الفانوس
+        const flameY = cp.y - 44;
+        if (cp.activated) {
+            const glow = ctx.createRadialGradient(cp.x, flameY, 2, cp.x, flameY, 32);
+            glow.addColorStop(0, 'rgba(56, 189, 248, 0.9)');
+            glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(cp.x, flameY, 32, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#e0f2fe';
+            ctx.beginPath();
+            ctx.arc(cp.x, flameY, 5, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(cp.x, flameY, 5, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    function drawPortal(p) {
+        const unlocked = collectedShardsCount >= totalShardsInLevel;
+        const cx = p.x;
+        const cy = p.y - 48;
+
+        ctx.save();
+
+        // قوس البوابة الحجري
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 34, Math.PI, 0);
+        ctx.lineTo(cx + 34, p.y);
+        ctx.moveTo(cx - 34, cy);
+        ctx.lineTo(cx - 34, p.y);
+        ctx.stroke();
+
+        // دوامة الطاقة داخل البوابة
+        if (unlocked) {
+            const grad = ctx.createRadialGradient(cx, cy + 10, 4, cx, cy + 10, 48);
+            grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
+            grad.addColorStop(0.5, 'rgba(56, 189, 248, 0.45)');
+            grad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(cx, cy + 10, 48, 0, Math.PI * 2);
+            ctx.fill();
+
+            // حلقات دوارة
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + 12, 18 + Math.sin(globalTime * 4) * 3, 30, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        } else {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
+            ctx.beginPath();
+            ctx.arc(cx, cy + 12, 22, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.restore();
+    }
+
+    function drawPlayer() {
+        ctx.save();
+
+        // 1. رسم العباءة المتطايرة خلف الشخصية
+        ctx.fillStyle = isShadowRealm ? '#1e1035' : '#0b0f19';
+        ctx.beginPath();
+        ctx.moveTo(capePoints[0].x, capePoints[0].y);
+        for (let i = 1; i < capePoints.length; i++) {
+            ctx.lineTo(capePoints[i].x, capePoints[i].y);
+        }
+        for (let i = capePoints.length - 1; i >= 0; i--) {
+            ctx.lineTo(capePoints[i].x - player.facing * 6, capePoints[i].y + 4);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        // 2. رسم جسد البطل مع تطبيق التمدد والانضغاط (Squash & Stretch)
+        const centerX = player.x + player.w / 2;
+        const bottomY = player.y + player.h;
+
+        ctx.translate(centerX, bottomY);
+        ctx.scale(player.squashX, player.squashY);
+
+        // ظل الجسد الأسود النقي (Limbo Silhouette)
+        ctx.fillStyle = '#020305';
+        // الجذع
+        ctx.beginPath();
+        ctx.roundRect(-10, -30, 20, 24, 6);
+        ctx.fill();
+
+        // الرأس
+        ctx.beginPath();
+        ctx.arc(0, -35, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        // الأرجل المتحركة أثناء المشي
+        const walkSwing = Math.abs(player.vx) > 0.3 && player.grounded
+            ? Math.sin(globalTime * 16) * 5
+            : 0;
+        ctx.strokeStyle = '#020305';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-4, -8);
+        ctx.lineTo(-4 + walkSwing, 0);
+        ctx.moveTo(4, -8);
+        ctx.lineTo(4 - walkSwing, 0);
+        ctx.stroke();
+
+        // العينان المتوهجتان البيضاويتان
+        ctx.fillStyle = isShadowRealm ? '#f3e8ff' : '#ffffff';
+        ctx.shadowColor = isShadowRealm ? '#c084fc' : '#38bdf8';
+        ctx.shadowBlur = 8;
+        const eyeOffsetX = player.facing * 4;
+        ctx.beginPath();
+        ctx.ellipse(eyeOffsetX - 2.5, -35, 2, 3, 0, 0, Math.PI * 2);
+        ctx.ellipse(eyeOffsetX + 2.5, -35, 2, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. المصباح المضيء بيد الشخصية
+        const lanternX = player.facing * 14;
+        const lanternY = -18 + Math.sin(globalTime * 6) * 1.5;
+
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#fde047';
+        ctx.fillStyle = '#fef9c3';
+        ctx.beginPath();
+        ctx.arc(lanternX, lanternY, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function drawAtmosphericLighting() {
+        // إضاءة دائرية ناعمة حول المصباح لإبراز التفاصيل القريبة في الظلام
+        const screenPlayerX = (player.x + player.w / 2 + player.facing * 12) - camera.x;
+        const screenPlayerY = (player.y + 22) - camera.y;
+
+        const r = player.lanternRadius + Math.sin(globalTime * 4) * 6;
+        const lightGrad = ctx.createRadialGradient(
+            screenPlayerX, screenPlayerY, 15,
+            screenPlayerX, screenPlayerY, r * 2.4
+        );
+
+        if (isShadowRealm) {
+            lightGrad.addColorStop(0, 'rgba(192, 132, 252, 0.14)');
+            lightGrad.addColorStop(0.45, 'rgba(15, 10, 30, 0.25)');
+            lightGrad.addColorStop(1, 'rgba(3, 2, 8, 0.72)');
+        } else {
+            lightGrad.addColorStop(0, 'rgba(253, 224, 71, 0.12)');
+            lightGrad.addColorStop(0.45, 'rgba(10, 15, 28, 0.22)');
+            lightGrad.addColorStop(1, 'rgba(3, 5, 10, 0.68)');
+        }
+
+        ctx.fillStyle = lightGrad;
+        ctx.fillRect(0, 0, width, height);
+    }
+
+    // ----------------------------------------------------------------------------
+    // 11. الحلقة الرئيسية للعبة (Main Game Loop)
+    // ----------------------------------------------------------------------------
+    let lastTime = 0;
+    function gameLoop(timestamp) {
+        const dt = timestamp - lastTime;
+        lastTime = timestamp;
+
+        update(dt);
+        render();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // ----------------------------------------------------------------------------
+    // 12. التحكم عبر لوحة المفاتيح واللمس والأزرار
+    // ----------------------------------------------------------------------------
+    window.addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+            e.preventDefault();
+        }
+
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
+            if (!keys.up) keys.upPressedThisFrame = true;
+            keys.up = true;
+        }
+        if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'KeyE') {
+            toggleDimension();
+        }
+        if (e.code === 'KeyR' && gameState === 'PLAYING') {
+            loadLevel(currentLevelIndex, true);
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
+    });
+
+    // ربط أزرار اللمس
+    function bindTouchButton(elementId, onPress, onRelease) {
+        const btn = document.getElementById(elementId);
+        const start = (e) => {
+            e.preventDefault();
+            btn.classList.add('active');
+            onPress();
+        };
+        const end = (e) => {
+            e.preventDefault();
+            btn.classList.remove('active');
+            if (onRelease) onRelease();
+        };
+        btn.addEventListener('touchstart', start, { passive: false });
+        btn.addEventListener('touchend', end, { passive: false });
+        btn.addEventListener('touchcancel', end, { passive: false });
+        btn.addEventListener('mousedown', start);
+        btn.addEventListener('mouseup', end);
+        btn.addEventListener('mouseleave', end);
+    }
+
+    bindTouchButton('touch-left', () => { keys.left = true; }, () => { keys.left = false; });
+    bindTouchButton('touch-right', () => { keys.right = true; }, () => { keys.right = false; });
+    bindTouchButton('touch-jump', () => {
+        if (!keys.up) keys.upPressedThisFrame = true;
+        keys.up = true;
+    }, () => { keys.up = false; });
+    bindTouchButton('touch-phase', () => { toggleDimension(); });
+
+    // أزرار الواجهة
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+        sound.init();
+        document.getElementById('start-screen').classList.add('hidden');
+        generateParallaxScenery();
+        loadLevel(0, false);
+        gameState = 'PLAYING';
+    });
+
+    document.getElementById('btn-play-again').addEventListener('click', () => {
+        document.getElementById('victory-screen').classList.add('hidden');
+        loadLevel(0, false);
+        gameState = 'PLAYING';
+    });
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+        if (gameState === 'PLAYING') {
+            loadLevel(currentLevelIndex, false);
+        }
+    });
+
+    document.getElementById('btn-audio').addEventListener('click', () => {
+        sound.init();
+        const isMuted = sound.toggleMute();
+        document.getElementById('icon-sound-on').style.display = isMuted ? 'none' : 'block';
+        document.getElementById('icon-sound-off').style.display = isMuted ? 'block' : 'none';
+    });
+
+    // بدء حلقة الرسم عند تحميل الصفحة
+    window.onload = function () {
+        generateParallaxScenery();
+        loadLevel(0, false);
+        requestAnimationFrame(gameLoop);
+    };
+    </script>
+</body>
+</html>
