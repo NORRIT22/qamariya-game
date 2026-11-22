@@ -2,113 +2,91 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LAGHOUAT: HAYY (حيّ) — اللعبة التفاعلية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAGHOUAT: HAYY 3D — حيّ (المدينة الحية)</title>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-    body, html { width: 100%; height: 100%; overflow: hidden; background: #0c0a09; font-family: 'IBM Plex Sans Arabic', sans-serif; color: #f5efe6; }
-    canvas { display: block; width: 100%; height: 100%; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #0d0a08; font-family: 'IBM Plex Sans Arabic', sans-serif; color: #f5efe6; }
+    #canvas-container { position: fixed; inset: 0; z-index: 1; }
 
     /* Minimalist Diegetic HUD */
-    #hud { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; z-index: 10; }
+    #hud { position: fixed; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; z-index: 10; transition: opacity 0.3s; }
     .top-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .district-badge { background: rgba(18, 15, 13, 0.78); backdrop-filter: blur(8px); border: 1px solid rgba(217, 119, 54, 0.35); padding: 10px 16px; border-radius: 10px; pointer-events: auto; }
-    .district-name { font-family: 'Amiri', serif; font-size: 1.35rem; color: #f5efe6; line-height: 1.2; }
-    .district-sub { font-size: 0.78rem; color: #c89d7c; font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+    .location-card { background: rgba(16, 13, 11, 0.72); backdrop-filter: blur(10px); border: 1px solid rgba(229, 169, 60, 0.35); padding: 12px 18px; border-radius: 12px; }
+    .loc-title { font-family: 'Amiri', serif; font-size: 1.45rem; color: #f5efe6; line-height: 1.2; }
+    .loc-meta { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: #e5a93c; margin-top: 4px; }
 
-    .stats-cluster { display: flex; gap: 8px; flex-wrap: wrap; pointer-events: auto; }
-    .pill { background: rgba(18, 15, 13, 0.78); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 999px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; }
-    .pill:hover { border-color: #d97736; background: rgba(35, 28, 24, 0.9); }
-    .pill span.val { font-family: 'IBM Plex Mono', monospace; color: #e5a93c; font-weight: 600; }
+    .actions-bar { display: flex; gap: 8px; flex-wrap: wrap; pointer-events: auto; }
+    .pill-btn { background: rgba(16, 13, 11, 0.78); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.12); color: #f5efe6; padding: 8px 14px; border-radius: 999px; font-family: inherit; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .pill-btn:hover { border-color: #d97736; background: rgba(38, 28, 22, 0.92); }
+    .mono { font-family: 'IBM Plex Mono', monospace; color: #e5a93c; font-weight: 600; }
 
-    /* Bottom Controls & Prompt */
     .bottom-bar { display: flex; justify-content: space-between; align-items: flex-end; }
-    .controls-hint { background: rgba(18, 15, 13, 0.72); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 8px; font-size: 0.8rem; color: #b8aea3; line-height: 1.6; }
-    .key { display: inline-block; background: #26211d; border: 1px solid #453c34; padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #f5efe6; margin: 0 2px; }
+    .controls-box { background: rgba(16, 13, 11, 0.72); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); padding: 10px 16px; border-radius: 10px; font-size: 0.82rem; color: #c7bdb2; }
+    .key { display: inline-block; background: #26201b; border: 1px solid #4a3f36; padding: 1px 6px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #fff; margin: 0 2px; }
 
-    /* Interaction Prompt */
-    #interact-prompt { position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); background: rgba(217, 119, 54, 0.92); color: #fff; padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; box-shadow: 0 8px 24px rgba(0,0,0,0.45); display: none; z-index: 15; }
+    /* Crosshair / Interaction Prompt */
+    #interact-prompt { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(217, 119, 54, 0.92); color: #fff; padding: 9px 22px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; display: none; z-index: 15; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
+    #toast { position: fixed; top: 88px; left: 50%; transform: translateX(-50%); background: rgba(16, 13, 11, 0.92); border: 1px solid #e5a93c; padding: 10px 22px; border-radius: 10px; font-size: 0.92rem; opacity: 0; transition: opacity 0.35s; pointer-events: none; z-index: 30; }
 
-    /* Notification Toast */
-    #toast { position: fixed; top: 82px; left: 50%; transform: translateX(-50%); background: rgba(18, 15, 13, 0.92); border: 1px solid #e5a93c; color: #f5efe6; padding: 10px 22px; border-radius: 10px; font-size: 0.92rem; opacity: 0; transition: opacity 0.35s; pointer-events: none; z-index: 30; text-align: center; }
+    /* Start Screen */
+    #start-overlay { position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(28, 20, 15, 0.85), rgba(10, 8, 7, 0.96)); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+    .start-card { background: #171310; border: 1px solid #362d26; border-radius: 16px; max-width: 640px; width: 100%; padding: 32px; text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.8); }
+    .start-card h1 { font-family: 'Amiri', serif; font-size: 2.5rem; color: #f5efe6; margin-bottom: 8px; }
+    .start-card p { color: #b0a69b; font-size: 0.96rem; line-height: 1.65; margin-bottom: 22px; }
+    .arch-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; text-align: right; }
+    .arch-opt { background: #211b17; border: 2px solid #2e2620; border-radius: 10px; padding: 12px; cursor: pointer; transition: 0.2s; }
+    .arch-opt.active, .arch-opt:hover { border-color: #d97736; background: #2b221b; }
+    .arch-opt h4 { color: #e5a93c; font-size: 0.98rem; margin-bottom: 4px; }
+    .arch-opt span { font-size: 0.78rem; color: #a89e93; display: block; line-height: 1.4; }
+    .start-btn { width: 100%; background: #d97736; color: #fff; border: none; padding: 14px; border-radius: 10px; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; }
+    .start-btn:hover { background: #e88543; }
 
-    /* Modals (Start Screen, Smartphone, Dialogue, Photo Mode) */
-    .overlay-screen { position: fixed; inset: 0; background: rgba(10, 8, 7, 0.88); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
-    .modal-box { background: #171412; border: 1px solid #332c26; border-radius: 16px; max-width: 680px; width: 100%; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.65); }
-    .modal-title { font-family: 'Amiri', serif; font-size: 2rem; color: #f5efe6; margin-bottom: 6px; }
-    .modal-desc { color: #a89f94; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
+    /* Dialogue & Phone Modals */
+    #dialogue-box { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); width: 620px; max-width: 92vw; background: rgba(18, 15, 13, 0.95); border: 1px solid #d97736; border-radius: 14px; padding: 20px; display: none; z-index: 40; }
+    #phone-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 45; }
+    .phone-box { background: #151210; border: 2px solid #3a312a; border-radius: 26px; width: 370px; height: 560px; display: flex; flex-direction: column; overflow: hidden; }
+    .phone-top { padding: 16px; background: #1e1916; border-bottom: 1px solid #2e2620; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: #e5a93c; }
+    .phone-feed { flex: 1; overflow-y: auto; padding: 14px; }
+    .post { background: #1f1a17; border: 1px solid #2e2620; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .post img { width: 100%; border-radius: 6px; margin-top: 8px; }
 
-    .archetype-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px; }
-    .arch-card { background: #211c18; border: 2px solid #2e2722; border-radius: 12px; padding: 14px; cursor: pointer; transition: 0.2s; text-align: right; }
-    .arch-card:hover, .arch-card.selected { border-color: #d97736; background: #2a221c; }
-    .arch-card h4 { color: #e5a93c; font-size: 1.05rem; margin-bottom: 4px; }
-    .arch-card p { font-size: 0.8rem; color: #b5aba0; line-height: 1.45; }
-
-    .primary-btn { width: 100%; background: #d97736; color: #fff; border: none; padding: 13px; border-radius: 10px; font-family: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
-    .primary-btn:hover { background: #e68442; }
-
-    /* Smartphone Diegetic UI */
-    #phone-modal { display: none; }
-    .phone-frame { background: #141210; border: 2px solid #38302a; border-radius: 28px; width: 380px; max-width: 100%; height: 600px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
-    .phone-header { padding: 16px 20px; background: #1c1815; border-bottom: 1px solid #2e2722; display: flex; justify-content: space-between; align-items: center; }
-    .phone-tabs { display: flex; background: #1c1815; border-bottom: 1px solid #2e2722; }
-    .phone-tab { flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; cursor: pointer; color: #9c9288; border-bottom: 2px solid transparent; }
-    .phone-tab.active { color: #e5a93c; border-bottom-color: #e5a93c; font-weight: 700; }
-    .phone-body { flex: 1; overflow-y: auto; padding: 16px; }
-    .feed-item { background: #1f1b18; border: 1px solid #2e2722; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
-    .feed-author { font-size: 0.82rem; color: #e5a93c; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
-    .feed-text { font-size: 0.88rem; color: #dfd7ce; line-height: 1.5; }
-    .feed-img { width: 100%; border-radius: 6px; margin-top: 8px; border: 1px solid #38302a; }
-
-    /* Dialogue Box */
-    #dialogue-box { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: 640px; max-width: 92vw; background: rgba(20, 17, 15, 0.95); border: 1px solid #d97736; border-radius: 14px; padding: 20px; display: none; z-index: 40; box-shadow: 0 16px 40px rgba(0,0,0,0.7); }
-    .npc-name { color: #e5a93c; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; }
-    .npc-line { color: #f2ece4; font-size: 0.96rem; line-height: 1.65; margin-bottom: 14px; }
-    .dialogue-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .btn-sm { background: #29231e; color: #f2ece4; border: 1px solid #453b33; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.85rem; }
-    .btn-sm.accent { background: #d97736; border-color: #d97736; color: #fff; }
-
-    /* Photo Mode Overlay */
-    #photo-hud { position: fixed; inset: 0; border: 12px solid rgba(255,255,255,0.12); pointer-events: none; display: none; z-index: 25; flex-direction: column; justify-content: space-between; padding: 24px; }
-    .photo-controls { pointer-events: auto; background: rgba(15,13,11,0.85); border: 1px solid #38302a; padding: 12px 20px; border-radius: 12px; display: flex; gap: 12px; align-items: center; align-self: center; }
-
-    /* Mobile Touch Pad */
-    #touch-controls { display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; justify-content: space-between; z-index: 20; pointer-events: none; }
-    .touch-cluster { display: flex; gap: 10px; pointer-events: auto; }
-    .t-btn { width: 54px; height: 54px; border-radius: 50%; background: rgba(25,21,18,0.8); border: 1px solid rgba(217,119,54,0.5); color: #fff; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
-    @media (max-width: 820px) { #touch-controls { display: flex; } .controls-hint { display: none; } }
+    /* Photo Mode Frame */
+    #photo-frame { position: fixed; inset: 0; border: 14px solid rgba(255,255,255,0.1); pointer-events: none; display: none; z-index: 25; flex-direction: column; justify-content: space-between; padding: 24px; }
+    .photo-bar { pointer-events: auto; background: rgba(15,12,10,0.88); border: 1px solid #3d332b; padding: 10px 18px; border-radius: 12px; display: flex; gap: 10px; align-self: center; }
+    .sm-btn { background: #29221d; color: #f5efe6; border: 1px solid #473c33; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.85rem; }
+    .sm-btn.primary { background: #d97736; border-color: #d97736; }
   </style>
 </head>
 <body>
 
-  <canvas id="gameCanvas"></canvas>
+  <div id="canvas-container"></div>
 
   <!-- HUD -->
   <div id="hud">
     <div class="top-bar">
-      <div class="district-badge">
-        <div class="district-name" id="hud-district">الأقواس — وسط المدينة</div>
-        <div class="district-sub" id="hud-time">18:15 • غروب الأغواط (Golden Hour)</div>
+      <div class="location-card">
+        <div class="loc-title" id="hud-zone">الأقواس — شارع الأمير عبد القادر</div>
+        <div class="loc-meta" id="hud-atmosphere">18:20 • غروب الأغواط (Golden Hour 3D)</div>
       </div>
 
-      <div class="stats-cluster">
-        <div class="pill" onclick="cycleTime()" title="تغيير الوقت">🌓 <span id="hud-phase">الغروب</span></div>
-        <div class="pill" onclick="cycleWeather()" title="تغيير الطقس">🌤️ <span id="hud-weather">سماء صافية</span></div>
-        <div class="pill">🪙 <span class="val" id="hud-tokens">25</span></div>
-        <div class="pill">🧭 <span class="val" id="hud-discovery">1/8</span></div>
-        <div class="pill" onclick="togglePhotoMode()">📷 تصوير <span class="key">P</span></div>
-        <div class="pill" onclick="togglePhone()">📱 الهاتف <span class="key">Tab</span></div>
+      <div class="actions-bar">
+        <button class="pill-btn" onclick="cycleLighting()">🌅 الإضاءة: <span id="lbl-light">الغروب</span></button>
+        <div class="pill-btn">🪙 <span class="mono" id="lbl-tokens">30</span></div>
+        <div class="pill-btn">🧭 <span class="mono" id="lbl-discovered">1/5</span></div>
+        <button class="pill-btn" onclick="togglePhotoMode()">📷 تصوير <span class="key">P</span></button>
+        <button class="pill-btn" onclick="togglePhone()">📱 City Feed <span class="key">Tab</span></button>
       </div>
     </div>
 
     <div class="bottom-bar">
-      <div class="controls-hint">
-        الحركة: <span class="key">WASD</span> أو <span class="key">الأسهم</span> &nbsp;|&nbsp;
-        القدرة الخاصة / التسلق: <span class="key">Space</span> &nbsp;|&nbsp;
+      <div class="controls-box">
+        التحرك: <span class="key">W A S D</span> &nbsp;|&nbsp;
+        تدوير الكاميرا: <span class="key">اسحب بالماوس</span> &nbsp;|&nbsp;
+        قفز / تحليق: <span class="key">Space</span> &nbsp;|&nbsp;
         تفاعل: <span class="key">E</span> &nbsp;|&nbsp;
-        تصوير: <span class="key">P</span> &nbsp;|&nbsp;
-        الهاتف والخريطة: <span class="key">Tab</span>
+        تصوير: <span class="key">P</span>
       </div>
     </div>
   </div>
@@ -117,777 +95,597 @@
   <div id="toast"></div>
 
   <!-- Photo Mode HUD -->
-  <div id="photo-hud">
-    <div style="text-align:center; font-family:'IBM Plex Mono', monospace; color:#e5a93c; background:rgba(0,0,0,0.6); padding:6px 14px; border-radius:6px; align-self:center;">
-      PHOTO MODE — الكاميرا الحرة مفعّلة (حرّك بالأسهم / التكبير بالماوس)
+  <div id="photo-frame">
+    <div style="align-self:center; background:rgba(0,0,0,0.65); padding:6px 16px; border-radius:6px; font-family:'IBM Plex Mono',monospace; color:#e5a93c;">
+      3D PHOTO MODE — حرّك الكاميرا بالماوس والتقريب بالعجلة
     </div>
-    <div class="photo-controls">
-      <button class="btn-sm" onclick="cycleFilter()">الفلتر: <span id="filter-name">دافئ (غروب)</span></button>
-      <button class="btn-sm accent" onclick="capturePhoto()">📸 التقاط ونشر في City Feed</button>
-      <button class="btn-sm" onclick="togglePhotoMode()">إغلاق [P]</button>
+    <div class="photo-bar">
+      <button class="sm-btn primary" onclick="take3DPhoto()">📸 التقاط ونشر في City Feed</button>
+      <button class="sm-btn" onclick="togglePhotoMode()">خروج [P]</button>
     </div>
   </div>
 
-  <!-- Dialogue Box -->
+  <!-- Dialogue Modal -->
   <div id="dialogue-box">
-    <div class="npc-name" id="dlg-name">اسم الشخصية</div>
-    <div class="npc-line" id="dlg-text">نص الحوار...</div>
-    <div class="dialogue-actions">
-      <button class="btn-sm accent" id="dlg-quest-btn" style="display:none;" onclick="acceptOrCompleteQuest()">قبول المهمة</button>
-      <button class="btn-sm" onclick="closeDialogue()">إغلاق</button>
+    <div style="color:#e5a93c; font-weight:700; font-size:1.05rem; margin-bottom:6px;" id="dlg-speaker"></div>
+    <div style="color:#f5efe6; font-size:0.95rem; line-height:1.6; margin-bottom:14px;" id="dlg-body"></div>
+    <div style="text-align:left;">
+      <button class="sm-btn primary" onclick="closeDialogue()">متابعة التجول</button>
     </div>
   </div>
 
-  <!-- Smartphone Modal -->
-  <div class="overlay-screen" id="phone-modal">
-    <div class="phone-frame">
-      <div class="phone-header">
-        <span style="font-weight:700; color:#e5a93c;">هاتف حيّ — LAGHOUAT OS</span>
-        <button class="btn-sm" onclick="togglePhone()">✕</button>
+  <!-- Smartphone Feed -->
+  <div id="phone-modal">
+    <div class="phone-box">
+      <div class="phone-top">
+        <span>LAGHOUAT: HAYY — City Feed</span>
+        <button class="sm-btn" onclick="togglePhone()">✕</button>
       </div>
-      <div class="phone-tabs">
-        <div class="phone-tab active" onclick="switchPhoneTab('feed', this)">City Feed</div>
-        <div class="phone-tab" onclick="switchPhoneTab('map', this)">المعالم</div>
-        <div class="phone-tab" onclick="switchPhoneTab('quests', this)">المهام</div>
-      </div>
-      <div class="phone-body" id="phone-content"></div>
+      <div class="phone-feed" id="feed-container"></div>
     </div>
   </div>
 
-  <!-- Intro / Character Selection Screen -->
-  <div class="overlay-screen" id="start-screen">
-    <div class="modal-box">
-      <div class="modal-title">LAGHOUAT: HAYY (حيّ)</div>
-      <div class="modal-desc">
+  <!-- Start Screen -->
+  <div id="start-overlay">
+    <div class="start-card">
+      <h1>LAGHOUAT: HAYY (حيّ)</h1>
+      <p>
         «مدينة تعرفها، لكنك لم ترها هكذا من قبل.»<br>
-        اختر الكائن الذي ستتجول به داخل التوأم الرقمي لمدينة الأغواط. لا قتال، لا بشر؛ فقط الاستكشاف، الأسطح، المقاهي، وأجواء الغروب.
-      </div>
-      <div class="archetype-grid" id="archetype-list"></div>
-      <button class="primary-btn" onclick="startGame()">ابدأ التجول في الأغواط</button>
-    </div>
-  </div>
-
-  <!-- Touch Controls for Mobile -->
-  <div id="touch-controls">
-    <div class="touch-cluster">
-      <button class="t-btn" ontouchstart="keys['ArrowRight']=true" ontouchend="keys['ArrowRight']=false">→</button>
-      <button class="t-btn" ontouchstart="keys['ArrowUp']=true" ontouchend="keys['ArrowUp']=false">↑</button>
-      <button class="t-btn" ontouchstart="keys['ArrowDown']=true" ontouchend="keys['ArrowDown']=false">↓</button>
-      <button class="t-btn" ontouchstart="keys['ArrowLeft']=true" ontouchend="keys['ArrowLeft']=false">←</button>
-    </div>
-    <div class="touch-cluster">
-      <button class="t-btn" onclick="triggerAbility()">⚡</button>
-      <button class="t-btn" onclick="triggerInteract()">E</button>
-    </div>
-  </div>
-
-<script>
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-// --- GAME DATA & DIGITAL TWIN MAP OF LAGHOUAT ---
-const ARCHETYPES = [
-  { id: 'nimble', name: 'الوثّاب (Nimble)', color: '#e5a93c', coat: '#3b4d3b', speed: 4.4, abilityName: 'اندفاع سريع وعبور الممرات الضيقة', desc: 'سريع الحركة، يقفز فوق الحواجز المنخفضة ويدخل الأزقة الضيقة.' },
-  { id: 'glider', name: 'المُحلّق (Glider)', color: '#d97736', coat: '#2b3a4a', speed: 3.8, abilityName: 'تحليق شراعي فوق الساحات', desc: 'يرتدي معطفًا مجنحًا يسمح له بالانزلاق السريع فوق الطرقات.' },
-  { id: 'nocturnal', name: 'الليلي (Nocturnal)', color: '#70a1ff', coat: '#1e1b24', speed: 4.0, abilityName: 'بصيرة ليلية لكشف الأسرار', desc: 'عيون مضيئة تكشف الرموز والمقتنيات المخفية في أرجاء المدينة.' },
-  { id: 'strange', name: 'الأثيري (Strange)', color: '#e056fd', coat: '#3d2c3e', speed: 3.9, abilityName: 'انتقال آني قصير (Phase Dash)', desc: 'كائن مقنّع يطفو قليلًا ويعبر المسافات القصيرة بلمح البصر.' }
-];
-
-let selectedArch = ARCHETYPES[0];
-
-const LANDMARKS = [
-  { id: 'arches', name: 'الأقواس — شارع الأمير عبد القادر', x: 1100, y: 1100, w: 320, h: 180, color: '#8c583a', discovered: true, lore: 'القلب النابض لوسط المدينة، حيث تتقاطع الظلال الطويلة وقت الغروب مع المقاهي العتيقة.' },
-  { id: 'moqawama', name: 'ساحة المقاومة', x: 1550, y: 1050, w: 340, h: 260, color: '#7a634b', discovered: false, lore: 'ساحة واسعة تتوسط المدينة، تتجمع فيها الكائنات لمراقبة السماء وتبادل الحكايات.' },
-  { id: 'mosque', name: 'المسجد العتيق والقصر القديم', x: 850, y: 720, w: 280, h: 220, color: '#9e6b43', discovered: false, lore: 'أزقة ضيقة وجدران طينية دافئة تحتفظ بذاكرة المدينة القديمة وأسرارها المعمارية.' },
-  { id: 'oued', name: 'ضفاف واد مزي والبساتين', x: 2100, y: 1450, w: 460, h: 360, color: '#3b6e52', discovered: false, lore: 'واحات النخيل ومجرى الوادي؛ أفضل مكان لمشاهدة انعكاس الغروب الذهبي.' },
-  { id: 'ensl', name: 'المدرسة العليا للأساتذة طالب عبد الرحمن', x: 650, y: 1650, w: 360, h: 240, color: '#58687a', discovered: false, lore: 'قطب المعرفة والهدوء، حيث تتجول الكائنات حاملة الكتب والمخطوطات.' },
-  { id: 'maqam', name: 'حي المقام العتيق', x: 1450, y: 650, w: 300, h: 210, color: '#875a42', discovered: false, lore: 'بيوت متلاصقة وأسطح منخفضة مثالية للتنقل العلوي.' },
-  { id: 'gardens', name: 'الحديقة العمومية', x: 1750, y: 1550, w: 260, h: 220, color: '#2f5e44', discovered: false, lore: 'ملاذ هادئ وسط المدينة مليء بالأشجار والمقاعد الخشبية.' },
-  { id: 'bab', name: 'باب الجزائر', x: 1150, y: 1520, w: 240, h: 170, color: '#7d4f38', discovered: false, lore: 'بوابة تاريخية تربط بين الأحياء القديمة والامتداد الحديث للأغواط.' }
-];
-
-// Decorative City Buildings (Stylized Architecture)
-const BUILDINGS = [
-  { x: 1020, y: 980, w: 140, h: 90, roof: '#a8643e' },
-  { x: 1190, y: 980, w: 160, h: 90, roof: '#965634' },
-  { x: 1020, y: 1290, w: 180, h: 100, roof: '#8c4f30' },
-  { x: 1230, y: 1290, w: 150, h: 100, roof: '#a15e3b' },
-  { x: 1520, y: 920, w: 170, h: 110, roof: '#7d563c' },
-  { x: 1720, y: 920, w: 160, h: 110, roof: '#8f6346' },
-  { x: 820, y: 610, w: 130, h: 95, roof: '#b07448' },
-  { x: 980, y: 610, w: 140, h: 95, roof: '#9c6238' },
-  { x: 620, y: 1520, w: 200, h: 110, roof: '#4e5d6e' },
-  { x: 850, y: 1520, w: 170, h: 110, roof: '#5a6b7d' },
-  { x: 1430, y: 530, w: 150, h: 100, roof: '#945d40' },
-  { x: 1610, y: 530, w: 140, h: 100, roof: '#824f35' }
-];
-
-// Palm Trees around Oued M'zi & Gardens
-const PALMS = [];
-for (let i = 0; i < 38; i++) {
-  PALMS.push({
-    x: 2050 + Math.random() * 520,
-    y: 1380 + Math.random() * 480,
-    size: 16 + Math.random() * 10
-  });
-}
-for (let i = 0; i < 14; i++) {
-  PALMS.push({
-    x: 1740 + Math.random() * 260,
-    y: 1530 + Math.random() * 220,
-    size: 14 + Math.random() * 8
-  });
-}
-
-// Secrets & Collectibles
-const SECRETS = [
-  { id: 'sec1', name: 'مخطوطة الأقواس القديمة', x: 1080, y: 1075, found: false, tokens: 15 },
-  { id: 'sec2', name: 'عدسة الغروب الذهبية', x: 2320, y: 1620, found: false, tokens: 20 },
-  { id: 'sec3', name: 'رمز القصر المخفي', x: 910, y: 780, found: false, tokens: 15 },
-  { id: 'sec4', name: 'مذكرة طالب الأثير', x: 740, y: 1710, found: false, tokens: 20 },
-  { id: 'sec5', name: 'مفتاح سطح المقام', x: 1560, y: 710, found: false, tokens: 25 }
-];
-
-// Non-Human NPCs
-const NPCS = [
-  {
-    id: 'npc1', name: 'الراوي سُهيل (مقهى الأقواس)', x: 1260, y: 1160, color: '#e5a93c', cloak: '#5c3a21',
-    dialogue: 'أهلاً بك في قلب الأغواط! انظر كيف يصبغ الغروب جدران الأقواس بالذهب. هل يمكنك زيارة ضفاف واد مزي والتقاط صورة هناك؟',
-    quest: { id: 'q1', title: 'غروب واد مزي', desc: 'اكتشف ضفاف واد مزي والبساتين ثم عد إلى سهيل.', targetLandmark: 'oued', reward: 30, status: 'available' }
-  },
-  {
-    id: 'npc2', name: 'أمينة الورّاقة (قرب المدرسة العليا)', x: 820, y: 1760, color: '#70a1ff', cloak: '#2c3e50',
-    dialogue: 'أبحث عن مخطوطة قديمة سقطت قرب الأقواس في وسط المدينة. المدينة هادئة اليوم ومناسبة للتجول.',
-    quest: { id: 'q2', title: 'مخطوطة الأقواس', desc: 'اعثر على مخطوطة الأقواس القديمة في وسط المدينة.', targetSecret: 'sec1', reward: 35, status: 'available' }
-  },
-  {
-    id: 'npc3', name: 'حارس القصر القديم', x: 980, y: 830, color: '#ff7979', cloak: '#4a2c2a',
-    dialogue: 'هذه الأزقة تعرف كل خطوة. جرب استخدام قدرتك الخاصة [Space] لاستكشاف الأماكن المخفية حول حي المقام.',
-    quest: null
-  },
-  {
-    id: 'npc4', name: 'عازف البساتين', x: 2220, y: 1560, color: '#55efc4', cloak: '#1e3d2f',
-    dialogue: 'صوت الرياح بين النخيل هنا يساوي ألف لحن. افتح وضع التصوير [P] ووثّق هذه اللحظة في City Feed!',
-    quest: null
-  }
-];
-
-// City Feed Initial Posts
-const CITY_FEED = [
-  { author: 'الحيّ الآن • نشرة المدينة', time: 'منذ دقيقتين', text: 'الغروب يبلغ ذروته الآن فوق واد مزي والأقواس. الإضاءة مثالية للتصوير الفوتوغرافي!', img: null },
-  { author: 'أمينة الورّاقة', time: 'منذ 14 دقيقة', text: 'شوهدت رموز مضيئة قرب المسجد العتيق وحي المقام. الكائنات الليلية ستلاحظها بسهولة.', img: null },
-  { author: 'صدى الواقع • ثقافة الأغواط', time: 'منذ ساعة', text: 'معرض افتراضي مصغّر للعمارة التقليدية متاح الآن للاستكشاف في ساحة المقاومة.', img: null }
-];
-
-// --- GAME STATE ---
-const player = {
-  x: 1220,
-  y: 1200,
-  vx: 0,
-  vy: 0,
-  radius: 14,
-  facing: 0,
-  dashTimer: 0,
-  tokens: 25
-};
-
-const camera = { x: player.x, y: player.y, zoom: 1 };
-const keys = {};
-let gameStarted = false;
-let photoMode = false;
-let phoneOpen = false;
-let activeDialogueNpc = null;
-
-const TIME_PHASES = [
-  { name: 'الصباح', time: '08:30', tint: 'rgba(255, 245, 220, 0.06)', ground: '#c9b393' },
-  { name: 'الظهيرة', time: '13:00', tint: 'rgba(255, 255, 255, 0.0)', ground: '#d4be9e' },
-  { name: 'الغروب', time: '18:15', tint: 'rgba(217, 100, 36, 0.24)', ground: '#b89772' },
-  { name: 'الليل', time: '22:45', tint: 'rgba(14, 18, 38, 0.58)', ground: '#786855' }
-];
-let timeIdx = 2; // Start at Sunset (Hero Lighting)
-
-const WEATHERS = ['سماء صافية', 'نسيم صحراوي', 'ضباب خفيف', 'مطر دافئ'];
-let weatherIdx = 0;
-
-const FILTERS = ['دافئ (غروب)', 'سينمائي ليلي', 'أبيض وأسود كلاسيكي', 'طبيعي'];
-let filterIdx = 0;
-
-// Particles (Dust motes / Rain / Leaves)
-const particles = Array.from({ length: 70 }, () => ({
-  x: Math.random() * 2800,
-  y: Math.random() * 2200,
-  vx: -0.4 - Math.random() * 0.6,
-  vy: 0.2 + Math.random() * 0.4,
-  size: 1.5 + Math.random() * 2
-}));
-
-// --- INITIALIZE START SCREEN ---
-const archListEl = document.getElementById('archetype-list');
-ARCHETYPES.forEach((arch, idx) => {
-  const card = document.createElement('div');
-  card.className = 'arch-card' + (idx === 0 ? ' selected' : '');
-  card.innerHTML = `<h4>${arch.name}</h4><p>${arch.desc}</p>`;
-  card.onclick = () => {
-    document.querySelectorAll('.arch-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    selectedArch = arch;
-  };
-  archListEl.appendChild(card);
-});
-
-function startGame() {
-  document.getElementById('start-screen').style.display = 'none';
-  gameStarted = true;
-  showToast('مرحباً بك في حيّ — الأغواط. تجول بحرية واستكشف المدينة.');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3400);
-}
-
-// --- CONTROLS ---
-window.addEventListener('keydown', e => {
-  keys[e.key] = true;
-  keys[e.code] = true;
-  if (!gameStarted) return;
-
-  if (e.code === 'Space') {
-    e.preventDefault();
-    triggerAbility();
-  }
-  if (e.code === 'KeyE') triggerInteract();
-  if (e.code === 'KeyP') togglePhotoMode();
-  if (e.code === 'Tab') {
-    e.preventDefault();
-    togglePhone();
-  }
-  if (e.code === 'Escape') {
-    if (photoMode) togglePhotoMode();
-    if (phoneOpen) togglePhone();
-    closeDialogue();
-  }
-});
-
-window.addEventListener('keyup', e => {
-  keys[e.key] = false;
-  keys[e.code] = false;
-});
-
-window.addEventListener('wheel', e => {
-  if (photoMode) {
-    camera.zoom = Math.max(0.6, Math.min(2.2, camera.zoom - e.deltaY * 0.001));
-  }
-});
-
-function triggerAbility() {
-  if (photoMode || phoneOpen) return;
-  player.dashTimer = 16;
-  showToast(`تفعيل القدرة: ${selectedArch.abilityName}`);
-}
-
-function cycleTime() {
-  timeIdx = (timeIdx + 1) % TIME_PHASES.length;
-  const p = TIME_PHASES[timeIdx];
-  document.getElementById('hud-phase').textContent = p.name;
-  document.getElementById('hud-time').textContent = `${p.time} • ${p.name} في الأغواط`;
-}
-
-function cycleWeather() {
-  weatherIdx = (weatherIdx + 1) % WEATHERS.length;
-  document.getElementById('hud-weather').textContent = WEATHERS[weatherIdx];
-}
-
-function togglePhotoMode() {
-  if (phoneOpen) return;
-  photoMode = !photoMode;
-  document.getElementById('photo-hud').style.display = photoMode ? 'flex' : 'none';
-  document.getElementById('hud').style.opacity = photoMode ? '0' : '1';
-  if (!photoMode) {
-    camera.zoom = 1;
-    canvas.style.filter = 'none';
-  } else {
-    applyPhotoFilter();
-  }
-}
-
-function cycleFilter() {
-  filterIdx = (filterIdx + 1) % FILTERS.length;
-  document.getElementById('filter-name').textContent = FILTERS[filterIdx];
-  applyPhotoFilter();
-}
-
-function applyPhotoFilter() {
-  const f = FILTERS[filterIdx];
-  if (f === 'دافئ (غروب)') canvas.style.filter = 'sepia(0.22) saturate(1.35) contrast(1.06)';
-  else if (f === 'سينمائي ليلي') canvas.style.filter = 'contrast(1.18) brightness(0.92) hue-rotate(-8deg)';
-  else if (f === 'أبيض وأسود كلاسيكي') canvas.style.filter = 'grayscale(1) contrast(1.2)';
-  else canvas.style.filter = 'none';
-}
-
-function capturePhoto() {
-  const dataUrl = canvas.toDataURL('image/png');
-  const currentLoc = document.getElementById('hud-district').textContent;
-  CITY_FEED.unshift({
-    author: `أنت (${selectedArch.name})`,
-    time: 'الآن',
-    text: `لقطة جديدة من ${currentLoc} — ${TIME_PHASES[timeIdx].name}`,
-    img: dataUrl
-  });
-  player.tokens += 10;
-  document.getElementById('hud-tokens').textContent = player.tokens;
-  showToast('📸 تم التقاط الصورة ونشرها في City Feed (+10 دنانير حيّ)');
-  togglePhotoMode();
-}
-
-// --- SMARTPHONE UI ---
-function togglePhone() {
-  if (photoMode) return;
-  phoneOpen = !phoneOpen;
-  document.getElementById('phone-modal').style.display = phoneOpen ? 'flex' : 'none';
-  if (phoneOpen) renderPhoneTab('feed');
-}
-
-function switchPhoneTab(tab, el) {
-  document.querySelectorAll('.phone-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderPhoneTab(tab);
-}
-
-function renderPhoneTab(tab) {
-  const body = document.getElementById('phone-content');
-  if (tab === 'feed') {
-    body.innerHTML = CITY_FEED.map(post => `
-      <div class="feed-item">
-        <div class="feed-author"><span>${post.author}</span><span style="color:#7a7067;font-weight:400;">${post.time}</span></div>
-        <div class="feed-text">${post.text}</div>
-        ${post.img ? `<img src="${post.img}" class="feed-img" />` : ''}
-      </div>
-    `).join('');
-  } else if (tab === 'map') {
-    body.innerHTML = LANDMARKS.map(lm => `
-      <div class="feed-item" style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div class="feed-author">${lm.discovered ? '✅' : '🔒'} ${lm.name}</div>
-          <div class="feed-text" style="font-size:0.8rem;">${lm.discovered ? lm.lore : 'معلم غير مكتشف بعد — تجول في المدينة للوصول إليه.'}</div>
+        استكشف التوأم الرقمي ثلاثي الأبعاد لمدينة الأغواط في وقت الغروب: الأقواس، ساحة المقاومة، القصر القديم، وضفاف واد مزي.
+      </p>
+      <div class="arch-row">
+        <div class="arch-opt active" onclick="selectArch('nimble', this)">
+          <h4>الوثّاب (Nimble)</h4>
+          <span>قفز مزدوج عالٍ للوصول إلى أسطح الأقواس والمباني.</span>
         </div>
-        ${lm.discovered ? `<button class="btn-sm" onclick="fastTravel(${lm.x + lm.w/2}, ${lm.y + lm.h/2})">انتقال</button>` : ''}
+        <div class="arch-opt" onclick="selectArch('glider', this)">
+          <h4>المُحلّق (Glider)</h4>
+          <span>انزلاق شراعي في الهواء عند الضغط المستمر على Space.</span>
+        </div>
+        <div class="arch-opt" onclick="selectArch('strange', this)">
+          <h4>الأثيري (Strange)</h4>
+          <span>كائن مقنّع يطفو فوق الأرض ويندفع بسرعة أثيرية.</span>
+        </div>
       </div>
-    `).join('');
-  } else if (tab === 'quests') {
-    const quests = NPCS.filter(n => n.quest).map(n => n.quest);
-    body.innerHTML = quests.map(q => `
-      <div class="feed-item">
-        <div class="feed-author"><span>${q.title}</span><span>+${q.reward} 🪙</span></div>
-        <div class="feed-text">${q.desc}</div>
-        <div style="margin-top:6px; font-size:0.78rem; color:#c89d7c;">الحالة: ${q.status === 'completed' ? 'مكتملة ✅' : q.status === 'active' ? 'قيد التنفيذ 🧭' : 'متاحة لدى السكان'}</div>
-      </div>
-    `).join('');
-  }
-}
+      <button class="start-btn" onclick="beginExploration()">دخول العالم ثلاثي الأبعاد</button>
+    </div>
+  </div>
 
-function fastTravel(tx, ty) {
-  player.x = tx;
-  player.y = ty;
-  togglePhone();
-  showToast('تم الانتقال السريع عبر خريطة المدينة.');
-}
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // --- SCENE, RENDERER & CAMERA SETUP ---
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xd97a38);
+    scene.fog = new THREE.FogExp2(0xd97a38, 0.0042);
 
-// --- INTERACTION & DIALOGUE ---
-function getNearbyInteractable() {
-  for (const npc of NPCS) {
-    if (Math.hypot(player.x - npc.x, player.y - npc.y) < 55) return { type: 'npc', data: npc };
-  }
-  for (const sec of SECRETS) {
-    if (!sec.found && Math.hypot(player.x - sec.x, player.y - sec.y) < 48) return { type: 'secret', data: sec };
-  }
-  return null;
-}
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 600);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    container.appendChild(renderer.domElement);
 
-function triggerInteract() {
-  if (photoMode || phoneOpen) return;
-  const target = getNearbyInteractable();
-  if (!target) return;
+    // --- LIGHTING (STYLIZED REALISM SUNSET) ---
+    const hemiLight = new THREE.HemisphereLight(0xffb870, 0x3d2b1f, 0.65);
+    scene.add(hemiLight);
 
-  if (target.type === 'secret') {
-    target.data.found = true;
-    player.tokens += target.data.tokens;
-    document.getElementById('hud-tokens').textContent = player.tokens;
-    showToast(`✨ اكتشفت سرًا: ${target.data.name} (+${target.data.tokens} دنانير حيّ)`);
-  } else if (target.type === 'npc') {
-    openDialogue(target.data);
-  }
-}
+    const sunLight = new THREE.DirectionalLight(0xff8c42, 1.85);
+    sunLight.position.set(90, 48, -75);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 10;
+    sunLight.shadow.camera.far = 320;
+    const d = 120;
+    sunLight.shadow.camera.left = -d;
+    sunLight.shadow.camera.right = d;
+    sunLight.shadow.camera.top = d;
+    sunLight.shadow.camera.bottom = -d;
+    sunLight.shadow.bias = -0.0005;
+    scene.add(sunLight);
 
-function openDialogue(npc) {
-  activeDialogueNpc = npc;
-  document.getElementById('dlg-name').textContent = npc.name;
-  const qBtn = document.getElementById('dlg-quest-btn');
+    // Sun Disk in Sky
+    const sunMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(14, 24, 24),
+      new THREE.MeshBasicMaterial({ color: 0xffd280 })
+    );
+    sunMesh.position.copy(sunLight.position).multiplyScalar(2.2);
+    scene.add(sunMesh);
 
-  if (npc.quest) {
-    // Check completion condition
-    let ready = false;
-    if (npc.quest.targetLandmark) {
-      const lm = LANDMARKS.find(l => l.id === npc.quest.targetLandmark);
-      if (lm && lm.discovered) ready = true;
+    // --- MATERIALS (STYLIZED ARCHITECTURAL PALETTE) ---
+    const matGround = new THREE.MeshStandardMaterial({ color: 0xc29b70, roughness: 0.9 });
+    const matRoad = new THREE.MeshStandardMaterial({ color: 0x3b3530, roughness: 0.85 });
+    const matPlaza = new THREE.MeshStandardMaterial({ color: 0x9e7b56, roughness: 0.8 });
+    const matWallOchre = new THREE.MeshStandardMaterial({ color: 0xd49663, roughness: 0.75 });
+    const matWallClay = new THREE.MeshStandardMaterial({ color: 0xb87346, roughness: 0.85 });
+    const matWallWhite = new THREE.MeshStandardMaterial({ color: 0xebe0d0, roughness: 0.7 });
+    const matWater = new THREE.MeshStandardMaterial({ color: 0x3b6e6c, roughness: 0.2, metalness: 0.4 });
+    const matPalmTrunk = new THREE.MeshStandardMaterial({ color: 0x5c4028, roughness: 0.9 });
+    const matPalmLeaf = new THREE.MeshStandardMaterial({ color: 0x2f5e3a, roughness: 0.7, side: THREE.DoubleSide });
+
+    // --- GROUND & OUED M'ZI ---
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), matGround);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Oued M'zi Riverbed (East side)
+    const oued = new THREE.Mesh(new THREE.PlaneGeometry(55, 420), matWater);
+    oued.rotation.x = -Math.PI / 2;
+    oued.position.set(95, 0.08, 0);
+    oued.receiveShadow = true;
+    scene.add(oued);
+
+    // Main Boulevard (Emir Abdelkader) & Cross Streets
+    const mainRoad = new THREE.Mesh(new THREE.PlaneGeometry(16, 360), matRoad);
+    mainRoad.rotation.x = -Math.PI / 2;
+    mainRoad.position.set(0, 0.05, 0);
+    mainRoad.receiveShadow = true;
+    scene.add(mainRoad);
+
+    const crossRoad = new THREE.Mesh(new THREE.PlaneGeometry(240, 14), matRoad);
+    crossRoad.rotation.x = -Math.PI / 2;
+    crossRoad.position.set(10, 0.05, -20);
+    crossRoad.receiveShadow = true;
+    scene.add(crossRoad);
+
+    // Place de la Résistance (ساحة المقاومة)
+    const plaza = new THREE.Mesh(new THREE.BoxGeometry(44, 0.3, 44), matPlaza);
+    plaza.position.set(32, 0.15, -20);
+    plaza.receiveShadow = true;
+    scene.add(plaza);
+
+    // --- COLLIDERS & PLATFORMS ARRAY ---
+    const colliders = []; // { minX, maxX, minZ, maxZ, topY }
+
+    function addSolidBlock(x, y, z, w, h, d, mat) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+      mesh.position.set(x, y + h / 2, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+      colliders.push({
+        minX: x - w / 2, maxX: x + w / 2,
+        minZ: z - d / 2, maxZ: z + d / 2,
+        topY: y + h
+      });
+      return mesh;
     }
-    if (npc.quest.targetSecret) {
-      const sc = SECRETS.find(s => s.id === npc.quest.targetSecret);
-      if (sc && sc.found) ready = true;
+
+    // --- ARCHITECTURAL LANDMARK: LES ARCADES (الأقواس) ---
+    function buildArcadesRow(xPos, zStart, count) {
+      const spacing = 7;
+      for (let i = 0; i < count; i++) {
+        const z = zStart + i * spacing;
+        // Pillar
+        addSolidBlock(xPos, 0, z, 1.6, 5.5, 1.6, matWallWhite);
+        // Arch Spandrel (Top beam connecting pillars)
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.6, spacing), matWallOchre);
+        beam.position.set(xPos, 6.2, z + spacing / 2);
+        beam.castShadow = true;
+        beam.receiveShadow = true;
+        scene.add(beam);
+      }
+      // Behind the colonnade: Main Historic Building + Walkable Rooftop
+      const totalLen = count * spacing;
+      const centerZ = zStart + totalLen / 2;
+      const bX = xPos < 0 ? xPos - 5.5 : xPos + 5.5;
+      addSolidBlock(bX, 0, centerZ, 9.5, 7.2, totalLen + 2, matWallOchre);
+      // Rooftop Parapet
+      addSolidBlock(xPos, 7.0, centerZ, 1.8, 0.8, totalLen + 2, matWallClay);
     }
 
-    if (npc.quest.status === 'completed') {
-      document.getElementById('dlg-text').textContent = 'شكرًا لك يا صديقي! الأغواط أجمل بوجود مستكشفين مثلك.';
-      qBtn.style.display = 'none';
-    } else if (ready) {
-      document.getElementById('dlg-text').textContent = 'رائع! لقد أنجزت المطلوب بالفعل. تفضل مكافأتك!';
-      qBtn.textContent = `استلام المكافأة (+${npc.quest.reward} 🪙)`;
-      qBtn.style.display = 'inline-block';
-    } else if (npc.quest.status === 'active') {
-      document.getElementById('dlg-text').textContent = `${npc.dialogue} (المهمة قيد التنفيذ: ${npc.quest.desc})`;
-      qBtn.style.display = 'none';
-    } else {
-      document.getElementById('dlg-text').textContent = npc.dialogue;
-      qBtn.textContent = `قبول المهمة: ${npc.quest.title}`;
-      qBtn.style.display = 'inline-block';
+    buildArcadesRow(-10, -45, 12);
+    buildArcadesRow(10, 5, 8);
+
+    // --- OLD QSOUR & MOSQUE QUARTER (القصر القديم والمسجد العتيق) ---
+    addSolidBlock(-45, 0, -55, 22, 9, 22, matWallClay);
+    // Minaret Tower
+    addSolidBlock(-52, 0, -62, 4.5, 22, 4.5, matWallWhite);
+    const minaretCap = new THREE.Mesh(new THREE.ConeGeometry(3.2, 4, 4), matWallOchre);
+    minaretCap.position.set(-52, 24, -62);
+    minaretCap.rotation.y = Math.PI / 4;
+    scene.add(minaretCap);
+
+    // Stepped Rooftops (Parkour path to climb the Arcades!)
+    addSolidBlock(-17, 0, 42, 6, 2.2, 6, matWallClay);
+    addSolidBlock(-17, 0, 35, 6, 4.5, 6, matWallOchre);
+    addSolidBlock(-17, 0, 28, 6, 6.8, 6, matWallClay);
+
+    // --- ENSL / ACADEMIC QUARTER (المدرسة العليا للأساتذة) ---
+    addSolidBlock(-48, 0, 45, 28, 8, 18, matWallWhite);
+    addSolidBlock(-48, 8, 45, 12, 3, 10, matWallOchre);
+
+    // --- PALM TREES ALONG OUED M'ZI ---
+    function createPalmTree(x, z, height) {
+      const group = new THREE.Group();
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.65, height, 7), matPalmTrunk);
+      trunk.position.y = height / 2;
+      trunk.castShadow = true;
+      group.add(trunk);
+
+      for (let i = 0; i < 7; i++) {
+        const frond = new THREE.Mesh(new THREE.ConeGeometry(1.4, 5.5, 4), matPalmLeaf);
+        frond.position.y = height;
+        frond.rotation.z = Math.PI / 2.6;
+        frond.rotation.y = (i * Math.PI * 2) / 7;
+        frond.translateY(2.2);
+        frond.castShadow = true;
+        group.add(frond);
+      }
+      group.position.set(x, 0, z);
+      scene.add(group);
     }
-  } else {
-    document.getElementById('dlg-text').textContent = npc.dialogue;
-    qBtn.style.display = 'none';
-  }
 
-  document.getElementById('dialogue-box').style.display = 'block';
-}
+    for (let i = 0; i < 26; i++) {
+      createPalmTree(64 + (Math.random() - 0.5) * 18, -90 + i * 8, 9 + Math.random() * 5);
+    }
 
-function acceptOrCompleteQuest() {
-  if (!activeDialogueNpc || !activeDialogueNpc.quest) return;
-  const q = activeDialogueNpc.quest;
+    // --- DISCOVERY ZONES ---
+    const ZONES = [
+      { id: 'arches', name: 'الأقواس — شارع الأمير عبد القادر', x: 0, z: 0, r: 28, discovered: true },
+      { id: 'plaza', name: 'ساحة المقاومة', x: 32, z: -20, r: 26, discovered: false },
+      { id: 'qsour', name: 'المسجد العتيق والقصر القديم', x: -45, z: -55, r: 28, discovered: false },
+      { id: 'oued', name: 'ضفاف واد مزي والبساتين', x: 68, z: 0, r: 34, discovered: false },
+      { id: 'ensl', name: 'المدرسة العليا للأساتذة — الأغواط', x: -48, z: 45, r: 28, discovered: false }
+    ];
 
-  let ready = false;
-  if (q.targetLandmark && LANDMARKS.find(l => l.id === q.targetLandmark)?.discovered) ready = true;
-  if (q.targetSecret && SECRETS.find(s => s.id === q.targetSecret)?.found) ready = true;
+    // --- NON-HUMAN CREATURE PLAYER (3D ARTICULATED MESH) ---
+    const playerGroup = new THREE.Group();
+    const cloakMat = new THREE.MeshStandardMaterial({ color: 0x2c3e35, roughness: 0.8 });
+    const skinMat = new THREE.MeshStandardMaterial({ color: 0xe5a93c, roughness: 0.5 });
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-  if (ready && q.status !== 'completed') {
-    q.status = 'completed';
-    player.tokens += q.reward;
-    document.getElementById('hud-tokens').textContent = player.tokens;
-    showToast(`🎉 اكتملت المهمة: ${q.title} (+${q.reward} دنانير حيّ)`);
-  } else if (q.status === 'available') {
-    q.status = 'active';
-    showToast(`🧭 بدأت مهمة: ${q.title}`);
-  }
-  closeDialogue();
-}
+    // Cloak Body
+    const bodyMesh = new THREE.Mesh(new THREE.ConeGeometry(0.65, 1.5, 12), cloakMat);
+    bodyMesh.position.y = 0.75;
+    bodyMesh.castShadow = true;
+    playerGroup.add(bodyMesh);
 
-function closeDialogue() {
-  document.getElementById('dialogue-box').style.display = 'none';
-  activeDialogueNpc = null;
-}
+    // Creature Head
+    const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 16, 16), skinMat);
+    headMesh.position.y = 1.65;
+    headMesh.castShadow = true;
+    playerGroup.add(headMesh);
 
-// --- UPDATE & RENDER LOOP ---
-function update() {
-  if (!gameStarted) return;
+    // Stylized Long Ears / Horns
+    const earGeo = new THREE.ConeGeometry(0.12, 0.65, 6);
+    const earL = new THREE.Mesh(earGeo, skinMat);
+    earL.position.set(-0.25, 2.1, -0.05);
+    earL.rotation.z = 0.25;
+    const earR = new THREE.Mesh(earGeo, skinMat);
+    earR.position.set(0.25, 2.1, -0.05);
+    earR.rotation.z = -0.25;
+    playerGroup.add(earL, earR);
 
-  let dx = 0, dy = 0;
-  if (keys['KeyW'] || keys['ArrowUp']) dy -= 1;
-  if (keys['KeyS'] || keys['ArrowDown']) dy += 1;
-  if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
-  if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
+    // Glowing Eyes
+    const eyeGeo = new THREE.SphereGeometry(0.07, 8, 8);
+    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeL.position.set(-0.15, 1.68, 0.36);
+    const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeR.position.set(0.15, 1.68, 0.36);
+    playerGroup.add(eyeL, eyeR);
 
-  if (dx !== 0 || dy !== 0) {
-    const len = Math.hypot(dx, dy);
-    dx /= len;
-    dy /= len;
-    player.facing = Math.atan2(dy, dx);
-  }
+    playerGroup.position.set(0, 0, 12);
+    scene.add(playerGroup);
 
-  if (photoMode) {
-    // Free camera pan in Photo Mode
-    camera.x += dx * 7;
-    camera.y += dy * 7;
-    return;
-  }
+    // --- NON-HUMAN NPCS ---
+    const NPCS = [
+      {
+        name: 'الراوي سُهيل (تحت الأقواس)',
+        x: -6, z: -8, color: 0x70a1ff, cloak: 0x4a2c2a,
+        text: 'مرحبًا بك في الأغواط! جرب صعود الدرج الطيني خلفك للوصول إلى سطح الأقواس ومشاهدة الغروب فوق واد مزي.'
+      },
+      {
+        name: 'أمينة الورّاقة (ساحة المقاومة)',
+        x: 32, z: -20, color: 0xff7979, cloak: 0x263238,
+        text: 'هنا يلتقي سكان الحيّ كل مساء. التقط صورة بالضغط على [P] وانشرها في City Feed!'
+      },
+      {
+        name: 'عازف النخيل (ضفاف واد مزي)',
+        x: 66, z: 12, color: 0x55efc4, cloak: 0x1e3d2f,
+        text: 'انعكاس الشمس الذهبية على الوادي هو أجمل مشهد في المدينة. هل زرت القصر القديم في الجهة الغربية؟'
+      }
+    ];
 
-  if (phoneOpen) return;
+    NPCS.forEach(npc => {
+      const g = new THREE.Group();
+      const c = new THREE.Mesh(new THREE.ConeGeometry(0.7, 1.6, 10), new THREE.MeshStandardMaterial({ color: npc.cloak }));
+      c.position.y = 0.8;
+      c.castShadow = true;
+      const h = new THREE.Mesh(new THREE.DodecahedronGeometry(0.45), new THREE.MeshStandardMaterial({ color: npc.color }));
+      h.position.y = 1.75;
+      h.castShadow = true;
+      g.add(c, h);
+      g.position.set(npc.x, 0, npc.z);
+      scene.add(g);
+      npc.mesh = g;
+    });
 
-  const mult = player.dashTimer > 0 ? 2.3 : 1;
-  if (player.dashTimer > 0) player.dashTimer--;
+    // --- PLAYER PHYSICS & CAMERA ORBIT ---
+    const state = {
+      started: false,
+      archetype: 'nimble',
+      velY: 0,
+      onGround: true,
+      jumps: 0,
+      tokens: 30,
+      camYaw: Math.PI,
+      camPitch: 0.32,
+      camDist: 11,
+      photoMode: false,
+      phoneOpen: false,
+      lightIdx: 0
+    };
 
-  const nextX = Math.max(200, Math.min(2650, player.x + dx * selectedArch.speed * mult));
-  const nextY = Math.max(200, Math.min(2050, player.y + dy * selectedArch.speed * mult));
+    const keys = {};
+    let isDragging = false;
+    let prevMouse = { x: 0, y: 0 };
 
-  // Simple building collision (Strange archetype phases through when dashing)
-  let blocked = false;
-  if (!(selectedArch.id === 'strange' && player.dashTimer > 0)) {
-    for (const b of BUILDINGS) {
-      if (nextX > b.x - 10 && nextX < b.x + b.w + 10 && nextY > b.y - 10 && nextY < b.y + b.h + 10) {
-        blocked = true;
-        break;
+    window.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging || !state.started) return;
+      state.camYaw -= (e.clientX - prevMouse.x) * 0.006;
+      state.camPitch = Math.max(0.08, Math.min(1.15, state.camPitch + (e.clientY - prevMouse.y) * 0.005));
+      prevMouse = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('wheel', e => {
+      state.camDist = Math.max(4, Math.min(24, state.camDist + e.deltaY * 0.01));
+    });
+
+    window.addEventListener('keydown', e => {
+      keys[e.code] = true;
+      if (!state.started) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handleJump();
+      }
+      if (e.code === 'KeyE') handleInteract();
+      if (e.code === 'KeyP') togglePhotoMode();
+      if (e.code === 'Tab') { e.preventDefault(); togglePhone(); }
+    });
+    window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+    function selectArch(type, el) {
+      state.archetype = type;
+      document.querySelectorAll('.arch-opt').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      if (type === 'nimble') skinMat.color.setHex(0xe5a93c);
+      if (type === 'glider') skinMat.color.setHex(0xd97736);
+      if (type === 'strange') skinMat.color.setHex(0xe056fd);
+    }
+
+    function beginExploration() {
+      document.getElementById('start-overlay').style.display = 'none';
+      state.started = true;
+      showToast('اسحب بالماوس لتدوير الكاميرا 360° وتحرك بـ WASD');
+    }
+
+    function handleJump() {
+      if (state.photoMode || state.phoneOpen) return;
+      const maxJumps = state.archetype === 'nimble' ? 2 : 1;
+      if (state.onGround || state.jumps < maxJumps) {
+        state.velY = state.archetype === 'nimble' ? 0.34 : 0.28;
+        state.onGround = false;
+        state.jumps++;
       }
     }
-  }
 
-  if (!blocked) {
-    player.x = nextX;
-    player.y = nextY;
-  }
+    // --- LIGHTING PRESETS ---
+    const LIGHT_MODES = [
+      { name: 'الغروب', time: '18:20 • غروب الأغواط', sky: 0xd97a38, sunColor: 0xff8c42, sunInt: 1.85, sunPos: [90, 48, -75] },
+      { name: 'الصباح', time: '08:30 • صباح مشرق', sky: 0x87b5c9, sunColor: 0xfff0d4, sunInt: 1.5, sunPos: [-80, 95, 60] },
+      { name: 'الليل', time: '22:45 • ليل الأغواط', sky: 0x0d1326, sunColor: 0x6c8cff, sunInt: 0.45, sunPos: [-60, 80, -60] }
+    ];
 
-  // Smooth camera follow
-  camera.x += (player.x - camera.x) * 0.1;
-  camera.y += (player.y - camera.y) * 0.1;
+    function cycleLighting() {
+      state.lightIdx = (state.lightIdx + 1) % LIGHT_MODES.length;
+      const m = LIGHT_MODES[state.lightIdx];
+      scene.background.setHex(m.sky);
+      scene.fog.color.setHex(m.sky);
+      sunLight.color.setHex(m.sunColor);
+      sunLight.intensity = m.sunInt;
+      sunLight.position.set(...m.sunPos);
+      sunMesh.position.copy(sunLight.position).multiplyScalar(2.2);
+      document.getElementById('lbl-light').textContent = m.name;
+      document.getElementById('hud-atmosphere').textContent = m.time;
+    }
 
-  // Landmark Discovery Check
-  let activeDistrict = 'شوارع الأغواط — تجول حر';
-  let discoveredCount = 0;
-  for (const lm of LANDMARKS) {
-    if (player.x > lm.x && player.x < lm.x + lm.w && player.y > lm.y && player.y < lm.y + lm.h) {
-      activeDistrict = lm.name;
-      if (!lm.discovered) {
-        lm.discovered = true;
-        player.tokens += 15;
-        document.getElementById('hud-tokens').textContent = player.tokens;
-        showToast(`🗺️ معلم جديد مكتشف: ${lm.name} (+15 دنانير حيّ)`);
+    // --- PHOTO MODE & CITY FEED ---
+    const FEED_POSTS = [
+      { author: 'الحيّ الآن', text: 'أجواء الغروب الذهبية تغطي الأقواس وواد مزي الآن.', img: null },
+      { author: 'سُهيل', text: 'يمكنك تسلق الدرج الطيني خلف الأقواس للوصول إلى السطح!', img: null }
+    ];
+
+    function togglePhotoMode() {
+      if (state.phoneOpen) return;
+      state.photoMode = !state.photoMode;
+      document.getElementById('photo-frame').style.display = state.photoMode ? 'flex' : 'none';
+      document.getElementById('hud').style.opacity = state.photoMode ? '0' : '1';
+    }
+
+    function take3DPhoto() {
+      renderer.render(scene, camera);
+      const dataUrl = renderer.domElement.toDataURL('image/png');
+      const zoneName = document.getElementById('hud-zone').textContent;
+      FEED_POSTS.unshift({ author: 'أنت (لقطة 3D)', text: `من ${zoneName} — ${LIGHT_MODES[state.lightIdx].name}`, img: dataUrl });
+      state.tokens += 15;
+      document.getElementById('lbl-tokens').textContent = state.tokens;
+      showToast('📸 تم حفظ اللقطة ثلاثية الأبعاد ونشرها في City Feed (+15 🪙)');
+      togglePhotoMode();
+    }
+
+    function togglePhone() {
+      if (state.photoMode) return;
+      state.phoneOpen = !state.phoneOpen;
+      const modal = document.getElementById('phone-modal');
+      modal.style.display = state.phoneOpen ? 'flex' : 'none';
+      if (state.phoneOpen) {
+        document.getElementById('feed-container').innerHTML = FEED_POSTS.map(p => `
+          <div class="post">
+            <div style="color:#e5a93c; font-weight:700; font-size:0.85rem; margin-bottom:4px;">${p.author}</div>
+            <div style="font-size:0.88rem; color:#e6ded5;">${p.text}</div>
+            ${p.img ? `<img src="${p.img}" />` : ''}
+          </div>
+        `).join('');
       }
     }
-    if (lm.discovered) discoveredCount++;
-  }
-  document.getElementById('hud-district').textContent = activeDistrict;
-  document.getElementById('hud-discovery').textContent = `${discoveredCount}/${LANDMARKS.length}`;
 
-  // Nearby interaction prompt
-  const near = getNearbyInteractable();
-  const promptEl = document.getElementById('interact-prompt');
-  if (near) {
-    promptEl.style.display = 'block';
-    promptEl.innerHTML = near.type === 'npc'
-      ? `اضغط <span class="key">E</span> للتحدث مع ${near.data.name}`
-      : `اضغط <span class="key">E</span> لفحص ${near.data.name}`;
-  } else {
-    promptEl.style.display = 'none';
-  }
-
-  // Update ambient particles
-  for (const p of particles) {
-    p.x += p.vx;
-    p.y += p.vy + (WEATHERS[weatherIdx] === 'مطر دافئ' ? 3.5 : 0);
-    if (p.x < 200) p.x = 2650;
-    if (p.y > 2050) p.y = 200;
-  }
-}
-
-function draw() {
-  const phase = TIME_PHASES[timeIdx];
-  ctx.fillStyle = phase.ground;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.save();
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.scale(camera.zoom, camera.zoom);
-  ctx.translate(-camera.x, -camera.y);
-
-  // 1. Oued M'zi Riverbed (Stylized Oasis Waterway)
-  ctx.fillStyle = '#5c7c78';
-  ctx.beginPath();
-  ctx.moveTo(2050, 1250);
-  ctx.quadraticCurveTo(2280, 1550, 2550, 1950);
-  ctx.lineTo(2680, 1950);
-  ctx.quadraticCurveTo(2400, 1500, 2180, 1250);
-  ctx.closePath();
-  ctx.fill();
-
-  // 2. Real-World Inspired Street Network (Boulevard Emir Abdelkader & Arteries)
-  ctx.strokeStyle = '#595149';
-  ctx.lineWidth = 46;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  // Main East-West Axis
-  ctx.moveTo(600, 1180);
-  ctx.lineTo(2150, 1180);
-  // North-South Historic Axis
-  ctx.moveTo(1220, 580);
-  ctx.lineTo(1220, 1850);
-  // Diagonal Boulevard
-  ctx.moveTo(750, 1750);
-  ctx.lineTo(1650, 1180);
-  ctx.lineTo(1650, 620);
-  ctx.stroke();
-
-  // Street Center Markings
-  ctx.strokeStyle = 'rgba(245, 239, 230, 0.25)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([14, 14]);
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // 3. Landmark Zones (Digital Twin Plazas & Districts)
-  for (const lm of LANDMARKS) {
-    ctx.fillStyle = lm.discovered ? lm.color : 'rgba(90, 82, 74, 0.35)';
-    ctx.beginPath();
-    ctx.roundRect(lm.x, lm.y, lm.w, lm.h, 14);
-    ctx.fill();
-
-    ctx.strokeStyle = lm.discovered ? 'rgba(229, 169, 60, 0.6)' : 'rgba(255,255,255,0.15)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Landmark Label on Ground
-    ctx.fillStyle = lm.discovered ? '#f5efe6' : 'rgba(245,239,230,0.45)';
-    ctx.font = '600 14px "IBM Plex Sans Arabic"';
-    ctx.textAlign = 'center';
-    ctx.fillText(lm.discovered ? lm.name : 'منطقة غير مكتشفة', lm.x + lm.w / 2, lm.y + lm.h / 2);
-  }
-
-  // 4. Stylized Buildings with Sunset Long Shadows
-  const shadowOffsetX = timeIdx === 2 ? 32 : timeIdx === 0 ? -26 : 12;
-  const shadowOffsetY = timeIdx === 2 ? 22 : 14;
-
-  for (const b of BUILDINGS) {
-    // Ground Shadow
-    ctx.fillStyle = 'rgba(15, 10, 8, 0.32)';
-    ctx.fillRect(b.x + shadowOffsetX, b.y + shadowOffsetY, b.w, b.h);
-
-    // Building Body & Stylized Rooftop
-    ctx.fillStyle = b.roof;
-    ctx.beginPath();
-    ctx.roundRect(b.x, b.y, b.w, b.h, 6);
-    ctx.fill();
-
-    ctx.strokeStyle = '#3d281c';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Inner Rooftop Trim
-    ctx.strokeStyle = 'rgba(255, 225, 190, 0.22)';
-    ctx.strokeRect(b.x + 8, b.y + 8, b.w - 16, b.h - 16);
-  }
-
-  // 5. Palm Trees (Laghouat Oasis Signature)
-  for (const palm of PALMS) {
-    ctx.fillStyle = 'rgba(15, 10, 8, 0.25)';
-    ctx.beginPath();
-    ctx.arc(palm.x + 10, palm.y + 10, palm.size, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#2d5a3c';
-    for (let a = 0; a < 6; a++) {
-      const ang = (a * Math.PI) / 3;
-      ctx.beginPath();
-      ctx.ellipse(palm.x + Math.cos(ang) * 8, palm.y + Math.sin(ang) * 8, palm.size, 5, ang, 0, Math.PI * 2);
-      ctx.fill();
+    // --- NPC INTERACTION ---
+    function handleInteract() {
+      if (state.photoMode || state.phoneOpen) return;
+      for (const npc of NPCS) {
+        if (playerGroup.position.distanceTo(npc.mesh.position) < 5.5) {
+          document.getElementById('dlg-speaker').textContent = npc.name;
+          document.getElementById('dlg-body').textContent = npc.text;
+          document.getElementById('dialogue-box').style.display = 'block';
+          return;
+        }
+      }
     }
-  }
 
-  // 6. Secrets / Glowing Glyphs
-  for (const sec of SECRETS) {
-    if (sec.found) continue;
-    const isNocturnal = selectedArch.id === 'nocturnal';
-    const pulse = 6 + Math.sin(Date.now() * 0.006) * 3;
-    ctx.fillStyle = isNocturnal ? '#70a1ff' : 'rgba(229, 169, 60, 0.75)';
-    ctx.beginPath();
-    ctx.arc(sec.x, sec.y, isNocturnal ? pulse + 4 : pulse, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // 7. Non-Human NPCs
-  for (const npc of NPCS) {
-    // Cloak
-    ctx.fillStyle = npc.cloak;
-    ctx.beginPath();
-    ctx.arc(npc.x, npc.y, 15, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Stylized Creature Head
-    ctx.fillStyle = npc.color;
-    ctx.beginPath();
-    ctx.arc(npc.x, npc.y - 4, 9, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Quest Indicator
-    if (npc.quest && npc.quest.status !== 'completed') {
-      ctx.fillStyle = '#e5a93c';
-      ctx.font = 'bold 16px "IBM Plex Mono"';
-      ctx.textAlign = 'center';
-      ctx.fillText(npc.quest.status === 'available' ? '!' : '?', npc.x, npc.y - 22);
+    function closeDialogue() {
+      document.getElementById('dialogue-box').style.display = 'none';
     }
-  }
 
-  // 8. Player Creature (Stylized Non-Human Avatar)
-  ctx.save();
-  ctx.translate(player.x, player.y);
-  // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
-  ctx.beginPath();
-  ctx.ellipse(0, 10, 14, 7, 0, 0, Math.PI * 2);
-  ctx.fill();
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._id);
+      t._id = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+    }
 
-  // Coat / Cloak
-  ctx.fillStyle = selectedArch.coat;
-  ctx.beginPath();
-  ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
-  ctx.fill();
+    // --- MAIN SIMULATION LOOP ---
+    const clock = new THREE.Clock();
 
-  // Creature Head & Ears/Mask
-  ctx.fillStyle = selectedArch.color;
-  ctx.beginPath();
-  ctx.arc(0, -4, 9.5, 0, Math.PI * 2);
-  ctx.fill();
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(clock.getDelta(), 0.05);
 
-  // Stylized Ears / Horns
-  ctx.beginPath();
-  ctx.moveTo(-6, -10);
-  ctx.lineTo(-10, -21);
-  ctx.lineTo(-1, -12);
-  ctx.moveTo(6, -10);
-  ctx.lineTo(10, -21);
-  ctx.lineTo(1, -12);
-  ctx.fill();
+      if (state.started && !state.phoneOpen) {
+        // Movement relative to camera Yaw
+        let moveForward = 0, moveRight = 0;
+        if (keys['KeyW'] || keys['ArrowUp']) moveForward += 1;
+        if (keys['KeyS'] || keys['ArrowDown']) moveForward -= 1;
+        if (keys['KeyD'] || keys['ArrowRight']) moveRight += 1;
+        if (keys['KeyA'] || keys['ArrowLeft']) moveRight -= 1;
 
-  // Glowing Eyes
-  ctx.fillStyle = '#fff';
-  const lookX = Math.cos(player.facing) * 3;
-  const lookY = Math.sin(player.facing) * 2;
-  ctx.beginPath();
-  ctx.arc(-3 + lookX, -4 + lookY, 2, 0, Math.PI * 2);
-  ctx.arc(3 + lookX, -4 + lookY, 2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
+        const speed = state.archetype === 'strange' ? 14 : 11;
+        if (moveForward !== 0 || moveRight !== 0) {
+          const forwardVec = new THREE.Vector3(-Math.sin(state.camYaw), 0, -Math.cos(state.camYaw));
+          const rightVec = new THREE.Vector3(Math.cos(state.camYaw), 0, -Math.sin(state.camYaw));
+          const moveDir = new THREE.Vector3()
+            .addScaledVector(forwardVec, moveForward)
+            .addScaledVector(rightVec, moveRight)
+            .normalize();
 
-  // 9. Atmospheric Particles
-  ctx.fillStyle = WEATHERS[weatherIdx] === 'مطر دافئ' ? 'rgba(180, 210, 255, 0.5)' : 'rgba(255, 220, 170, 0.45)';
-  for (const p of particles) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
+          const nextX = playerGroup.position.x + moveDir.x * speed * dt;
+          const nextZ = playerGroup.position.z + moveDir.z * speed * dt;
 
-  ctx.restore();
+          // Horizontal Collision Check against buildings
+          let canMoveX = true, canMoveZ = true;
+          for (const c of colliders) {
+            if (playerGroup.position.y < c.topY - 0.3) {
+              if (nextX > c.minX - 0.6 && nextX < c.maxX + 0.6 && playerGroup.position.z > c.minZ - 0.6 && playerGroup.position.z < c.maxZ + 0.6) canMoveX = false;
+              if (playerGroup.position.x > c.minX - 0.6 && playerGroup.position.x < c.maxX + 0.6 && nextZ > c.minZ - 0.6 && nextZ < c.maxZ + 0.6) canMoveZ = false;
+            }
+          }
+          if (canMoveX) playerGroup.position.x = nextX;
+          if (canMoveZ) playerGroup.position.z = nextZ;
 
-  // 10. Global Time-of-Day & Weather Lighting Tint
-  ctx.fillStyle = phase.tint;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // Smooth creature rotation
+          const targetRot = Math.atan2(moveDir.x, moveDir.z);
+          playerGroup.rotation.y = targetRot;
+        }
 
-  if (WEATHERS[weatherIdx] === 'ضباب خفيف') {
-    ctx.fillStyle = 'rgba(220, 215, 205, 0.25)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-}
+        // Gravity & Gliding
+        const isGliding = state.archetype === 'glider' && keys['Space'] && state.velY < 0;
+        const gravity = isGliding ? 0.004 : 0.016;
+        state.velY -= gravity;
+        playerGroup.position.y += state.velY;
 
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-loop();
-</script>
+        // Ground & Rooftop Landing Check
+        let floorY = 0;
+        for (const c of colliders) {
+          if (playerGroup.position.x > c.minX - 0.4 && playerGroup.position.x < c.maxX + 0.4 &&
+              playerGroup.position.z > c.minZ - 0.4 && playerGroup.position.z < c.maxZ + 0.4) {
+            if (playerGroup.position.y >= c.topY - 0.5) {
+              floorY = Math.max(floorY, c.topY);
+            }
+          }
+        }
+
+        if (playerGroup.position.y <= floorY) {
+          playerGroup.position.y = floorY;
+          state.velY = 0;
+          state.onGround = true;
+          state.jumps = 0;
+        }
+
+        // Strange Archetype Subtle Hover Bobbing
+        if (state.archetype === 'strange') {
+          bodyMesh.position.y = 0.85 + Math.sin(clock.elapsedTime * 4) * 0.1;
+          headMesh.position.y = 1.75 + Math.sin(clock.elapsedTime * 4) * 0.1;
+        }
+
+        // Zone Discovery Check
+        let currentZoneName = 'شوارع الأغواط — استكشاف حر';
+        let discCount = 0;
+        for (const z of ZONES) {
+          const dist = Math.hypot(playerGroup.position.x - z.x, playerGroup.position.z - z.z);
+          if (dist < z.r) {
+            currentZoneName = z.name;
+            if (!z.discovered) {
+              z.discovered = true;
+              state.tokens += 20;
+              document.getElementById('lbl-tokens').textContent = state.tokens;
+              showToast(`🧭 اكتشفت معلمًا جديدًا: ${z.name} (+20 دنانير حيّ)`);
+            }
+          }
+          if (z.discovered) discCount++;
+        }
+        document.getElementById('hud-zone').textContent = currentZoneName;
+        document.getElementById('lbl-discovered').textContent = `${discCount}/${ZONES.length}`;
+
+        // NPC Proximity Prompt
+        let nearNpc = null;
+        for (const npc of NPCS) {
+          if (playerGroup.position.distanceTo(npc.mesh.position) < 5.5) nearNpc = npc;
+        }
+        const promptEl = document.getElementById('interact-prompt');
+        if (nearNpc) {
+          promptEl.style.display = 'block';
+          promptEl.innerHTML = `اضغط <span class="key">E</span> للتحدث مع ${nearNpc.name}`;
+        } else {
+          promptEl.style.display = 'none';
+        }
+      }
+
+      // Third-Person Orbital Camera Update
+      const targetCamX = playerGroup.position.x + Math.sin(state.camYaw) * Math.cos(state.camPitch) * state.camDist;
+      const targetCamY = playerGroup.position.y + 2.2 + Math.sin(state.camPitch) * state.camDist;
+      const targetCamZ = playerGroup.position.z + Math.cos(state.camYaw) * Math.cos(state.camPitch) * state.camDist;
+
+      camera.position.lerp(new THREE.Vector3(targetCamX, targetCamY, targetCamZ), 0.14);
+      camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1.6, playerGroup.position.z);
+
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    animate();
+  </script>
 </body>
 </html>
