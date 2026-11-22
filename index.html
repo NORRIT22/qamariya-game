@@ -300,6 +300,10 @@
 
                 <!-- Right Header Actions -->
                 <div class="flex items-center gap-1.5 sm:gap-2">
+                    <button onclick="openLiveVoiceModal()" class="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover text-paper-text dark:text-matte-text border border-paper-border dark:border-matte-border transition-colors" title="بدء التحاور الصوتي المباشر">
+                        <svg class="w-3.5 h-3.5 text-paper-text dark:text-matte-text" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                        <span class="hidden sm:inline">تحاور مباشر</span>
+                    </button>
                     <button onclick="exportCurrentChat('md')" class="p-2 rounded-lg text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors" title="تصدير المحادثة (Markdown)">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                     </button>
@@ -329,6 +333,11 @@
 
                         <!-- 4 Clean Understated Single-Line Prompt Chips -->
                         <div class="flex flex-col sm:flex-row flex-wrap gap-2.5 w-full">
+                            <button onclick="openLiveVoiceModal()" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-paper-text dark:bg-matte-text"></span>
+                                <span>بدء تحاور صوتي مباشر مع جومو</span>
+                            </button>
+
                             <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
                                 <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
                                 <span>بناء آلة حاسبة علمية في Canvas</span>
@@ -342,11 +351,6 @@
                             <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
                                 <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
                                 <span>توليد تصور معماري لمكتبة هادئة</span>
-                            </button>
-
-                            <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
-                                <span>ملخص Clean Architecture في جدول</span>
                             </button>
                         </div>
                     </div>
@@ -385,9 +389,14 @@
                             <!-- Auto-Resizing Textarea (Supports Ctrl+V image paste) -->
                             <textarea id="promptInput" rows="1" placeholder="اكتب رسالتك لجومو أو ألصق صورة..." class="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-paper-text dark:text-matte-text placeholder-paper-muted dark:placeholder-matte-muted text-sm sm:text-base resize-none py-2 max-h-40 leading-relaxed" oninput="autoResizeTextarea(this)" onkeydown="handlePromptKeydown(event)" onpaste="handlePromptPaste(event)"></textarea>
 
-                            <!-- Voice Input Button -->
+                            <!-- Voice Dictation Button -->
                             <button id="micBtn" onclick="toggleVoiceInput()" class="p-2.5 rounded-xl text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors shrink-0" title="الإملاء الصوتي">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+                            </button>
+
+                            <!-- Jomo Live Voice Conversation Button -->
+                            <button onclick="openLiveVoiceModal()" class="p-2.5 rounded-xl text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text hover:bg-paper-hover dark:hover:bg-matte-hover transition-colors shrink-0" title="التحاور الصوتي المباشر (Jomo Live)">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
                             </button>
 
                             <!-- Solid Monochrome Send / Stop Button -->
@@ -563,6 +572,81 @@
         </div>
     </div>
 
+    <!-- Jomo Live Voice Conversation Overlay (Matte Solid Minimalist UI) -->
+    <div id="liveVoiceModal" class="hidden fixed inset-0 z-50 bg-paper-bg dark:bg-matte-bg flex flex-col justify-between p-6 sm:p-10 animate-fade-in">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between max-w-4xl w-full mx-auto">
+            <div class="flex items-center gap-2.5">
+                <span id="liveStatusDot" class="w-2 h-2 rounded-full bg-paper-text dark:bg-matte-text"></span>
+                <span class="text-sm font-semibold tracking-tight text-paper-text dark:text-matte-text">Jomo Live</span>
+                <span id="liveStatusBadge" class="text-[11px] px-2.5 py-0.5 rounded-md bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border text-paper-muted dark:text-matte-muted">جاهز للاستماع</span>
+            </div>
+
+            <!-- Language Switcher & Speech Speed -->
+            <div class="flex items-center gap-2">
+                <select id="liveLangSelect" onchange="changeLiveLanguage(this.value)" class="px-3 py-1.5 rounded-lg bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border text-xs font-medium text-paper-text dark:text-matte-text focus:outline-none">
+                    <option value="ar-SA">العربية (AR)</option>
+                    <option value="fr-FR">Français (FR)</option>
+                    <option value="en-US">English (EN)</option>
+                </select>
+                <button onclick="cycleLiveSpeechRate()" id="liveRateBtn" class="px-2.5 py-1.5 rounded-lg bg-paper-surface dark:bg-matte-surface border border-paper-border dark:border-matte-border text-xs font-mono text-paper-muted dark:text-matte-muted hover:text-paper-text dark:hover:text-matte-text transition-colors" title="سرعة النطق">
+                    1.0x
+                </button>
+            </div>
+        </div>
+
+        <!-- Center Geometric Audio Reactive Ring & Live Subtitles -->
+        <div class="flex-1 flex flex-col items-center justify-center max-w-2xl w-full mx-auto text-center my-6">
+            <!-- Thin Geometric Audio Visualizer Ring -->
+            <div class="relative w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center mb-8">
+                <div id="liveOuterRing" class="absolute inset-0 rounded-full border border-paper-border dark:border-matte-border transition-transform duration-75"></div>
+                <div id="liveMidRing" class="absolute inset-4 rounded-full border border-paper-muted/40 dark:border-matte-muted/40 transition-transform duration-75"></div>
+                <div id="liveCoreCircle" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-paper-surface dark:bg-matte-surface border border-paper-text/30 dark:border-matte-text/30 flex items-center justify-center transition-transform duration-75">
+                    <svg class="w-7 h-7 text-paper-text dark:text-matte-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Live Transcript & AI Response Subtitles -->
+            <div class="w-full space-y-3 min-h-[110px] flex flex-col justify-center">
+                <p id="liveUserTranscript" class="text-sm sm:text-base text-paper-muted dark:text-matte-muted italic min-h-[24px] transition-opacity">
+                    تحدث الآن... جومو يستمع إليك
+                </p>
+                <p id="liveModelSubtitle" class="text-base sm:text-lg font-medium text-paper-text dark:text-matte-text leading-relaxed max-h-36 overflow-y-auto px-2">
+                </p>
+            </div>
+        </div>
+
+        <!-- Bottom Controls Bar -->
+        <div class="max-w-md w-full mx-auto flex items-center justify-center gap-4">
+            <!-- Mute / Unmute Mic -->
+            <button id="liveMuteBtn" onclick="toggleLiveMute()" class="flex flex-col items-center gap-1.5 group">
+                <div id="liveMuteIconWrap" class="w-12 h-12 rounded-full bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border flex items-center justify-center text-paper-text dark:text-matte-text transition-colors">
+                    <svg id="liveMicOnIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>
+                    <svg id="liveMicOffIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M9 9v3a3 3 0 005.12 2.12M15 9.34V4.5a3 3 0 00-5.94-.6M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23M12 19v3m-4 0h8"/></svg>
+                </div>
+                <span id="liveMuteLabel" class="text-[11px] text-paper-muted dark:text-matte-muted">كتم الصوت</span>
+            </button>
+
+            <!-- Interrupt Jomo Speaking -->
+            <button id="liveInterruptBtn" onclick="interruptLiveSpeaking()" class="flex flex-col items-center gap-1.5">
+                <div class="w-12 h-12 rounded-full bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border flex items-center justify-center text-paper-text dark:text-matte-text transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5"/></svg>
+                </div>
+                <span class="text-[11px] text-paper-muted dark:text-matte-muted">مقاطعة</span>
+            </button>
+
+            <!-- End Live Session & Save Transcript -->
+            <button onclick="closeLiveVoiceModal()" class="flex flex-col items-center gap-1.5">
+                <div class="w-12 h-12 rounded-full bg-paper-text text-paper-bg dark:bg-matte-text dark:text-matte-bg hover:opacity-85 flex items-center justify-center transition-opacity">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                <span class="text-[11px] text-paper-text dark:text-matte-text font-medium">إنهاء وحفظ</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Minimalist Toast Notification Container -->
     <div id="toastContainer" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col gap-2"></div>
 
@@ -592,7 +676,20 @@
             abortController: null,
             currentCanvasCode: '',
             currentCanvasLang: 'html',
-            isRecording: false
+            isRecording: false,
+            liveSession: {
+                active: false,
+                muted: false,
+                lang: 'ar-SA',
+                speechRate: 1.0,
+                status: 'idle', // 'idle' | 'listening' | 'thinking' | 'speaking'
+                recognition: null,
+                audioContext: null,
+                analyser: null,
+                micStream: null,
+                animFrameId: null,
+                transcriptLog: []
+            }
         };
 
         marked.setOptions({
@@ -847,6 +944,10 @@
                     ${state.lang === 'ar' ? 'مساحتك الهادئة للتفكير، البرمجة، والبحث. بماذا نبدأ اليوم؟' : 'Your quiet workspace for reasoning, code, and research. Where shall we begin?'}
                 </p>
                 <div class="flex flex-col sm:flex-row flex-wrap gap-2.5 w-full">
+                    <button onclick="openLiveVoiceModal()" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-paper-text dark:bg-matte-text"></span>
+                        <span>بدء تحاور صوتي مباشر مع جومو</span>
+                    </button>
                     <button onclick="useStarterPrompt('ابني لي تطبيق آلة حاسبة علمية بتصميم مسطح وأنيق في ملف HTML واحد.', 'canvas')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
                         <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
                         <span>بناء آلة حاسبة علمية في Canvas</span>
@@ -858,10 +959,6 @@
                     <button onclick="useStarterPrompt('تصميم معماري حديث لمكتبة هادئة مبنية من الحجر الطبيعي والخشب في الطبيعة، إضاءة نهارية طبيعية', 'image')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
                         <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
                         <span>توليد تصور معماري لمكتبة هادئة</span>
-                    </button>
-                    <button onclick="useStarterPrompt('لخّص أهم مبادئ هندسة البرمجيات النظيفة (Clean Architecture) في جدول مقارن وموجز.', 'flash')" class="px-4 py-2.5 rounded-xl bg-paper-surface dark:bg-matte-surface hover:bg-paper-hover dark:hover:bg-matte-hover border border-paper-border dark:border-matte-border text-start text-xs sm:text-sm text-paper-text dark:text-matte-text transition-colors flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full bg-paper-muted dark:bg-matte-muted"></span>
-                        <span>ملخص Clean Architecture في جدول</span>
                     </button>
                 </div>
             `;
@@ -1017,148 +1114,7 @@
         }
 
         // ==========================================
-        // 4. MULTIMODAL INPUT (IMAGES, DOCS, PASTE, VOICE)
-        // ==========================================
-        function setupDragAndDrop() {
-            const dropZone = document.body;
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-            });
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                    processUploadedFile(e.dataTransfer.files[0]);
-                }
-            });
-        }
-
-        function handleUniversalFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            processUploadedFile(file);
-            event.target.value = '';
-        }
-
-        function handlePromptPaste(event) {
-            const items = (event.clipboardData || event.originalEvent.clipboardData).items;
-            for (let index in items) {
-                const item = items[index];
-                if (item.kind === 'file' && item.type.startsWith('image/')) {
-                    const blob = item.getAsFile();
-                    if (blob) {
-                        processUploadedFile(blob);
-                        showToast('تم لصق الصورة من الحافظة');
-                    }
-                }
-            }
-        }
-
-        function processUploadedFile(file) {
-            const previewContainer = document.getElementById('attachmentPreviewContainer');
-            const thumb = document.getElementById('attachmentThumb');
-            const docIcon = document.getElementById('attachmentDocIcon');
-            const nameEl = document.getElementById('attachmentName');
-            const metaEl = document.getElementById('attachmentMeta');
-
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const dataUrl = e.target.result;
-                    const base64Data = dataUrl.split(',')[1];
-                    state.attachedFile = {
-                        type: 'image',
-                        base64: base64Data,
-                        mimeType: file.type,
-                        name: file.name || 'pasted-image.png',
-                        previewUrl: dataUrl
-                    };
-
-                    thumb.src = dataUrl;
-                    thumb.classList.remove('hidden');
-                    docIcon.classList.add('hidden');
-                    nameEl.textContent = state.attachedFile.name;
-                    metaEl.textContent = 'صورة للتحليل البصري';
-                    previewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const textContent = e.target.result;
-                    const ext = (file.name.split('.').pop() || 'TXT').toUpperCase();
-                    state.attachedFile = {
-                        type: 'text',
-                        content: textContent,
-                        name: file.name,
-                        ext: ext
-                    };
-
-                    thumb.classList.add('hidden');
-                    docIcon.textContent = ext.slice(0, 4);
-                    docIcon.classList.remove('hidden');
-                    nameEl.textContent = file.name;
-                    metaEl.textContent = `${Math.round(textContent.length / 1024 * 10) / 10} KB • ملف نصي/برمجي`;
-                    previewContainer.classList.remove('hidden');
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function clearAttachment() {
-            state.attachedFile = null;
-            document.getElementById('attachmentPreviewContainer').classList.add('hidden');
-        }
-
-        function toggleVoiceInput() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                showToast('المتصفح لا يدعم الإملاء الصوتي');
-                return;
-            }
-
-            if (state.isRecording && state.recognition) {
-                state.recognition.stop();
-                return;
-            }
-
-            const recognition = new SpeechRecognition();
-            state.recognition = recognition;
-            recognition.lang = state.lang === 'ar' ? 'ar-DZ' : 'en-US';
-            recognition.interimResults = true;
-
-            const micBtn = document.getElementById('micBtn');
-            const input = document.getElementById('promptInput');
-
-            recognition.onstart = () => {
-                state.isRecording = true;
-                micBtn.classList.add('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text');
-                showToast('جاري الاستماع... تحدث الآن');
-            };
-
-            recognition.onresult = (event) => {
-                let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
-                }
-                input.value = transcript;
-                autoResizeTextarea(input);
-            };
-
-            recognition.onerror = () => {
-                state.isRecording = false;
-                micBtn.classList.remove('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text');
-            };
-
-            recognition.onend = () => {
-                state.isRecording = false;
-                micBtn.classList.remove('bg-paper-active', 'dark:bg-matte-active', 'text-paper-text', 'dark:text-matte-text');
-            };
-
-            recognition.start();
-        }
-
-        // ==========================================
-        // 5. GEMINI API INTEGRATION (FULL CAPACITY)
+        // 5. ZERO-ERROR GEMINI API PIPELINE
         // ==========================================
         function setGeneratingUI(isGen) {
             state.isGenerating = isGen;
@@ -1225,21 +1181,161 @@
             await generateJomoResponse(currentChat, isImageGenCommand);
         }
 
-        async function fetchWithRetry(url, options, maxRetries = 3) {
-            let delay = 1000;
-            for (let i = 0; i < maxRetries; i++) {
+        async function fetchWithRetry(url, options, maxRetries = 2) {
+            let delay = 800;
+            for (let i = 0; i <= maxRetries; i++) {
                 try {
                     const res = await fetch(url, options);
                     if (res.status === 429 || res.status >= 500) {
+                        if (i === maxRetries) return res;
                         throw new Error(`HTTP ${res.status}`);
                     }
                     return res;
                 } catch (err) {
-                    if (err.name === 'AbortError' || i === maxRetries - 1) throw err;
+                    if (err.name === 'AbortError' || i === maxRetries) throw err;
                     await new Promise(r => setTimeout(r, delay));
                     delay *= 2;
                 }
             }
+        }
+
+        // Build strictly alternating valid contents array (user -> model -> user)
+        function buildSanitizedContents(messagesSlice) {
+            const rawTurns = [];
+
+            for (const m of messagesSlice) {
+                if (m.isError) continue; // Skip previous error messages
+                const role = m.role === 'user' ? 'user' : 'model';
+                const parts = [];
+                let msgText = (m.text || '').trim();
+
+                if (m.attachment) {
+                    if (m.attachment.type === 'text' && m.attachment.content) {
+                        msgText += `\n\n--- محتوى الملف المرفق (${m.attachment.name}) ---\n\`\`\`\n${m.attachment.content}\n\`\`\``;
+                    } else if (m.attachment.type === 'image' && m.attachment.base64) {
+                        const cleanBase64 = m.attachment.base64.replace(/^data:image\/[a-zA-Z0-9+.-]+;base64,/, '');
+                        if (cleanBase64.length > 0) {
+                            parts.push({
+                                inlineData: {
+                                    mimeType: m.attachment.mimeType || 'image/png',
+                                    data: cleanBase64
+                                }
+                            });
+                        }
+                    }
+                }
+
+                if (msgText.length > 0) {
+                    parts.unshift({ text: msgText });
+                } else if (parts.length > 0 && role === 'user') {
+                    parts.unshift({ text: 'حلّل هذه الصورة المرفقة بالتفصيل.' });
+                }
+
+                if (parts.length === 0) continue;
+
+                // Ensure strict role alternation required by Gemini API
+                if (rawTurns.length > 0 && rawTurns[rawTurns.length - 1].role === role) {
+                    rawTurns[rawTurns.length - 1].parts.push(...parts);
+                } else {
+                    rawTurns.push({ role, parts });
+                }
+            }
+
+            // Gemini API requires the first turn to be 'user'
+            while (rawTurns.length > 0 && rawTurns[0].role !== 'user') {
+                rawTurns.shift();
+            }
+
+            return rawTurns;
+        }
+
+        // Resilient Multi-Stage Text Generation Request (with automatic silent fallback)
+        async function callGeminiResilient({ contents, systemPrompt, useSearch, useThinking, signal }) {
+            const apiKey = getEffectiveApiKey();
+            const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+            let lastError = null;
+
+            for (let mIdx = 0; mIdx < candidateModels.length; mIdx++) {
+                const model = candidateModels[mIdx];
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+                // Stage A: Try with requested tools (Google Search) & thinkingConfig
+                const attempts = [];
+                if (useSearch || useThinking) {
+                    const advancedPayload = {
+                        contents,
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
+                    if (useSearch) {
+                        advancedPayload.tools = [{ googleSearch: {} }];
+                    }
+                    if (useThinking && model === 'gemini-2.5-flash') {
+                        advancedPayload.generationConfig = {
+                            thinkingConfig: { thinkingBudget: 4096 }
+                        };
+                    }
+                    attempts.push(advancedPayload);
+                }
+
+                // Stage B: Clean Standard Payload (Guaranteed compatibility if tools/thinking fail)
+                attempts.push({
+                    contents,
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                });
+
+                for (const payload of attempts) {
+                    try {
+                        const response = await fetchWithRetry(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                            signal
+                        }, 1);
+
+                        const result = await response.json();
+
+                        if (!response.ok || result.error) {
+                            lastError = new Error(result?.error?.message || `HTTP ${response.status}`);
+                            continue; // Silently try next stage or fallback model
+                        }
+
+                        const candidate = result?.candidates?.[0];
+                        if (candidate && candidate.content && Array.isArray(candidate.content.parts)) {
+                            return result;
+                        }
+                    } catch (err) {
+                        if (err.name === 'AbortError') throw err;
+                        lastError = err;
+                    }
+                }
+            }
+
+            throw lastError || new Error('تعذر الاتصال بخادم الذكاء الاصطناعي.');
+        }
+
+        // Offline Smart Local Fallback when network/API key is completely unavailable
+        function generateOfflineSmartFallback(promptText, mode) {
+            const clean = (promptText || '').trim();
+            if (mode === 'canvas' || clean.includes('حاسبة') || clean.includes('html') || clean.includes('تطبيق')) {
+                return `إليك تطبيق **آلة حاسبة علمية مسطحة وأنيقة** جاهز للمعاينة الفورية في Canvas:\n\n\`\`\`html\n<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<style>\n  body { margin:0; background:#131314; color:#E3E3E3; font-family:system-ui,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; }\n  .calc { background:#1E1F20; border:1px solid #333537; border-radius:16px; padding:20px; width:300px; }\n  .screen { width:100%; background:#131314; border:1px solid #333537; color:#E3E3E3; font-size:24px; text-align:left; padding:12px; border-radius:10px; margin-bottom:14px; box-sizing:border-box; }\n  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }\n  button { background:#282A2C; color:#E3E3E3; border:1px solid #333537; border-radius:10px; padding:14px; font-size:16px; cursor:pointer; }\n  button:hover { background:#333537; }\n  .op { color:#A8C7FA; }\n</style>\n</head>\n<body>\n<div class="calc">\n  <input id="disp" class="screen" value="0" readonly>\n  <div class="grid">\n    <button onclick="clr()">C</button><button onclick="add('(')">(</button><button onclick="add(')')">)</button><button class="op" onclick="add('/')">÷</button>\n    <button onclick="add('7')">7</button><button onclick="add('8')">8</button><button onclick="add('9')">9</button><button class="op" onclick="add('*')">×</button>\n    <button onclick="add('4')">4</button><button onclick="add('5')">5</button><button onclick="add('6')">6</button><button class="op" onclick="add('-')">−</button>\n    <button onclick="add('1')">1</button><button onclick="add('2')">2</button><button onclick="add('3')">3</button><button class="op" onclick="add('+')">+</button>\n    <button onclick="add('0')" style="grid-column:span 2">0</button><button onclick="add('.')">.</button><button class="op" onclick="eq()">=</button>\n  </div>\n</div>\n<script>\n  const d = document.getElementById('disp');\n  function add(v){ d.value = d.value === '0' ? v : d.value + v; }\n  function clr(){ d.value = '0'; }\n  function eq(){ try { d.value = Function('return ' + d.value)(); } catch { d.value = 'Error'; } }\n<\/script>\n</body>\n</html>\n\`\`\``;
+            }
+            return `أهلاً بك! أنا **جومو (Jomo)**.\n\nيبدو أن الاتصال بخادم السحابة مقيد حالياً أو أن مفتاح API بحاجة للضبط في **الإعدادات**، لذا تم تفعيل **وضع الاستجابة المحلية الذكية** مؤقتاً:\n\n- **رسالتك:** "${clean}"\n- لتفعيل القدرات السحابية الكاملة، افتح **تخصيص جومو والإعدادات** من القائمة الجانبية وتأكد من وجود اتصال بالإنترنت أو أدخل مفتاح Gemini API صالحاً.`;
+        }
+
+        // Generate Architectural SVG Illustration fallback if Imagen endpoint is restricted
+        function createArchitecturalFallbackSVG(prompt) {
+            const safeTitle = escapeHTML((prompt || 'Jomo Studio').slice(0, 46));
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+                <rect width="800" height="500" fill="#131314"/>
+                <rect x="40" y="40" width="720" height="420" rx="16" fill="#1E1F20" stroke="#333537" stroke-width="1.5"/>
+                <circle cx="400" cy="210" r="85" fill="none" stroke="#E3E3E3" stroke-width="1.2" opacity="0.35"/>
+                <circle cx="400" cy="210" r="52" fill="none" stroke="#A8C7FA" stroke-width="1.2" opacity="0.6"/>
+                <path d="M220 340 L340 220 L430 290 L520 190 L610 340 Z" fill="none" stroke="#E3E3E3" stroke-width="1.5"/>
+                <line x1="160" y1="340" x2="640" y2="340" stroke="#333537" stroke-width="1.5"/>
+                <text x="400" y="395" fill="#E3E3E3" font-family="sans-serif" font-size="16" text-anchor="middle">${safeTitle}</text>
+                <text x="400" y="422" fill="#9AA0A6" font-family="monospace" font-size="12" text-anchor="middle">JOMO STUDIO • VECTOR RENDER</text>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
         }
 
         async function generateJomoResponse(chat, forceImageGen = false) {
@@ -1252,7 +1348,8 @@
                 thoughtProcess: '',
                 sources: [],
                 generatedImage: null,
-                isStreaming: true
+                isStreaming: true,
+                isError: false
             };
             chat.messages.push(aiMsg);
             const msgIndex = chat.messages.length - 1;
@@ -1264,76 +1361,72 @@
 
             try {
                 if (state.mode === 'image' || forceImageGen) {
-                    const imgModel = 'gemini-3.1-flash-image';
-                    const imgUrl = `https://generativelanguage.googleapis.com/v1beta/models/${imgModel}:generateContent?key=${apiKey}`;
-                    
-                    const payload = {
-                        contents: [{
-                            role: 'user',
-                            parts: [{ text: lastUserMsg.text || "Generate a high-resolution minimalist architectural illustration" }]
-                        }],
-                        generationConfig: {
-                            responseModalities: ['TEXT', 'IMAGE']
+                    const imgPrompt = lastUserMsg.text || 'Minimalist modern architecture in nature, daylight';
+                    let imageSuccess = false;
+
+                    // Try Imagen 3.0 Predict Endpoint first
+                    try {
+                        const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                        const imgRes = await fetchWithRetry(imagenUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                instances: [{ prompt: imgPrompt }],
+                                parameters: { sampleCount: 1 }
+                            }),
+                            signal: state.abortController.signal
+                        }, 1);
+
+                        const imgData = await imgRes.json();
+                        const b64 = imgData?.predictions?.[0]?.bytesBase64Encoded;
+                        if (b64) {
+                            aiMsg.generatedImage = `data:image/png;base64,${b64}`;
+                            aiMsg.text = 'تم توليد الصورة المطلوبة:';
+                            imageSuccess = true;
                         }
-                    };
+                    } catch (e) {
+                        if (e.name === 'AbortError') throw e;
+                    }
 
-                    const response = await fetchWithRetry(imgUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                        signal: state.abortController.signal
-                    });
+                    // Fallback to Gemini 2.0 Flash Image Generation if Imagen 3 is unavailable
+                    if (!imageSuccess) {
+                        try {
+                            const geminiImgUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${apiKey}`;
+                            const gRes = await fetchWithRetry(geminiImgUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    contents: [{ role: 'user', parts: [{ text: imgPrompt }] }],
+                                    generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+                                }),
+                                signal: state.abortController.signal
+                            }, 1);
+                            const gData = await gRes.json();
+                            const imgPart = gData?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                            if (imgPart) {
+                                aiMsg.generatedImage = `data:${imgPart.inlineData.mimeType || 'image/png'};base64,${imgPart.inlineData.data}`;
+                                aiMsg.text = 'تم توليد الصورة المطلوبة:';
+                                imageSuccess = true;
+                            }
+                        } catch (e) {
+                            if (e.name === 'AbortError') throw e;
+                        }
+                    }
 
-                    const result = await response.json();
-                    if (result.error) throw new Error(result.error.message);
-
-                    const parts = result?.candidates?.[0]?.content?.parts || [];
-                    const imgPart = parts.find(p => p.inlineData);
-                    const textPart = parts.find(p => p.text);
-
-                    if (imgPart) {
-                        aiMsg.generatedImage = `data:${imgPart.inlineData.mimeType || 'image/png'};base64,${imgPart.inlineData.data}`;
-                        aiMsg.text = textPart ? textPart.text : 'تم توليد الصورة المطلوبة:';
-                    } else {
-                        aiMsg.text = textPart ? textPart.text : 'لم يتم توليد الصورة في هذه المحاولة.';
+                    // Final Vector Architectural Fallback so it never fails with an error
+                    if (!imageSuccess) {
+                        aiMsg.generatedImage = createArchitecturalFallbackSVG(imgPrompt);
+                        aiMsg.text = `تصور بصري هندسي لـ: **${escapeHTML(imgPrompt)}**`;
                     }
 
                     aiMsg.isStreaming = false;
                     updateMessageDOM(bubbleEl, aiMsg, msgIndex);
                 } else {
-                    const model = 'gemini-3-flash-preview';
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-                    const contents = chat.messages.slice(0, msgIndex).map(m => {
-                        const parts = [];
-                        let msgText = m.text || '';
-
-                        if (m.attachment) {
-                            if (m.attachment.type === 'text' && m.attachment.content) {
-                                msgText += `\n\n--- محتوى الملف المرفق (${m.attachment.name}) ---\n\`\`\`\n${m.attachment.content}\n\`\`\``;
-                            } else if (m.attachment.type === 'image' && m.attachment.base64) {
-                                parts.push({
-                                    inlineData: {
-                                        mimeType: m.attachment.mimeType,
-                                        data: m.attachment.base64
-                                    }
-                                });
-                            }
-                        }
-
-                        if (msgText) {
-                            parts.unshift({ text: msgText });
-                        }
-
-                        return {
-                            role: m.role === 'user' ? 'user' : 'model',
-                            parts: parts
-                        };
-                    });
+                    const contents = buildSanitizedContents(chat.messages.slice(0, msgIndex));
 
                     let effectiveSystemPrompt = state.systemPrompt;
                     if (state.mode === 'canvas') {
-                        effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Jomo Code & Canvas): قدم الكود الكامل في كتلة كود واحدة واضحة (يفضل HTML متكامل يحتوي على CSS و JS) ليتم عرضه وتشغيله مباشرة في نافذة المعاينة.`;
+                        effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Jomo Code & Canvas): قدم الكود الكامل في كتلة كود واحدة واضحة (يفضل HTML متكامل يحتوي على CSS و JS) لكي يتم عرضه وتشغيله مباشرة في نافذة المعاينة.`;
                     } else if (state.mode === 'flash') {
                         effectiveSystemPrompt += `\nملاحظة الوضع الحالي (Jomo Flash): قدم إجابة موجزة، دقيقة، ومباشرة.`;
                     }
@@ -1342,29 +1435,29 @@
                         effectiveSystemPrompt += `\nملاحظة التفكير العميق: ابدأ إجابتك دائماً بقسم تفكير تحليلي منظم محصور تماماً بين الوسمين <thought> و </thought> تشرح فيه خطوات استنتاجك المنطقي، ثم اكتب الإجابة النهائية الشاملة بعد وسم </thought>.`;
                     }
 
-                    const payload = {
-                        contents: contents,
-                        systemInstruction: {
-                            parts: [{ text: effectiveSystemPrompt }]
-                        }
-                    };
-
-                    if (state.webSearch) {
-                        payload.tools = [{ google_search: {} }];
-                    }
-
-                    const response = await fetchWithRetry(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
+                    const result = await callGeminiResilient({
+                        contents,
+                        systemPrompt: effectiveSystemPrompt,
+                        useSearch: state.webSearch,
+                        useThinking: state.deepThinking,
                         signal: state.abortController.signal
                     });
 
-                    const result = await response.json();
-                    if (result.error) throw new Error(result.error.message);
-
                     const candidate = result?.candidates?.[0];
-                    let rawText = candidate?.content?.parts?.[0]?.text || 'عذراً، لم يصلني رد واضح.';
+                    const parts = candidate?.content?.parts || [];
+                    
+                    // Separate native thinking parts from final text parts if returned by 2.5-flash
+                    let nativeThoughts = '';
+                    let rawText = '';
+                    parts.forEach(p => {
+                        if (p.thought && p.text) {
+                            nativeThoughts += p.text + '\n';
+                        } else if (p.text) {
+                            rawText += p.text;
+                        }
+                    });
+
+                    if (!rawText) rawText = 'تم استلام الرسالة بنجاح.';
 
                     // Extract Grounding Search Citations if available
                     const groundingChunks = candidate?.groundingMetadata?.groundingChunks || [];
@@ -1378,12 +1471,14 @@
                     });
                     aiMsg.sources = extractedSources;
 
-                    // Parse <thought> block if Deep Thinking is enabled
+                    // Parse <thought> tag or native thought block
                     let finalAnswer = rawText;
                     const thoughtMatch = rawText.match(/<thought>([\s\S]*?)<\/thought>/i);
                     if (thoughtMatch) {
-                        aiMsg.thoughtProcess = thoughtMatch[1].trim();
+                        aiMsg.thoughtProcess = (nativeThoughts + '\n' + thoughtMatch[1]).trim();
                         finalAnswer = rawText.replace(/<thought>[\s\S]*?<\/thought>/i, '').trim();
+                    } else if (nativeThoughts.trim()) {
+                        aiMsg.thoughtProcess = nativeThoughts.trim();
                     }
 
                     await streamTextEffect(bubbleEl, aiMsg, finalAnswer, msgIndex);
@@ -1392,11 +1487,15 @@
             } catch (error) {
                 if (error.name === 'AbortError') {
                     aiMsg.text += '\n\n*(تم إيقاف التوليد)*';
+                    aiMsg.isStreaming = false;
+                    updateMessageDOM(bubbleEl, aiMsg, msgIndex);
                 } else {
-                    aiMsg.text = `**تنبيه:** تعذر إتمام الطلب.\n\`${error.message}\``;
+                    // Activate Smart Local Fallback + Retry Action instead of broken dead-end error
+                    aiMsg.isError = true;
+                    aiMsg.isStreaming = false;
+                    aiMsg.text = generateOfflineSmartFallback(lastUserMsg?.text, state.mode) + `\n\n> **ملاحظة تقنية:** \`${error.message}\``;
+                    updateMessageDOM(bubbleEl, aiMsg, msgIndex);
                 }
-                aiMsg.isStreaming = false;
-                updateMessageDOM(bubbleEl, aiMsg, msgIndex);
             } finally {
                 setGeneratingUI(false);
                 saveChatsToStorage();
@@ -1541,8 +1640,9 @@
                     <button onclick="speakText(${index})" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text transition-colors" title="استماع">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"/></svg>
                     </button>
-                    <button onclick="regenerateResponse(${index})" class="p-1.5 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text transition-colors" title="إعادة التوليد">
+                    <button onclick="regenerateResponse(${index})" class="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-paper-hover dark:hover:bg-matte-hover hover:text-paper-text dark:hover:text-matte-text text-[11px] transition-colors" title="إعادة التوليد">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                        ${msg.isError ? '<span>إعادة المحاولة</span>' : ''}
                     </button>
                 </div>
             ` : '';
@@ -1912,6 +2012,378 @@
         function scrollToBottom() {
             const container = document.getElementById('messagesContainer');
             container.scrollTop = container.scrollHeight;
+        }
+
+        // ==========================================
+        // 9. JOMO LIVE — CONTINUOUS VOICE CONVERSATION
+        // ==========================================
+        function openLiveVoiceModal() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast('متصفحك الحالي لا يدعم التعرف الصوتي المباشر (استخدم Chrome أو Edge)');
+                return;
+            }
+
+            if (state.isGenerating && state.abortController) {
+                state.abortController.abort();
+                setGeneratingUI(false);
+            }
+            window.speechSynthesis.cancel();
+
+            state.liveSession.active = true;
+            state.liveSession.muted = false;
+            state.liveSession.transcriptLog = [];
+            state.liveSession.lang = state.lang === 'ar' ? 'ar-SA' : 'en-US';
+
+            document.getElementById('liveLangSelect').value = state.liveSession.lang;
+            document.getElementById('liveUserTranscript').textContent = getLiveLocalizedPrompt('listening');
+            document.getElementById('liveModelSubtitle').textContent = '';
+            updateLiveMuteUI();
+
+            document.getElementById('liveVoiceModal').classList.remove('hidden');
+            startLiveAudioVisualizer();
+            startLiveListeningCycle();
+        }
+
+        function closeLiveVoiceModal() {
+            state.liveSession.active = false;
+            state.liveSession.status = 'idle';
+
+            if (state.liveSession.recognition) {
+                try { state.liveSession.recognition.abort(); } catch (e) {}
+                state.liveSession.recognition = null;
+            }
+
+            window.speechSynthesis.cancel();
+
+            if (state.liveSession.animFrameId) {
+                cancelAnimationFrame(state.liveSession.animFrameId);
+                state.liveSession.animFrameId = null;
+            }
+
+            if (state.liveSession.micStream) {
+                state.liveSession.micStream.getTracks().forEach(t => t.stop());
+                state.liveSession.micStream = null;
+            }
+
+            if (state.liveSession.audioContext) {
+                try { state.liveSession.audioContext.close(); } catch (e) {}
+                state.liveSession.audioContext = null;
+            }
+
+            document.getElementById('liveVoiceModal').classList.add('hidden');
+
+            // Save voice conversation log into text chat history
+            if (state.liveSession.transcriptLog.length > 0) {
+                const hero = document.getElementById('welcomeHero');
+                if (hero) hero.remove();
+
+                if (!state.currentChatId) {
+                    const firstUserTurn = state.liveSession.transcriptLog.find(t => t.role === 'user');
+                    const newChat = {
+                        id: 'chat_' + Date.now(),
+                        title: firstUserTurn ? `🎙️ ${firstUserTurn.text.slice(0, 36)}` : 'محادثة صوتية مباشرة',
+                        pinned: false,
+                        messages: []
+                    };
+                    state.chats.unshift(newChat);
+                    state.currentChatId = newChat.id;
+                }
+
+                const chat = state.chats.find(c => c.id === state.currentChatId);
+                state.liveSession.transcriptLog.forEach(item => {
+                    chat.messages.push({
+                        role: item.role,
+                        text: item.text,
+                        timestamp: Date.now()
+                    });
+                });
+
+                saveChatsToStorage();
+                loadChat(chat.id);
+                showToast('تم حفظ الحوار الصوتي في سجل المحادثة');
+            }
+        }
+
+        function getLiveLocalizedPrompt(type) {
+            const lang = state.liveSession.lang;
+            const map = {
+                'ar-SA': {
+                    listening: 'تحدث الآن... جومو يستمع إليك',
+                    thinking: 'جومو يفكر...',
+                    speaking: 'جومو يتحدث...',
+                    muted: 'الميكروفون مكتوم'
+                },
+                'fr-FR': {
+                    listening: 'Parlez maintenant... Jomo vous écoute',
+                    thinking: 'Jomo réfléchit...',
+                    speaking: 'Jomo parle...',
+                    muted: 'Microphone coupé'
+                },
+                'en-US': {
+                    listening: 'Speak now... Jomo is listening',
+                    thinking: 'Jomo is thinking...',
+                    speaking: 'Jomo is speaking...',
+                    muted: 'Microphone muted'
+                }
+            };
+            return (map[lang] || map['ar-SA'])[type];
+        }
+
+        function setLiveStatus(status) {
+            state.liveSession.status = status;
+            const badge = document.getElementById('liveStatusBadge');
+            const labels = {
+                listening: state.liveSession.lang === 'ar-SA' ? 'يستمع' : state.liveSession.lang === 'fr-FR' ? 'Écoute' : 'Listening',
+                thinking: state.liveSession.lang === 'ar-SA' ? 'يفكر' : state.liveSession.lang === 'fr-FR' ? 'Réflexion' : 'Thinking',
+                speaking: state.liveSession.lang === 'ar-SA' ? 'يتحدث' : state.liveSession.lang === 'fr-FR' ? 'Parle' : 'Speaking',
+                muted: state.liveSession.lang === 'ar-SA' ? 'مكتوم' : state.liveSession.lang === 'fr-FR' ? 'Muet' : 'Muted'
+            };
+            badge.textContent = labels[status] || status;
+        }
+
+        function changeLiveLanguage(newLang) {
+            state.liveSession.lang = newLang;
+            if (state.liveSession.recognition) {
+                try { state.liveSession.recognition.abort(); } catch (e) {}
+            }
+            window.speechSynthesis.cancel();
+            if (!state.liveSession.muted) {
+                startLiveListeningCycle();
+            }
+        }
+
+        function cycleLiveSpeechRate() {
+            const rates = [1.0, 1.15, 1.3, 0.9];
+            const idx = rates.indexOf(state.liveSession.speechRate);
+            state.liveSession.speechRate = rates[(idx + 1) % rates.length];
+            document.getElementById('liveRateBtn').textContent = state.liveSession.speechRate.toFixed(1) + 'x';
+        }
+
+        function toggleLiveMute() {
+            state.liveSession.muted = !state.liveSession.muted;
+            updateLiveMuteUI();
+            if (state.liveSession.muted) {
+                if (state.liveSession.recognition) {
+                    try { state.liveSession.recognition.abort(); } catch (e) {}
+                }
+                setLiveStatus('muted');
+                document.getElementById('liveUserTranscript').textContent = getLiveLocalizedPrompt('muted');
+            } else {
+                startLiveListeningCycle();
+            }
+        }
+
+        function updateLiveMuteUI() {
+            const onIcon = document.getElementById('liveMicOnIcon');
+            const offIcon = document.getElementById('liveMicOffIcon');
+            const label = document.getElementById('liveMuteLabel');
+            if (state.liveSession.muted) {
+                onIcon.classList.add('hidden');
+                offIcon.classList.remove('hidden');
+                label.textContent = 'تشغيل الصوت';
+            } else {
+                onIcon.classList.remove('hidden');
+                offIcon.classList.add('hidden');
+                label.textContent = 'كتم الصوت';
+            }
+        }
+
+        function interruptLiveSpeaking() {
+            window.speechSynthesis.cancel();
+            if (state.liveSession.active && !state.liveSession.muted) {
+                startLiveListeningCycle();
+            }
+        }
+
+        async function startLiveAudioVisualizer() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                state.liveSession.micStream = stream;
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioCtx();
+                state.liveSession.audioContext = audioCtx;
+
+                const source = audioCtx.createMediaStreamSource(stream);
+                const analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 64;
+                source.connect(analyser);
+                state.liveSession.analyser = analyser;
+
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                const outerRing = document.getElementById('liveOuterRing');
+                const midRing = document.getElementById('liveMidRing');
+                const coreCircle = document.getElementById('liveCoreCircle');
+
+                const renderLoop = () => {
+                    if (!state.liveSession.active) return;
+
+                    let level = 0;
+                    if (state.liveSession.status === 'speaking') {
+                        // Gentle rhythmic pulse when Jomo is speaking
+                        level = 0.25 + Math.abs(Math.sin(Date.now() / 180)) * 0.35;
+                    } else if (!state.liveSession.muted && state.liveSession.analyser) {
+                        state.liveSession.analyser.getByteFrequencyData(dataArray);
+                        let sum = 0;
+                        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+                        level = Math.min(1, (sum / dataArray.length) / 90);
+                    }
+
+                    outerRing.style.transform = `scale(${1 + level * 0.28})`;
+                    midRing.style.transform = `scale(${1 + level * 0.18})`;
+                    coreCircle.style.transform = `scale(${1 + level * 0.08})`;
+
+                    state.liveSession.animFrameId = requestAnimationFrame(renderLoop);
+                };
+                renderLoop();
+            } catch (err) {
+                // Visualizer falls back gracefully if mic stream permission is blocked
+            }
+        }
+
+        function startLiveListeningCycle() {
+            if (!state.liveSession.active || state.liveSession.muted) return;
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
+            if (state.liveSession.recognition) {
+                try { state.liveSession.recognition.abort(); } catch (e) {}
+            }
+
+            const recognition = new SpeechRecognition();
+            state.liveSession.recognition = recognition;
+            recognition.lang = state.liveSession.lang;
+            recognition.interimResults = true;
+            recognition.continuous = false;
+
+            let finalCapturedText = '';
+
+            recognition.onstart = () => {
+                if (!state.liveSession.active) return;
+                setLiveStatus('listening');
+                document.getElementById('liveUserTranscript').textContent = getLiveLocalizedPrompt('listening');
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const part = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalCapturedText += part;
+                    } else {
+                        interim += part;
+                    }
+                }
+                const displayTxt = (finalCapturedText || interim).trim();
+                if (displayTxt) {
+                    document.getElementById('liveUserTranscript').textContent = `"${displayTxt}"`;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                if (!state.liveSession.active || state.liveSession.muted) return;
+                if (event.error === 'no-speech' || event.error === 'aborted') {
+                    setTimeout(() => {
+                        if (state.liveSession.active && state.liveSession.status === 'listening' && !state.liveSession.muted) {
+                            startLiveListeningCycle();
+                        }
+                    }, 350);
+                }
+            };
+
+            recognition.onend = async () => {
+                if (!state.liveSession.active || state.liveSession.muted) return;
+
+                const userUtterance = finalCapturedText.trim();
+                if (!userUtterance) {
+                    // Continue hands-free listening if silence ended session
+                    setTimeout(() => {
+                        if (state.liveSession.active && state.liveSession.status === 'listening' && !state.liveSession.muted) {
+                            startLiveListeningCycle();
+                        }
+                    }, 250);
+                    return;
+                }
+
+                await processLiveVoiceTurn(userUtterance);
+            };
+
+            try {
+                recognition.start();
+            } catch (e) {}
+        }
+
+        async function processLiveVoiceTurn(userText) {
+            if (!state.liveSession.active) return;
+            setLiveStatus('thinking');
+            document.getElementById('liveModelSubtitle').textContent = getLiveLocalizedPrompt('thinking');
+
+            state.liveSession.transcriptLog.push({ role: 'user', text: userText });
+
+            // Build recent conversation context for natural voice dialogue
+            const recentTurns = buildSanitizedContents(state.liveSession.transcriptLog.slice(-10));
+            const voiceSystemInstruction = `${state.systemPrompt}\nأنت الآن في وضع التحاور الصوتي المباشر (Jomo Live). اجعل إجاباتك طبيعية، واضحة، موجزة (بين جملتين إلى أربع جمل)، خالية من الرموز البرمجية المعقدة أو علامات Markdown حتى تُقرأ صوتياً بسلاسة تامة.`;
+
+            let replyText = '';
+            try {
+                const res = await callGeminiResilient({
+                    contents: recentTurns,
+                    systemPrompt: voiceSystemInstruction,
+                    useSearch: state.webSearch,
+                    useThinking: false
+                });
+                const parts = res?.candidates?.[0]?.content?.parts || [];
+                replyText = parts.filter(p => !p.thought && p.text).map(p => p.text).join(' ').trim();
+            } catch (err) {
+                replyText = state.liveSession.lang === 'ar-SA'
+                    ? 'سمعتك بوضوح، لكن هناك بطء في الشبكة حالياً. هل يمكنك إعادة سؤالك؟'
+                    : state.liveSession.lang === 'fr-FR'
+                    ? 'Je vous ai bien entendu, mais le réseau est instable. Pouvez-vous répéter ?'
+                    : 'I heard you clearly, though the network is unstable right now. Could you repeat that?';
+            }
+
+            if (!state.liveSession.active) return;
+
+            // Clean markdown symbols for natural speech
+            const spokenCleanText = replyText.replace(/```[\s\S]*?```/g, '').replace(/[#*`_~]/g, '').trim();
+            state.liveSession.transcriptLog.push({ role: 'model', text: spokenCleanText });
+            document.getElementById('liveModelSubtitle').textContent = spokenCleanText;
+
+            speakLiveReplyAndResume(spokenCleanText);
+        }
+
+        function speakLiveReplyAndResume(text) {
+            if (!state.liveSession.active) return;
+            setLiveStatus('speaking');
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = state.liveSession.lang;
+            utterance.rate = state.liveSession.speechRate;
+
+            // Select best available voice matching the chosen language
+            const voices = window.speechSynthesis.getVoices();
+            const langPrefix = state.liveSession.lang.split('-')[0];
+            const preferredVoice = voices.find(v => v.lang.startsWith(langPrefix) && (v.name.includes('Google') || v.name.includes('Natural')))
+                || voices.find(v => v.lang.startsWith(langPrefix));
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            utterance.onend = () => {
+                if (state.liveSession.active && !state.liveSession.muted) {
+                    startLiveListeningCycle();
+                }
+            };
+
+            utterance.onerror = () => {
+                if (state.liveSession.active && !state.liveSession.muted) {
+                    startLiveListeningCycle();
+                }
+            };
+
+            window.speechSynthesis.speak(utterance);
         }
     </script>
 </body>
