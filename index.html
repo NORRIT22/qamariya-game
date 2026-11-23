@@ -5,27 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Readdy</title>
 
-  <!-- Custom Readdy Google-Style SVG Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFFFFF'/%3E%3Cpath d='M16 14h8v36h-8z' fill='%234285F4'/%3E%3Cpath d='M16 34h8v16h-8z' fill='%23EA4335'/%3E%3Cpath d='M24 14c14 0 24 9 24 20s-10 16-20 16v-8c7 0 12-4 12-8s-5-12-16-12V14z' fill='%23FBBC04'/%3E%3Cpath d='M48 34c0 11-10 16-20 16v-8c7 0 12-4 12-8h8z' fill='%2334A853'/%3E%3Cpolygon points='28,26 28,40 39,33' fill='%23202124'/%3E%3C/svg%3E" />
+  <!-- Unified Readdy SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFFFFF'/%3E%3Cpath d='M14 14h8.5v37H14z' fill='%234285F4'/%3E%3Cpath d='M14 35h8.5v16H14z' fill='%23EA4335'/%3E%3Cpath d='M22 14c14.5 0 26 8.2 26 19.5S37.5 51 25.5 51v-8.5c7.7 0 14-3.7 14-9s-6.7-11-17.5-11V14z' fill='%23FBBC04'/%3E%3Cpath d='M48 33.5C48 44.5 37.5 51 25.5 51v-8.5c7.7 0 14-3.7 14-9H48z' fill='%2334A853'/%3E%3Cpolygon points='27.5,25.5 38.5,32.5 27.5,39.5' fill='%23202124'/%3E%3C/svg%3E" />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
-
-  <!-- Material Symbols Outlined -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0" />
 
-  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-  <!-- Mammoth.js for DOCX extraction -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-
-  <!-- Tesseract.js for OCR -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
   <script>
@@ -71,9 +62,7 @@
       color: #202124;
       font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
-
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
       vertical-align: middle;
@@ -82,8 +71,6 @@
     .material-symbols-outlined.filled {
       font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
-
-    /* Word Token Interaction - Zero layout shift */
     .word-token {
       display: inline;
       cursor: pointer;
@@ -106,154 +93,81 @@
     .word-token.bookmarked-token {
       box-shadow: inset 0 -1.5px 0 #34A853;
     }
-
-    /* Plain Solid Google Docs Paginated Sheet */
     .g-doc-sheet {
       width: 100%;
       max-width: 816px;
       background: #FFFFFF;
       border: 1px solid #DADCE0;
       border-radius: 4px;
+      content-visibility: auto;
+      contain-intrinsic-size: 900px;
     }
+    .doc-font-sans { font-family: 'Inter', sans-serif; letter-spacing: -0.005em; }
+    .doc-font-serif { font-family: 'Literata', Georgia, serif; letter-spacing: 0; }
 
-    /* Document Typography Modes */
-    .doc-font-sans {
-      font-family: 'Inter', sans-serif;
-      letter-spacing: -0.005em;
-    }
-    .doc-font-serif {
-      font-family: 'Literata', Georgia, serif;
-      letter-spacing: 0;
-    }
-
-    /* Subtle Audio Soundwave Animation */
-    .soundwave-bars {
-      display: inline-flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 12px;
-    }
-    .soundwave-bars span {
-      width: 2.5px;
-      background-color: #1A73E8;
-      border-radius: 2px;
-      animation: wavePulse 0.8s ease-in-out infinite;
-    }
+    .soundwave-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .soundwave-bars span { width: 2.5px; background-color: #1A73E8; border-radius: 2px; animation: wavePulse 0.8s ease-in-out infinite; }
     .soundwave-bars span:nth-child(2) { animation-delay: 0.15s; }
     .soundwave-bars span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes wavePulse {
-      0%, 100% { height: 3px; }
-      50% { height: 12px; }
+    @keyframes wavePulse { 0%, 100% { height: 3px; } 50% { height: 12px; } }
+
+    /* ==================== UNIFIED ANIMATED READDY SVG LOGO ==================== */
+    .readdy-logo-wrapper { display: inline-flex; align-items: center; gap: 10px; user-select: none; }
+    .readdy-mark-svg { overflow: visible; }
+    .readdy-play-tri { transform-origin: 31px 32px; transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); animation: readdyPlayPulse 3.6s ease-in-out infinite; }
+    .readdy-logo-wrapper:hover .readdy-play-tri { transform: scale(1.16) translateX(1.5px); }
+    .readdy-ribbon-wave { transform-origin: center; animation: readdyRibbonFloat 4.2s ease-in-out infinite; }
+    @keyframes readdyPlayPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
+    @keyframes readdyRibbonFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-2px); } }
+
+    /* Welcome Modal Entrance Animation */
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-modal-in {
+      animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* ==================== ANIMATED READDY SVG LOGO STYLES ==================== */
-    .readdy-logo-wrapper {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      user-select: none;
-    }
-    .readdy-mark-svg {
-      overflow: visible;
-    }
-    .readdy-play-tri {
-      transform-origin: 31px 32px;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      animation: readdyPlayPulse 3.6s ease-in-out infinite;
-    }
-    .readdy-logo-wrapper:hover .readdy-play-tri {
-      transform: scale(1.16) translateX(1.5px);
-    }
-    .readdy-ribbon-wave {
-      transform-origin: center;
-      animation: readdyRibbonFloat 4.2s ease-in-out infinite;
-    }
-    .readdy-page-curl {
-      transform-origin: 48px 48px;
-      animation: readdyPageCurl 4s ease-in-out infinite;
-    }
-    @keyframes readdyPlayPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.09); }
-    }
-    @keyframes readdyRibbonFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-2px); }
-    }
-    @keyframes readdyPageCurl {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-    }
+    .g-progress-track { height: 3px; background-color: #E8F0FE; overflow: hidden; width: 100%; }
+    .g-progress-fill { height: 100%; background-color: #1A73E8; transition: width 0.25s ease; }
 
-    /* Linear Progress Bar */
-    .g-progress-track {
-      height: 3px;
-      background-color: #E8F0FE;
-      overflow: hidden;
-      width: 100%;
-    }
-    .g-progress-fill {
-      height: 100%;
-      background-color: #1A73E8;
-      transition: width 0.25s ease;
-    }
-
-    /* Shimmer Skeleton */
     .skeleton {
       background: #F1F3F4;
       background-image: linear-gradient(90deg, #F1F3F4 0px, #E8EAED 40px, #F1F3F4 80px);
       background-size: 600px;
       animation: shimmer 1.4s infinite linear;
     }
-    @keyframes shimmer {
-      0% { background-position: -200px; }
-      100% { background-position: 400px; }
-    }
+    @keyframes shimmer { 0% { background-position: -200px; } 100% { background-position: 400px; } }
 
-    /* Minimal Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #DADCE0;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #BDC1C6;
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #DADCE0; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #BDC1C6; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Hidden File Input -->
   <input type="file" id="fileInput" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" class="hidden" />
 
-  <!-- ==================== 1. MINIMALIST SOLID GOOGLE HEADER (64px) ==================== -->
+  <!-- ==================== 1. HEADER ==================== -->
   <header class="sticky top-0 z-40 h-16 bg-white border-b border-g-border px-4 sm:px-6 flex items-center justify-between gap-3">
-    <!-- Left / Start: Custom Animated Readdy Logo + Doc Title -->
     <div class="flex items-center gap-3 min-w-0 flex-1">
+      <!-- Unified Brand Logo -->
       <button onclick="resetToEmptyState()" class="readdy-logo-wrapper shrink-0 focus:outline-none group" title="Readdy">
         <svg class="readdy-mark-svg w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
-            <linearGradient id="readdyBlueRed" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#4285F4" />
-              <stop offset="52%" stop-color="#4285F4" />
-              <stop offset="68%" stop-color="#EA4335" />
-              <stop offset="100%" stop-color="#EA4335" />
+            <linearGradient id="readdyBlueRedHeader" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
+              <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
             </linearGradient>
-            <linearGradient id="readdyLoopGrad" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#EA4335" />
-              <stop offset="32%" stop-color="#FBBC04" />
-              <stop offset="72%" stop-color="#FBBC04" />
-              <stop offset="100%" stop-color="#34A853" />
+            <linearGradient id="readdyLoopGradHeader" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
+              <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
             </linearGradient>
           </defs>
-          <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGrad)" />
-          <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRed)" />
+          <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradHeader)" />
+          <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedHeader)" />
           <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
         </svg>
 
@@ -264,13 +178,10 @@
             <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
             <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
           </svg>
-          <span class="font-brand text-[22px] font-bold tracking-tight text-[#3C4043] leading-none">
-            readdy
-          </span>
+          <span class="font-brand text-[22px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
         </div>
       </button>
 
-      <!-- Document Title Input -->
       <div id="headerDocMeta" class="hidden sm:flex items-center min-w-0 border-r border-g-border pr-3">
         <input
           id="docTitleInput"
@@ -282,9 +193,7 @@
       </div>
     </div>
 
-    <!-- Right / End: Language Selector, Upload, API Settings, Saved Words -->
     <div class="flex items-center gap-2 shrink-0">
-      <!-- Language Selector (Auto / EN / FR) -->
       <div class="flex items-center bg-white rounded-full px-3 py-1.5 border border-g-border hover:bg-[#F8F9FA] transition">
         <span class="material-symbols-outlined text-[16px] text-g-sub ml-1">language</span>
         <select id="langSelect" onchange="handleLanguageChange(this.value)" class="bg-transparent text-xs font-medium text-g-text focus:outline-none cursor-pointer">
@@ -294,18 +203,19 @@
         </select>
       </div>
 
-      <!-- Compact File Upload Trigger Button -->
       <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white text-xs sm:text-sm font-medium px-3.5 sm:px-4 py-2 rounded-full transition flex items-center gap-1.5 cursor-pointer">
         <span class="material-symbols-outlined text-[18px]">upload_file</span>
-        <span class="hidden xs:inline sm:inline">رفع ملف</span>
+        <span>رفع ملف</span>
       </button>
 
-      <!-- Optional Gemini API Settings Button -->
-      <button onclick="openApiSettingsModal()" class="p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition flex items-center justify-center cursor-pointer" title="إعدادات محرك الترجمة">
+      <button onclick="openWelcomeModal(true)" class="hidden sm:flex p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition items-center justify-center cursor-pointer" title="حول التطبيق">
+        <span class="material-symbols-outlined text-[20px]">help_outline</span>
+      </button>
+
+      <button onclick="openApiSettingsModal()" class="p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition flex items-center justify-center cursor-pointer" title="إعدادات الترجمة">
         <span class="material-symbols-outlined text-[20px]">tune</span>
       </button>
 
-      <!-- Saved Words Drawer Button with Badge -->
       <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-text transition flex items-center justify-center cursor-pointer" title="الكلمات المحفوظة">
         <span class="material-symbols-outlined text-[20px]">bookmarks</span>
         <span id="savedCountBadge" class="hidden absolute -top-1 -right-1 bg-g-blue text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">0</span>
@@ -324,38 +234,40 @@
     </div>
   </div>
 
-  <!-- ==================== 2. CLEAN PLAIN ('سادة') EMPTY STATE ==================== -->
+  <!-- ==================== 2. EMPTY STATE (WITH UNIFIED LOGO) ==================== -->
   <main id="emptyStateView" class="flex-1 flex items-center justify-center p-4 sm:p-8">
     <div
       id="emptyDropzone"
       onclick="triggerFileUpload()"
       class="w-full max-w-lg bg-white border border-g-border hover:border-g-blue rounded-2xl p-10 sm:p-12 text-center transition-colors duration-150 cursor-pointer"
     >
+      <!-- Unified Brand Logo (Large) -->
       <div class="flex flex-col items-center justify-center mb-6 select-none">
-        <div class="flex items-center gap-3.5" dir="ltr">
-          <svg class="w-14 h-14 overflow-visible" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M10 12C10 9.79086 11.7909 8 14 8H28C30.2 8 32 9.8 32 12V54C32 55.1 31.1 56 30 56H14C11.7909 56 10 54.2091 10 52V12Z" fill="#4285F4" />
-            <path d="M32 12C32 9.8 33.8 8 36 8H50C52.2091 8 54 9.79086 54 12V44L42 56H32V12Z" fill="#34A853" />
-            <path d="M32 12C38 12 44 10 47 8.5V36C42 42 36 49 32 54V12Z" fill="#FBBC04" />
-            <path d="M32 12C35.5 12 39 11 41 9.5V34C37.5 41 34 48 32 54V12Z" fill="#EA4335" />
-            <path class="readdy-page-curl" d="M42 56V46C42 44.8954 42.8954 44 44 44H54L42 56Z" fill="#E8EAED" />
+        <div class="readdy-logo-wrapper gap-3.5">
+          <svg class="readdy-mark-svg w-14 h-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="readdyBlueRedHero" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
+                <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
+              </linearGradient>
+              <linearGradient id="readdyLoopGradHero" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
+                <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
+              </linearGradient>
+            </defs>
+            <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradHero)" />
+            <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedHero)" />
+            <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
           </svg>
 
-          <div class="flex items-baseline font-brand text-[34px] font-semibold tracking-tight text-[#3C4043]">
-            <span>Read</span>
-            <span class="relative inline-flex items-center">
-              <svg class="w-4 h-7 -mr-1.5" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 4C6.5 4 3 8.5 3 14" stroke="#EA4335" stroke-width="2.6" stroke-linecap="round" />
-                <path d="M3 14C3 19.5 6.5 24 12 24" stroke="#4285F4" stroke-width="2.6" stroke-linecap="round" />
-              </svg>
-              <span>d</span>
-            </span>
-            <svg class="w-6 h-8 ml-0.5 translate-y-[5px]" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M3 4L12 19" stroke="#EA4335" stroke-width="4.2" stroke-linecap="round" />
-              <path d="M21 4L12 19" stroke="#4285F4" stroke-width="4.2" stroke-linecap="round" />
-              <path d="M12 19L8.5 25" stroke="#FBBC04" stroke-width="4.2" stroke-linecap="round" />
-              <path d="M8.5 25L6.5 28.5" stroke="#34A853" stroke-width="4.2" stroke-linecap="round" />
+          <div dir="ltr" class="relative flex items-center pt-2">
+            <svg class="readdy-ribbon-wave w-[76px] h-[22px] absolute -top-2 left-[3px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
+              <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
             </svg>
+            <span class="font-brand text-[34px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
           </div>
         </div>
       </div>
@@ -368,7 +280,6 @@
         <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
           اختيار ملف
         </button>
-
         <button onclick="openPasteModal()" class="bg-white hover:bg-[#F8F9FA] text-g-text border border-g-border font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
           لصق نص مباشرة
         </button>
@@ -376,14 +287,12 @@
     </div>
   </main>
 
-  <!-- ==================== 3 & 4. ACTIVE DOCUMENT WORKSPACE + AUDIO BAR + SIDE PANEL ==================== -->
+  <!-- ==================== 3 & 4. WORKSPACE ==================== -->
   <div id="workspaceView" class="hidden flex-1 flex flex-col">
 
-    <!-- Unified Clean Document & Audio Control Bar -->
-    <div class="bg-white border-b border-g-border px-4 py-2 sticky top-16 z-30">
+    <!-- Toolbar -->
+    <div id="workspaceToolbar" class="bg-white border-b border-g-border px-4 py-2 sticky top-16 z-30">
       <div class="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-2.5">
-
-        <!-- Left Group: Document Audio Player Controls -->
         <div class="flex flex-wrap items-center gap-2">
           <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="flex items-center gap-1.5 bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition cursor-pointer">
             <span id="docAudioPlayIcon" class="material-symbols-outlined filled text-[17px]">play_arrow</span>
@@ -416,15 +325,10 @@
           </div>
         </div>
 
-        <!-- Right Group: Typography Controls -->
         <div class="flex items-center gap-2">
           <div class="flex items-center bg-g-bg border border-g-border rounded-full p-0.5 text-xs">
-            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer">
-              Inter
-            </button>
-            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer">
-              Literata
-            </button>
+            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer">Inter</button>
+            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer">Literata</button>
           </div>
 
           <div class="flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-1.5 py-0.5">
@@ -433,7 +337,13 @@
             <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تكبير الخط">A+</button>
           </div>
 
-          <span id="pageCountIndicator" class="hidden sm:inline text-xs text-g-sub px-1">1 صفحة</span>
+          <!-- Quick Page Jump -->
+          <div class="hidden sm:flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs text-g-sub">
+            <span>صفحة</span>
+            <input id="jumpPageInput" type="number" min="1" value="1" onchange="jumpToPageNumber(this.value)" class="w-11 bg-white border border-g-border rounded px-1 text-center text-g-text font-medium focus:outline-none focus:border-g-blue" />
+            <span id="pageCountIndicator">/ 1</span>
+          </div>
+
           <button onclick="resetToEmptyState()" class="text-xs text-g-sub hover:text-g-text hover:bg-[#F8F9FA] border border-g-border px-3 py-1.5 rounded-full transition flex items-center gap-1 font-medium cursor-pointer">
             <span class="material-symbols-outlined text-[15px]">add</span>
             <span>جديد</span>
@@ -442,26 +352,25 @@
       </div>
     </div>
 
-    <!-- Main Split Layout: Document Canvas + Responsive Dictionary Panel -->
-    <div class="flex-1 flex flex-col lg:flex-row relative">
+    <!-- Split Layout -->
+    <div class="flex-1 flex flex-col lg:flex-row relative items-start">
 
-      <!-- Document Canvas Area -->
-      <div id="canvasDropArea" class="flex-1 py-6 sm:py-8 px-3 sm:px-6 pb-24 lg:pb-12 flex flex-col items-center gap-6 overflow-y-auto">
+      <!-- Document Canvas -->
+      <div id="canvasDropArea" class="flex-1 w-full py-6 sm:py-8 px-3 sm:px-6 pb-24 lg:pb-12 flex flex-col items-center gap-6">
         <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6"></div>
       </div>
 
-      <!-- Responsive Dictionary Panel (Bottom Sheet on Mobile, 360px Right Panel on Desktop) -->
+      <!-- Fixed/Sticky Right Dictionary Panel -->
       <aside
         id="sideDictionaryPanel"
-        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-2xl shadow-g-modal lg:rounded-none lg:shadow-none lg:static w-full lg:w-[360px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[109px] lg:h-[calc(100vh-109px)] lg:max-h-none overflow-y-auto z-40 transition-transform duration-200"
+        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-2xl shadow-g-modal lg:rounded-none lg:shadow-none w-full lg:w-[370px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[113px] lg:h-[calc(100vh-113px)] lg:max-h-none overflow-y-auto z-40"
       >
-        <!-- Panel Top Bar -->
         <div class="px-4 py-3 border-b border-g-border flex items-center justify-between bg-white sticky top-0 z-10">
           <div class="flex items-center gap-1.5 text-xs font-semibold text-g-text">
             <span class="material-symbols-outlined text-g-blue text-[18px]">translate</span>
             <span>الترجمة والشرح السياقي</span>
           </div>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1.5">
             <span id="engineSourceTag" class="text-[10px] px-2 py-0.5 rounded-full bg-g-bg border border-g-border text-g-sub"></span>
             <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer" title="إغلاق">
               <span class="material-symbols-outlined text-[18px]">close</span>
@@ -469,7 +378,7 @@
           </div>
         </div>
 
-        <!-- Skeleton Loading State -->
+        <!-- Skeleton -->
         <div id="panelSkeleton" class="hidden p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div class="space-y-2">
@@ -478,14 +387,13 @@
             </div>
             <div class="w-9 h-9 rounded-full skeleton"></div>
           </div>
-          <div class="h-16 w-full rounded-xl skeleton"></div>
-          <div class="h-24 w-full rounded-xl skeleton"></div>
+          <div class="h-12 w-full rounded-xl skeleton"></div>
           <div class="h-20 w-full rounded-xl skeleton"></div>
+          <div class="h-24 w-full rounded-xl skeleton"></div>
         </div>
 
-        <!-- Word Analysis Content -->
+        <!-- Content -->
         <div id="panelContent" class="hidden p-5 space-y-4">
-          <!-- Word Header & Bookmark -->
           <div class="flex items-start justify-between gap-2 pb-3.5 border-b border-g-border">
             <div dir="ltr" class="text-left min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
@@ -504,24 +412,20 @@
             </button>
           </div>
 
-          <!-- 3-Control Word Pronunciation Bar -->
           <div class="bg-g-bg border border-g-border rounded-xl p-2.5 flex items-center justify-between gap-1.5">
-            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer" title="نطق عادي">
+            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
               <span class="material-symbols-outlined filled text-[17px]">volume_up</span>
               <span>نطق 1.0x</span>
             </button>
-
-            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-text hover:text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer" title="نطق بطيء للتعلم">
+            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-text hover:text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
               <span class="material-symbols-outlined text-[17px]">slow_motion_video</span>
               <span>بطيء 0.65x</span>
             </button>
-
-            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer" title="تكرار النطق تلقائياً">
+            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer" title="تكرار النطق">
               <span class="material-symbols-outlined text-[18px]">repeat</span>
             </button>
           </div>
 
-          <!-- Direct Arabic Translation -->
           <div class="bg-white border border-g-border rounded-xl p-3.5">
             <div class="flex items-center justify-between mb-1">
               <span class="text-[11px] font-semibold text-g-blue">الترجمة العربية</span>
@@ -534,13 +438,11 @@
             <p id="panelLemma" class="text-[11px] text-g-sub mt-1"></p>
           </div>
 
-          <!-- Contextual Explanation -->
           <div class="bg-g-bg border border-g-border rounded-xl p-3.5">
             <h3 class="text-xs font-semibold text-g-text mb-1.5">المعنى والشرح السياقي</h3>
             <p id="panelExplanationAr" class="text-[13px] text-g-text leading-relaxed"></p>
           </div>
 
-          <!-- Example Sentence -->
           <div id="exampleBox" class="bg-white border border-g-border rounded-xl p-3.5 space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-semibold text-g-sub">مثال تطبيقي</span>
@@ -549,27 +451,22 @@
                   <span class="material-symbols-outlined text-[14px]">volume_up</span>
                   <span>1.0x</span>
                 </button>
-                <button onclick="pronounceExample(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-1.5 py-0.5 rounded cursor-pointer">
-                  0.65x
-                </button>
+                <button onclick="pronounceExample(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-1.5 py-0.5 rounded cursor-pointer">0.65x</button>
               </div>
             </div>
             <p id="panelExampleOrig" dir="ltr" class="font-docSans text-xs text-g-text leading-relaxed"></p>
             <p id="panelExampleAr" class="text-xs text-g-sub leading-relaxed"></p>
           </div>
 
-          <!-- Surrounding Sentence with 3 Audio Controls -->
           <div class="border-t border-g-border pt-3.5 space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-semibold text-g-sub">الجملة الكاملة في النص</span>
               <div class="flex items-center gap-1">
-                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer" title="نطق الجملة">
+                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer">
                   <span class="material-symbols-outlined text-[15px]">volume_up</span>
                   <span>1.0x</span>
                 </button>
-                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-2 py-0.5 rounded-full font-medium transition cursor-pointer" title="نطق الجملة ببطء">
-                  0.65x
-                </button>
+                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-2 py-0.5 rounded-full font-medium transition cursor-pointer">0.65x</button>
                 <button id="sentenceRepeatBtn" onclick="toggleSentenceRepeatLoop()" class="p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer" title="تكرار الجملة">
                   <span class="material-symbols-outlined text-[15px]">repeat</span>
                 </button>
@@ -583,7 +480,7 @@
     </div>
   </div>
 
-  <!-- ==================== 5. SAVED VOCABULARY SLIDE-OVER DRAWER ==================== -->
+  <!-- ==================== 5. SAVED VOCABULARY DRAWER ==================== -->
   <div id="vocabDrawerBackdrop" onclick="toggleVocabDrawer(false)" class="hidden fixed inset-0 z-50 bg-black/25 transition-opacity"></div>
   <aside id="vocabDrawer" class="fixed top-0 left-0 z-50 h-full w-full max-w-sm bg-white shadow-g-modal border-r border-g-border transform -translate-x-full transition-transform duration-200 flex flex-col">
     <div class="h-16 px-4 border-b border-g-border flex items-center justify-between shrink-0">
@@ -593,7 +490,7 @@
         <span id="drawerCountPill" class="text-xs bg-g-bg border border-g-border px-2 py-0.5 rounded-full text-g-sub">0</span>
       </div>
       <div class="flex items-center gap-1">
-        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-g-blue hover:bg-g-blueSoft px-3 py-1.5 rounded-full font-medium flex items-center gap-1 transition cursor-pointer" title="تصدير CSV">
+        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-g-blue hover:bg-g-blueSoft px-3 py-1.5 rounded-full font-medium flex items-center gap-1 transition cursor-pointer">
           <span class="material-symbols-outlined text-[16px]">download</span>
           <span>CSV</span>
         </button>
@@ -602,22 +499,110 @@
         </button>
       </div>
     </div>
-
     <div class="p-3 border-b border-g-border shrink-0">
       <div class="relative">
         <span class="material-symbols-outlined text-[18px] text-g-sub absolute right-3 top-2.5">search</span>
-        <input
-          id="vocabSearchInput"
-          type="text"
-          oninput="renderVocabDrawerList()"
-          placeholder="بحث في المفردات..."
-          class="w-full bg-g-bg border border-g-border focus:bg-white focus:border-g-blue rounded-full pr-9 pl-3 py-1.5 text-xs text-g-text focus:outline-none transition"
-        />
+        <input id="vocabSearchInput" type="text" oninput="renderVocabDrawerList()" placeholder="بحث في المفردات..." class="w-full bg-g-bg border border-g-border focus:bg-white focus:border-g-blue rounded-full pr-9 pl-3 py-1.5 text-xs text-g-text focus:outline-none transition" />
       </div>
     </div>
-
     <div id="vocabDrawerList" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
   </aside>
+
+  <!-- ==================== WELCOME POPUP MODAL ON SITE OPEN ==================== -->
+  <div id="welcomeModal" class="hidden fixed inset-0 z-50 bg-black/35 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-g-modal border border-g-border overflow-hidden animate-modal-in">
+      <!-- Top Close Button -->
+      <div class="px-5 pt-4 flex items-center justify-between">
+        <span class="text-[11px] font-medium text-g-sub bg-g-bg border border-g-border px-2.5 py-0.5 rounded-full">منصة القراءة الذكية</span>
+        <button onclick="closeWelcomeModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer" title="إغلاق">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="px-6 pt-3 pb-6 text-center">
+        <!-- Unified Readdy Logo -->
+        <div class="flex justify-center mb-4">
+          <div class="readdy-logo-wrapper gap-3">
+            <svg class="readdy-mark-svg w-11 h-11" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="readdyBlueRedModal" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
+                  <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
+                </linearGradient>
+                <linearGradient id="readdyLoopGradModal" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
+                  <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
+                </linearGradient>
+              </defs>
+              <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradModal)" />
+              <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedModal)" />
+              <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
+            </svg>
+
+            <div dir="ltr" class="relative flex items-center pt-1.5">
+              <svg class="readdy-ribbon-wave w-[62px] h-[18px] absolute -top-1.5 left-[2px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
+                <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
+                <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
+                <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
+              </svg>
+              <span class="font-brand text-[28px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="text-lg font-bold text-g-text mb-1.5">مرحباً بك في Readdy</h2>
+        <p class="text-xs text-g-sub leading-relaxed mb-5">
+          اقرأ الكتب والمقالات الإنجليزية والفرنسية بسلاسة، وانقر على أي كلمة للحصول على ترجمتها الفورية ونطقها الصوتي.
+        </p>
+
+        <!-- 3 Clean Feature Rows -->
+        <div class="space-y-2.5 text-right mb-6">
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
+            <div class="w-8 h-8 rounded-lg bg-g-blueSoft text-g-blue flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[18px]">description</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-g-text">دعم شامل للملفات والصور</p>
+              <p class="text-[11px] text-g-sub">افتح ملفات PDF و DOCX والصور الممسوحة ضوئياً (OCR).</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
+            <div class="w-8 h-8 rounded-lg bg-[#E6F4EA] text-g-green flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[18px]">translate</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-g-text">ترجمة سياقية بنقرة واحدة</p>
+              <p class="text-[11px] text-g-sub">معنى الكلمة، النطق الصوتي IPA، وترجمة الجملة كاملة.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
+            <div class="w-8 h-8 rounded-lg bg-[#FEF7E0] text-[#EA8600] flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[18px]">record_voice_over</span>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-g-text">قراءة صوتية وحفظ المفردات</p>
+              <p class="text-[11px] text-g-sub">استمع للمستند بسرعات مختلفة وصدّر مفرداتك بصيغة CSV.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Action Button -->
+        <button onclick="closeWelcomeModal()" class="w-full bg-g-blue hover:bg-g-blueHover text-white font-medium text-sm py-2.5 rounded-full transition cursor-pointer">
+          ابدأ القراءة الآن
+        </button>
+
+        <!-- Don't show again checkbox -->
+        <label class="mt-3.5 inline-flex items-center gap-2 text-xs text-g-sub cursor-pointer select-none">
+          <input id="dontShowWelcomeCheckbox" type="checkbox" class="rounded border-g-border text-g-blue focus:ring-g-blue cursor-pointer" />
+          <span>عدم إظهار هذه النافذة مجدداً</span>
+        </label>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== PASTE TEXT MODAL ==================== -->
   <div id="pasteModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
@@ -629,13 +614,7 @@
         </button>
       </div>
       <div class="p-5">
-        <textarea
-          id="pasteTextInput"
-          dir="auto"
-          rows="8"
-          placeholder="الصق النص الإنجليزي أو الفرنسي هنا..."
-          class="w-full rounded-xl border border-g-border focus:border-g-blue p-3.5 font-docSans text-sm text-g-text focus:outline-none"
-        ></textarea>
+        <textarea id="pasteTextInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..." class="w-full rounded-xl border border-g-border focus:border-g-blue p-3.5 font-docSans text-sm text-g-text focus:outline-none"></textarea>
       </div>
       <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-end gap-2">
         <button onclick="closePasteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إلغاء</button>
@@ -644,7 +623,7 @@
     </div>
   </div>
 
-  <!-- ==================== API SETTINGS MODAL (OPTIONAL GEMINI KEY) ==================== -->
+  <!-- ==================== API SETTINGS MODAL ==================== -->
   <div id="apiSettingsModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-g-modal border border-g-border overflow-hidden">
       <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
@@ -655,21 +634,15 @@
       </div>
       <div class="p-5 space-y-3 text-xs text-g-sub leading-relaxed">
         <p class="text-g-text font-medium">
-          يعمل التطبيق افتراضياً بمحرك ترجمة فوري مجاني (Google Translate + القواميس اللغوية) دون الحاجة لأي مفتاح.
+          يعمل التطبيق مجاناً بـ 3 محركات ترجمة تلقائية (Google Translate + Lingva + MyMemory) مع قواميس EN/FR دون أي مفتاح.
         </p>
         <p>
-          اختياري: إذا أردت تفعيل التحليل السياقي المتقدم عبر <strong>Gemini AI</strong>، أدخل مفتاح Gemini API الخاص بك هنا (يُحفظ محلياً في متصفحك فقط):
+          اختياري: لتفعيل التحليل الأدبي والسياقي العميق عبر <strong>Gemini AI</strong>، أدخل مفتاح API هنا:
         </p>
-        <input
-          id="geminiKeyInput"
-          type="password"
-          dir="ltr"
-          placeholder="AIzaSy..."
-          class="w-full rounded-xl border border-g-border focus:border-g-blue px-3.5 py-2.5 font-mono text-xs text-g-text focus:outline-none"
-        />
+        <input id="geminiKeyInput" type="password" dir="ltr" placeholder="AIzaSy..." class="w-full rounded-xl border border-g-border focus:border-g-blue px-3.5 py-2.5 font-mono text-xs text-g-text focus:outline-none" />
       </div>
       <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-between">
-        <button onclick="clearStoredCache()" class="text-xs text-g-red hover:underline cursor-pointer">مسح ذاكرة الترجمة المؤقتة</button>
+        <button onclick="clearStoredCache()" class="text-xs text-g-red hover:underline cursor-pointer">مسح ذاكرة الترجمة</button>
         <div class="flex items-center gap-2">
           <button onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إغلاق</button>
           <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">حفظ</button>
@@ -678,7 +651,7 @@
     </div>
   </div>
 
-  <!-- ==================== MINIMAL SNACKBAR TOAST ==================== -->
+  <!-- ==================== SNACKBAR ==================== -->
   <div id="snackbar" class="fixed bottom-5 right-5 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none">
     <div class="bg-[#202124] text-white text-xs px-4 py-2.5 rounded-lg shadow-g-elevated flex items-center gap-2">
       <span id="snackbarText"></span>
@@ -686,15 +659,14 @@
   </div>
 
   <script>
-    // Initialize PDF.js Worker
     if (window.pdfjsLib) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    // ==================== APPLICATION STATE ====================
-    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v3';
-    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v3';
+    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v4';
+    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v4';
     const STORAGE_GEMINI_KEY = 'readdy_user_gemini_api_key';
+    const STORAGE_WELCOME_KEY = 'readdy_hide_welcome_modal_v1';
 
     const appState = {
       docTitle: '',
@@ -708,13 +680,30 @@
       activeSentenceTokens: [],
       selectedSentenceIndex: -1,
       selectedAnalysis: null,
-      activeRequestToken: 0, // Prevents fast-click race conditions
+      activeRequestToken: 0,
       memoryCache: new Map(),
       savedWords: [],
       geminiApiKey: ''
     };
 
-    // ==================== UPGRADED SPEECH MANAGER ====================
+    // ==================== WELCOME MODAL LOGIC ====================
+    function openWelcomeModal(force = false) {
+      if (!force && localStorage.getItem(STORAGE_WELCOME_KEY) === 'true') return;
+      document.getElementById('dontShowWelcomeCheckbox').checked = localStorage.getItem(STORAGE_WELCOME_KEY) === 'true';
+      document.getElementById('welcomeModal').classList.remove('hidden');
+    }
+
+    function closeWelcomeModal() {
+      const hideForever = document.getElementById('dontShowWelcomeCheckbox')?.checked;
+      if (hideForever) {
+        localStorage.setItem(STORAGE_WELCOME_KEY, 'true');
+      } else {
+        localStorage.removeItem(STORAGE_WELCOME_KEY);
+      }
+      document.getElementById('welcomeModal').classList.add('hidden');
+    }
+
+    // ==================== SPEECH MANAGER ====================
     const SpeechManager = {
       voices: [],
       selectedVoiceURI: '',
@@ -737,21 +726,18 @@
         };
         load();
         window.speechSynthesis.onvoiceschanged = load;
-        setTimeout(load, 500);
+        setTimeout(load, 600);
       },
 
       rankVoice(voice, targetPrefix) {
         const name = voice.name.toLowerCase();
         const lang = voice.lang.toLowerCase();
         if (!lang.startsWith(targetPrefix)) return -1;
-
         let score = 10;
-        if (name.includes('google uk english') || name.includes('google us english') || name.includes('google français')) score += 50;
-        else if (name.includes('google')) score += 40;
+        if (name.includes('google')) score += 45;
         if (name.includes('natural') || name.includes('neural') || name.includes('online')) score += 35;
         if (name.includes('premium') || name.includes('enhanced')) score += 30;
-        if (name.includes('aria') || name.includes('denise') || name.includes('henri') || name.includes('samantha') || name.includes('thomas') || name.includes('amélie') || name.includes('amelie') || name.includes('daniel')) score += 25;
-        if (!voice.localService) score += 10;
+        if (name.includes('aria') || name.includes('denise') || name.includes('henri') || name.includes('samantha') || name.includes('thomas') || name.includes('amélie') || name.includes('amelie')) score += 25;
         return score;
       },
 
@@ -772,12 +758,10 @@
           select.innerHTML = `<option value="">الصوت الافتراضي (${lang.toUpperCase()})</option>`;
           return;
         }
-
         select.innerHTML = ranked.map(v => {
           const cleanName = v.name.replace(/Microsoft |Google |Apple /g, '');
           return `<option value="${v.voiceURI}">${cleanName} (${v.lang})</option>`;
         }).join('');
-
         if (ranked.some(v => v.voiceURI === this.selectedVoiceURI)) {
           select.value = this.selectedVoiceURI;
         } else {
@@ -786,19 +770,14 @@
         }
       },
 
-      selectVoiceByURI(uri) {
-        this.selectedVoiceURI = uri;
-      },
+      selectVoiceByURI(uri) { this.selectedVoiceURI = uri; },
 
       getBestVoice(lang) {
         if (this.selectedVoiceURI) {
           const chosen = this.voices.find(v => v.voiceURI === this.selectedVoiceURI);
-          if (chosen && chosen.lang.toLowerCase().startsWith(lang === 'fr' ? 'fr' : 'en')) {
-            return chosen;
-          }
+          if (chosen && chosen.lang.toLowerCase().startsWith(lang === 'fr' ? 'fr' : 'en')) return chosen;
         }
-        const ranked = this.getRankedVoicesForLang(lang);
-        return ranked[0] || null;
+        return this.getRankedVoicesForLang(lang)[0] || null;
       },
 
       setDocRate(rate) {
@@ -811,24 +790,13 @@
       setVisualSpeaking(active) {
         const wave = document.getElementById('globalSpeakingWave');
         if (!wave) return;
-        if (active) {
-          wave.classList.remove('hidden');
-          wave.classList.add('flex');
-        } else {
-          wave.classList.add('hidden');
-          wave.classList.remove('flex');
-        }
+        wave.classList.toggle('hidden', !active);
+        wave.classList.toggle('flex', active);
       },
 
       clearTimers() {
-        if (this.repeatTimer) {
-          clearTimeout(this.repeatTimer);
-          this.repeatTimer = null;
-        }
-        if (this.keepAliveTimer) {
-          clearInterval(this.keepAliveTimer);
-          this.keepAliveTimer = null;
-        }
+        if (this.repeatTimer) { clearTimeout(this.repeatTimer); this.repeatTimer = null; }
+        if (this.keepAliveTimer) { clearInterval(this.keepAliveTimer); this.keepAliveTimer = null; }
       },
 
       speakSingle(text, lang, rate = 1.0, loopMode = null) {
@@ -851,20 +819,15 @@
               this.repeatTimer = setTimeout(runUtterance, 650);
             }
           };
-          utterance.onerror = () => {
-            this.setVisualSpeaking(false);
-          };
-
+          utterance.onerror = () => this.setVisualSpeaking(false);
           window.speechSynthesis.speak(utterance);
         };
-
         runUtterance();
       },
 
       playDocumentFromIndex(startIdx = 0) {
         if (!('speechSynthesis' in window) || appState.sentenceRecords.length === 0) return;
         this.stop(false);
-
         this.isPlayingDoc = true;
         this.isPausedDoc = false;
         this.currentSentenceIdx = Math.max(0, Math.min(startIdx, appState.sentenceRecords.length - 1));
@@ -883,12 +846,9 @@
             this.stop();
             return;
           }
-
           const record = appState.sentenceRecords[this.currentSentenceIdx];
           highlightSentenceTokens(record.tokens);
-          if (record.tokens[0]) {
-            record.tokens[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
+          if (record.tokens[0]) record.tokens[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
 
           window.speechSynthesis.cancel();
           const utterance = new SpeechSynthesisUtterance(record.text);
@@ -908,10 +868,8 @@
             this.currentSentenceIdx++;
             speakNextSentence();
           };
-
           window.speechSynthesis.speak(utterance);
         };
-
         speakNextSentence();
       },
 
@@ -933,9 +891,7 @@
         this.repeatMode = null;
         this.isPlayingDoc = false;
         this.isPausedDoc = false;
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-        }
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         this.setVisualSpeaking(false);
         if (resetUI) {
           this.updateDocPlayerUI();
@@ -965,25 +921,21 @@
       }
     };
 
-    // Hydrate Storage
     (function hydrateStorage() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_VOCAB_KEY) || '[]');
         if (Array.isArray(saved)) appState.savedWords = saved;
-
         const cachedObj = JSON.parse(localStorage.getItem(STORAGE_CACHE_KEY) || '{}');
         Object.entries(cachedObj).forEach(([k, v]) => appState.memoryCache.set(k, v));
-
         appState.geminiApiKey = localStorage.getItem(STORAGE_GEMINI_KEY) || '';
       } catch (_) {}
     })();
 
-    // ==================== INITIALIZATION ====================
     window.addEventListener('DOMContentLoaded', () => {
       SpeechManager.init();
       updateSavedBadges();
       setupFileInputAndDragDrop();
-
+      openWelcomeModal(false); // Show welcome popup automatically on page open
       document.getElementById('docTitleInput').addEventListener('input', (e) => {
         appState.docTitle = e.target.value;
       });
@@ -993,22 +945,13 @@
       const fileInput = document.getElementById('fileInput');
       fileInput.addEventListener('change', (e) => {
         const file = e.target.files?.[0];
-        if (file) {
-          handleFileIngestion(file);
-          fileInput.value = '';
-        }
+        if (file) { handleFileIngestion(file); fileInput.value = ''; }
       });
 
-      const dropTargets = [document.getElementById('emptyDropzone'), document.getElementById('canvasDropArea')];
-      dropTargets.forEach((target) => {
+      [document.getElementById('emptyDropzone'), document.getElementById('canvasDropArea')].forEach((target) => {
         if (!target) return;
-        target.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          target.classList.add('border-g-blue', 'bg-g-blueSoft/20');
-        });
-        target.addEventListener('dragleave', () => {
-          target.classList.remove('border-g-blue', 'bg-g-blueSoft/20');
-        });
+        target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('border-g-blue', 'bg-g-blueSoft/20'); });
+        target.addEventListener('dragleave', () => { target.classList.remove('border-g-blue', 'bg-g-blueSoft/20'); });
         target.addEventListener('drop', (e) => {
           e.preventDefault();
           target.classList.remove('border-g-blue', 'bg-g-blueSoft/20');
@@ -1018,9 +961,7 @@
       });
     }
 
-    function triggerFileUpload() {
-      document.getElementById('fileInput').click();
-    }
+    function triggerFileUpload() { document.getElementById('fileInput').click(); }
 
     function resetToEmptyState() {
       SpeechManager.stop();
@@ -1035,11 +976,10 @@
       closeSidePanel();
     }
 
-    // ==================== TEXT CLEANING & LANGUAGE DETECTION ====================
     function sanitizeExtractedText(text) {
       return text
-        .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width chars
-        .replace(/\u00A0/g, ' ') // Replace non-breaking spaces
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\u00A0/g, ' ')
         .replace(/[“”]/g, '"')
         .replace(/[‘’]/g, "'")
         .replace(/\s+/g, ' ')
@@ -1048,10 +988,7 @@
 
     function setExtractionProgress(visible, text = '', percent = 0) {
       const container = document.getElementById('extractionProgressContainer');
-      if (!visible) {
-        container.classList.add('hidden');
-        return;
-      }
+      if (!visible) { container.classList.add('hidden'); return; }
       container.classList.remove('hidden');
       document.getElementById('extractionStatusText').textContent = text;
       document.getElementById('extractionPercentText').textContent = `${Math.round(percent)}%`;
@@ -1060,25 +997,24 @@
 
     function detectTextLanguage(text) {
       if (appState.languageOverride !== 'auto') return appState.languageOverride;
-      const sample = text.slice(0, 2500).toLowerCase();
-      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces)\b/g) || []).length;
+      const sample = text.slice(0, 3000).toLowerCase();
+      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes)\b/g) || []).length;
       const enScore = (sample.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g) || []).length;
       return frScore > enScore ? 'fr' : 'en';
     }
 
     function handleLanguageChange(val) {
       appState.languageOverride = val;
-      const allText = appState.pages.flatMap(p => p.blocks.map(b => b.text)).join(' ');
+      const allText = appState.pages.slice(0, 5).flatMap(p => p.blocks.map(b => b.text)).join(' ');
       appState.detectedLang = detectTextLanguage(allText);
       SpeechManager.populateVoiceDropdown(appState.detectedLang);
-      showSnackbar(`تم ضبط اللغة إلى: ${appState.detectedLang === 'fr' ? 'الفرنسية (FR)' : 'الإنجليزية (EN)'}`);
+      showSnackbar(`اللغة المختارة: ${appState.detectedLang === 'fr' ? 'الفرنسية (FR)' : 'الإنجليزية (EN)'}`);
     }
 
-    // ==================== DOCUMENT EXTRACTION ENGINE ====================
+    // ==================== FILE EXTRACTION ====================
     async function handleFileIngestion(file) {
       SpeechManager.stop();
       const lower = file.name.toLowerCase();
-
       try {
         if (lower.endsWith('.pdf') || file.type === 'application/pdf') {
           await extractPDFWithLayout(file);
@@ -1091,18 +1027,21 @@
         }
       } catch (err) {
         setExtractionProgress(false);
-        showSnackbar('تعذر استخراج محتوى الملف. يرجى التحقق من صيغة الملف.');
+        showSnackbar('تعذر استخراج محتوى الملف.');
       }
     }
 
     async function extractPDFWithLayout(file) {
-      setExtractionProgress(true, 'جاري قراءة صفحات PDF...', 10);
+      setExtractionProgress(true, 'جاري قراءة صفحات PDF...', 8);
       const buffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
       const extractedPages = [];
 
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        setExtractionProgress(true, `استخراج الصفحة ${pageNum} من ${pdf.numPages}...`, 10 + (pageNum / pdf.numPages) * 85);
+        if (pageNum % 5 === 1 || pageNum === pdf.numPages) {
+          setExtractionProgress(true, `استخراج الصفحة ${pageNum} من ${pdf.numPages}...`, 10 + (pageNum / pdf.numPages) * 85);
+          await new Promise(r => setTimeout(r, 0));
+        }
         const page = await pdf.getPage(pageNum);
         const content = await page.getTextContent();
 
@@ -1115,7 +1054,6 @@
               x: it.transform[4],
               y: it.transform[5],
               width: it.width || 0,
-              height: it.height || fontSize,
               fontSize
             };
           });
@@ -1129,9 +1067,7 @@
         const medianFontSize = sortedSizes[Math.floor(sortedSizes.length / 2)] || 12;
 
         rawItems.sort((a, b) => {
-          if (Math.abs(b.y - a.y) > Math.max(4, a.fontSize * 0.35)) {
-            return b.y - a.y;
-          }
+          if (Math.abs(b.y - a.y) > Math.max(4, a.fontSize * 0.35)) return b.y - a.y;
           return a.x - b.x;
         });
 
@@ -1151,7 +1087,6 @@
         lines.push(currentLine);
 
         const minX = Math.min(...lines.map(l => Math.min(...l.map(it => it.x))));
-
         const lineObjects = lines.map(lineItems => {
           lineItems.sort((a, b) => a.x - b.x);
           const avgFontSize = lineItems.reduce((acc, it) => acc + it.fontSize, 0) / lineItems.length;
@@ -1170,7 +1105,6 @@
             }
             lineText += curr.str;
           }
-
           return {
             text: sanitizeExtractedText(lineText),
             y,
@@ -1181,12 +1115,10 @@
 
         const blocks = [];
         let activeBlock = null;
-
         for (let i = 0; i < lineObjects.length; i++) {
           const line = lineObjects[i];
           const prevLine = i > 0 ? lineObjects[i - 1] : null;
           const verticalGap = prevLine ? (prevLine.y - line.y) : 0;
-
           const isHeading = line.fontSize >= medianFontSize * 1.25 && line.text.length < 140;
           const isListItem = /^([•\-–—*]|\d+[.)])\s+/.test(line.text);
           const isNewParagraph = !prevLine || verticalGap > line.fontSize * 1.45 || isHeading || isListItem;
@@ -1197,32 +1129,21 @@
             if (line.fontSize >= medianFontSize * 1.5 && line.text.length < 120) blockType = 'h1';
             else if (isHeading) blockType = 'h2';
             else if (isListItem) blockType = 'li';
-
-            activeBlock = {
-              type: blockType,
-              text: line.text,
-              indent: line.indent > 18 ? Math.min(line.indent, 48) : 0
-            };
+            activeBlock = { type: blockType, text: line.text, indent: line.indent > 18 ? Math.min(line.indent, 48) : 0 };
           } else {
-            if (activeBlock.text.endsWith('-')) {
-              activeBlock.text = activeBlock.text.slice(0, -1) + line.text;
-            } else {
-              activeBlock.text += ' ' + line.text;
-            }
+            if (activeBlock.text.endsWith('-')) activeBlock.text = activeBlock.text.slice(0, -1) + line.text;
+            else activeBlock.text += ' ' + line.text;
           }
         }
         if (activeBlock) blocks.push(activeBlock);
-
         extractedPages.push({ pageNumber: pageNum, blocks });
       }
 
-      const hasAnyText = extractedPages.some(p => p.blocks.length > 0);
-      if (!hasAnyText) {
+      if (!extractedPages.some(p => p.blocks.length > 0)) {
         setExtractionProgress(false);
-        showSnackbar('ملف PDF عبارة عن صور ممسوحة ضوئياً بدون طبقة نصية.');
+        showSnackbar('ملف PDF عبارة عن صور ممسوحة ضوئياً بدون نص.');
         return;
       }
-
       openExtractedDocument(file.name, extractedPages);
     }
 
@@ -1232,14 +1153,12 @@
       const result = await mammoth.convertToHtml({ arrayBuffer });
       const parser = new DOMParser();
       const doc = parser.parseFromString(result.value, 'text/html');
-
       const blocks = [];
       doc.body.childNodes.forEach(node => {
         if (node.nodeType !== Node.ELEMENT_NODE) return;
         const tag = node.tagName.toLowerCase();
         const text = sanitizeExtractedText(node.textContent);
         if (!text) return;
-
         if (tag === 'h1') blocks.push({ type: 'h1', text });
         else if (tag === 'h2' || tag === 'h3') blocks.push({ type: 'h2', text });
         else if (tag === 'ul' || tag === 'ol') {
@@ -1247,11 +1166,8 @@
             const liText = sanitizeExtractedText(li.textContent);
             if (liText) blocks.push({ type: 'li', text: liText });
           });
-        } else {
-          blocks.push({ type: 'p', text });
-        }
+        } else blocks.push({ type: 'p', text });
       });
-
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
@@ -1259,82 +1175,58 @@
       setExtractionProgress(true, 'تهيئة محرك التعرف الضوئي (OCR)...', 10);
       const worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
         logger: (m) => {
-          if (m.status === 'recognizing text') {
-            setExtractionProgress(true, 'جاري استخراج النص من الصورة...', 15 + m.progress * 80);
-          }
+          if (m.status === 'recognizing text') setExtractionProgress(true, 'جاري استخراج النص من الصورة...', 15 + m.progress * 80);
         }
       });
-
       const { data: { text } } = await worker.recognize(file);
       await worker.terminate();
-
-      const blocks = text
-        .split(/\n\s*\n/)
-        .map(p => sanitizeExtractedText(p.replace(/\n/g, ' ')))
-        .filter(Boolean)
-        .map(p => ({ type: 'p', text: p }));
-
+      const blocks = text.split(/\n\s*\n/).map(p => sanitizeExtractedText(p.replace(/\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
     async function extractPlainText(file) {
       setExtractionProgress(true, 'جاري قراءة الملف النصي...', 60);
       const text = await file.text();
-      const blocks = text
-        .split(/\n\s*\n|\r\n\s*\r\n/)
-        .map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' ')))
-        .filter(Boolean)
-        .map(p => ({ type: 'p', text: p }));
-
+      const blocks = text.split(/\n\s*\n|\r\n\s*\r\n/).map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
-    function openPasteModal() {
-      document.getElementById('pasteModal').classList.remove('hidden');
-      document.getElementById('pasteTextInput').focus();
-    }
-    function closePasteModal() {
-      document.getElementById('pasteModal').classList.add('hidden');
-    }
+    function openPasteModal() { document.getElementById('pasteModal').classList.remove('hidden'); document.getElementById('pasteTextInput').focus(); }
+    function closePasteModal() { document.getElementById('pasteModal').classList.add('hidden'); }
     function processPastedText() {
       const raw = document.getElementById('pasteTextInput').value.trim();
       if (!raw) return;
-      const blocks = raw
-        .split(/\n\s*\n|\r\n\s*\r\n/)
-        .map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' ')))
-        .filter(Boolean)
-        .map(p => ({ type: 'p', text: p }));
-
+      const blocks = raw.split(/\n\s*\n|\r\n\s*\r\n/).map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
       document.getElementById('pasteTextInput').value = '';
       closePasteModal();
       openExtractedDocument('مستند نصي', [{ pageNumber: 1, blocks }]);
     }
 
-    // ==================== RENDER PAGINATED DOCUMENT ====================
+    // ==================== RENDER DOCUMENT ====================
     function openExtractedDocument(title, pages) {
       setExtractionProgress(false);
       appState.docTitle = title;
       appState.pages = pages;
 
-      const allText = pages.flatMap(p => p.blocks.map(b => b.text)).join(' ');
-      appState.detectedLang = detectTextLanguage(allText);
+      const sampleText = pages.slice(0, 6).flatMap(p => p.blocks.map(b => b.text)).join(' ');
+      appState.detectedLang = detectTextLanguage(sampleText);
       SpeechManager.populateVoiceDropdown(appState.detectedLang);
 
       document.getElementById('emptyStateView').classList.add('hidden');
       document.getElementById('workspaceView').classList.remove('hidden');
       document.getElementById('headerDocMeta').classList.remove('hidden');
       document.getElementById('docTitleInput').value = title;
-      document.getElementById('pageCountIndicator').textContent = `${pages.length} ${pages.length === 1 ? 'صفحة' : 'صفحات'}`;
+      document.getElementById('jumpPageInput').max = pages.length;
+      document.getElementById('jumpPageInput').value = 1;
+      document.getElementById('pageCountIndicator').textContent = `/ ${pages.length}`;
 
       renderPaginatedSheets();
     }
 
-    // Smart sentence splitter that avoids breaking on Mr., Dr., M., etc., or decimals
     function splitTextIntoSentences(text) {
       const protectedText = text
         .replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|M|Mme|Mlle|etc|vs|fig|vol|no|pp|p)\./gi, '$1\u0000')
         .replace(/(\d)\.(\d)/g, '$1\u0000$2');
-
       const rawSentences = protectedText.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [protectedText];
       return rawSentences.map(s => s.replace(/\u0000/g, '.'));
     }
@@ -1346,8 +1238,10 @@
       const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
       const fontClass = appState.fontFamily === 'serif' ? 'doc-font-serif' : 'doc-font-sans';
 
+      const fragment = document.createDocumentFragment();
       appState.pages.forEach((page) => {
         const sheet = document.createElement('article');
+        sheet.id = `doc-page-${page.pageNumber}`;
         sheet.className = 'g-doc-sheet px-6 py-8 sm:px-14 sm:py-12 md:px-16 md:py-14 relative';
         sheet.dir = 'ltr';
 
@@ -1357,20 +1251,10 @@
 
         page.blocks.forEach((block) => {
           let el;
-          if (block.type === 'h1') {
-            el = document.createElement('h1');
-            el.className = 'text-[1.5em] font-bold text-g-text leading-snug mt-2 mb-3';
-          } else if (block.type === 'h2') {
-            el = document.createElement('h2');
-            el.className = 'text-[1.22em] font-semibold text-g-text leading-snug mt-2 mb-2';
-          } else if (block.type === 'li') {
-            el = document.createElement('div');
-            el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:text-g-sub';
-          } else {
-            el = document.createElement('p');
-            el.className = 'text-left';
-            if (block.indent) el.style.paddingLeft = `${block.indent}px`;
-          }
+          if (block.type === 'h1') { el = document.createElement('h1'); el.className = 'text-[1.5em] font-bold text-g-text leading-snug mt-2 mb-3'; }
+          else if (block.type === 'h2') { el = document.createElement('h2'); el.className = 'text-[1.22em] font-semibold text-g-text leading-snug mt-2 mb-2'; }
+          else if (block.type === 'li') { el = document.createElement('div'); el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:text-g-sub'; }
+          else { el = document.createElement('p'); el.className = 'text-left'; if (block.indent) el.style.paddingLeft = `${block.indent}px`; }
 
           tokenizeBlockIntoElement(el, block.text, savedSet);
           contentWrapper.appendChild(el);
@@ -1383,13 +1267,20 @@
         pageFooter.innerHTML = `<span>Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
         sheet.appendChild(pageFooter);
 
-        container.appendChild(sheet);
+        fragment.appendChild(sheet);
       });
+      container.appendChild(fragment);
+    }
+
+    function jumpToPageNumber(numStr) {
+      const pageNum = Math.max(1, Math.min(appState.pages.length, parseInt(numStr, 10) || 1));
+      document.getElementById('jumpPageInput').value = pageNum;
+      const target = document.getElementById(`doc-page-${pageNum}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function tokenizeBlockIntoElement(parentEl, blockText, savedSet) {
       const sentences = splitTextIntoSentences(blockText);
-
       sentences.forEach((sentenceStr) => {
         const cleanSentence = sentenceStr.trim();
         if (!cleanSentence) return;
@@ -1400,16 +1291,10 @@
 
         const parts = sentenceStr.split(/(\s+)/);
         parts.forEach((part) => {
-          if (/^\s+$/.test(part)) {
-            parentEl.appendChild(document.createTextNode(part));
-            return;
-          }
+          if (/^\s+$/.test(part)) { parentEl.appendChild(document.createTextNode(part)); return; }
 
           const match = part.match(/^([^\p{L}\p{N}]*)([\p{L}\p{N}’'-]+)([^\p{L}\p{N}]*)$/u);
-          if (!match) {
-            parentEl.appendChild(document.createTextNode(part));
-            return;
-          }
+          if (!match) { parentEl.appendChild(document.createTextNode(part)); return; }
 
           const [, lead, word, trail] = match;
           if (lead) parentEl.appendChild(document.createTextNode(lead));
@@ -1418,9 +1303,7 @@
           span.textContent = word;
           span.dataset.wordLower = word.toLowerCase();
           span.className = 'word-token';
-          if (savedSet.has(word.toLowerCase())) {
-            span.classList.add('bookmarked-token');
-          }
+          if (savedSet.has(word.toLowerCase())) span.classList.add('bookmarked-token');
 
           sentenceTokens.push(span);
           span.addEventListener('click', () => {
@@ -1437,7 +1320,6 @@
       appState.fontFamily = mode;
       const sansBtn = document.getElementById('fontSansBtn');
       const serifBtn = document.getElementById('fontSerifBtn');
-
       if (mode === 'sans') {
         sansBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
         serifBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
@@ -1445,7 +1327,6 @@
         serifBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
         sansBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
       }
-
       document.querySelectorAll('.doc-content-body').forEach(el => {
         el.classList.remove('doc-font-sans', 'doc-font-serif');
         el.classList.add(mode === 'serif' ? 'doc-font-serif' : 'doc-font-sans');
@@ -1455,9 +1336,7 @@
     function adjustFontSize(delta) {
       appState.fontSize = Math.min(24, Math.max(16, appState.fontSize + delta));
       document.getElementById('fontSizeIndicator').textContent = `${appState.fontSize}px`;
-      document.querySelectorAll('.doc-content-body').forEach(el => {
-        el.style.fontSize = `${appState.fontSize}px`;
-      });
+      document.querySelectorAll('.doc-content-body').forEach(el => { el.style.fontSize = `${appState.fontSize}px`; });
     }
 
     function highlightSentenceTokens(tokens) {
@@ -1466,23 +1345,20 @@
       appState.activeSentenceTokens = tokens;
     }
 
-    // ==================== 4. HYBRID MULTI-PROVIDER TRANSLATION ENGINE ====================
+    // ==================== 3-LAYER TRANSLATION ENGINE ====================
     async function onWordTokenClicked(tokenEl, word, surroundingSentence, sentenceTokenList, sentenceIndex) {
-      if (appState.activeWordEl) {
-        appState.activeWordEl.classList.remove('active-token');
-      }
+      if (appState.activeWordEl) appState.activeWordEl.classList.remove('active-token');
       highlightSentenceTokens(sentenceTokenList);
       tokenEl.classList.add('active-token');
       appState.activeWordEl = tokenEl;
       appState.selectedSentenceIndex = sentenceIndex;
 
-      if (SpeechManager.repeatMode) {
-        SpeechManager.stop();
-      }
+      if (SpeechManager.repeatMode) SpeechManager.stop();
 
       const panel = document.getElementById('sideDictionaryPanel');
       panel.classList.remove('hidden');
       panel.classList.add('flex');
+      panel.scrollTop = 0;
 
       const lang = appState.detectedLang;
       const cacheKey = `${lang}::${word.toLowerCase()}::${surroundingSentence.slice(0, 80)}`;
@@ -1509,27 +1385,20 @@
           analysis = await queryHybridFreeDictionary(word, surroundingSentence, lang);
         }
 
-        // Ignore stale response if user already clicked another word
         if (currentRequest !== appState.activeRequestToken) return;
 
-        const fullRecord = {
-          word,
-          lang,
-          sentence_original: surroundingSentence,
-          ...analysis
-        };
-
+        const fullRecord = { word, lang, sentence_original: surroundingSentence, ...analysis };
         appState.memoryCache.set(cacheKey, fullRecord);
         persistCacheToStorage();
         renderSidePanelAnalysis(fullRecord);
       } catch (err) {
         if (currentRequest !== appState.activeRequestToken) return;
-        const fallbackRecord = {
+        renderSidePanelAnalysis({
           word,
           lang,
           source_label: 'Offline',
           translation_ar: 'تعذر الاتصال بخدمة الترجمة',
-          explanation_ar: 'تأكد من اتصالك بالإنترنت ثم انقر على الكلمة مرة أخرى. يمكنك الاستماع للنطق الصوتي حالياً.',
+          explanation_ar: 'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً. يمكنك الاستماع للنطق الصوتي.',
           ipa: '',
           pos_ar: lang === 'fr' ? 'كلمة فرنسية' : 'كلمة إنجليزية',
           lemma: word.toLowerCase(),
@@ -1537,30 +1406,27 @@
           example_ar: '',
           sentence_original: surroundingSentence,
           sentence_ar: ''
-        };
-        renderSidePanelAnalysis(fallbackRecord);
+        });
       }
     }
 
-    // Free Multi-Provider Engine: Google Translate + MyMemory Fallback + DictionaryAPI (EN/FR)
     async function queryHybridFreeDictionary(word, sentence, lang) {
       const cleanWord = word.replace(/^[’'-]+|[’'-]+$/g, '');
 
-      // 1. Translate sentence first, and translate word in parallel
       const [wordTransResult, sentenceTransText, lexicalMeta] = await Promise.all([
-        translateWithFallback(cleanWord, lang, 'ar'),
-        translateWithFallback(sentence, lang, 'ar'),
+        translateWordWithFallback(cleanWord, lang, 'ar'),
+        translateTextWithFallback(sentence, lang, 'ar').catch(() => ''),
         fetchLexicalMetadata(cleanWord, lang)
       ]);
 
       let exampleAr = '';
       if (lexicalMeta.example_original) {
-        exampleAr = await translateWithFallback(lexicalMeta.example_original, lang, 'ar');
+        exampleAr = await translateTextWithFallback(lexicalMeta.example_original, lang, 'ar').catch(() => '');
       }
 
       const explanationParts = [];
       if (lexicalMeta.definition_orig) {
-        const defAr = await translateWithFallback(lexicalMeta.definition_orig, lang, 'ar');
+        const defAr = await translateTextWithFallback(lexicalMeta.definition_orig, lang, 'ar').catch(() => '');
         if (defAr) explanationParts.push(defAr);
       }
       if (wordTransResult.alternatives && wordTransResult.alternatives.length > 0) {
@@ -1583,17 +1449,23 @@
       };
     }
 
-    async function translateWithFallback(text, sourceLang, targetLang = 'ar') {
-      if (!text || !text.trim()) return typeof text === 'string' ? '' : { primary: '', alternatives: [], provider: '' };
-
-      // Provider 1: Google Translate Public GTX Endpoint (with dictionary alternatives)
+    async function fetchWithTimeout(url, ms = 3500) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), ms);
       try {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&dt=bd&q=${encodeURIComponent(text)}`;
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000);
         const res = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeout);
+        clearTimeout(id);
+        return res;
+      } catch (e) {
+        clearTimeout(id);
+        throw e;
+      }
+    }
 
+    async function translateWordWithFallback(word, sourceLang, targetLang = 'ar') {
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&dt=bd&q=${encodeURIComponent(word)}`;
+        const res = await fetchWithTimeout(url, 3500);
         if (res.ok) {
           const data = await res.json();
           const primary = (data[0] || []).map(chunk => chunk[0]).join('').trim();
@@ -1602,63 +1474,84 @@
             data[1].forEach(group => {
               if (Array.isArray(group[1])) {
                 group[1].slice(0, 3).forEach(alt => {
-                  if (alt && alt !== primary && !alternatives.includes(alt)) {
-                    alternatives.push(alt);
-                  }
+                  if (alt && alt !== primary && !alternatives.includes(alt)) alternatives.push(alt);
                 });
               }
             });
           }
-          if (primary) {
-            return text.includes(' ')
-              ? primary
-              : { primary, alternatives: alternatives.slice(0, 4), provider: 'Google Translate' };
-          }
+          if (primary) return { primary, alternatives: alternatives.slice(0, 4), provider: 'Google' };
         }
       } catch (_) {}
 
-      // Provider 2: MyMemory Translation API Fallback
       try {
-        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 480))}&langpair=${sourceLang}|${targetLang}`;
-        const res = await fetch(mmUrl);
+        const lingvaUrl = `https://lingva.ml/api/v1/${sourceLang}/${targetLang}/${encodeURIComponent(word)}`;
+        const res = await fetchWithTimeout(lingvaUrl, 3500);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.translation) return { primary: data.translation.trim(), alternatives: [], provider: 'Lingva' };
+        }
+      } catch (_) {}
+
+      try {
+        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=${sourceLang}|${targetLang}`;
+        const res = await fetchWithTimeout(mmUrl, 4000);
         if (res.ok) {
           const data = await res.json();
           const translated = data?.responseData?.translatedText?.trim();
           if (translated && !translated.includes('MYMEMORY WARNING')) {
-            return text.includes(' ')
-              ? translated
-              : { primary: translated, alternatives: [], provider: 'MyMemory' };
+            return { primary: translated, alternatives: [], provider: 'MyMemory' };
           }
         }
       } catch (_) {}
 
-      throw new Error('All translation providers failed');
+      throw new Error('All providers failed');
     }
 
-    // Fetch IPA, Part of Speech, Lemma, and Example from DictionaryAPI (EN) or Wiktionary (FR)
+    async function translateTextWithFallback(text, sourceLang, targetLang = 'ar') {
+      if (!text || !text.trim()) return '';
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.slice(0, 600))}`;
+        const res = await fetchWithTimeout(url, 3800);
+        if (res.ok) {
+          const data = await res.json();
+          const primary = (data[0] || []).map(chunk => chunk[0]).join('').trim();
+          if (primary) return primary;
+        }
+      } catch (_) {}
+
+      try {
+        const lingvaUrl = `https://lingva.ml/api/v1/${sourceLang}/${targetLang}/${encodeURIComponent(text.slice(0, 400))}`;
+        const res = await fetchWithTimeout(lingvaUrl, 3800);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.translation) return data.translation.trim();
+        }
+      } catch (_) {}
+
+      try {
+        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 450))}&langpair=${sourceLang}|${targetLang}`;
+        const res = await fetchWithTimeout(mmUrl, 4000);
+        if (res.ok) {
+          const data = await res.json();
+          const translated = data?.responseData?.translatedText?.trim();
+          if (translated && !translated.includes('MYMEMORY WARNING')) return translated;
+        }
+      } catch (_) {}
+
+      return '';
+    }
+
     async function fetchLexicalMetadata(word, lang) {
       const lower = word.toLowerCase();
       const posMap = {
-        noun: 'اسم',
-        verb: 'فعل',
-        adjective: 'صفة',
-        adverb: 'ظرف / حال',
-        pronoun: 'ضمير',
-        preposition: 'حرف جر',
-        conjunction: 'أداة ربط',
-        interjection: 'تعجب',
-        determiner: 'أداة تعريف/تحديد',
-        nom: 'اسم',
-        verbe: 'فعل',
-        adjectif: 'صفة',
-        adverbe: 'ظرف',
-        préposition: 'حرف جر',
-        pronom: 'ضمير'
+        noun: 'اسم', verb: 'فعل', adjective: 'صفة', adverb: 'ظرف / حال',
+        pronoun: 'ضمير', preposition: 'حرف جر', conjunction: 'أداة ربط', interjection: 'تعجب',
+        nom: 'اسم', verbe: 'فعل', adjectif: 'صفة', adverbe: 'ظرف', préposition: 'حرف جر', pronom: 'ضمير'
       };
 
       if (lang === 'en') {
         try {
-          const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lower)}`);
+          const res = await fetchWithTimeout(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lower)}`, 3000);
           if (res.ok) {
             const data = await res.json();
             const entry = data[0];
@@ -1666,7 +1559,6 @@
             const meaning = entry.meanings?.[0];
             const posRaw = meaning?.partOfSpeech?.toLowerCase() || '';
             const defObj = meaning?.definitions?.[0];
-
             return {
               ipa: phonetic,
               pos_ar: posMap[posRaw] || posRaw,
@@ -1678,7 +1570,7 @@
         } catch (_) {}
       } else if (lang === 'fr') {
         try {
-          const res = await fetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(lower)}`);
+          const res = await fetchWithTimeout(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(lower)}`, 3000);
           if (res.ok) {
             const data = await res.json();
             const frEntry = data.fr?.[0];
@@ -1686,7 +1578,6 @@
             const defItem = frEntry?.definitions?.[0];
             const cleanDef = defItem?.definition ? defItem.definition.replace(/<[^>]+>/g, '').trim() : '';
             const cleanEx = defItem?.examples?.[0] ? defItem.examples[0].replace(/<[^>]+>/g, '').trim() : '';
-
             return {
               ipa: '',
               pos_ar: posMap[posRaw] || posRaw,
@@ -1697,33 +1588,15 @@
           }
         } catch (_) {}
       }
-
       return { ipa: '', pos_ar: '', lemma: lower, definition_orig: '', example_original: '' };
     }
 
-    // Optional Gemini AI Contextual Dictionary (when user provides key)
     async function queryGeminiDictionary(word, sentence, lang, apiKey) {
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
       const sourceLang = lang === 'fr' ? 'French' : 'English';
-      const systemInstruction = `You are a precision bilingual dictionary engine for Arabic speakers reading ${sourceLang} documents. Analyze the target word within its exact context sentence and output structured JSON.`;
-
-      const prompt = `Target word: "${word}"
-Language: ${sourceLang}
-Context sentence: "${sentence}"
-
-Provide:
-- translation_ar: accurate direct Arabic translation for this exact context
-- explanation_ar: clear, concise Arabic explanation of the word's meaning and nuance in this sentence
-- ipa: IPA phonetic transcription
-- pos_ar: Arabic grammatical part of speech (e.g. اسم، فعل، صفة، ظرف)
-- lemma: base dictionary form of the word
-- example_original: one natural ${sourceLang} example sentence using the word
-- example_ar: Arabic translation of example_original
-- sentence_ar: Arabic translation of the context sentence`;
-
       const payload = {
-        contents: [{ parts: [{ text: prompt }] }],
-        systemInstruction: { parts: [{ text: systemInstruction }] },
+        contents: [{ parts: [{ text: `Word: "${word}" (${sourceLang})\nSentence: "${sentence}"` }] }],
+        systemInstruction: { parts: [{ text: `Bilingual dictionary engine for Arabic speakers reading ${sourceLang}. Return JSON.` }] },
         generationConfig: {
           responseMimeType: "application/json",
           responseSchema: {
@@ -1742,17 +1615,10 @@ Provide:
           }
         }
       };
-
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const res = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawJson) throw new Error('Empty response');
-      return JSON.parse(rawJson);
+      return JSON.parse(data.candidates[0].content.parts[0].text);
     }
 
     function persistCacheToStorage() {
@@ -1764,7 +1630,6 @@ Provide:
 
     function renderSidePanelAnalysis(data) {
       appState.selectedAnalysis = data;
-
       document.getElementById('panelSkeleton').classList.add('hidden');
       document.getElementById('panelContent').classList.remove('hidden');
 
@@ -1808,10 +1673,7 @@ Provide:
       const panel = document.getElementById('sideDictionaryPanel');
       panel.classList.add('hidden');
       panel.classList.remove('flex');
-      if (appState.activeWordEl) {
-        appState.activeWordEl.classList.remove('active-token');
-        appState.activeWordEl = null;
-      }
+      if (appState.activeWordEl) { appState.activeWordEl.classList.remove('active-token'); appState.activeWordEl = null; }
       appState.activeSentenceTokens.forEach(t => t.classList.remove('sentence-highlight'));
       appState.activeSentenceTokens = [];
       appState.selectedSentenceIndex = -1;
@@ -1820,35 +1682,20 @@ Provide:
     function copyCurrentTranslation() {
       if (!appState.selectedAnalysis) return;
       const text = `${appState.selectedAnalysis.word} — ${appState.selectedAnalysis.translation_ar}`;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(() => {});
-      } else {
-        const el = document.createElement('textarea');
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-      }
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => {});
       showSnackbar('تم نسخ الترجمة');
     }
 
-    // ==================== AUDIO CONTROL HELPERS ====================
     function pronounceSelectedWord(rate) {
       if (!appState.selectedAnalysis) return;
-      const keepLoop = SpeechManager.repeatMode === 'word' ? 'word' : null;
-      SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, rate, keepLoop);
+      SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, rate, SpeechManager.repeatMode === 'word' ? 'word' : null);
       updateRepeatButtonsUI();
     }
 
     function toggleWordRepeatLoop() {
       if (!appState.selectedAnalysis) return;
-      if (SpeechManager.repeatMode === 'word') {
-        SpeechManager.stop();
-      } else {
-        SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, 0.85, 'word');
-        updateRepeatButtonsUI();
-      }
+      if (SpeechManager.repeatMode === 'word') SpeechManager.stop();
+      else { SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, 0.85, 'word'); updateRepeatButtonsUI(); }
     }
 
     function pronounceExample(rate = 1.0) {
@@ -1859,64 +1706,39 @@ Provide:
 
     function pronounceSurroundingSentence(rate = 1.0) {
       if (!appState.selectedAnalysis?.sentence_original) return;
-      const keepLoop = SpeechManager.repeatMode === 'sentence' ? 'sentence' : null;
-      SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, rate, keepLoop);
+      SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, rate, SpeechManager.repeatMode === 'sentence' ? 'sentence' : null);
       updateRepeatButtonsUI();
     }
 
     function toggleSentenceRepeatLoop() {
       if (!appState.selectedAnalysis?.sentence_original) return;
-      if (SpeechManager.repeatMode === 'sentence') {
-        SpeechManager.stop();
-      } else {
-        SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, 0.9, 'sentence');
-        updateRepeatButtonsUI();
-      }
+      if (SpeechManager.repeatMode === 'sentence') SpeechManager.stop();
+      else { SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, 0.9, 'sentence'); updateRepeatButtonsUI(); }
     }
 
     function updateRepeatButtonsUI() {
       const wordBtn = document.getElementById('wordRepeatToggleBtn');
       const sentBtn = document.getElementById('sentenceRepeatBtn');
-      if (wordBtn) {
-        if (SpeechManager.repeatMode === 'word') {
-          wordBtn.className = 'bg-g-blueSoft text-g-blue border border-g-blue p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
-        } else {
-          wordBtn.className = 'bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
-        }
-      }
-      if (sentBtn) {
-        if (SpeechManager.repeatMode === 'sentence') {
-          sentBtn.className = 'p-1 rounded-full bg-g-blueSoft text-g-blue transition cursor-pointer';
-        } else {
-          sentBtn.className = 'p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer';
-        }
-      }
+      if (wordBtn) wordBtn.className = SpeechManager.repeatMode === 'word'
+        ? 'bg-g-blueSoft text-g-blue border border-g-blue p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer'
+        : 'bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
+      if (sentBtn) sentBtn.className = SpeechManager.repeatMode === 'sentence'
+        ? 'p-1 rounded-full bg-g-blueSoft text-g-blue transition cursor-pointer'
+        : 'p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer';
     }
 
     function toggleDocumentAudioPlayback() {
-      if (SpeechManager.isPlayingDoc && !SpeechManager.isPausedDoc) {
-        SpeechManager.pauseDocument();
-      } else if (SpeechManager.isPlayingDoc && SpeechManager.isPausedDoc) {
-        SpeechManager.resumeDocument();
-      } else {
-        const startIdx = appState.selectedSentenceIndex >= 0 ? appState.selectedSentenceIndex : 0;
-        SpeechManager.playDocumentFromIndex(startIdx);
-      }
+      if (SpeechManager.isPlayingDoc && !SpeechManager.isPausedDoc) SpeechManager.pauseDocument();
+      else if (SpeechManager.isPlayingDoc && SpeechManager.isPausedDoc) SpeechManager.resumeDocument();
+      else SpeechManager.playDocumentFromIndex(appState.selectedSentenceIndex >= 0 ? appState.selectedSentenceIndex : 0);
     }
 
-    // ==================== 5. SAVED VOCABULARY MANAGEMENT (NO DOM RESET) ====================
-    function isWordBookmarked(word) {
-      return appState.savedWords.some(item => item.word.toLowerCase() === word.toLowerCase());
-    }
+    function isWordBookmarked(word) { return appState.savedWords.some(item => item.word.toLowerCase() === word.toLowerCase()); }
 
     function syncBookmarkedHighlightsInDOM() {
       const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
       document.querySelectorAll('.word-token').forEach(span => {
-        if (savedSet.has(span.dataset.wordLower)) {
-          span.classList.add('bookmarked-token');
-        } else {
-          span.classList.remove('bookmarked-token');
-        }
+        span.classList.toggle('bookmarked-token', savedSet.has(span.dataset.wordLower));
       });
     }
 
@@ -1925,7 +1747,6 @@ Provide:
       const btn = document.getElementById('bookmarkWordBtn');
       const icon = document.getElementById('bookmarkWordIcon');
       const bookmarked = isWordBookmarked(appState.selectedAnalysis.word);
-
       if (bookmarked) {
         btn.className = 'w-9 h-9 rounded-full border border-g-green bg-[#E6F4EA] text-g-green flex items-center justify-center transition shrink-0 cursor-pointer';
         icon.textContent = 'bookmark_added';
@@ -1941,11 +1762,8 @@ Provide:
       if (!appState.selectedAnalysis) return;
       const targetLower = appState.selectedAnalysis.word.toLowerCase();
       const idx = appState.savedWords.findIndex(w => w.word.toLowerCase() === targetLower);
-
-      if (idx >= 0) {
-        appState.savedWords.splice(idx, 1);
-        showSnackbar('تمت إزالة الكلمة من المحفوظات');
-      } else {
+      if (idx >= 0) { appState.savedWords.splice(idx, 1); showSnackbar('تمت إزالة الكلمة من المحفوظات'); }
+      else {
         appState.savedWords.unshift({
           word: appState.selectedAnalysis.word,
           lang: appState.selectedAnalysis.lang,
@@ -1955,7 +1773,6 @@ Provide:
         });
         showSnackbar('تم حفظ الكلمة في المفردات');
       }
-
       localStorage.setItem(STORAGE_VOCAB_KEY, JSON.stringify(appState.savedWords));
       updateBookmarkButtonUI();
       updateSavedBadges();
@@ -1975,47 +1792,26 @@ Provide:
     function updateSavedBadges() {
       const count = appState.savedWords.length;
       const badge = document.getElementById('savedCountBadge');
-      const pill = document.getElementById('drawerCountPill');
-      pill.textContent = count;
-      if (count > 0) {
-        badge.textContent = count;
-        badge.classList.remove('hidden');
-      } else {
-        badge.classList.add('hidden');
-      }
+      document.getElementById('drawerCountPill').textContent = count;
+      badge.textContent = count;
+      badge.classList.toggle('hidden', count === 0);
     }
 
     function toggleVocabDrawer(open) {
       const drawer = document.getElementById('vocabDrawer');
       const backdrop = document.getElementById('vocabDrawerBackdrop');
-      if (open) {
-        renderVocabDrawerList();
-        backdrop.classList.remove('hidden');
-        drawer.classList.remove('-translate-x-full');
-      } else {
-        backdrop.classList.add('hidden');
-        drawer.classList.add('-translate-x-full');
-      }
+      if (open) { renderVocabDrawerList(); backdrop.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); }
+      else { backdrop.classList.add('hidden'); drawer.classList.add('-translate-x-full'); }
     }
 
     function renderVocabDrawerList() {
       const listEl = document.getElementById('vocabDrawerList');
       const query = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
-
-      const filtered = appState.savedWords.filter(item =>
-        item.word.toLowerCase().includes(query) || item.translation_ar.includes(query)
-      );
-
+      const filtered = appState.savedWords.filter(item => item.word.toLowerCase().includes(query) || item.translation_ar.includes(query));
       if (filtered.length === 0) {
-        listEl.innerHTML = `
-          <div class="py-12 text-center text-g-sub text-xs">
-            <span class="material-symbols-outlined text-[30px] text-g-border mb-2">bookmark_border</span>
-            <p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p>
-          </div>
-        `;
+        listEl.innerHTML = `<div class="py-12 text-center text-g-sub text-xs"><span class="material-symbols-outlined text-[30px] text-g-border mb-2">bookmark_border</span><p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p></div>`;
         return;
       }
-
       listEl.innerHTML = filtered.map(item => `
         <div class="p-3 rounded-xl border border-g-border bg-white flex items-center justify-between gap-2">
           <div class="min-w-0">
@@ -2026,70 +1822,43 @@ Provide:
             <p class="text-xs font-medium text-g-blue mt-0.5 truncate">${item.translation_ar}</p>
           </div>
           <div class="flex items-center gap-0.5 shrink-0">
-            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-full hover:bg-g-blueSoft text-g-blue cursor-pointer" title="نطق">
-              <span class="material-symbols-outlined text-[18px]">volume_up</span>
-            </button>
-            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full hover:bg-[#FCE8E6] text-g-red cursor-pointer" title="حذف">
-              <span class="material-symbols-outlined text-[18px]">delete</span>
-            </button>
+            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-full hover:bg-g-blueSoft text-g-blue cursor-pointer" title="نطق"><span class="material-symbols-outlined text-[18px]">volume_up</span></button>
+            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full hover:bg-[#FCE8E6] text-g-red cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[18px]">delete</span></button>
           </div>
         </div>
       `).join('');
     }
 
     function exportSavedVocabularyCSV() {
-      if (appState.savedWords.length === 0) {
-        showSnackbar('لا توجد كلمات محفوظة للتصدير');
-        return;
-      }
+      if (appState.savedWords.length === 0) { showSnackbar('لا توجد كلمات محفوظة للتصدير'); return; }
       const header = 'Word,Language,IPA,PartOfSpeech,ArabicTranslation';
-      const rows = appState.savedWords.map(w =>
-        [w.word, w.lang.toUpperCase(), w.ipa, w.pos_ar, w.translation_ar]
-          .map(val => `"${(val || '').replace(/"/g, '""')}"`)
-          .join(',')
-      );
-      const csvContent = '\uFEFF' + [header, ...rows].join('\n');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const rows = appState.savedWords.map(w => [w.word, w.lang.toUpperCase(), w.ipa, w.pos_ar, w.translation_ar].map(val => `"${(val || '').replace(/"/g, '""')}"`).join(','));
+      const blob = new Blob(['\uFEFF' + [header, ...rows].join('\n')], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'readdy-vocabulary.csv';
-      a.click();
+      a.href = url; a.download = 'readdy-vocabulary.csv'; a.click();
       URL.revokeObjectURL(url);
       showSnackbar('تم تصدير ملف المفردات بنجاح');
     }
 
-    // ==================== API SETTINGS MODAL ====================
-    function openApiSettingsModal() {
-      document.getElementById('geminiKeyInput').value = appState.geminiApiKey;
-      document.getElementById('apiSettingsModal').classList.remove('hidden');
-    }
-    function closeApiSettingsModal() {
-      document.getElementById('apiSettingsModal').classList.add('hidden');
-    }
+    function openApiSettingsModal() { document.getElementById('geminiKeyInput').value = appState.geminiApiKey; document.getElementById('apiSettingsModal').classList.remove('hidden'); }
+    function closeApiSettingsModal() { document.getElementById('apiSettingsModal').classList.add('hidden'); }
     function saveGeminiApiKey() {
       const val = document.getElementById('geminiKeyInput').value.trim();
       appState.geminiApiKey = val;
       localStorage.setItem(STORAGE_GEMINI_KEY, val);
       closeApiSettingsModal();
-      showSnackbar(val ? 'تم تفعيل مفتاح Gemini AI بنجاح' : 'تم اعتماد محرك الترجمة المجاني الافتراضي');
+      showSnackbar(val ? 'تم تفعيل مفتاح Gemini AI بنجاح' : 'تم اعتماد محركات الترجمة المجانية');
     }
-    function clearStoredCache() {
-      appState.memoryCache.clear();
-      localStorage.removeItem(STORAGE_CACHE_KEY);
-      showSnackbar('تم مسح الذاكرة المؤقتة');
-    }
+    function clearStoredCache() { appState.memoryCache.clear(); localStorage.removeItem(STORAGE_CACHE_KEY); showSnackbar('تم مسح الذاكرة المؤقتة'); }
 
-    // ==================== SNACKBAR ====================
     let snackbarTimer;
     function showSnackbar(message) {
       const el = document.getElementById('snackbar');
       document.getElementById('snackbarText').textContent = message;
       el.classList.remove('translate-y-16', 'opacity-0');
       clearTimeout(snackbarTimer);
-      snackbarTimer = setTimeout(() => {
-        el.classList.add('translate-y-16', 'opacity-0');
-      }, 2600);
+      snackbarTimer = setTimeout(() => { el.classList.add('translate-y-16', 'opacity-0'); }, 2600);
     }
   </script>
 </body>
