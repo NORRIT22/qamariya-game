@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Readdy</title>
 
-  <!-- Unified Readdy SVG Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFFFFF'/%3E%3Cpath d='M14 14h8.5v37H14z' fill='%234285F4'/%3E%3Cpath d='M14 35h8.5v16H14z' fill='%23EA4335'/%3E%3Cpath d='M22 14c14.5 0 26 8.2 26 19.5S37.5 51 25.5 51v-8.5c7.7 0 14-3.7 14-9s-6.7-11-17.5-11V14z' fill='%23FBBC04'/%3E%3Cpath d='M48 33.5C48 44.5 37.5 51 25.5 51v-8.5c7.7 0 14-3.7 14-9H48z' fill='%2334A853'/%3E%3Cpolygon points='27.5,25.5 38.5,32.5 27.5,39.5' fill='%23202124'/%3E%3C/svg%3E" />
+  <!-- Unified Open Book + Play SVG Favicon (Claude Warm Terracotta & Ink Aesthetic) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23F5F4EF'/%3E%3Cpath d='M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z' fill='%23141413'/%3E%3Cpath d='M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z' fill='%23D97757'/%3E%3Crect x='15' y='22' width='10' height='2.6' rx='1.3' fill='%23FAF9F5'/%3E%3Crect x='15' y='28.5' width='10' height='2.6' rx='1.3' fill='%23FAF9F5'/%3E%3Crect x='15' y='35' width='7' height='2.6' rx='1.3' fill='%23FAF9F5'/%3E%3Cpath d='M40 25.5L48.5 32L40 38.5V25.5Z' fill='%23FAF9F5'/%3E%3C/svg%3E" />
 
   <script src="https://cdn.tailwindcss.com"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -25,31 +25,30 @@
         extend: {
           fontFamily: {
             sans: ['"IBM Plex Sans Arabic"', 'Cairo', 'sans-serif'],
-            brand: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            serifBrand: ['Literata', 'Georgia', 'serif'],
             docSans: ['Inter', 'sans-serif'],
             docSerif: ['Literata', 'Georgia', 'serif'],
           },
           colors: {
-            g: {
-              bg: '#F8F9FA',
-              surface: '#FFFFFF',
-              border: '#DADCE0',
-              borderSubtle: '#E8EAED',
-              blue: '#1A73E8',
-              blueHover: '#1557B0',
-              blueSoft: '#E8F0FE',
-              blueToken: '#D2E3FC',
-              blueDark: '#174EA6',
-              text: '#202124',
-              sub: '#5F6368',
-              red: '#EA4335',
-              yellow: '#FBBC04',
-              green: '#34A853',
+            c: {
+              bg: '#F5F4EF',          /* Claude warm alabaster background */
+              surface: '#FAF9F5',     /* Warm off-white card surface */
+              paper: '#FFFFFF',       /* Pure reading sheet */
+              border: '#E5E4DF',      /* Subtle warm border */
+              borderStrong: '#D3D1C9',
+              accent: '#D97757',      /* Claude signature warm terracotta */
+              accentHover: '#C46445',
+              accentSoft: '#F6EAE4',
+              ink: '#141413',         /* Deep editorial charcoal ink */
+              sub: '#5E5D59',         /* Muted warm slate */
+              olive: '#4A6B53',       /* Muted sage/olive for saved items */
+              oliveSoft: '#EBF2ED',
+              danger: '#B84A39',
             }
           },
           boxShadow: {
-            'g-elevated': '0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15)',
-            'g-modal': '0 8px 28px rgba(60,64,67,0.2)',
+            'c-subtle': '0 1px 3px rgba(20, 20, 19, 0.04)',
+            'c-modal': '0 12px 32px rgba(20, 20, 19, 0.12)',
           }
         }
       }
@@ -58,8 +57,8 @@
 
   <style>
     body {
-      background-color: #F8F9FA;
-      color: #202124;
+      background-color: #F5F4EF;
+      color: #141413;
       font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
@@ -71,70 +70,71 @@
     .material-symbols-outlined.filled {
       font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
+
+    /* Interactive Word Tokens (Claude Warm Editorial Style) */
     .word-token {
       display: inline;
       cursor: pointer;
-      border-radius: 3px;
-      padding: 1px 0;
-      transition: background-color 0.1s ease, color 0.1s ease;
+      border-radius: 4px;
+      padding: 1px 1px;
+      transition: background-color 0.12s ease, color 0.12s ease;
     }
     .word-token:hover {
-      background-color: #E8F0FE;
-      color: #1A73E8;
+      background-color: #F6EAE4;
+      color: #C46445;
     }
     .word-token.sentence-highlight {
-      background-color: #F1F3F4;
+      background-color: #EFECE4;
     }
     .word-token.active-token {
-      background-color: #E8F0FE !important;
-      color: #1A73E8 !important;
-      box-shadow: inset 0 -2px 0 #1A73E8;
+      background-color: #F6EAE4 !important;
+      color: #141413 !important;
+      box-shadow: inset 0 -2px 0 #D97757;
     }
     .word-token.bookmarked-token {
-      box-shadow: inset 0 -1.5px 0 #34A853;
+      box-shadow: inset 0 -1.5px 0 #4A6B53;
     }
-    .g-doc-sheet {
+
+    /* Reading Sheet */
+    .c-doc-sheet {
       width: 100%;
-      max-width: 816px;
+      max-width: 780px;
       background: #FFFFFF;
-      border: 1px solid #DADCE0;
-      border-radius: 4px;
+      border: 1px solid #E5E4DF;
+      border-radius: 14px;
       content-visibility: auto;
       contain-intrinsic-size: 900px;
     }
-    .doc-font-sans { font-family: 'Inter', sans-serif; letter-spacing: -0.005em; }
     .doc-font-serif { font-family: 'Literata', Georgia, serif; letter-spacing: 0; }
+    .doc-font-sans { font-family: 'Inter', sans-serif; letter-spacing: -0.005em; }
 
+    /* Audio Soundwave */
     .soundwave-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
-    .soundwave-bars span { width: 2.5px; background-color: #1A73E8; border-radius: 2px; animation: wavePulse 0.8s ease-in-out infinite; }
+    .soundwave-bars span { width: 2.5px; background-color: #D97757; border-radius: 2px; animation: wavePulse 0.8s ease-in-out infinite; }
     .soundwave-bars span:nth-child(2) { animation-delay: 0.15s; }
     .soundwave-bars span:nth-child(3) { animation-delay: 0.3s; }
     @keyframes wavePulse { 0%, 100% { height: 3px; } 50% { height: 12px; } }
 
-    /* ==================== UNIFIED ANIMATED READDY SVG LOGO ==================== */
-    .readdy-logo-wrapper { display: inline-flex; align-items: center; gap: 10px; user-select: none; }
-    .readdy-mark-svg { overflow: visible; }
-    .readdy-play-tri { transform-origin: 31px 32px; transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); animation: readdyPlayPulse 3.6s ease-in-out infinite; }
-    .readdy-logo-wrapper:hover .readdy-play-tri { transform: scale(1.16) translateX(1.5px); }
-    .readdy-ribbon-wave { transform-origin: center; animation: readdyRibbonFloat 4.2s ease-in-out infinite; }
-    @keyframes readdyPlayPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
-    @keyframes readdyRibbonFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-2px); } }
+    /* Unified Open Book Logo Subtle Animation */
+    .readdy-book-logo { display: inline-flex; align-items: center; gap: 10px; user-select: none; }
+    .readdy-play-icon { transform-origin: 43px 32px; transition: transform 0.25s ease; }
+    .readdy-book-logo:hover .readdy-play-icon { transform: scale(1.12) translateX(1px); }
 
-    /* Welcome Modal Entrance Animation */
+    /* Modal Entrance */
     @keyframes modalScaleIn {
-      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      from { opacity: 0; transform: scale(0.97) translateY(6px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
     .animate-modal-in {
       animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .g-progress-track { height: 3px; background-color: #E8F0FE; overflow: hidden; width: 100%; }
-    .g-progress-fill { height: 100%; background-color: #1A73E8; transition: width 0.25s ease; }
+    .c-progress-track { height: 3px; background-color: #EFECE4; overflow: hidden; width: 100%; }
+    .c-progress-fill { height: 100%; background-color: #D97757; transition: width 0.25s ease; }
 
     .skeleton {
-      background: #F1F3F4;
-      background-image: linear-gradient(90deg, #F1F3F4 0px, #E8EAED 40px, #F1F3F4 80px);
+      background: #EFECE4;
+      background-image: linear-gradient(90deg, #EFECE4 0px, #E5E4DF 40px, #EFECE4 80px);
       background-size: 600px;
       animation: shimmer 1.4s infinite linear;
     }
@@ -142,8 +142,8 @@
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #DADCE0; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #BDC1C6; }
+    ::-webkit-scrollbar-thumb { background: #D3D1C9; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #B8B5AC; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -151,138 +151,129 @@
   <input type="file" id="fileInput" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" class="hidden" />
 
   <!-- ==================== 1. HEADER ==================== -->
-  <header class="sticky top-0 z-40 h-16 bg-white border-b border-g-border px-4 sm:px-6 flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-40 h-16 bg-c-bg/95 backdrop-blur-sm border-b border-c-border px-4 sm:px-6 flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0 flex-1">
-      <!-- Unified Brand Logo -->
-      <button onclick="resetToEmptyState()" class="readdy-logo-wrapper shrink-0 focus:outline-none group" title="Readdy">
-        <svg class="readdy-mark-svg w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="readdyBlueRedHeader" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
-              <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
-            </linearGradient>
-            <linearGradient id="readdyLoopGradHeader" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
-              <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
-            </linearGradient>
-          </defs>
-          <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradHeader)" />
-          <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedHeader)" />
-          <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
+      <!-- Unified Brand Logo (Option 1: Open Book + Play Icon) -->
+      <button onclick="resetToEmptyState()" class="readdy-book-logo shrink-0 focus:outline-none group cursor-pointer" title="Readdy">
+        <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Left Page (Deep Ink) -->
+          <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#141413"/>
+          <!-- Right Page (Claude Warm Terracotta) -->
+          <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#D97757"/>
+          <!-- Spine Fold Accent -->
+          <path d="M30 14H34V50H30V14Z" fill="#E5E4DF"/>
+          <!-- Text Lines on Left Page -->
+          <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+          <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+          <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FAF9F5"/>
+          <!-- Audio Play Triangle on Right Page -->
+          <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#FAF9F5"/>
         </svg>
 
-        <div dir="ltr" class="relative flex items-center pt-1.5">
-          <svg class="readdy-ribbon-wave w-[52px] h-[16px] absolute -top-1.5 left-[2px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
-            <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
-            <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
-            <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
-          </svg>
-          <span class="font-brand text-[22px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
-        </div>
+        <span dir="ltr" class="font-serifBrand text-[22px] font-semibold tracking-tight text-c-ink leading-none">Readdy</span>
       </button>
 
-      <div id="headerDocMeta" class="hidden sm:flex items-center min-w-0 border-r border-g-border pr-3">
+      <div id="headerDocMeta" class="hidden sm:flex items-center min-w-0 border-r border-c-border pr-3">
         <input
           id="docTitleInput"
           type="text"
           dir="auto"
           aria-label="عنوان المستند"
-          class="text-sm font-medium text-g-text bg-transparent hover:bg-[#F8F9FA] focus:bg-white focus:ring-1 focus:ring-g-blue px-2.5 py-1 rounded border border-transparent focus:border-g-blue focus:outline-none truncate max-w-[200px] lg:max-w-[300px] transition"
+          class="text-sm font-medium text-c-ink bg-transparent hover:bg-c-surface focus:bg-c-paper focus:ring-1 focus:ring-c-accent px-2.5 py-1 rounded-lg border border-transparent focus:border-c-accent focus:outline-none truncate max-w-[200px] lg:max-w-[300px] transition"
         />
       </div>
     </div>
 
     <div class="flex items-center gap-2 shrink-0">
-      <div class="flex items-center bg-white rounded-full px-3 py-1.5 border border-g-border hover:bg-[#F8F9FA] transition">
-        <span class="material-symbols-outlined text-[16px] text-g-sub ml-1">language</span>
-        <select id="langSelect" onchange="handleLanguageChange(this.value)" class="bg-transparent text-xs font-medium text-g-text focus:outline-none cursor-pointer">
+      <div class="flex items-center bg-c-surface rounded-lg px-2.5 py-1.5 border border-c-border hover:border-c-borderStrong transition">
+        <span class="material-symbols-outlined text-[16px] text-c-sub ml-1">language</span>
+        <select id="langSelect" onchange="handleLanguageChange(this.value)" class="bg-transparent text-xs font-medium text-c-ink focus:outline-none cursor-pointer">
           <option value="auto">Auto</option>
           <option value="en">EN</option>
           <option value="fr">FR</option>
         </select>
       </div>
 
-      <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white text-xs sm:text-sm font-medium px-3.5 sm:px-4 py-2 rounded-full transition flex items-center gap-1.5 cursor-pointer">
+      <button onclick="triggerFileUpload()" class="bg-c-accent hover:bg-c-accentHover text-white text-xs sm:text-sm font-medium px-3.5 sm:px-4 py-2 rounded-lg transition flex items-center gap-1.5 cursor-pointer">
         <span class="material-symbols-outlined text-[18px]">upload_file</span>
         <span>رفع ملف</span>
       </button>
 
-      <button onclick="openWelcomeModal(true)" class="hidden sm:flex p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition items-center justify-center cursor-pointer" title="حول التطبيق">
+      <button onclick="openWelcomeModal(true)" class="hidden sm:flex p-2 rounded-lg border border-c-border bg-c-surface hover:bg-c-paper text-c-sub hover:text-c-ink transition items-center justify-center cursor-pointer" title="حول التطبيق">
         <span class="material-symbols-outlined text-[20px]">help_outline</span>
       </button>
 
-      <button onclick="openApiSettingsModal()" class="p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition flex items-center justify-center cursor-pointer" title="إعدادات الترجمة">
+      <button onclick="openApiSettingsModal()" class="p-2 rounded-lg border border-c-border bg-c-surface hover:bg-c-paper text-c-sub hover:text-c-ink transition flex items-center justify-center cursor-pointer" title="إعدادات الترجمة">
         <span class="material-symbols-outlined text-[20px]">tune</span>
       </button>
 
-      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-text transition flex items-center justify-center cursor-pointer" title="الكلمات المحفوظة">
+      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-lg border border-c-border bg-c-surface hover:bg-c-paper text-c-ink transition flex items-center justify-center cursor-pointer" title="الكلمات المحفوظة">
         <span class="material-symbols-outlined text-[20px]">bookmarks</span>
-        <span id="savedCountBadge" class="hidden absolute -top-1 -right-1 bg-g-blue text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">0</span>
+        <span id="savedCountBadge" class="hidden absolute -top-1.5 -right-1.5 bg-c-accent text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">0</span>
       </button>
     </div>
   </header>
 
   <!-- Linear Progress Bar -->
-  <div id="extractionProgressContainer" class="hidden bg-white border-b border-g-border">
-    <div class="g-progress-track">
-      <div id="extractionProgressBar" class="g-progress-fill" style="width: 0%"></div>
+  <div id="extractionProgressContainer" class="hidden bg-c-surface border-b border-c-border">
+    <div class="c-progress-track">
+      <div id="extractionProgressBar" class="c-progress-fill" style="width: 0%"></div>
     </div>
-    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-xs text-g-sub">
+    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-xs text-c-sub">
       <span id="extractionStatusText">جاري استخراج النص...</span>
-      <span id="extractionPercentText" class="font-medium text-g-blue">0%</span>
+      <span id="extractionPercentText" class="font-medium text-c-accent">0%</span>
     </div>
   </div>
 
-  <!-- ==================== 2. EMPTY STATE (WITH UNIFIED LOGO) ==================== -->
+  <!-- ==================== 2. EMPTY STATE (CLAUDE EDITORIAL CENTERPIECE) ==================== -->
   <main id="emptyStateView" class="flex-1 flex items-center justify-center p-4 sm:p-8">
-    <div
-      id="emptyDropzone"
-      onclick="triggerFileUpload()"
-      class="w-full max-w-lg bg-white border border-g-border hover:border-g-blue rounded-2xl p-10 sm:p-12 text-center transition-colors duration-150 cursor-pointer"
-    >
-      <!-- Unified Brand Logo (Large) -->
-      <div class="flex flex-col items-center justify-center mb-6 select-none">
-        <div class="readdy-logo-wrapper gap-3.5">
-          <svg class="readdy-mark-svg w-14 h-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="readdyBlueRedHero" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
-                <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
-              </linearGradient>
-              <linearGradient id="readdyLoopGradHero" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
-                <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
-              </linearGradient>
-            </defs>
-            <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradHero)" />
-            <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedHero)" />
-            <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
+    <div class="w-full max-w-xl text-center space-y-6">
+      <!-- Unified Large Open Book Logo -->
+      <div class="flex flex-col items-center justify-center select-none">
+        <div class="readdy-book-logo gap-3.5 mb-3">
+          <svg class="w-14 h-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#141413"/>
+            <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#D97757"/>
+            <path d="M30 14H34V50H30V14Z" fill="#E5E4DF"/>
+            <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+            <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+            <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FAF9F5"/>
+            <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#FAF9F5"/>
           </svg>
-
-          <div dir="ltr" class="relative flex items-center pt-2">
-            <svg class="readdy-ribbon-wave w-[76px] h-[22px] absolute -top-2 left-[3px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
-              <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
-              <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
-              <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
-            </svg>
-            <span class="font-brand text-[34px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
-          </div>
+          <span dir="ltr" class="font-serifBrand text-[36px] font-semibold tracking-tight text-c-ink leading-none">Readdy</span>
         </div>
+        <h1 class="font-serifBrand text-2xl sm:text-[26px] font-normal text-c-ink leading-snug">
+          مساحة قراءة هادئة، بترجمة فورية ونطق صوتي
+        </h1>
       </div>
 
-      <p class="text-base font-semibold text-g-text mb-6 leading-relaxed">
-        اسحب الملف هنا أو انقر للاختيار — PDF, DOCX, PNG, JPG, TXT
-      </p>
+      <!-- Claude-style Prompt/Drop Card -->
+      <div
+        id="emptyDropzone"
+        onclick="triggerFileUpload()"
+        class="bg-c-surface hover:bg-c-paper border border-c-border hover:border-c-accent rounded-2xl p-8 sm:p-10 text-center transition-colors duration-150 cursor-pointer shadow-c-subtle"
+      >
+        <div class="w-11 h-11 rounded-xl bg-c-bg border border-c-border text-c-ink flex items-center justify-center mx-auto mb-4">
+          <span class="material-symbols-outlined text-[22px]">menu_book</span>
+        </div>
 
-      <div class="flex items-center justify-center gap-3" onclick="event.stopPropagation()">
-        <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
-          اختيار ملف
-        </button>
-        <button onclick="openPasteModal()" class="bg-white hover:bg-[#F8F9FA] text-g-text border border-g-border font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
-          لصق نص مباشرة
-        </button>
+        <p class="text-sm sm:text-base font-medium text-c-ink mb-1.5">
+          اسحب أي مستند هنا أو انقر لاختيار ملف
+        </p>
+        <p class="text-xs text-c-sub mb-6">
+          يدعم ملفات PDF، مستندات Word (DOCX)، الصور (OCR)، والنصوص العادية
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-2.5" onclick="event.stopPropagation()">
+          <button onclick="triggerFileUpload()" class="bg-c-ink hover:bg-[#2B2B29] text-c-surface font-medium text-xs sm:text-sm px-5 py-2.5 rounded-lg transition cursor-pointer flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">folder_open</span>
+            <span>اختيار ملف من الجهاز</span>
+          </button>
+          <button onclick="openPasteModal()" class="bg-c-paper hover:bg-c-bg text-c-ink border border-c-border font-medium text-xs sm:text-sm px-5 py-2.5 rounded-lg transition cursor-pointer flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">edit_note</span>
+            <span>لصق نص للقراءة</span>
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -291,60 +282,60 @@
   <div id="workspaceView" class="hidden flex-1 flex flex-col">
 
     <!-- Toolbar -->
-    <div id="workspaceToolbar" class="bg-white border-b border-g-border px-4 py-2 sticky top-16 z-30">
+    <div id="workspaceToolbar" class="bg-c-bg/95 backdrop-blur-sm border-b border-c-border px-4 py-2 sticky top-16 z-30">
       <div class="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-2.5">
         <div class="flex flex-wrap items-center gap-2">
-          <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="flex items-center gap-1.5 bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition cursor-pointer">
+          <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="flex items-center gap-1.5 bg-c-ink hover:bg-[#2B2B29] text-c-surface font-medium text-xs px-3.5 py-1.5 rounded-lg transition cursor-pointer">
             <span id="docAudioPlayIcon" class="material-symbols-outlined filled text-[17px]">play_arrow</span>
             <span id="docAudioPlayLabel">استماع للمستند</span>
           </button>
 
-          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden p-1.5 rounded-full border border-g-border hover:bg-[#F8F9FA] text-g-text transition cursor-pointer" title="إيقاف">
+          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden p-1.5 rounded-lg border border-c-border bg-c-surface hover:bg-c-paper text-c-ink transition cursor-pointer" title="إيقاف">
             <span class="material-symbols-outlined filled text-[16px]">stop</span>
           </button>
 
-          <div id="globalSpeakingWave" class="hidden items-center gap-1.5 px-2 py-1 rounded-full bg-g-blueSoft text-g-blue text-[11px] font-medium">
+          <div id="globalSpeakingWave" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-lg bg-c-accentSoft text-c-accent text-[11px] font-medium">
             <div class="soundwave-bars"><span></span><span></span><span></span></div>
             <span>ينطق الآن</span>
           </div>
 
-          <div class="flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs">
-            <span class="text-g-sub ml-1">السرعة:</span>
-            <select id="docSpeechRateSelect" onchange="SpeechManager.setDocRate(parseFloat(this.value))" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer">
+          <div class="flex items-center bg-c-surface border border-c-border rounded-lg px-2.5 py-1 text-xs">
+            <span class="text-c-sub ml-1">السرعة:</span>
+            <select id="docSpeechRateSelect" onchange="SpeechManager.setDocRate(parseFloat(this.value))" class="bg-transparent font-medium text-c-ink focus:outline-none cursor-pointer">
               <option value="0.75">0.75x</option>
               <option value="1" selected>1.0x</option>
               <option value="1.25">1.25x</option>
             </select>
           </div>
 
-          <div class="hidden md:flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs max-w-[210px]">
-            <span class="material-symbols-outlined text-[15px] text-g-sub ml-1">record_voice_over</span>
-            <select id="voiceSelector" onchange="SpeechManager.selectVoiceByURI(this.value)" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer truncate w-full" title="اختيار الصوت">
+          <div class="hidden md:flex items-center bg-c-surface border border-c-border rounded-lg px-2.5 py-1 text-xs max-w-[210px]">
+            <span class="material-symbols-outlined text-[15px] text-c-sub ml-1">record_voice_over</span>
+            <select id="voiceSelector" onchange="SpeechManager.selectVoiceByURI(this.value)" class="bg-transparent font-medium text-c-ink focus:outline-none cursor-pointer truncate w-full" title="اختيار الصوت">
               <option value="">الصوت الافتراضي</option>
             </select>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <div class="flex items-center bg-g-bg border border-g-border rounded-full p-0.5 text-xs">
-            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer">Inter</button>
-            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer">Literata</button>
+          <div class="flex items-center bg-c-surface border border-c-border rounded-lg p-0.5 text-xs">
+            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-md bg-c-bg text-c-ink font-medium border border-c-border transition cursor-pointer">Literata</button>
+            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-md text-c-sub hover:text-c-ink font-medium border border-transparent transition cursor-pointer">Inter</button>
           </div>
 
-          <div class="flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-1.5 py-0.5">
-            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تصغير الخط">A-</button>
-            <span id="fontSizeIndicator" class="text-[11px] text-g-sub px-1 select-none font-medium">17px</span>
-            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تكبير الخط">A+</button>
+          <div class="flex items-center gap-1 bg-c-surface border border-c-border rounded-lg px-1.5 py-0.5">
+            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded hover:bg-c-bg text-c-ink text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تصغير الخط">A-</button>
+            <span id="fontSizeIndicator" class="text-[11px] text-c-sub px-1 select-none font-medium">18px</span>
+            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded hover:bg-c-bg text-c-ink text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تكبير الخط">A+</button>
           </div>
 
           <!-- Quick Page Jump -->
-          <div class="hidden sm:flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs text-g-sub">
+          <div class="hidden sm:flex items-center gap-1 bg-c-surface border border-c-border rounded-lg px-2.5 py-1 text-xs text-c-sub">
             <span>صفحة</span>
-            <input id="jumpPageInput" type="number" min="1" value="1" onchange="jumpToPageNumber(this.value)" class="w-11 bg-white border border-g-border rounded px-1 text-center text-g-text font-medium focus:outline-none focus:border-g-blue" />
+            <input id="jumpPageInput" type="number" min="1" value="1" onchange="jumpToPageNumber(this.value)" class="w-11 bg-c-paper border border-c-border rounded px-1 text-center text-c-ink font-medium focus:outline-none focus:border-c-accent" />
             <span id="pageCountIndicator">/ 1</span>
           </div>
 
-          <button onclick="resetToEmptyState()" class="text-xs text-g-sub hover:text-g-text hover:bg-[#F8F9FA] border border-g-border px-3 py-1.5 rounded-full transition flex items-center gap-1 font-medium cursor-pointer">
+          <button onclick="resetToEmptyState()" class="text-xs text-c-sub hover:text-c-ink bg-c-surface hover:bg-c-paper border border-c-border px-3 py-1.5 rounded-lg transition flex items-center gap-1 font-medium cursor-pointer">
             <span class="material-symbols-outlined text-[15px]">add</span>
             <span>جديد</span>
           </button>
@@ -360,19 +351,19 @@
         <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6"></div>
       </div>
 
-      <!-- Fixed/Sticky Right Dictionary Panel -->
+      <!-- Fixed/Sticky Right Dictionary Panel (Claude Warm Inspector) -->
       <aside
         id="sideDictionaryPanel"
-        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-2xl shadow-g-modal lg:rounded-none lg:shadow-none w-full lg:w-[370px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[113px] lg:h-[calc(100vh-113px)] lg:max-h-none overflow-y-auto z-40"
+        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-2xl shadow-c-modal lg:rounded-none lg:shadow-none w-full lg:w-[375px] shrink-0 bg-c-surface border-t lg:border-t-0 lg:border-r border-c-border lg:sticky lg:top-[113px] lg:h-[calc(100vh-113px)] lg:max-h-none overflow-y-auto z-40"
       >
-        <div class="px-4 py-3 border-b border-g-border flex items-center justify-between bg-white sticky top-0 z-10">
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-g-text">
-            <span class="material-symbols-outlined text-g-blue text-[18px]">translate</span>
+        <div class="px-4 py-3 border-b border-c-border flex items-center justify-between bg-c-surface sticky top-0 z-10">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-c-ink">
+            <span class="material-symbols-outlined text-c-accent text-[18px]">translate</span>
             <span>الترجمة والشرح السياقي</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span id="engineSourceTag" class="text-[10px] px-2 py-0.5 rounded-full bg-g-bg border border-g-border text-g-sub"></span>
-            <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer" title="إغلاق">
+            <span id="engineSourceTag" class="text-[10px] px-2 py-0.5 rounded bg-c-bg border border-c-border text-c-sub"></span>
+            <button onclick="closeSidePanel()" class="p-1 rounded-lg hover:bg-c-bg text-c-sub cursor-pointer" title="إغلاق">
               <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
           </div>
@@ -385,7 +376,7 @@
               <div class="h-6 w-32 rounded skeleton"></div>
               <div class="h-3.5 w-20 rounded skeleton"></div>
             </div>
-            <div class="w-9 h-9 rounded-full skeleton"></div>
+            <div class="w-9 h-9 rounded-lg skeleton"></div>
           </div>
           <div class="h-12 w-full rounded-xl skeleton"></div>
           <div class="h-20 w-full rounded-xl skeleton"></div>
@@ -394,86 +385,86 @@
 
         <!-- Content -->
         <div id="panelContent" class="hidden p-5 space-y-4">
-          <div class="flex items-start justify-between gap-2 pb-3.5 border-b border-g-border">
+          <div class="flex items-start justify-between gap-2 pb-3.5 border-b border-c-border">
             <div dir="ltr" class="text-left min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <h2 id="panelWordTitle" class="font-docSans text-2xl font-semibold text-g-text break-words"></h2>
-                <span id="panelLangBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-g-bg border border-g-border text-g-sub uppercase"></span>
+                <h2 id="panelWordTitle" class="font-docSerif text-2xl font-semibold text-c-ink break-words"></h2>
+                <span id="panelLangBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-c-bg border border-c-border text-c-sub uppercase"></span>
               </div>
-              <div class="flex items-center gap-2 mt-1 text-xs text-g-sub flex-wrap">
-                <span id="panelIpa" class="font-mono text-g-text"></span>
+              <div class="flex items-center gap-2 mt-1 text-xs text-c-sub flex-wrap">
+                <span id="panelIpa" class="font-mono text-c-ink"></span>
                 <span id="panelIpaDot">•</span>
-                <span id="panelPosBadge" class="font-sans font-medium text-g-green"></span>
+                <span id="panelPosBadge" class="font-sans font-medium text-c-olive"></span>
               </div>
             </div>
 
-            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0 cursor-pointer" title="حفظ الكلمة">
+            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-lg border border-c-border bg-c-paper hover:bg-c-bg text-c-sub flex items-center justify-center transition shrink-0 cursor-pointer" title="حفظ الكلمة">
               <span id="bookmarkWordIcon" class="material-symbols-outlined text-[20px]">bookmark_add</span>
             </button>
           </div>
 
-          <div class="bg-g-bg border border-g-border rounded-xl p-2.5 flex items-center justify-between gap-1.5">
-            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
+          <div class="bg-c-bg border border-c-border rounded-xl p-2 flex items-center justify-between gap-1.5">
+            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-c-paper hover:bg-c-accentSoft text-c-accent border border-c-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
               <span class="material-symbols-outlined filled text-[17px]">volume_up</span>
               <span>نطق 1.0x</span>
             </button>
-            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-text hover:text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
+            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-c-paper hover:bg-c-accentSoft text-c-ink hover:text-c-accent border border-c-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer">
               <span class="material-symbols-outlined text-[17px]">slow_motion_video</span>
               <span>بطيء 0.65x</span>
             </button>
-            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer" title="تكرار النطق">
+            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-c-paper hover:bg-c-bg text-c-sub border border-c-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer" title="تكرار النطق">
               <span class="material-symbols-outlined text-[18px]">repeat</span>
             </button>
           </div>
 
-          <div class="bg-white border border-g-border rounded-xl p-3.5">
+          <div class="bg-c-paper border border-c-border rounded-xl p-3.5">
             <div class="flex items-center justify-between mb-1">
-              <span class="text-[11px] font-semibold text-g-blue">الترجمة العربية</span>
-              <button onclick="copyCurrentTranslation()" class="text-[11px] text-g-sub hover:text-g-blue flex items-center gap-0.5 cursor-pointer">
+              <span class="text-[11px] font-semibold text-c-accent">الترجمة العربية</span>
+              <button onclick="copyCurrentTranslation()" class="text-[11px] text-c-sub hover:text-c-accent flex items-center gap-0.5 cursor-pointer">
                 <span class="material-symbols-outlined text-[14px]">content_copy</span>
                 <span>نسخ</span>
               </button>
             </div>
-            <p id="panelTranslationAr" class="text-lg font-bold text-g-text leading-snug"></p>
-            <p id="panelLemma" class="text-[11px] text-g-sub mt-1"></p>
+            <p id="panelTranslationAr" class="text-lg font-bold text-c-ink leading-snug"></p>
+            <p id="panelLemma" class="text-[11px] text-c-sub mt-1"></p>
           </div>
 
-          <div class="bg-g-bg border border-g-border rounded-xl p-3.5">
-            <h3 class="text-xs font-semibold text-g-text mb-1.5">المعنى والشرح السياقي</h3>
-            <p id="panelExplanationAr" class="text-[13px] text-g-text leading-relaxed"></p>
+          <div class="bg-c-bg border border-c-border rounded-xl p-3.5">
+            <h3 class="text-xs font-semibold text-c-ink mb-1.5">المعنى والشرح السياقي</h3>
+            <p id="panelExplanationAr" class="text-[13px] text-c-ink leading-relaxed"></p>
           </div>
 
-          <div id="exampleBox" class="bg-white border border-g-border rounded-xl p-3.5 space-y-1.5">
+          <div id="exampleBox" class="bg-c-paper border border-c-border rounded-xl p-3.5 space-y-1.5">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-semibold text-g-sub">مثال تطبيقي</span>
+              <span class="text-[11px] font-semibold text-c-sub">مثال تطبيقي</span>
               <div class="flex items-center gap-1">
-                <button onclick="pronounceExample(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded flex items-center gap-0.5 cursor-pointer">
+                <button onclick="pronounceExample(1.0)" class="text-[11px] text-c-accent hover:bg-c-accentSoft px-2 py-0.5 rounded flex items-center gap-0.5 cursor-pointer">
                   <span class="material-symbols-outlined text-[14px]">volume_up</span>
                   <span>1.0x</span>
                 </button>
-                <button onclick="pronounceExample(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-1.5 py-0.5 rounded cursor-pointer">0.65x</button>
+                <button onclick="pronounceExample(0.65)" class="text-[11px] text-c-sub hover:text-c-ink hover:bg-c-bg px-1.5 py-0.5 rounded cursor-pointer">0.65x</button>
               </div>
             </div>
-            <p id="panelExampleOrig" dir="ltr" class="font-docSans text-xs text-g-text leading-relaxed"></p>
-            <p id="panelExampleAr" class="text-xs text-g-sub leading-relaxed"></p>
+            <p id="panelExampleOrig" dir="ltr" class="font-docSerif text-xs text-c-ink leading-relaxed"></p>
+            <p id="panelExampleAr" class="text-xs text-c-sub leading-relaxed"></p>
           </div>
 
-          <div class="border-t border-g-border pt-3.5 space-y-2">
+          <div class="border-t border-c-border pt-3.5 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-semibold text-g-sub">الجملة الكاملة في النص</span>
+              <span class="text-[11px] font-semibold text-c-sub">الجملة الكاملة في النص</span>
               <div class="flex items-center gap-1">
-                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer">
+                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-c-accent hover:bg-c-accentSoft px-2 py-0.5 rounded flex items-center gap-0.5 font-medium transition cursor-pointer">
                   <span class="material-symbols-outlined text-[15px]">volume_up</span>
                   <span>1.0x</span>
                 </button>
-                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-2 py-0.5 rounded-full font-medium transition cursor-pointer">0.65x</button>
-                <button id="sentenceRepeatBtn" onclick="toggleSentenceRepeatLoop()" class="p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer" title="تكرار الجملة">
+                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-c-sub hover:text-c-ink hover:bg-c-bg px-2 py-0.5 rounded font-medium transition cursor-pointer">0.65x</button>
+                <button id="sentenceRepeatBtn" onclick="toggleSentenceRepeatLoop()" class="p-1 rounded text-c-sub hover:bg-c-bg transition cursor-pointer" title="تكرار الجملة">
                   <span class="material-symbols-outlined text-[15px]">repeat</span>
                 </button>
               </div>
             </div>
-            <p id="panelSentenceOrig" dir="ltr" class="font-docSans text-xs text-g-text bg-g-bg p-2.5 rounded-lg border border-g-border leading-relaxed"></p>
-            <p id="panelSentenceAr" class="text-xs font-medium text-g-text leading-relaxed"></p>
+            <p id="panelSentenceOrig" dir="ltr" class="font-docSerif text-xs text-c-ink bg-c-bg p-2.5 rounded-lg border border-c-border leading-relaxed"></p>
+            <p id="panelSentenceAr" class="text-xs font-medium text-c-ink leading-relaxed"></p>
           </div>
         </div>
       </aside>
@@ -481,123 +472,108 @@
   </div>
 
   <!-- ==================== 5. SAVED VOCABULARY DRAWER ==================== -->
-  <div id="vocabDrawerBackdrop" onclick="toggleVocabDrawer(false)" class="hidden fixed inset-0 z-50 bg-black/25 transition-opacity"></div>
-  <aside id="vocabDrawer" class="fixed top-0 left-0 z-50 h-full w-full max-w-sm bg-white shadow-g-modal border-r border-g-border transform -translate-x-full transition-transform duration-200 flex flex-col">
-    <div class="h-16 px-4 border-b border-g-border flex items-center justify-between shrink-0">
+  <div id="vocabDrawerBackdrop" onclick="toggleVocabDrawer(false)" class="hidden fixed inset-0 z-50 bg-c-ink/25 transition-opacity"></div>
+  <aside id="vocabDrawer" class="fixed top-0 left-0 z-50 h-full w-full max-w-sm bg-c-surface shadow-c-modal border-r border-c-border transform -translate-x-full transition-transform duration-200 flex flex-col">
+    <div class="h-16 px-4 border-b border-c-border flex items-center justify-between shrink-0">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-g-blue">bookmarks</span>
-        <h2 class="font-semibold text-sm text-g-text">الكلمات المحفوظة</h2>
-        <span id="drawerCountPill" class="text-xs bg-g-bg border border-g-border px-2 py-0.5 rounded-full text-g-sub">0</span>
+        <span class="material-symbols-outlined text-c-accent">bookmarks</span>
+        <h2 class="font-semibold text-sm text-c-ink">الكلمات المحفوظة</h2>
+        <span id="drawerCountPill" class="text-xs bg-c-bg border border-c-border px-2 py-0.5 rounded text-c-sub">0</span>
       </div>
       <div class="flex items-center gap-1">
-        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-g-blue hover:bg-g-blueSoft px-3 py-1.5 rounded-full font-medium flex items-center gap-1 transition cursor-pointer">
+        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-c-accent hover:bg-c-accentSoft px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 transition cursor-pointer">
           <span class="material-symbols-outlined text-[16px]">download</span>
           <span>CSV</span>
         </button>
-        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
+        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-lg hover:bg-c-bg text-c-sub cursor-pointer">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
     </div>
-    <div class="p-3 border-b border-g-border shrink-0">
+    <div class="p-3 border-b border-c-border shrink-0">
       <div class="relative">
-        <span class="material-symbols-outlined text-[18px] text-g-sub absolute right-3 top-2.5">search</span>
-        <input id="vocabSearchInput" type="text" oninput="renderVocabDrawerList()" placeholder="بحث في المفردات..." class="w-full bg-g-bg border border-g-border focus:bg-white focus:border-g-blue rounded-full pr-9 pl-3 py-1.5 text-xs text-g-text focus:outline-none transition" />
+        <span class="material-symbols-outlined text-[18px] text-c-sub absolute right-3 top-2.5">search</span>
+        <input id="vocabSearchInput" type="text" oninput="renderVocabDrawerList()" placeholder="بحث في المفردات..." class="w-full bg-c-bg border border-c-border focus:bg-c-paper focus:border-c-accent rounded-lg pr-9 pl-3 py-1.5 text-xs text-c-ink focus:outline-none transition" />
       </div>
     </div>
     <div id="vocabDrawerList" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
   </aside>
 
   <!-- ==================== WELCOME POPUP MODAL ON SITE OPEN ==================== -->
-  <div id="welcomeModal" class="hidden fixed inset-0 z-50 bg-black/35 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full shadow-g-modal border border-g-border overflow-hidden animate-modal-in">
-      <!-- Top Close Button -->
+  <div id="welcomeModal" class="hidden fixed inset-0 z-50 bg-c-ink/40 backdrop-blur-[1px] flex items-center justify-center p-4">
+    <div class="bg-c-surface rounded-2xl max-w-md w-full shadow-c-modal border border-c-border overflow-hidden animate-modal-in">
+      <!-- Top Bar -->
       <div class="px-5 pt-4 flex items-center justify-between">
-        <span class="text-[11px] font-medium text-g-sub bg-g-bg border border-g-border px-2.5 py-0.5 rounded-full">منصة القراءة الذكية</span>
-        <button onclick="closeWelcomeModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer" title="إغلاق">
+        <span class="text-[11px] font-medium text-c-sub bg-c-bg border border-c-border px-2.5 py-0.5 rounded-md">مساحة القراءة الذكية</span>
+        <button onclick="closeWelcomeModal()" class="p-1 rounded-lg hover:bg-c-bg text-c-sub cursor-pointer" title="إغلاق">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
 
       <!-- Modal Body -->
       <div class="px-6 pt-3 pb-6 text-center">
-        <!-- Unified Readdy Logo -->
+        <!-- Unified Open Book Logo -->
         <div class="flex justify-center mb-4">
-          <div class="readdy-logo-wrapper gap-3">
-            <svg class="readdy-mark-svg w-11 h-11" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <linearGradient id="readdyBlueRedModal" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#4285F4" /><stop offset="52%" stop-color="#4285F4" />
-                  <stop offset="68%" stop-color="#EA4335" /><stop offset="100%" stop-color="#EA4335" />
-                </linearGradient>
-                <linearGradient id="readdyLoopGradModal" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#EA4335" /><stop offset="32%" stop-color="#FBBC04" />
-                  <stop offset="72%" stop-color="#FBBC04" /><stop offset="100%" stop-color="#34A853" />
-                </linearGradient>
-              </defs>
-              <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGradModal)" />
-              <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRedModal)" />
-              <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
+          <div class="readdy-book-logo gap-3">
+            <svg class="w-11 h-11" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#141413"/>
+              <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#D97757"/>
+              <path d="M30 14H34V50H30V14Z" fill="#E5E4DF"/>
+              <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+              <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FAF9F5"/>
+              <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FAF9F5"/>
+              <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#FAF9F5"/>
             </svg>
-
-            <div dir="ltr" class="relative flex items-center pt-1.5">
-              <svg class="readdy-ribbon-wave w-[62px] h-[18px] absolute -top-1.5 left-[2px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
-                <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
-                <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
-                <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
-              </svg>
-              <span class="font-brand text-[28px] font-bold tracking-tight text-[#3C4043] leading-none">readdy</span>
-            </div>
+            <span dir="ltr" class="font-serifBrand text-[28px] font-semibold tracking-tight text-c-ink leading-none">Readdy</span>
           </div>
         </div>
 
-        <h2 class="text-lg font-bold text-g-text mb-1.5">مرحباً بك في Readdy</h2>
-        <p class="text-xs text-g-sub leading-relaxed mb-5">
-          اقرأ الكتب والمقالات الإنجليزية والفرنسية بسلاسة، وانقر على أي كلمة للحصول على ترجمتها الفورية ونطقها الصوتي.
+        <h2 class="font-serifBrand text-xl font-semibold text-c-ink mb-1.5">مرحباً بك في Readdy</h2>
+        <p class="text-xs text-c-sub leading-relaxed mb-5">
+          اقرأ الكتب والمقالات الإنجليزية والفرنسية بهدوء وتركيز، وانقر على أي كلمة للحصول على ترجمتها السياقية ونطقها الصوتي.
         </p>
 
         <!-- 3 Clean Feature Rows -->
         <div class="space-y-2.5 text-right mb-6">
-          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
-            <div class="w-8 h-8 rounded-lg bg-g-blueSoft text-g-blue flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-[18px]">description</span>
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-c-paper border border-c-border">
+            <div class="w-8 h-8 rounded-lg bg-c-bg border border-c-border text-c-ink flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[18px]">menu_book</span>
             </div>
             <div>
-              <p class="text-xs font-semibold text-g-text">دعم شامل للملفات والصور</p>
-              <p class="text-[11px] text-g-sub">افتح ملفات PDF و DOCX والصور الممسوحة ضوئياً (OCR).</p>
+              <p class="text-xs font-semibold text-c-ink">دعم شامل للكتب والوثائق</p>
+              <p class="text-[11px] text-c-sub">افتح ملفات PDF و DOCX والصور الممسوحة ضوئياً (OCR).</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
-            <div class="w-8 h-8 rounded-lg bg-[#E6F4EA] text-g-green flex items-center justify-center shrink-0">
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-c-paper border border-c-border">
+            <div class="w-8 h-8 rounded-lg bg-c-accentSoft text-c-accent flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[18px]">translate</span>
             </div>
             <div>
-              <p class="text-xs font-semibold text-g-text">ترجمة سياقية بنقرة واحدة</p>
-              <p class="text-[11px] text-g-sub">معنى الكلمة، النطق الصوتي IPA، وترجمة الجملة كاملة.</p>
+              <p class="text-xs font-semibold text-c-ink">ترجمة سياقية بنقرة واحدة</p>
+              <p class="text-[11px] text-c-sub">معنى الكلمة، النطق الصوتي IPA، وترجمة الجملة كاملة.</p>
             </div>
           </div>
 
-          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-g-bg border border-g-border">
-            <div class="w-8 h-8 rounded-lg bg-[#FEF7E0] text-[#EA8600] flex items-center justify-center shrink-0">
+          <div class="flex items-center gap-3 p-2.5 rounded-xl bg-c-paper border border-c-border">
+            <div class="w-8 h-8 rounded-lg bg-c-oliveSoft text-c-olive flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[18px]">record_voice_over</span>
             </div>
             <div>
-              <p class="text-xs font-semibold text-g-text">قراءة صوتية وحفظ المفردات</p>
-              <p class="text-[11px] text-g-sub">استمع للمستند بسرعات مختلفة وصدّر مفرداتك بصيغة CSV.</p>
+              <p class="text-xs font-semibold text-c-ink">استماع صوتي وحفظ المفردات</p>
+              <p class="text-[11px] text-c-sub">استمع للمستند بسرعات مختلفة وصدّر مفرداتك بصيغة CSV.</p>
             </div>
           </div>
         </div>
 
         <!-- Primary Action Button -->
-        <button onclick="closeWelcomeModal()" class="w-full bg-g-blue hover:bg-g-blueHover text-white font-medium text-sm py-2.5 rounded-full transition cursor-pointer">
+        <button onclick="closeWelcomeModal()" class="w-full bg-c-accent hover:bg-c-accentHover text-white font-medium text-sm py-2.5 rounded-lg transition cursor-pointer">
           ابدأ القراءة الآن
         </button>
 
         <!-- Don't show again checkbox -->
-        <label class="mt-3.5 inline-flex items-center gap-2 text-xs text-g-sub cursor-pointer select-none">
-          <input id="dontShowWelcomeCheckbox" type="checkbox" class="rounded border-g-border text-g-blue focus:ring-g-blue cursor-pointer" />
+        <label class="mt-3.5 inline-flex items-center gap-2 text-xs text-c-sub cursor-pointer select-none">
+          <input id="dontShowWelcomeCheckbox" type="checkbox" class="rounded border-c-border text-c-accent focus:ring-c-accent cursor-pointer" />
           <span>عدم إظهار هذه النافذة مجدداً</span>
         </label>
       </div>
@@ -605,47 +581,47 @@
   </div>
 
   <!-- ==================== PASTE TEXT MODAL ==================== -->
-  <div id="pasteModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full shadow-g-modal border border-g-border overflow-hidden">
-      <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
-        <h3 class="font-semibold text-sm text-g-text">لصق نص مباشرة</h3>
-        <button onclick="closePasteModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
+  <div id="pasteModal" class="hidden fixed inset-0 z-50 bg-c-ink/35 flex items-center justify-center p-4">
+    <div class="bg-c-surface rounded-2xl max-w-xl w-full shadow-c-modal border border-c-border overflow-hidden">
+      <div class="px-5 py-4 border-b border-c-border flex items-center justify-between">
+        <h3 class="font-semibold text-sm text-c-ink">لصق نص للقراءة</h3>
+        <button onclick="closePasteModal()" class="p-1 rounded-lg hover:bg-c-bg text-c-sub cursor-pointer">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
       <div class="p-5">
-        <textarea id="pasteTextInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..." class="w-full rounded-xl border border-g-border focus:border-g-blue p-3.5 font-docSans text-sm text-g-text focus:outline-none"></textarea>
+        <textarea id="pasteTextInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..." class="w-full rounded-xl bg-c-paper border border-c-border focus:border-c-accent p-3.5 font-docSerif text-sm text-c-ink focus:outline-none"></textarea>
       </div>
-      <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-end gap-2">
-        <button onclick="closePasteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إلغاء</button>
-        <button onclick="processPastedText()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">فتح</button>
+      <div class="px-5 py-3.5 bg-c-bg border-t border-c-border flex items-center justify-end gap-2">
+        <button onclick="closePasteModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-c-sub hover:bg-c-border transition cursor-pointer">إلغاء</button>
+        <button onclick="processPastedText()" class="px-5 py-2 rounded-lg text-xs font-medium bg-c-ink hover:bg-[#2B2B29] text-c-surface transition cursor-pointer">فتح للقراءة</button>
       </div>
     </div>
   </div>
 
   <!-- ==================== API SETTINGS MODAL ==================== -->
-  <div id="apiSettingsModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full shadow-g-modal border border-g-border overflow-hidden">
-      <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
-        <h3 class="font-semibold text-sm text-g-text">إعدادات محرك الترجمة</h3>
-        <button onclick="closeApiSettingsModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
+  <div id="apiSettingsModal" class="hidden fixed inset-0 z-50 bg-c-ink/35 flex items-center justify-center p-4">
+    <div class="bg-c-surface rounded-2xl max-w-md w-full shadow-c-modal border border-c-border overflow-hidden">
+      <div class="px-5 py-4 border-b border-c-border flex items-center justify-between">
+        <h3 class="font-semibold text-sm text-c-ink">إعدادات محرك الترجمة</h3>
+        <button onclick="closeApiSettingsModal()" class="p-1 rounded-lg hover:bg-c-bg text-c-sub cursor-pointer">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
-      <div class="p-5 space-y-3 text-xs text-g-sub leading-relaxed">
-        <p class="text-g-text font-medium">
+      <div class="p-5 space-y-3 text-xs text-c-sub leading-relaxed">
+        <p class="text-c-ink font-medium">
           يعمل التطبيق مجاناً بـ 3 محركات ترجمة تلقائية (Google Translate + Lingva + MyMemory) مع قواميس EN/FR دون أي مفتاح.
         </p>
         <p>
           اختياري: لتفعيل التحليل الأدبي والسياقي العميق عبر <strong>Gemini AI</strong>، أدخل مفتاح API هنا:
         </p>
-        <input id="geminiKeyInput" type="password" dir="ltr" placeholder="AIzaSy..." class="w-full rounded-xl border border-g-border focus:border-g-blue px-3.5 py-2.5 font-mono text-xs text-g-text focus:outline-none" />
+        <input id="geminiKeyInput" type="password" dir="ltr" placeholder="AIzaSy..." class="w-full rounded-xl bg-c-paper border border-c-border focus:border-c-accent px-3.5 py-2.5 font-mono text-xs text-c-ink focus:outline-none" />
       </div>
-      <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-between">
-        <button onclick="clearStoredCache()" class="text-xs text-g-red hover:underline cursor-pointer">مسح ذاكرة الترجمة</button>
+      <div class="px-5 py-3.5 bg-c-bg border-t border-c-border flex items-center justify-between">
+        <button onclick="clearStoredCache()" class="text-xs text-c-danger hover:underline cursor-pointer">مسح ذاكرة الترجمة</button>
         <div class="flex items-center gap-2">
-          <button onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إغلاق</button>
-          <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">حفظ</button>
+          <button onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-c-sub hover:bg-c-border transition cursor-pointer">إغلاق</button>
+          <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-lg text-xs font-medium bg-c-accent hover:bg-c-accentHover text-white transition cursor-pointer">حفظ</button>
         </div>
       </div>
     </div>
@@ -653,7 +629,7 @@
 
   <!-- ==================== SNACKBAR ==================== -->
   <div id="snackbar" class="fixed bottom-5 right-5 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none">
-    <div class="bg-[#202124] text-white text-xs px-4 py-2.5 rounded-lg shadow-g-elevated flex items-center gap-2">
+    <div class="bg-c-ink text-c-surface text-xs px-4 py-2.5 rounded-lg shadow-c-modal flex items-center gap-2">
       <span id="snackbarText"></span>
     </div>
   </div>
@@ -666,7 +642,7 @@
     const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v4';
     const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v4';
     const STORAGE_GEMINI_KEY = 'readdy_user_gemini_api_key';
-    const STORAGE_WELCOME_KEY = 'readdy_hide_welcome_modal_v1';
+    const STORAGE_WELCOME_KEY = 'readdy_hide_welcome_modal_v2';
 
     const appState = {
       docTitle: '',
@@ -674,8 +650,8 @@
       sentenceRecords: [],
       languageOverride: 'auto',
       detectedLang: 'en',
-      fontFamily: 'sans',
-      fontSize: 17,
+      fontFamily: 'serif',
+      fontSize: 18,
       activeWordEl: null,
       activeSentenceTokens: [],
       selectedSentenceIndex: -1,
@@ -935,7 +911,7 @@
       SpeechManager.init();
       updateSavedBadges();
       setupFileInputAndDragDrop();
-      openWelcomeModal(false); // Show welcome popup automatically on page open
+      openWelcomeModal(false);
       document.getElementById('docTitleInput').addEventListener('input', (e) => {
         appState.docTitle = e.target.value;
       });
@@ -950,11 +926,11 @@
 
       [document.getElementById('emptyDropzone'), document.getElementById('canvasDropArea')].forEach((target) => {
         if (!target) return;
-        target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('border-g-blue', 'bg-g-blueSoft/20'); });
-        target.addEventListener('dragleave', () => { target.classList.remove('border-g-blue', 'bg-g-blueSoft/20'); });
+        target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('border-c-accent', 'bg-c-paper'); });
+        target.addEventListener('dragleave', () => { target.classList.remove('border-c-accent', 'bg-c-paper'); });
         target.addEventListener('drop', (e) => {
           e.preventDefault();
-          target.classList.remove('border-g-blue', 'bg-g-blueSoft/20');
+          target.classList.remove('border-c-accent', 'bg-c-paper');
           const file = e.dataTransfer?.files?.[0];
           if (file) handleFileIngestion(file);
         });
@@ -1242,18 +1218,18 @@
       appState.pages.forEach((page) => {
         const sheet = document.createElement('article');
         sheet.id = `doc-page-${page.pageNumber}`;
-        sheet.className = 'g-doc-sheet px-6 py-8 sm:px-14 sm:py-12 md:px-16 md:py-14 relative';
+        sheet.className = 'c-doc-sheet px-6 py-8 sm:px-14 sm:py-12 md:px-16 md:py-14 relative';
         sheet.dir = 'ltr';
 
         const contentWrapper = document.createElement('div');
-        contentWrapper.className = `doc-content-body ${fontClass} text-g-text leading-[1.85] space-y-5`;
+        contentWrapper.className = `doc-content-body ${fontClass} text-c-ink leading-[1.9] space-y-5`;
         contentWrapper.style.fontSize = `${appState.fontSize}px`;
 
         page.blocks.forEach((block) => {
           let el;
-          if (block.type === 'h1') { el = document.createElement('h1'); el.className = 'text-[1.5em] font-bold text-g-text leading-snug mt-2 mb-3'; }
-          else if (block.type === 'h2') { el = document.createElement('h2'); el.className = 'text-[1.22em] font-semibold text-g-text leading-snug mt-2 mb-2'; }
-          else if (block.type === 'li') { el = document.createElement('div'); el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:text-g-sub'; }
+          if (block.type === 'h1') { el = document.createElement('h1'); el.className = 'text-[1.5em] font-bold text-c-ink leading-snug mt-2 mb-3'; }
+          else if (block.type === 'h2') { el = document.createElement('h2'); el.className = 'text-[1.22em] font-semibold text-c-ink leading-snug mt-2 mb-2'; }
+          else if (block.type === 'li') { el = document.createElement('div'); el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:text-c-sub'; }
           else { el = document.createElement('p'); el.className = 'text-left'; if (block.indent) el.style.paddingLeft = `${block.indent}px`; }
 
           tokenizeBlockIntoElement(el, block.text, savedSet);
@@ -1263,8 +1239,8 @@
         sheet.appendChild(contentWrapper);
 
         const pageFooter = document.createElement('div');
-        pageFooter.className = 'mt-10 pt-3 border-t border-g-borderSubtle flex justify-between items-center text-[11px] text-g-sub select-none';
-        pageFooter.innerHTML = `<span>Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
+        pageFooter.className = 'mt-10 pt-3 border-t border-c-border flex justify-between items-center text-[11px] text-c-sub select-none';
+        pageFooter.innerHTML = `<span class="font-serifBrand">Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
         sheet.appendChild(pageFooter);
 
         fragment.appendChild(sheet);
@@ -1320,12 +1296,12 @@
       appState.fontFamily = mode;
       const sansBtn = document.getElementById('fontSansBtn');
       const serifBtn = document.getElementById('fontSerifBtn');
-      if (mode === 'sans') {
-        sansBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
-        serifBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
+      if (mode === 'serif') {
+        serifBtn.className = 'px-2.5 py-1 rounded-md bg-c-bg text-c-ink font-medium border border-c-border transition cursor-pointer';
+        sansBtn.className = 'px-2.5 py-1 rounded-md text-c-sub hover:text-c-ink font-medium border border-transparent transition cursor-pointer';
       } else {
-        serifBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
-        sansBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
+        sansBtn.className = 'px-2.5 py-1 rounded-md bg-c-bg text-c-ink font-medium border border-c-border transition cursor-pointer';
+        serifBtn.className = 'px-2.5 py-1 rounded-md text-c-sub hover:text-c-ink font-medium border border-transparent transition cursor-pointer';
       }
       document.querySelectorAll('.doc-content-body').forEach(el => {
         el.classList.remove('doc-font-sans', 'doc-font-serif');
@@ -1720,11 +1696,11 @@
       const wordBtn = document.getElementById('wordRepeatToggleBtn');
       const sentBtn = document.getElementById('sentenceRepeatBtn');
       if (wordBtn) wordBtn.className = SpeechManager.repeatMode === 'word'
-        ? 'bg-g-blueSoft text-g-blue border border-g-blue p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer'
-        : 'bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
+        ? 'bg-c-accentSoft text-c-accent border border-c-accent p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer'
+        : 'bg-c-paper hover:bg-c-bg text-c-sub border border-c-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
       if (sentBtn) sentBtn.className = SpeechManager.repeatMode === 'sentence'
-        ? 'p-1 rounded-full bg-g-blueSoft text-g-blue transition cursor-pointer'
-        : 'p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer';
+        ? 'p-1 rounded bg-c-accentSoft text-c-accent transition cursor-pointer'
+        : 'p-1 rounded text-c-sub hover:bg-c-bg transition cursor-pointer';
     }
 
     function toggleDocumentAudioPlayback() {
@@ -1748,11 +1724,11 @@
       const icon = document.getElementById('bookmarkWordIcon');
       const bookmarked = isWordBookmarked(appState.selectedAnalysis.word);
       if (bookmarked) {
-        btn.className = 'w-9 h-9 rounded-full border border-g-green bg-[#E6F4EA] text-g-green flex items-center justify-center transition shrink-0 cursor-pointer';
+        btn.className = 'w-9 h-9 rounded-lg border border-c-olive bg-c-oliveSoft text-c-olive flex items-center justify-center transition shrink-0 cursor-pointer';
         icon.textContent = 'bookmark_added';
         icon.classList.add('filled');
       } else {
-        btn.className = 'w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0 cursor-pointer';
+        btn.className = 'w-9 h-9 rounded-lg border border-c-border bg-c-paper hover:bg-c-bg text-c-sub flex items-center justify-center transition shrink-0 cursor-pointer';
         icon.textContent = 'bookmark_add';
         icon.classList.remove('filled');
       }
@@ -1809,21 +1785,21 @@
       const query = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
       const filtered = appState.savedWords.filter(item => item.word.toLowerCase().includes(query) || item.translation_ar.includes(query));
       if (filtered.length === 0) {
-        listEl.innerHTML = `<div class="py-12 text-center text-g-sub text-xs"><span class="material-symbols-outlined text-[30px] text-g-border mb-2">bookmark_border</span><p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p></div>`;
+        listEl.innerHTML = `<div class="py-12 text-center text-c-sub text-xs"><span class="material-symbols-outlined text-[30px] text-c-borderStrong mb-2">bookmark_border</span><p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p></div>`;
         return;
       }
       listEl.innerHTML = filtered.map(item => `
-        <div class="p-3 rounded-xl border border-g-border bg-white flex items-center justify-between gap-2">
+        <div class="p-3 rounded-xl border border-c-border bg-c-paper flex items-center justify-between gap-2">
           <div class="min-w-0">
             <div dir="ltr" class="flex items-center gap-1.5 justify-end">
-              <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-g-bg border border-g-border text-g-sub uppercase">${item.lang}</span>
-              <span class="font-docSans font-semibold text-sm text-g-text truncate">${item.word}</span>
+              <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-c-bg border border-c-border text-c-sub uppercase">${item.lang}</span>
+              <span class="font-docSerif font-semibold text-sm text-c-ink truncate">${item.word}</span>
             </div>
-            <p class="text-xs font-medium text-g-blue mt-0.5 truncate">${item.translation_ar}</p>
+            <p class="text-xs font-medium text-c-accent mt-0.5 truncate">${item.translation_ar}</p>
           </div>
           <div class="flex items-center gap-0.5 shrink-0">
-            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-full hover:bg-g-blueSoft text-g-blue cursor-pointer" title="نطق"><span class="material-symbols-outlined text-[18px]">volume_up</span></button>
-            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full hover:bg-[#FCE8E6] text-g-red cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-lg hover:bg-c-accentSoft text-c-accent cursor-pointer" title="نطق"><span class="material-symbols-outlined text-[18px]">volume_up</span></button>
+            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-lg hover:bg-c-accentSoft text-c-danger cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[18px]">delete</span></button>
           </div>
         </div>
       `).join('');
