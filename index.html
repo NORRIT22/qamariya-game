@@ -11,7 +11,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: IBM Plex Sans Arabic, Cairo, Inter, Literata & Plus Jakarta Sans -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
@@ -88,6 +88,7 @@
       display: inline;
       cursor: pointer;
       border-radius: 3px;
+      padding: 1px 0;
       transition: background-color 0.1s ease, color 0.1s ease;
     }
     .word-token:hover {
@@ -232,11 +233,10 @@
   <input type="file" id="fileInput" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" class="hidden" />
 
   <!-- ==================== 1. MINIMALIST SOLID GOOGLE HEADER (64px) ==================== -->
-  <header class="sticky top-0 z-40 h-16 bg-white border-b border-g-border px-4 sm:px-6 flex items-center justify-between gap-4">
+  <header class="sticky top-0 z-40 h-16 bg-white border-b border-g-border px-4 sm:px-6 flex items-center justify-between gap-3">
     <!-- Left / Start: Custom Animated Readdy Logo + Doc Title -->
     <div class="flex items-center gap-3 min-w-0 flex-1">
       <button onclick="resetToEmptyState()" class="readdy-logo-wrapper shrink-0 focus:outline-none group" title="Readdy">
-        <!-- Animated 'R' Play Mark SVG -->
         <svg class="readdy-mark-svg w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="readdyBlueRed" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
@@ -252,15 +252,11 @@
               <stop offset="100%" stop-color="#34A853" />
             </linearGradient>
           </defs>
-          <!-- Outer R Curved Ribbon -->
           <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGrad)" />
-          <!-- Vertical Left Stem -->
           <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRed)" />
-          <!-- Animated Play Triangle -->
           <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
         </svg>
 
-        <!-- Wordmark with Animated Wave Ribbon -->
         <div dir="ltr" class="relative flex items-center pt-1.5">
           <svg class="readdy-ribbon-wave w-[52px] h-[16px] absolute -top-1.5 left-[2px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
@@ -274,7 +270,7 @@
         </div>
       </button>
 
-      <!-- Document Title Input (Visible when document is open) -->
+      <!-- Document Title Input -->
       <div id="headerDocMeta" class="hidden sm:flex items-center min-w-0 border-r border-g-border pr-3">
         <input
           id="docTitleInput"
@@ -286,7 +282,7 @@
       </div>
     </div>
 
-    <!-- Right / End: Compact Upload, Language Selector, Saved Words Drawer -->
+    <!-- Right / End: Language Selector, Upload, API Settings, Saved Words -->
     <div class="flex items-center gap-2 shrink-0">
       <!-- Language Selector (Auto / EN / FR) -->
       <div class="flex items-center bg-white rounded-full px-3 py-1.5 border border-g-border hover:bg-[#F8F9FA] transition">
@@ -299,13 +295,18 @@
       </div>
 
       <!-- Compact File Upload Trigger Button -->
-      <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-full transition flex items-center gap-1.5 cursor-pointer">
+      <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white text-xs sm:text-sm font-medium px-3.5 sm:px-4 py-2 rounded-full transition flex items-center gap-1.5 cursor-pointer">
         <span class="material-symbols-outlined text-[18px]">upload_file</span>
-        <span>رفع ملف</span>
+        <span class="hidden xs:inline sm:inline">رفع ملف</span>
+      </button>
+
+      <!-- Optional Gemini API Settings Button -->
+      <button onclick="openApiSettingsModal()" class="p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub hover:text-g-text transition flex items-center justify-center cursor-pointer" title="إعدادات محرك الترجمة">
+        <span class="material-symbols-outlined text-[20px]">tune</span>
       </button>
 
       <!-- Saved Words Drawer Button with Badge -->
-      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-text transition flex items-center justify-center" title="الكلمات المحفوظة">
+      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-text transition flex items-center justify-center cursor-pointer" title="الكلمات المحفوظة">
         <span class="material-symbols-outlined text-[20px]">bookmarks</span>
         <span id="savedCountBadge" class="hidden absolute -top-1 -right-1 bg-g-blue text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">0</span>
       </button>
@@ -330,35 +331,25 @@
       onclick="triggerFileUpload()"
       class="w-full max-w-lg bg-white border border-g-border hover:border-g-blue rounded-2xl p-10 sm:p-12 text-center transition-colors duration-150 cursor-pointer"
     >
-      <!-- Hero Animated Readdy Folded Page / Book Brand Emblem -->
       <div class="flex flex-col items-center justify-center mb-6 select-none">
         <div class="flex items-center gap-3.5" dir="ltr">
-          <!-- Colorful Folded Page / Book SVG Icon -->
           <svg class="w-14 h-14 overflow-visible" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Base Blue Left Page -->
             <path d="M10 12C10 9.79086 11.7909 8 14 8H28C30.2 8 32 9.8 32 12V54C32 55.1 31.1 56 30 56H14C11.7909 56 10 54.2091 10 52V12Z" fill="#4285F4" />
-            <!-- Green Back Right Page -->
             <path d="M32 12C32 9.8 33.8 8 36 8H50C52.2091 8 54 9.79086 54 12V44L42 56H32V12Z" fill="#34A853" />
-            <!-- Yellow Mid Folded Sheet -->
             <path d="M32 12C38 12 44 10 47 8.5V36C42 42 36 49 32 54V12Z" fill="#FBBC04" />
-            <!-- Red Inner Spine Ribbon -->
             <path d="M32 12C35.5 12 39 11 41 9.5V34C37.5 41 34 48 32 54V12Z" fill="#EA4335" />
-            <!-- Animated Bottom-Right Page Curl -->
             <path class="readdy-page-curl" d="M42 56V46C42 44.8954 42.8954 44 44 44H54L42 56Z" fill="#E8EAED" />
           </svg>
 
-          <!-- Clean Google-Styled Wordmark -->
           <div class="flex items-baseline font-brand text-[34px] font-semibold tracking-tight text-[#3C4043]">
             <span>Read</span>
             <span class="relative inline-flex items-center">
-              <!-- Subtle Blue/Red Accent Arc on 'd' -->
               <svg class="w-4 h-7 -mr-1.5" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M12 4C6.5 4 3 8.5 3 14" stroke="#EA4335" stroke-width="2.6" stroke-linecap="round" />
                 <path d="M3 14C3 19.5 6.5 24 12 24" stroke="#4285F4" stroke-width="2.6" stroke-linecap="round" />
               </svg>
               <span>d</span>
             </span>
-            <!-- Multi-color 'y' matching brand palette -->
             <svg class="w-6 h-8 ml-0.5 translate-y-[5px]" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M3 4L12 19" stroke="#EA4335" stroke-width="4.2" stroke-linecap="round" />
               <path d="M21 4L12 19" stroke="#4285F4" stroke-width="4.2" stroke-linecap="round" />
@@ -394,24 +385,20 @@
 
         <!-- Left Group: Document Audio Player Controls -->
         <div class="flex flex-wrap items-center gap-2">
-          <!-- Play / Pause Full Document or From Selected Word -->
           <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="flex items-center gap-1.5 bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition cursor-pointer">
             <span id="docAudioPlayIcon" class="material-symbols-outlined filled text-[17px]">play_arrow</span>
             <span id="docAudioPlayLabel">استماع للمستند</span>
           </button>
 
-          <!-- Stop Button -->
-          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden p-1.5 rounded-full border border-g-border hover:bg-[#F8F9FA] text-g-text transition" title="إيقاف">
+          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden p-1.5 rounded-full border border-g-border hover:bg-[#F8F9FA] text-g-text transition cursor-pointer" title="إيقاف">
             <span class="material-symbols-outlined filled text-[16px]">stop</span>
           </button>
 
-          <!-- Speaking Wave Indicator -->
           <div id="globalSpeakingWave" class="hidden items-center gap-1.5 px-2 py-1 rounded-full bg-g-blueSoft text-g-blue text-[11px] font-medium">
             <div class="soundwave-bars"><span></span><span></span><span></span></div>
             <span>ينطق الآن</span>
           </div>
 
-          <!-- Document Speed Selector (0.75x / 1.0x / 1.25x) -->
           <div class="flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs">
             <span class="text-g-sub ml-1">السرعة:</span>
             <select id="docSpeechRateSelect" onchange="SpeechManager.setDocRate(parseFloat(this.value))" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer">
@@ -421,7 +408,6 @@
             </select>
           </div>
 
-          <!-- Voice Selector Dropdown -->
           <div class="hidden md:flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs max-w-[210px]">
             <span class="material-symbols-outlined text-[15px] text-g-sub ml-1">record_voice_over</span>
             <select id="voiceSelector" onchange="SpeechManager.selectVoiceByURI(this.value)" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer truncate w-full" title="اختيار الصوت">
@@ -430,9 +416,8 @@
           </div>
         </div>
 
-        <!-- Right Group: Typography Controls (Font Family Toggle + Size 16px-24px) -->
+        <!-- Right Group: Typography Controls -->
         <div class="flex items-center gap-2">
-          <!-- Sans-serif (Inter) vs Editorial Serif (Literata) Toggle -->
           <div class="flex items-center bg-g-bg border border-g-border rounded-full p-0.5 text-xs">
             <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer">
               Inter
@@ -442,14 +427,12 @@
             </button>
           </div>
 
-          <!-- Font Size Controls (16px to 24px) -->
           <div class="flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-1.5 py-0.5">
-            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition" title="تصغير الخط">A-</button>
+            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تصغير الخط">A-</button>
             <span id="fontSizeIndicator" class="text-[11px] text-g-sub px-1 select-none font-medium">17px</span>
-            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition" title="تكبير الخط">A+</button>
+            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تكبير الخط">A+</button>
           </div>
 
-          <!-- Page Count & New Doc -->
           <span id="pageCountIndicator" class="hidden sm:inline text-xs text-g-sub px-1">1 صفحة</span>
           <button onclick="resetToEmptyState()" class="text-xs text-g-sub hover:text-g-text hover:bg-[#F8F9FA] border border-g-border px-3 py-1.5 rounded-full transition flex items-center gap-1 font-medium cursor-pointer">
             <span class="material-symbols-outlined text-[15px]">add</span>
@@ -459,20 +442,18 @@
       </div>
     </div>
 
-    <!-- Main Split Layout: Document Canvas + Right Side Dictionary Panel -->
+    <!-- Main Split Layout: Document Canvas + Responsive Dictionary Panel -->
     <div class="flex-1 flex flex-col lg:flex-row relative">
 
       <!-- Document Canvas Area -->
-      <div id="canvasDropArea" class="flex-1 py-6 sm:py-8 px-3 sm:px-6 flex flex-col items-center gap-6 overflow-y-auto">
-        <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6">
-          <!-- Paginated solid white Google Docs sheets injected here -->
-        </div>
+      <div id="canvasDropArea" class="flex-1 py-6 sm:py-8 px-3 sm:px-6 pb-24 lg:pb-12 flex flex-col items-center gap-6 overflow-y-auto">
+        <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6"></div>
       </div>
 
-      <!-- Right Side Panel (360px on Desktop) -->
+      <!-- Responsive Dictionary Panel (Bottom Sheet on Mobile, 360px Right Panel on Desktop) -->
       <aside
         id="sideDictionaryPanel"
-        class="hidden lg:flex flex-col w-full lg:w-[360px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[109px] lg:h-[calc(100vh-109px)] overflow-y-auto z-30"
+        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-2xl shadow-g-modal lg:rounded-none lg:shadow-none lg:static w-full lg:w-[360px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[109px] lg:h-[calc(100vh-109px)] lg:max-h-none overflow-y-auto z-40 transition-transform duration-200"
       >
         <!-- Panel Top Bar -->
         <div class="px-4 py-3 border-b border-g-border flex items-center justify-between bg-white sticky top-0 z-10">
@@ -480,9 +461,12 @@
             <span class="material-symbols-outlined text-g-blue text-[18px]">translate</span>
             <span>الترجمة والشرح السياقي</span>
           </div>
-          <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub" title="إغلاق">
-            <span class="material-symbols-outlined text-[18px]">close</span>
-          </button>
+          <div class="flex items-center gap-1">
+            <span id="engineSourceTag" class="text-[10px] px-2 py-0.5 rounded-full bg-g-bg border border-g-border text-g-sub"></span>
+            <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer" title="إغلاق">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
         </div>
 
         <!-- Skeleton Loading State -->
@@ -492,10 +476,7 @@
               <div class="h-6 w-32 rounded skeleton"></div>
               <div class="h-3.5 w-20 rounded skeleton"></div>
             </div>
-            <div class="flex gap-1.5">
-              <div class="w-9 h-9 rounded-full skeleton"></div>
-              <div class="w-9 h-9 rounded-full skeleton"></div>
-            </div>
+            <div class="w-9 h-9 rounded-full skeleton"></div>
           </div>
           <div class="h-16 w-full rounded-xl skeleton"></div>
           <div class="h-24 w-full rounded-xl skeleton"></div>
@@ -511,19 +492,19 @@
                 <h2 id="panelWordTitle" class="font-docSans text-2xl font-semibold text-g-text break-words"></h2>
                 <span id="panelLangBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-g-bg border border-g-border text-g-sub uppercase"></span>
               </div>
-              <div class="flex items-center gap-2 mt-1 text-xs text-g-sub">
+              <div class="flex items-center gap-2 mt-1 text-xs text-g-sub flex-wrap">
                 <span id="panelIpa" class="font-mono text-g-text"></span>
-                <span>•</span>
+                <span id="panelIpaDot">•</span>
                 <span id="panelPosBadge" class="font-sans font-medium text-g-green"></span>
               </div>
             </div>
 
-            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0" title="حفظ الكلمة">
+            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0 cursor-pointer" title="حفظ الكلمة">
               <span id="bookmarkWordIcon" class="material-symbols-outlined text-[20px]">bookmark_add</span>
             </button>
           </div>
 
-          <!-- 3-Control Word Pronunciation Bar (1.0x Normal, 0.65x Slow, Repeat Loop) -->
+          <!-- 3-Control Word Pronunciation Bar -->
           <div class="bg-g-bg border border-g-border rounded-xl p-2.5 flex items-center justify-between gap-1.5">
             <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer" title="نطق عادي">
               <span class="material-symbols-outlined filled text-[17px]">volume_up</span>
@@ -555,12 +536,12 @@
 
           <!-- Contextual Explanation -->
           <div class="bg-g-bg border border-g-border rounded-xl p-3.5">
-            <h3 class="text-xs font-semibold text-g-text mb-1.5">المعنى في سياق الجملة</h3>
+            <h3 class="text-xs font-semibold text-g-text mb-1.5">المعنى والشرح السياقي</h3>
             <p id="panelExplanationAr" class="text-[13px] text-g-text leading-relaxed"></p>
           </div>
 
           <!-- Example Sentence -->
-          <div class="bg-white border border-g-border rounded-xl p-3.5 space-y-1.5">
+          <div id="exampleBox" class="bg-white border border-g-border rounded-xl p-3.5 space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-semibold text-g-sub">مثال تطبيقي</span>
               <div class="flex items-center gap-1">
@@ -580,7 +561,7 @@
           <!-- Surrounding Sentence with 3 Audio Controls -->
           <div class="border-t border-g-border pt-3.5 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-semibold text-g-sub">الجملة الكاملة</span>
+              <span class="text-[11px] font-semibold text-g-sub">الجملة الكاملة في النص</span>
               <div class="flex items-center gap-1">
                 <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer" title="نطق الجملة">
                   <span class="material-symbols-outlined text-[15px]">volume_up</span>
@@ -595,7 +576,7 @@
               </div>
             </div>
             <p id="panelSentenceOrig" dir="ltr" class="font-docSans text-xs text-g-text bg-g-bg p-2.5 rounded-lg border border-g-border leading-relaxed"></p>
-            <p id="panelSentenceAr" class="text-xs text-g-sub leading-relaxed"></p>
+            <p id="panelSentenceAr" class="text-xs font-medium text-g-text leading-relaxed"></p>
           </div>
         </div>
       </aside>
@@ -616,13 +597,12 @@
           <span class="material-symbols-outlined text-[16px]">download</span>
           <span>CSV</span>
         </button>
-        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-full hover:bg-[#F1F3F4] text-g-sub">
+        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
     </div>
 
-    <!-- Search Input -->
     <div class="p-3 border-b border-g-border shrink-0">
       <div class="relative">
         <span class="material-symbols-outlined text-[18px] text-g-sub absolute right-3 top-2.5">search</span>
@@ -636,7 +616,6 @@
       </div>
     </div>
 
-    <!-- Saved Words List -->
     <div id="vocabDrawerList" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
   </aside>
 
@@ -645,7 +624,7 @@
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-g-modal border border-g-border overflow-hidden">
       <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
         <h3 class="font-semibold text-sm text-g-text">لصق نص مباشرة</h3>
-        <button onclick="closePasteModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub">
+        <button onclick="closePasteModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
@@ -654,12 +633,47 @@
           id="pasteTextInput"
           dir="auto"
           rows="8"
+          placeholder="الصق النص الإنجليزي أو الفرنسي هنا..."
           class="w-full rounded-xl border border-g-border focus:border-g-blue p-3.5 font-docSans text-sm text-g-text focus:outline-none"
         ></textarea>
       </div>
       <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-end gap-2">
         <button onclick="closePasteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إلغاء</button>
         <button onclick="processPastedText()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">فتح</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== API SETTINGS MODAL (OPTIONAL GEMINI KEY) ==================== -->
+  <div id="apiSettingsModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-g-modal border border-g-border overflow-hidden">
+      <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
+        <h3 class="font-semibold text-sm text-g-text">إعدادات محرك الترجمة</h3>
+        <button onclick="closeApiSettingsModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div class="p-5 space-y-3 text-xs text-g-sub leading-relaxed">
+        <p class="text-g-text font-medium">
+          يعمل التطبيق افتراضياً بمحرك ترجمة فوري مجاني (Google Translate + القواميس اللغوية) دون الحاجة لأي مفتاح.
+        </p>
+        <p>
+          اختياري: إذا أردت تفعيل التحليل السياقي المتقدم عبر <strong>Gemini AI</strong>، أدخل مفتاح Gemini API الخاص بك هنا (يُحفظ محلياً في متصفحك فقط):
+        </p>
+        <input
+          id="geminiKeyInput"
+          type="password"
+          dir="ltr"
+          placeholder="AIzaSy..."
+          class="w-full rounded-xl border border-g-border focus:border-g-blue px-3.5 py-2.5 font-mono text-xs text-g-text focus:outline-none"
+        />
+      </div>
+      <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-between">
+        <button onclick="clearStoredCache()" class="text-xs text-g-red hover:underline cursor-pointer">مسح ذاكرة الترجمة المؤقتة</button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إغلاق</button>
+          <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">حفظ</button>
+        </div>
       </div>
     </div>
   </div>
@@ -678,26 +692,29 @@
     }
 
     // ==================== APPLICATION STATE ====================
-    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v2';
-    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v2';
+    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v3';
+    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v3';
+    const STORAGE_GEMINI_KEY = 'readdy_user_gemini_api_key';
 
     const appState = {
       docTitle: '',
-      pages: [], // Array of { pageNumber, blocks: Array<{ type: 'h1'|'h2'|'p'|'li', text: string, indent?: number }> }
-      sentenceRecords: [], // Flat list of { text, tokens: HTMLElement[] } for document audio player
+      pages: [],
+      sentenceRecords: [],
       languageOverride: 'auto',
       detectedLang: 'en',
-      fontFamily: 'sans', // 'sans' (Inter) | 'serif' (Literata)
-      fontSize: 17, // 16px to 24px
+      fontFamily: 'sans',
+      fontSize: 17,
       activeWordEl: null,
       activeSentenceTokens: [],
       selectedSentenceIndex: -1,
       selectedAnalysis: null,
+      activeRequestToken: 0, // Prevents fast-click race conditions
       memoryCache: new Map(),
-      savedWords: []
+      savedWords: [],
+      geminiApiKey: ''
     };
 
-    // ==================== UPGRADED SPEECH MANAGER (WEB SPEECH API ENGINE) ====================
+    // ==================== UPGRADED SPEECH MANAGER ====================
     const SpeechManager = {
       voices: [],
       selectedVoiceURI: '',
@@ -705,18 +722,22 @@
       isPlayingDoc: false,
       isPausedDoc: false,
       currentSentenceIdx: 0,
-      repeatMode: null, // 'word' | 'sentence' | null
+      repeatMode: null,
       repeatTimer: null,
       keepAliveTimer: null,
 
       init() {
         if (!('speechSynthesis' in window)) return;
         const load = () => {
-          this.voices = window.speechSynthesis.getVoices() || [];
-          this.populateVoiceDropdown(appState.detectedLang);
+          const list = window.speechSynthesis.getVoices() || [];
+          if (list.length > 0) {
+            this.voices = list;
+            this.populateVoiceDropdown(appState.detectedLang);
+          }
         };
         load();
         window.speechSynthesis.onvoiceschanged = load;
+        setTimeout(load, 500);
       },
 
       rankVoice(voice, targetPrefix) {
@@ -727,7 +748,6 @@
         let score = 10;
         if (name.includes('google uk english') || name.includes('google us english') || name.includes('google français')) score += 50;
         else if (name.includes('google')) score += 40;
-
         if (name.includes('natural') || name.includes('neural') || name.includes('online')) score += 35;
         if (name.includes('premium') || name.includes('enhanced')) score += 30;
         if (name.includes('aria') || name.includes('denise') || name.includes('henri') || name.includes('samantha') || name.includes('thomas') || name.includes('amélie') || name.includes('amelie') || name.includes('daniel')) score += 25;
@@ -758,7 +778,6 @@
           return `<option value="${v.voiceURI}">${cleanName} (${v.lang})</option>`;
         }).join('');
 
-        // Preserve user selection if still valid for this language, otherwise pick top ranked
         if (ranked.some(v => v.voiceURI === this.selectedVoiceURI)) {
           select.value = this.selectedVoiceURI;
         } else {
@@ -785,7 +804,6 @@
       setDocRate(rate) {
         this.docRate = rate;
         if (this.isPlayingDoc && !this.isPausedDoc) {
-          // Restart current sentence smoothly at the new rate
           this.playDocumentFromIndex(this.currentSentenceIdx);
         }
       },
@@ -813,7 +831,6 @@
         }
       },
 
-      // Speak single utterance cleanly (cancels any active speech first)
       speakSingle(text, lang, rate = 1.0, loopMode = null) {
         if (!('speechSynthesis' in window) || !text) return;
         this.stop(false);
@@ -844,7 +861,6 @@
         runUtterance();
       },
 
-      // Chunked Sentence-by-Sentence Document Playback (Prevents Chrome 15s cutoff)
       playDocumentFromIndex(startIdx = 0) {
         if (!('speechSynthesis' in window) || appState.sentenceRecords.length === 0) return;
         this.stop(false);
@@ -854,7 +870,6 @@
         this.currentSentenceIdx = Math.max(0, Math.min(startIdx, appState.sentenceRecords.length - 1));
         this.updateDocPlayerUI();
 
-        // Chrome bug workaround: periodic pause/resume keeps synthesis alive on long sessions
         this.keepAliveTimer = setInterval(() => {
           if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
             window.speechSynthesis.pause();
@@ -950,7 +965,7 @@
       }
     };
 
-    // Load persisted vocabulary and cache
+    // Hydrate Storage
     (function hydrateStorage() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_VOCAB_KEY) || '[]');
@@ -958,10 +973,12 @@
 
         const cachedObj = JSON.parse(localStorage.getItem(STORAGE_CACHE_KEY) || '{}');
         Object.entries(cachedObj).forEach(([k, v]) => appState.memoryCache.set(k, v));
+
+        appState.geminiApiKey = localStorage.getItem(STORAGE_GEMINI_KEY) || '';
       } catch (_) {}
     })();
 
-    // ==================== DOM & EVENT INITIALIZATION ====================
+    // ==================== INITIALIZATION ====================
     window.addEventListener('DOMContentLoaded', () => {
       SpeechManager.init();
       updateSavedBadges();
@@ -1018,7 +1035,17 @@
       closeSidePanel();
     }
 
-    // ==================== PROGRESS & LANGUAGE DETECTION ====================
+    // ==================== TEXT CLEANING & LANGUAGE DETECTION ====================
+    function sanitizeExtractedText(text) {
+      return text
+        .replace(/[\u200B-\u200D\uFEFF]/g, '') // Remove zero-width chars
+        .replace(/\u00A0/g, ' ') // Replace non-breaking spaces
+        .replace(/[“”]/g, '"')
+        .replace(/[‘’]/g, "'")
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
     function setExtractionProgress(visible, text = '', percent = 0) {
       const container = document.getElementById('extractionProgressContainer');
       if (!visible) {
@@ -1033,9 +1060,9 @@
 
     function detectTextLanguage(text) {
       if (appState.languageOverride !== 'auto') return appState.languageOverride;
-      const sample = text.slice(0, 2000).toLowerCase();
-      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc)\b/g) || []).length;
-      const enScore = (sample.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could)\b/g) || []).length;
+      const sample = text.slice(0, 2500).toLowerCase();
+      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces)\b/g) || []).length;
+      const enScore = (sample.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g) || []).length;
       return frScore > enScore ? 'fr' : 'en';
     }
 
@@ -1044,13 +1071,13 @@
       const allText = appState.pages.flatMap(p => p.blocks.map(b => b.text)).join(' ');
       appState.detectedLang = detectTextLanguage(allText);
       SpeechManager.populateVoiceDropdown(appState.detectedLang);
+      showSnackbar(`تم ضبط اللغة إلى: ${appState.detectedLang === 'fr' ? 'الفرنسية (FR)' : 'الإنجليزية (EN)'}`);
     }
 
-    // ==================== 3. HIGH-FIDELITY DOCUMENT EXTRACTION ENGINE ====================
+    // ==================== DOCUMENT EXTRACTION ENGINE ====================
     async function handleFileIngestion(file) {
       SpeechManager.stop();
-      const name = file.name;
-      const lower = name.toLowerCase();
+      const lower = file.name.toLowerCase();
 
       try {
         if (lower.endsWith('.pdf') || file.type === 'application/pdf') {
@@ -1068,7 +1095,6 @@
       }
     }
 
-    // A. PDF Layout-Preserving Extraction
     async function extractPDFWithLayout(file) {
       setExtractionProgress(true, 'جاري قراءة صفحات PDF...', 10);
       const buffer = await file.arrayBuffer();
@@ -1138,7 +1164,7 @@
             if (j > 0) {
               const prev = lineItems[j - 1];
               const gap = curr.x - (prev.x + prev.width);
-              if (gap > curr.fontSize * 0.2) {
+              if (gap > curr.fontSize * 0.2 && !lineText.endsWith(' ') && !curr.str.startsWith(' ')) {
                 lineText += ' ';
               }
             }
@@ -1146,7 +1172,7 @@
           }
 
           return {
-            text: lineText.replace(/\s+/g, ' ').trim(),
+            text: sanitizeExtractedText(lineText),
             y,
             indent: Math.max(0, Math.round(startX - minX)),
             fontSize: avgFontSize
@@ -1190,10 +1216,16 @@
         extractedPages.push({ pageNumber: pageNum, blocks });
       }
 
+      const hasAnyText = extractedPages.some(p => p.blocks.length > 0);
+      if (!hasAnyText) {
+        setExtractionProgress(false);
+        showSnackbar('ملف PDF عبارة عن صور ممسوحة ضوئياً بدون طبقة نصية.');
+        return;
+      }
+
       openExtractedDocument(file.name, extractedPages);
     }
 
-    // B. DOCX Extraction via Mammoth.js
     async function extractDOCXWithMammoth(file) {
       setExtractionProgress(true, 'جاري تحليل مستند Word (DOCX)...', 45);
       const arrayBuffer = await file.arrayBuffer();
@@ -1205,14 +1237,14 @@
       doc.body.childNodes.forEach(node => {
         if (node.nodeType !== Node.ELEMENT_NODE) return;
         const tag = node.tagName.toLowerCase();
-        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        const text = sanitizeExtractedText(node.textContent);
         if (!text) return;
 
         if (tag === 'h1') blocks.push({ type: 'h1', text });
         else if (tag === 'h2' || tag === 'h3') blocks.push({ type: 'h2', text });
         else if (tag === 'ul' || tag === 'ol') {
           node.querySelectorAll('li').forEach(li => {
-            const liText = li.textContent.replace(/\s+/g, ' ').trim();
+            const liText = sanitizeExtractedText(li.textContent);
             if (liText) blocks.push({ type: 'li', text: liText });
           });
         } else {
@@ -1223,7 +1255,6 @@
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
-    // C. Image OCR via Tesseract.js (eng + fra)
     async function extractImageWithOCR(file) {
       setExtractionProgress(true, 'تهيئة محرك التعرف الضوئي (OCR)...', 10);
       const worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
@@ -1239,27 +1270,25 @@
 
       const blocks = text
         .split(/\n\s*\n/)
-        .map(p => p.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .map(p => sanitizeExtractedText(p.replace(/\n/g, ' ')))
         .filter(Boolean)
         .map(p => ({ type: 'p', text: p }));
 
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
-    // D. Plain Text Extraction
     async function extractPlainText(file) {
       setExtractionProgress(true, 'جاري قراءة الملف النصي...', 60);
       const text = await file.text();
       const blocks = text
         .split(/\n\s*\n|\r\n\s*\r\n/)
-        .map(p => p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' ')))
         .filter(Boolean)
         .map(p => ({ type: 'p', text: p }));
 
       openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
     }
 
-    // Paste Modal Handlers
     function openPasteModal() {
       document.getElementById('pasteModal').classList.remove('hidden');
       document.getElementById('pasteTextInput').focus();
@@ -1272,7 +1301,7 @@
       if (!raw) return;
       const blocks = raw
         .split(/\n\s*\n|\r\n\s*\r\n/)
-        .map(p => p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' ')))
         .filter(Boolean)
         .map(p => ({ type: 'p', text: p }));
 
@@ -1281,7 +1310,7 @@
       openExtractedDocument('مستند نصي', [{ pageNumber: 1, blocks }]);
     }
 
-    // ==================== RENDER PAGINATED DOCUMENT & TYPOGRAPHY ====================
+    // ==================== RENDER PAGINATED DOCUMENT ====================
     function openExtractedDocument(title, pages) {
       setExtractionProgress(false);
       appState.docTitle = title;
@@ -1298,6 +1327,16 @@
       document.getElementById('pageCountIndicator').textContent = `${pages.length} ${pages.length === 1 ? 'صفحة' : 'صفحات'}`;
 
       renderPaginatedSheets();
+    }
+
+    // Smart sentence splitter that avoids breaking on Mr., Dr., M., etc., or decimals
+    function splitTextIntoSentences(text) {
+      const protectedText = text
+        .replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|M|Mme|Mlle|etc|vs|fig|vol|no|pp|p)\./gi, '$1\u0000')
+        .replace(/(\d)\.(\d)/g, '$1\u0000$2');
+
+      const rawSentences = protectedText.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [protectedText];
+      return rawSentences.map(s => s.replace(/\u0000/g, '.'));
     }
 
     function renderPaginatedSheets() {
@@ -1339,7 +1378,6 @@
 
         sheet.appendChild(contentWrapper);
 
-        // Minimal Google Docs Page Footer
         const pageFooter = document.createElement('div');
         pageFooter.className = 'mt-10 pt-3 border-t border-g-borderSubtle flex justify-between items-center text-[11px] text-g-sub select-none';
         pageFooter.innerHTML = `<span>Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
@@ -1350,7 +1388,7 @@
     }
 
     function tokenizeBlockIntoElement(parentEl, blockText, savedSet) {
-      const sentences = blockText.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [blockText];
+      const sentences = splitTextIntoSentences(blockText);
 
       sentences.forEach((sentenceStr) => {
         const cleanSentence = sentenceStr.trim();
@@ -1378,6 +1416,7 @@
 
           const span = document.createElement('span');
           span.textContent = word;
+          span.dataset.wordLower = word.toLowerCase();
           span.className = 'word-token';
           if (savedSet.has(word.toLowerCase())) {
             span.classList.add('bookmarked-token');
@@ -1427,7 +1466,7 @@
       appState.activeSentenceTokens = tokens;
     }
 
-    // ==================== 4. WORD CLICK -> GEMINI AI TRANSLATION & EXPLANATION ====================
+    // ==================== 4. HYBRID MULTI-PROVIDER TRANSLATION ENGINE ====================
     async function onWordTokenClicked(tokenEl, word, surroundingSentence, sentenceTokenList, sentenceIndex) {
       if (appState.activeWordEl) {
         appState.activeWordEl.classList.remove('active-token');
@@ -1437,7 +1476,6 @@
       appState.activeWordEl = tokenEl;
       appState.selectedSentenceIndex = sentenceIndex;
 
-      // Stop repeat loops when user selects a new word
       if (SpeechManager.repeatMode) {
         SpeechManager.stop();
       }
@@ -1454,11 +1492,26 @@
         return;
       }
 
+      const currentRequest = ++appState.activeRequestToken;
       document.getElementById('panelContent').classList.add('hidden');
       document.getElementById('panelSkeleton').classList.remove('hidden');
 
       try {
-        const analysis = await queryGeminiDictionary(word, surroundingSentence, lang);
+        let analysis;
+        if (appState.geminiApiKey && appState.geminiApiKey.trim().length > 10) {
+          try {
+            analysis = await queryGeminiDictionary(word, surroundingSentence, lang, appState.geminiApiKey.trim());
+            analysis.source_label = 'Gemini AI';
+          } catch (_) {
+            analysis = await queryHybridFreeDictionary(word, surroundingSentence, lang);
+          }
+        } else {
+          analysis = await queryHybridFreeDictionary(word, surroundingSentence, lang);
+        }
+
+        // Ignore stale response if user already clicked another word
+        if (currentRequest !== appState.activeRequestToken) return;
+
         const fullRecord = {
           word,
           lang,
@@ -1470,15 +1523,17 @@
         persistCacheToStorage();
         renderSidePanelAnalysis(fullRecord);
       } catch (err) {
+        if (currentRequest !== appState.activeRequestToken) return;
         const fallbackRecord = {
           word,
           lang,
-          translation_ar: 'تعذر جلب الترجمة الآلية',
-          explanation_ar: 'يرجى التحقق من الاتصال بالشبكة لإظهار الشرح السياقي المفصل. يمكنك الاستماع للنطق الصوتي للكلمة والجملة.',
-          ipa: `/${word.toLowerCase()}/`,
+          source_label: 'Offline',
+          translation_ar: 'تعذر الاتصال بخدمة الترجمة',
+          explanation_ar: 'تأكد من اتصالك بالإنترنت ثم انقر على الكلمة مرة أخرى. يمكنك الاستماع للنطق الصوتي حالياً.',
+          ipa: '',
           pos_ar: lang === 'fr' ? 'كلمة فرنسية' : 'كلمة إنجليزية',
           lemma: word.toLowerCase(),
-          example_original: surroundingSentence,
+          example_original: '',
           example_ar: '',
           sentence_original: surroundingSentence,
           sentence_ar: ''
@@ -1487,10 +1542,168 @@
       }
     }
 
-    async function queryGeminiDictionary(word, sentence, lang) {
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // Free Multi-Provider Engine: Google Translate + MyMemory Fallback + DictionaryAPI (EN/FR)
+    async function queryHybridFreeDictionary(word, sentence, lang) {
+      const cleanWord = word.replace(/^[’'-]+|[’'-]+$/g, '');
 
+      // 1. Translate sentence first, and translate word in parallel
+      const [wordTransResult, sentenceTransText, lexicalMeta] = await Promise.all([
+        translateWithFallback(cleanWord, lang, 'ar'),
+        translateWithFallback(sentence, lang, 'ar'),
+        fetchLexicalMetadata(cleanWord, lang)
+      ]);
+
+      let exampleAr = '';
+      if (lexicalMeta.example_original) {
+        exampleAr = await translateWithFallback(lexicalMeta.example_original, lang, 'ar');
+      }
+
+      const explanationParts = [];
+      if (lexicalMeta.definition_orig) {
+        const defAr = await translateWithFallback(lexicalMeta.definition_orig, lang, 'ar');
+        if (defAr) explanationParts.push(defAr);
+      }
+      if (wordTransResult.alternatives && wordTransResult.alternatives.length > 0) {
+        explanationParts.push(`معانٍ أخرى شائعة: ${wordTransResult.alternatives.join('، ')}.`);
+      }
+      if (explanationParts.length === 0) {
+        explanationParts.push(`تُترجم كلمة "${cleanWord}" في هذا السياق إلى "${wordTransResult.primary}".`);
+      }
+
+      return {
+        source_label: wordTransResult.provider,
+        translation_ar: wordTransResult.primary || '—',
+        explanation_ar: explanationParts.join(' '),
+        ipa: lexicalMeta.ipa || '',
+        pos_ar: lexicalMeta.pos_ar || (lang === 'fr' ? 'مفردة فرنسية' : 'مفردة إنجليزية'),
+        lemma: lexicalMeta.lemma || cleanWord.toLowerCase(),
+        example_original: lexicalMeta.example_original || '',
+        example_ar: exampleAr || '',
+        sentence_ar: sentenceTransText || ''
+      };
+    }
+
+    async function translateWithFallback(text, sourceLang, targetLang = 'ar') {
+      if (!text || !text.trim()) return typeof text === 'string' ? '' : { primary: '', alternatives: [], provider: '' };
+
+      // Provider 1: Google Translate Public GTX Endpoint (with dictionary alternatives)
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&dt=bd&q=${encodeURIComponent(text)}`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          const data = await res.json();
+          const primary = (data[0] || []).map(chunk => chunk[0]).join('').trim();
+          const alternatives = [];
+          if (Array.isArray(data[1])) {
+            data[1].forEach(group => {
+              if (Array.isArray(group[1])) {
+                group[1].slice(0, 3).forEach(alt => {
+                  if (alt && alt !== primary && !alternatives.includes(alt)) {
+                    alternatives.push(alt);
+                  }
+                });
+              }
+            });
+          }
+          if (primary) {
+            return text.includes(' ')
+              ? primary
+              : { primary, alternatives: alternatives.slice(0, 4), provider: 'Google Translate' };
+          }
+        }
+      } catch (_) {}
+
+      // Provider 2: MyMemory Translation API Fallback
+      try {
+        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 480))}&langpair=${sourceLang}|${targetLang}`;
+        const res = await fetch(mmUrl);
+        if (res.ok) {
+          const data = await res.json();
+          const translated = data?.responseData?.translatedText?.trim();
+          if (translated && !translated.includes('MYMEMORY WARNING')) {
+            return text.includes(' ')
+              ? translated
+              : { primary: translated, alternatives: [], provider: 'MyMemory' };
+          }
+        }
+      } catch (_) {}
+
+      throw new Error('All translation providers failed');
+    }
+
+    // Fetch IPA, Part of Speech, Lemma, and Example from DictionaryAPI (EN) or Wiktionary (FR)
+    async function fetchLexicalMetadata(word, lang) {
+      const lower = word.toLowerCase();
+      const posMap = {
+        noun: 'اسم',
+        verb: 'فعل',
+        adjective: 'صفة',
+        adverb: 'ظرف / حال',
+        pronoun: 'ضمير',
+        preposition: 'حرف جر',
+        conjunction: 'أداة ربط',
+        interjection: 'تعجب',
+        determiner: 'أداة تعريف/تحديد',
+        nom: 'اسم',
+        verbe: 'فعل',
+        adjectif: 'صفة',
+        adverbe: 'ظرف',
+        préposition: 'حرف جر',
+        pronom: 'ضمير'
+      };
+
+      if (lang === 'en') {
+        try {
+          const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lower)}`);
+          if (res.ok) {
+            const data = await res.json();
+            const entry = data[0];
+            const phonetic = entry.phonetic || (entry.phonetics || []).find(p => p.text)?.text || '';
+            const meaning = entry.meanings?.[0];
+            const posRaw = meaning?.partOfSpeech?.toLowerCase() || '';
+            const defObj = meaning?.definitions?.[0];
+
+            return {
+              ipa: phonetic,
+              pos_ar: posMap[posRaw] || posRaw,
+              lemma: entry.word || lower,
+              definition_orig: defObj?.definition || '',
+              example_original: defObj?.example || ''
+            };
+          }
+        } catch (_) {}
+      } else if (lang === 'fr') {
+        try {
+          const res = await fetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(lower)}`);
+          if (res.ok) {
+            const data = await res.json();
+            const frEntry = data.fr?.[0];
+            const posRaw = frEntry?.partOfSpeech?.toLowerCase() || '';
+            const defItem = frEntry?.definitions?.[0];
+            const cleanDef = defItem?.definition ? defItem.definition.replace(/<[^>]+>/g, '').trim() : '';
+            const cleanEx = defItem?.examples?.[0] ? defItem.examples[0].replace(/<[^>]+>/g, '').trim() : '';
+
+            return {
+              ipa: '',
+              pos_ar: posMap[posRaw] || posRaw,
+              lemma: lower,
+              definition_orig: cleanDef.slice(0, 180),
+              example_original: cleanEx.slice(0, 180)
+            };
+          }
+        } catch (_) {}
+      }
+
+      return { ipa: '', pos_ar: '', lemma: lower, definition_orig: '', example_original: '' };
+    }
+
+    // Optional Gemini AI Contextual Dictionary (when user provides key)
+    async function queryGeminiDictionary(word, sentence, lang, apiKey) {
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
       const sourceLang = lang === 'fr' ? 'French' : 'English';
       const systemInstruction = `You are a precision bilingual dictionary engine for Arabic speakers reading ${sourceLang} documents. Analyze the target word within its exact context sentence and output structured JSON.`;
 
@@ -1525,43 +1738,26 @@ Provide:
               example_ar: { type: "STRING" },
               sentence_ar: { type: "STRING" }
             },
-            required: [
-              "translation_ar",
-              "explanation_ar",
-              "ipa",
-              "pos_ar",
-              "lemma",
-              "example_original",
-              "example_ar",
-              "sentence_ar"
-            ]
+            required: ["translation_ar", "explanation_ar", "ipa", "pos_ar", "lemma", "example_original", "example_ar", "sentence_ar"]
           }
         }
       };
 
-      const retryDelays = [1000, 2000, 4000];
-      for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
-        try {
-          const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-          const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (!rawJson) throw new Error('Empty response');
-          return JSON.parse(rawJson);
-        } catch (err) {
-          if (attempt === retryDelays.length) throw err;
-          await new Promise(r => setTimeout(r, retryDelays[attempt]));
-        }
-      }
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawJson) throw new Error('Empty response');
+      return JSON.parse(rawJson);
     }
 
     function persistCacheToStorage() {
       try {
-        const entries = Array.from(appState.memoryCache.entries()).slice(-120);
+        const entries = Array.from(appState.memoryCache.entries()).slice(-150);
         localStorage.setItem(STORAGE_CACHE_KEY, JSON.stringify(Object.fromEntries(entries)));
       } catch (_) {}
     }
@@ -1572,17 +1768,37 @@ Provide:
       document.getElementById('panelSkeleton').classList.add('hidden');
       document.getElementById('panelContent').classList.remove('hidden');
 
+      document.getElementById('engineSourceTag').textContent = data.source_label || 'Readdy';
       document.getElementById('panelWordTitle').textContent = data.word;
       document.getElementById('panelLangBadge').textContent = data.lang.toUpperCase();
-      document.getElementById('panelIpa').textContent = data.ipa || '';
+
+      const ipaEl = document.getElementById('panelIpa');
+      const dotEl = document.getElementById('panelIpaDot');
+      if (data.ipa) {
+        ipaEl.textContent = data.ipa;
+        ipaEl.classList.remove('hidden');
+        dotEl.classList.remove('hidden');
+      } else {
+        ipaEl.classList.add('hidden');
+        dotEl.classList.add('hidden');
+      }
+
       document.getElementById('panelPosBadge').textContent = data.pos_ar || '';
       document.getElementById('panelTranslationAr').textContent = data.translation_ar;
       document.getElementById('panelLemma').textContent = data.lemma ? `الأصل اللغوي: ${data.lemma}` : '';
       document.getElementById('panelExplanationAr').textContent = data.explanation_ar;
-      document.getElementById('panelExampleOrig').textContent = data.example_original;
-      document.getElementById('panelExampleAr').textContent = data.example_ar;
+
+      const exampleBox = document.getElementById('exampleBox');
+      if (data.example_original) {
+        exampleBox.classList.remove('hidden');
+        document.getElementById('panelExampleOrig').textContent = data.example_original;
+        document.getElementById('panelExampleAr').textContent = data.example_ar || '';
+      } else {
+        exampleBox.classList.add('hidden');
+      }
+
       document.getElementById('panelSentenceOrig').textContent = data.sentence_original;
-      document.getElementById('panelSentenceAr').textContent = data.sentence_ar;
+      document.getElementById('panelSentenceAr').textContent = data.sentence_ar || '';
 
       updateBookmarkButtonUI();
       updateRepeatButtonsUI();
@@ -1604,12 +1820,16 @@ Provide:
     function copyCurrentTranslation() {
       if (!appState.selectedAnalysis) return;
       const text = `${appState.selectedAnalysis.word} — ${appState.selectedAnalysis.translation_ar}`;
-      const el = document.createElement('textarea');
-      el.value = text;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+      }
       showSnackbar('تم نسخ الترجمة');
     }
 
@@ -1684,9 +1904,20 @@ Provide:
       }
     }
 
-    // ==================== 5. SAVED VOCABULARY MANAGEMENT ====================
+    // ==================== 5. SAVED VOCABULARY MANAGEMENT (NO DOM RESET) ====================
     function isWordBookmarked(word) {
       return appState.savedWords.some(item => item.word.toLowerCase() === word.toLowerCase());
+    }
+
+    function syncBookmarkedHighlightsInDOM() {
+      const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
+      document.querySelectorAll('.word-token').forEach(span => {
+        if (savedSet.has(span.dataset.wordLower)) {
+          span.classList.add('bookmarked-token');
+        } else {
+          span.classList.remove('bookmarked-token');
+        }
+      });
     }
 
     function updateBookmarkButtonUI() {
@@ -1696,11 +1927,11 @@ Provide:
       const bookmarked = isWordBookmarked(appState.selectedAnalysis.word);
 
       if (bookmarked) {
-        btn.className = 'w-9 h-9 rounded-full border border-g-green bg-[#E6F4EA] text-g-green flex items-center justify-center transition shrink-0';
+        btn.className = 'w-9 h-9 rounded-full border border-g-green bg-[#E6F4EA] text-g-green flex items-center justify-center transition shrink-0 cursor-pointer';
         icon.textContent = 'bookmark_added';
         icon.classList.add('filled');
       } else {
-        btn.className = 'w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0';
+        btn.className = 'w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0 cursor-pointer';
         icon.textContent = 'bookmark_add';
         icon.classList.remove('filled');
       }
@@ -1729,7 +1960,7 @@ Provide:
       updateBookmarkButtonUI();
       updateSavedBadges();
       renderVocabDrawerList();
-      if (appState.pages.length > 0) renderPaginatedSheets();
+      syncBookmarkedHighlightsInDOM();
     }
 
     function deleteSavedWord(word) {
@@ -1738,7 +1969,7 @@ Provide:
       updateBookmarkButtonUI();
       updateSavedBadges();
       renderVocabDrawerList();
-      if (appState.pages.length > 0) renderPaginatedSheets();
+      syncBookmarkedHighlightsInDOM();
     }
 
     function updateSavedBadges() {
@@ -1826,6 +2057,27 @@ Provide:
       a.click();
       URL.revokeObjectURL(url);
       showSnackbar('تم تصدير ملف المفردات بنجاح');
+    }
+
+    // ==================== API SETTINGS MODAL ====================
+    function openApiSettingsModal() {
+      document.getElementById('geminiKeyInput').value = appState.geminiApiKey;
+      document.getElementById('apiSettingsModal').classList.remove('hidden');
+    }
+    function closeApiSettingsModal() {
+      document.getElementById('apiSettingsModal').classList.add('hidden');
+    }
+    function saveGeminiApiKey() {
+      const val = document.getElementById('geminiKeyInput').value.trim();
+      appState.geminiApiKey = val;
+      localStorage.setItem(STORAGE_GEMINI_KEY, val);
+      closeApiSettingsModal();
+      showSnackbar(val ? 'تم تفعيل مفتاح Gemini AI بنجاح' : 'تم اعتماد محرك الترجمة المجاني الافتراضي');
+    }
+    function clearStoredCache() {
+      appState.memoryCache.clear();
+      localStorage.removeItem(STORAGE_CACHE_KEY);
+      showSnackbar('تم مسح الذاكرة المؤقتة');
     }
 
     // ==================== SNACKBAR ====================
