@@ -3,820 +3,1842 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jomo AI — المساعد الذكي الموحد</title>
+  <title>Readdy</title>
+
+  <!-- Custom Readdy Google-Style SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FFFFFF'/%3E%3Cpath d='M16 14h8v36h-8z' fill='%234285F4'/%3E%3Cpath d='M16 34h8v16h-8z' fill='%23EA4335'/%3E%3Cpath d='M24 14c14 0 24 9 24 20s-10 16-20 16v-8c7 0 12-4 12-8s-5-12-16-12V14z' fill='%23FBBC04'/%3E%3Cpath d='M48 34c0 11-10 16-20 16v-8c7 0 12-4 12-8h8z' fill='%2334A853'/%3E%3Cpolygon points='28,26 28,40 39,33' fill='%23202124'/%3E%3C/svg%3E" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: IBM Plex Sans Arabic, Cairo, Inter, Literata & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0" />
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Mammoth.js for DOCX extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+  <!-- Tesseract.js for OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"IBM Plex Sans Arabic"', 'Cairo', 'sans-serif'],
+            brand: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            docSans: ['Inter', 'sans-serif'],
+            docSerif: ['Literata', 'Georgia', 'serif'],
+          },
+          colors: {
+            g: {
+              bg: '#F8F9FA',
+              surface: '#FFFFFF',
+              border: '#DADCE0',
+              borderSubtle: '#E8EAED',
+              blue: '#1A73E8',
+              blueHover: '#1557B0',
+              blueSoft: '#E8F0FE',
+              blueToken: '#D2E3FC',
+              blueDark: '#174EA6',
+              text: '#202124',
+              sub: '#5F6368',
+              red: '#EA4335',
+              yellow: '#FBBC04',
+              green: '#34A853',
+            }
+          },
+          boxShadow: {
+            'g-elevated': '0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15)',
+            'g-modal': '0 8px 28px rgba(60,64,67,0.2)',
+          }
+        }
+      }
+    };
+  </script>
+
   <style>
-    :root {
-      --bg-main: #131314;
-      --bg-sidebar: #18191A;
-      --bg-surface: #1E1F20;
-      --bg-surface-hover: #282A2C;
-      --bg-input: #1E1F20;
-      --bg-code: #0E0F10;
-      --border-subtle: #2C2D2F;
-      --border-strong: #3C3E42;
-      --text-primary: #E3E3E3;
-      --text-secondary: #9AA0A6;
-      --text-muted: #6E7378;
-      --accent-solid: #E3E3E3;
-      --accent-text: #131314;
-      --badge-bg: #252628;
-      --danger: #D96B6B;
-      --success: #6BBF8A;
-      --font-sans: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 20px;
-      --radius-pill: 9999px;
-      --transition: 0.18s ease;
-    }
-
-    body.light-theme {
-      --bg-main: #F9F9F8;
-      --bg-sidebar: #F2F2F0;
-      --bg-surface: #FFFFFF;
-      --bg-surface-hover: #EAEAE7;
-      --bg-input: #FFFFFF;
-      --bg-code: #F4F4F2;
-      --border-subtle: #E2E2DF;
-      --border-strong: #CECEC9;
-      --text-primary: #1A1A1A;
-      --text-secondary: #5C5C5A;
-      --text-muted: #8C8C88;
-      --accent-solid: #1A1A1A;
-      --accent-text: #FFFFFF;
-      --badge-bg: #EBEBE8;
-      --danger: #B84242;
-      --success: #3B8757;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-      background-color: var(--bg-main);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      font-size: 15px;
-      line-height: 1.65;
-      overflow: hidden;
+    body {
+      background-color: #F8F9FA;
+      color: #202124;
+      font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
-
-    .app-container {
-      display: flex;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-    }
-
-    .sidebar {
-      width: 272px;
-      background-color: var(--bg-sidebar);
-      border-inline-end: 1px solid var(--border-subtle);
-      display: flex;
-      flex-direction: column;
-      transition: width var(--transition), transform var(--transition);
-      flex-shrink: 0;
-      z-index: 30;
-    }
-
-    .sidebar.collapsed {
-      width: 0;
-      border-inline-end: none;
-      overflow: hidden;
-    }
-
-    .sidebar-header {
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .new-chat-btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color var(--transition), border-color var(--transition);
-    }
-
-    .new-chat-btn:hover {
-      background-color: var(--bg-surface-hover);
-      border-color: var(--border-strong);
-    }
-
-    .sidebar-search {
-      padding: 0 16px 12px;
-    }
-
-    .sidebar-search input {
-      width: 100%;
-      background-color: var(--bg-main);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 13px;
-      outline: none;
-    }
-
-    .sidebar-search input:focus {
-      border-color: var(--border-strong);
-    }
-
-    .chat-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 4px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .chat-group-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      padding: 10px 10px 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .chat-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 10px;
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      font-size: 13.5px;
-      cursor: pointer;
-      transition: background-color var(--transition), color var(--transition);
-      gap: 8px;
-    }
-
-    .chat-item:hover, .chat-item.active {
-      background-color: var(--bg-surface-hover);
-      color: var(--text-primary);
-    }
-
-    .chat-item-title {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chat-item-actions {
-      display: none;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .chat-item:hover .chat-item-actions {
-      display: flex;
-    }
-
-    .mini-icon-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 3px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mini-icon-btn:hover {
-      color: var(--text-primary);
-      background-color: var(--bg-surface);
-    }
-
-    .sidebar-footer {
-      padding: 12px 16px;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .sidebar-footer-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 13.5px;
-      cursor: pointer;
-      text-align: start;
-      transition: background-color var(--transition), color var(--transition);
-    }
-
-    .sidebar-footer-btn:hover {
-      background-color: var(--bg-surface-hover);
-      color: var(--text-primary);
-    }
-
-    .workspace {
-      flex: 1;
-      display: flex;
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .chat-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-width: 340px;
-      background-color: var(--bg-main);
-    }
-
-    .topbar {
-      height: 58px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-subtle);
-      flex-shrink: 0;
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .icon-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-secondary);
-      width: 34px;
-      height: 34px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background-color var(--transition), color var(--transition), border-color var(--transition);
-    }
-
-    .icon-btn:hover {
-      background-color: var(--bg-surface);
-      color: var(--text-primary);
-    }
-
-    .brand-selector {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      background-color: transparent;
-      border: 1px solid transparent;
-      color: var(--text-primary);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      position: relative;
-    }
-
-    .brand-selector:hover {
-      background-color: var(--bg-surface);
-    }
-
-    .model-tag {
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background-color: var(--badge-bg);
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pill-action-btn {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 6px 13px;
-      border-radius: var(--radius-pill);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color var(--transition), border-color var(--transition);
-    }
-
-    .pill-action-btn:hover {
-      background-color: var(--bg-surface-hover);
-      border-color: var(--border-strong);
-    }
-
-    .pill-action-btn.active {
-      background-color: var(--accent-solid);
-      color: var(--accent-text);
-      border-color: var(--accent-solid);
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 46px;
-      inset-inline-start: 0;
-      width: 270px;
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-md);
-      padding: 6px;
-      display: none;
-      flex-direction: column;
-      gap: 2px;
-      z-index: 50;
-    }
-
-    .dropdown-menu.open {
-      display: flex;
-    }
-
-    .dropdown-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      background: transparent;
-      border: none;
-      color: var(--text-primary);
-      font-family: inherit;
-      cursor: pointer;
-      text-align: start;
-      width: 100%;
-    }
-
-    .dropdown-item:hover, .dropdown-item.selected {
-      background-color: var(--bg-surface-hover);
-    }
-
-    .dropdown-item-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .dropdown-item-desc {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    .messages-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .messages-inner {
-      width: 100%;
-      max-width: 780px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      flex: 1;
-    }
-
-    .welcome-screen {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 32px 16px;
-      margin: auto 0;
-    }
-
-    .jomo-mark {
-      width: 44px;
-      height: 44px;
-      border: 1.5px solid var(--text-primary);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-
-    .welcome-title {
-      font-size: 26px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .welcome-subtitle {
-      font-size: 14.5px;
-      color: var(--text-secondary);
-      max-width: 480px;
-      margin-bottom: 32px;
-    }
-
-    .suggestions-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      width: 100%;
-      max-width: 640px;
-    }
-
-    .suggestion-card {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      text-align: start;
-      cursor: pointer;
-      transition: background-color var(--transition), border-color var(--transition);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .suggestion-card:hover {
-      background-color: var(--bg-surface-hover);
-      border-color: var(--border-strong);
-    }
-
-    .suggestion-card-title {
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    .suggestion-card-sub {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-    }
-
-    .message-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .message-row.user {
-      align-items: flex-end;
-    }
-
-    .user-bubble {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 12px 16px;
-      border-radius: var(--radius-lg);
-      max-width: 82%;
-      font-size: 15px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .user-attachments {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 6px;
-      justify-content: flex-end;
-    }
-
-    .user-attachments img {
-      max-width: 220px;
-      max-height: 180px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      object-fit: cover;
-    }
-
-    .file-chip-display {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .assistant-block {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      width: 100%;
-    }
-
-    .assistant-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      border: 1px solid var(--border-strong);
-      background-color: var(--bg-surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      color: var(--text-primary);
-    }
-
-    .assistant-content {
-      flex: 1;
-      min-width: 0;
-      color: var(--text-primary);
-    }
-
-    .thinking-box {
-      border: 1px solid var(--border-subtle);
-      background-color: var(--bg-surface);
-      border-radius: var(--radius-sm);
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-
-    .thinking-header {
-      padding: 8px 12px;
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
       user-select: none;
     }
-
-    .thinking-header:hover {
-      background-color: var(--bg-surface-hover);
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
 
-    .thinking-body {
-      padding: 10px 14px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 13px;
-      color: var(--text-secondary);
-      white-space: pre-wrap;
-      display: none;
-    }
-
-    .thinking-box.open .thinking-body {
-      display: block;
-    }
-
-    .markdown-body p { margin-bottom: 12px; }
-    .markdown-body p:last-child { margin-bottom: 0; }
-    .markdown-body ul, .markdown-body ol { margin: 8px 0 12px; padding-inline-start: 22px; }
-    .markdown-body li { margin-bottom: 4px; }
-    .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin: 18px 0 8px; font-weight: 600; line-height: 1.35; }
-    .markdown-body h1 { font-size: 1.35em; }
-    .markdown-body h2 { font-size: 1.2em; }
-    .markdown-body h3 { font-size: 1.08em; }
-    .markdown-body blockquote {
-      border-inline-start: 2px solid var(--border-strong);
-      padding-inline-start: 14px;
-      color: var(--text-secondary);
-      margin: 12px 0;
-    }
-    .markdown-body table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 14px 0;
-      font-size: 13.5px;
-    }
-    .markdown-body th, .markdown-body td {
-      border: 1px solid var(--border-subtle);
-      padding: 8px 12px;
-      text-align: start;
-    }
-    .markdown-body th {
-      background-color: var(--bg-surface);
-      font-weight: 600;
-    }
-    .markdown-body code:not(pre code) {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      padding: 2px 6px;
-      border-radius: 5px;
-      font-family: var(--font-mono);
-      font-size: 0.88em;
-    }
-
-    .code-wrapper {
-      background-color: var(--bg-code);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      margin: 14px 0;
-      overflow: hidden;
-      direction: ltr;
-      text-align: left;
-    }
-
-    .code-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 14px;
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    .code-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .code-btn {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      padding: 3px 9px;
-      border-radius: 5px;
-      font-family: var(--font-sans);
-      font-size: 11.5px;
+    /* Word Token Interaction - Zero layout shift */
+    .word-token {
+      display: inline;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      border-radius: 3px;
+      transition: background-color 0.1s ease, color 0.1s ease;
+    }
+    .word-token:hover {
+      background-color: #E8F0FE;
+      color: #1A73E8;
+    }
+    .word-token.sentence-highlight {
+      background-color: #F1F3F4;
+    }
+    .word-token.active-token {
+      background-color: #E8F0FE !important;
+      color: #1A73E8 !important;
+      box-shadow: inset 0 -2px 0 #1A73E8;
+    }
+    .word-token.bookmarked-token {
+      box-shadow: inset 0 -1.5px 0 #34A853;
     }
 
-    .code-btn:hover {
-      background-color: var(--bg-surface-hover);
-      color: var(--text-primary);
-    }
-
-    .code-wrapper pre {
-      margin: 0;
-      padding: 14px;
-      overflow-x: auto;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .generated-image-card {
-      margin-top: 10px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      background-color: var(--bg-surface);
-      max-width: 480px;
-    }
-
-    .generated-image-card img {
+    /* Plain Solid Google Docs Paginated Sheet */
+    .g-doc-sheet {
       width: 100%;
-      display: block;
+      max-width: 816px;
+      background: #FFFFFF;
+      border: 1px solid #DADCE0;
+      border-radius: 4px;
     }
 
-    .generated-image-footer {
-      padding: 10px 14px;
-      display: flex;
+    /* Document Typography Modes */
+    .doc-font-sans {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.005em;
+    }
+    .doc-font-serif {
+      font-family: 'Literata', Georgia, serif;
+      letter-spacing: 0;
+    }
+
+    /* Subtle Audio Soundwave Animation */
+    .soundwave-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+    .soundwave-bars span {
+      width: 2.5px;
+      background-color: #1A73E8;
+      border-radius: 2px;
+      animation: wavePulse 0.8s ease-in-out infinite;
+    }
+    .soundwave-bars span:nth-child(2) { animation-delay: 0.15s; }
+    .soundwave-bars span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes wavePulse {
+      0%, 100% { height: 3px; }
+      50% { height: 12px; }
+    }
+
+    /* ==================== ANIMATED READDY SVG LOGO STYLES ==================== */
+    .readdy-logo-wrapper {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      border-top: 1px solid var(--border-subtle);
+      gap: 10px;
+      user-select: none;
+    }
+    .readdy-mark-svg {
+      overflow: visible;
+    }
+    .readdy-play-tri {
+      transform-origin: 31px 32px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: readdyPlayPulse 3.6s ease-in-out infinite;
+    }
+    .readdy-logo-wrapper:hover .readdy-play-tri {
+      transform: scale(1.16) translateX(1.5px);
+    }
+    .readdy-ribbon-wave {
+      transform-origin: center;
+      animation: readdyRibbonFloat 4.2s ease-in-out infinite;
+    }
+    .readdy-page-curl {
+      transform-origin: 48px 48px;
+      animation: readdyPageCurl 4s ease-in-out infinite;
+    }
+    @keyframes readdyPlayPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.09); }
+    }
+    @keyframes readdyRibbonFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-2px); }
+    }
+    @keyframes readdyPageCurl {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
     }
 
-    .sources-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-subtle);
-    }
-
-    .source-pill {
-      font-size: 11.5px;
-      color: var(--text-secondary);
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      text-decoration: none;
-      max-width: 220px;
-      white-space: nowrap;
+    /* Linear Progress Bar */
+    .g-progress-track {
+      height: 3px;
+      background-color: #E8F0FE;
       overflow: hidden;
-      text-overflow: ellipsis;
+      width: 100%;
+    }
+    .g-progress-fill {
+      height: 100%;
+      background-color: #1A73E8;
+      transition: width 0.25s ease;
     }
 
-    .source-pill:hover {
-      border-color: var(--border-strong);
-      color: var(--text-primary);
+    /* Shimmer Skeleton */
+    .skeleton {
+      background: #F1F3F4;
+      background-image: linear-gradient(90deg, #F1F3F4 0px, #E8EAED 40px, #F1F3F4 80px);
+      background-size: 600px;
+      animation: shimmer 1.4s infinite linear;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200px; }
+      100% { background-position: 400px; }
     }
 
-    .msg-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 8px;
+    /* Minimal Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DADCE0;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #BDC1C6;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Hidden File Input -->
+  <input type="file" id="fileInput" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" class="hidden" />
+
+  <!-- ==================== 1. MINIMALIST SOLID GOOGLE HEADER (64px) ==================== -->
+  <header class="sticky top-0 z-40 h-16 bg-white border-b border-g-border px-4 sm:px-6 flex items-center justify-between gap-4">
+    <!-- Left / Start: Custom Animated Readdy Logo + Doc Title -->
+    <div class="flex items-center gap-3 min-w-0 flex-1">
+      <button onclick="resetToEmptyState()" class="readdy-logo-wrapper shrink-0 focus:outline-none group" title="Readdy">
+        <!-- Animated 'R' Play Mark SVG -->
+        <svg class="readdy-mark-svg w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="readdyBlueRed" x1="16" y1="12" x2="16" y2="52" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#4285F4" />
+              <stop offset="52%" stop-color="#4285F4" />
+              <stop offset="68%" stop-color="#EA4335" />
+              <stop offset="100%" stop-color="#EA4335" />
+            </linearGradient>
+            <linearGradient id="readdyLoopGrad" x1="20" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#EA4335" />
+              <stop offset="32%" stop-color="#FBBC04" />
+              <stop offset="72%" stop-color="#FBBC04" />
+              <stop offset="100%" stop-color="#34A853" />
+            </linearGradient>
+          </defs>
+          <!-- Outer R Curved Ribbon -->
+          <path d="M22 14C36.5 14 48 22.2 48 33.5C48 44.5 37.5 51 25.5 51V42.5C33.2 42.5 39.5 38.8 39.5 33.5C39.5 27.8 32.8 22.5 22 22.5V14Z" fill="url(#readdyLoopGrad)" />
+          <!-- Vertical Left Stem -->
+          <path d="M14 14H22.5V51H14V14Z" fill="url(#readdyBlueRed)" />
+          <!-- Animated Play Triangle -->
+          <path class="readdy-play-tri" d="M27.5 25.5L38.5 32.5L27.5 39.5V25.5Z" fill="#202124" />
+        </svg>
+
+        <!-- Wordmark with Animated Wave Ribbon -->
+        <div dir="ltr" class="relative flex items-center pt-1.5">
+          <svg class="readdy-ribbon-wave w-[52px] h-[16px] absolute -top-1.5 left-[2px] pointer-events-none" viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 16C7 6 15 3 23 8C30 12.5 36 12.5 43 7.5C50 2.5 57 5.5 60 16" stroke="#4285F4" stroke-width="5.5" stroke-linecap="round" />
+            <path d="M21 7.2C29 12.5 36 12.5 43 7.5" stroke="#EA4335" stroke-width="5.5" stroke-linecap="round" />
+            <path d="M41 8.5C48 3.2 54 4.5 57.5 11" stroke="#FBBC04" stroke-width="5.5" stroke-linecap="round" />
+            <path d="M55.5 8.5C57.8 11.2 59.2 13.8 60 16.5" stroke="#34A853" stroke-width="5.5" stroke-linecap="round" />
+          </svg>
+          <span class="font-brand text-[22px] font-bold tracking-tight text-[#3C4043] leading-none">
+            readdy
+          </span>
+        </div>
+      </button>
+
+      <!-- Document Title Input (Visible when document is open) -->
+      <div id="headerDocMeta" class="hidden sm:flex items-center min-w-0 border-r border-g-border pr-3">
+        <input
+          id="docTitleInput"
+          type="text"
+          dir="auto"
+          aria-label="عنوان المستند"
+          class="text-sm font-medium text-g-text bg-transparent hover:bg-[#F8F9FA] focus:bg-white focus:ring-1 focus:ring-g-blue px-2.5 py-1 rounded border border-transparent focus:border-g-blue focus:outline-none truncate max-w-[200px] lg:max-w-[300px] transition"
+        />
+      </div>
+    </div>
+
+    <!-- Right / End: Compact Upload, Language Selector, Saved Words Drawer -->
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Language Selector (Auto / EN / FR) -->
+      <div class="flex items-center bg-white rounded-full px-3 py-1.5 border border-g-border hover:bg-[#F8F9FA] transition">
+        <span class="material-symbols-outlined text-[16px] text-g-sub ml-1">language</span>
+        <select id="langSelect" onchange="handleLanguageChange(this.value)" class="bg-transparent text-xs font-medium text-g-text focus:outline-none cursor-pointer">
+          <option value="auto">Auto</option>
+          <option value="en">EN</option>
+          <option value="fr">FR</option>
+        </select>
+      </div>
+
+      <!-- Compact File Upload Trigger Button -->
+      <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-full transition flex items-center gap-1.5 cursor-pointer">
+        <span class="material-symbols-outlined text-[18px]">upload_file</span>
+        <span>رفع ملف</span>
+      </button>
+
+      <!-- Saved Words Drawer Button with Badge -->
+      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-text transition flex items-center justify-center" title="الكلمات المحفوظة">
+        <span class="material-symbols-outlined text-[20px]">bookmarks</span>
+        <span id="savedCountBadge" class="hidden absolute -top-1 -right-1 bg-g-blue text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Linear Progress Bar -->
+  <div id="extractionProgressContainer" class="hidden bg-white border-b border-g-border">
+    <div class="g-progress-track">
+      <div id="extractionProgressBar" class="g-progress-fill" style="width: 0%"></div>
+    </div>
+    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-xs text-g-sub">
+      <span id="extractionStatusText">جاري استخراج النص...</span>
+      <span id="extractionPercentText" class="font-medium text-g-blue">0%</span>
+    </div>
+  </div>
+
+  <!-- ==================== 2. CLEAN PLAIN ('سادة') EMPTY STATE ==================== -->
+  <main id="emptyStateView" class="flex-1 flex items-center justify-center p-4 sm:p-8">
+    <div
+      id="emptyDropzone"
+      onclick="triggerFileUpload()"
+      class="w-full max-w-lg bg-white border border-g-border hover:border-g-blue rounded-2xl p-10 sm:p-12 text-center transition-colors duration-150 cursor-pointer"
+    >
+      <!-- Hero Animated Readdy Folded Page / Book Brand Emblem -->
+      <div class="flex flex-col items-center justify-center mb-6 select-none">
+        <div class="flex items-center gap-3.5" dir="ltr">
+          <!-- Colorful Folded Page / Book SVG Icon -->
+          <svg class="w-14 h-14 overflow-visible" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Base Blue Left Page -->
+            <path d="M10 12C10 9.79086 11.7909 8 14 8H28C30.2 8 32 9.8 32 12V54C32 55.1 31.1 56 30 56H14C11.7909 56 10 54.2091 10 52V12Z" fill="#4285F4" />
+            <!-- Green Back Right Page -->
+            <path d="M32 12C32 9.8 33.8 8 36 8H50C52.2091 8 54 9.79086 54 12V44L42 56H32V12Z" fill="#34A853" />
+            <!-- Yellow Mid Folded Sheet -->
+            <path d="M32 12C38 12 44 10 47 8.5V36C42 42 36 49 32 54V12Z" fill="#FBBC04" />
+            <!-- Red Inner Spine Ribbon -->
+            <path d="M32 12C35.5 12 39 11 41 9.5V34C37.5 41 34 48 32 54V12Z" fill="#EA4335" />
+            <!-- Animated Bottom-Right Page Curl -->
+            <path class="readdy-page-curl" d="M42 56V46C42 44.8954 42.8954 44 44 44H54L42 56Z" fill="#E8EAED" />
+          </svg>
+
+          <!-- Clean Google-Styled Wordmark -->
+          <div class="flex items-baseline font-brand text-[34px] font-semibold tracking-tight text-[#3C4043]">
+            <span>Read</span>
+            <span class="relative inline-flex items-center">
+              <!-- Subtle Blue/Red Accent Arc on 'd' -->
+              <svg class="w-4 h-7 -mr-1.5" viewBox="0 0 16 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 4C6.5 4 3 8.5 3 14" stroke="#EA4335" stroke-width="2.6" stroke-linecap="round" />
+                <path d="M3 14C3 19.5 6.5 24 12 24" stroke="#4285F4" stroke-width="2.6" stroke-linecap="round" />
+              </svg>
+              <span>d</span>
+            </span>
+            <!-- Multi-color 'y' matching brand palette -->
+            <svg class="w-6 h-8 ml-0.5 translate-y-[5px]" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 4L12 19" stroke="#EA4335" stroke-width="4.2" stroke-linecap="round" />
+              <path d="M21 4L12 19" stroke="#4285F4" stroke-width="4.2" stroke-linecap="round" />
+              <path d="M12 19L8.5 25" stroke="#FBBC04" stroke-width="4.2" stroke-linecap="round" />
+              <path d="M8.5 25L6.5 28.5" stroke="#34A853" stroke-width="4.2" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-base font-semibold text-g-text mb-6 leading-relaxed">
+        اسحب الملف هنا أو انقر للاختيار — PDF, DOCX, PNG, JPG, TXT
+      </p>
+
+      <div class="flex items-center justify-center gap-3" onclick="event.stopPropagation()">
+        <button onclick="triggerFileUpload()" class="bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
+          اختيار ملف
+        </button>
+
+        <button onclick="openPasteModal()" class="bg-white hover:bg-[#F8F9FA] text-g-text border border-g-border font-medium text-xs sm:text-sm px-5 py-2.5 rounded-full transition cursor-pointer">
+          لصق نص مباشرة
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== 3 & 4. ACTIVE DOCUMENT WORKSPACE + AUDIO BAR + SIDE PANEL ==================== -->
+  <div id="workspaceView" class="hidden flex-1 flex flex-col">
+
+    <!-- Unified Clean Document & Audio Control Bar -->
+    <div class="bg-white border-b border-g-border px-4 py-2 sticky top-16 z-30">
+      <div class="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-2.5">
+
+        <!-- Left Group: Document Audio Player Controls -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Play / Pause Full Document or From Selected Word -->
+          <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="flex items-center gap-1.5 bg-g-blue hover:bg-g-blueHover text-white font-medium text-xs px-3.5 py-1.5 rounded-full transition cursor-pointer">
+            <span id="docAudioPlayIcon" class="material-symbols-outlined filled text-[17px]">play_arrow</span>
+            <span id="docAudioPlayLabel">استماع للمستند</span>
+          </button>
+
+          <!-- Stop Button -->
+          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden p-1.5 rounded-full border border-g-border hover:bg-[#F8F9FA] text-g-text transition" title="إيقاف">
+            <span class="material-symbols-outlined filled text-[16px]">stop</span>
+          </button>
+
+          <!-- Speaking Wave Indicator -->
+          <div id="globalSpeakingWave" class="hidden items-center gap-1.5 px-2 py-1 rounded-full bg-g-blueSoft text-g-blue text-[11px] font-medium">
+            <div class="soundwave-bars"><span></span><span></span><span></span></div>
+            <span>ينطق الآن</span>
+          </div>
+
+          <!-- Document Speed Selector (0.75x / 1.0x / 1.25x) -->
+          <div class="flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs">
+            <span class="text-g-sub ml-1">السرعة:</span>
+            <select id="docSpeechRateSelect" onchange="SpeechManager.setDocRate(parseFloat(this.value))" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer">
+              <option value="0.75">0.75x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.25">1.25x</option>
+            </select>
+          </div>
+
+          <!-- Voice Selector Dropdown -->
+          <div class="hidden md:flex items-center bg-g-bg border border-g-border rounded-full px-2.5 py-1 text-xs max-w-[210px]">
+            <span class="material-symbols-outlined text-[15px] text-g-sub ml-1">record_voice_over</span>
+            <select id="voiceSelector" onchange="SpeechManager.selectVoiceByURI(this.value)" class="bg-transparent font-medium text-g-text focus:outline-none cursor-pointer truncate w-full" title="اختيار الصوت">
+              <option value="">الصوت الافتراضي</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Right Group: Typography Controls (Font Family Toggle + Size 16px-24px) -->
+        <div class="flex items-center gap-2">
+          <!-- Sans-serif (Inter) vs Editorial Serif (Literata) Toggle -->
+          <div class="flex items-center bg-g-bg border border-g-border rounded-full p-0.5 text-xs">
+            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer">
+              Inter
+            </button>
+            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer">
+              Literata
+            </button>
+          </div>
+
+          <!-- Font Size Controls (16px to 24px) -->
+          <div class="flex items-center gap-1 bg-g-bg border border-g-border rounded-full px-1.5 py-0.5">
+            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition" title="تصغير الخط">A-</button>
+            <span id="fontSizeIndicator" class="text-[11px] text-g-sub px-1 select-none font-medium">17px</span>
+            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-white text-g-text text-xs font-medium flex items-center justify-center transition" title="تكبير الخط">A+</button>
+          </div>
+
+          <!-- Page Count & New Doc -->
+          <span id="pageCountIndicator" class="hidden sm:inline text-xs text-g-sub px-1">1 صفحة</span>
+          <button onclick="resetToEmptyState()" class="text-xs text-g-sub hover:text-g-text hover:bg-[#F8F9FA] border border-g-border px-3 py-1.5 rounded-full transition flex items-center gap-1 font-medium cursor-pointer">
+            <span class="material-symbols-outlined text-[15px]">add</span>
+            <span>جديد</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Split Layout: Document Canvas + Right Side Dictionary Panel -->
+    <div class="flex-1 flex flex-col lg:flex-row relative">
+
+      <!-- Document Canvas Area -->
+      <div id="canvasDropArea" class="flex-1 py-6 sm:py-8 px-3 sm:px-6 flex flex-col items-center gap-6 overflow-y-auto">
+        <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6">
+          <!-- Paginated solid white Google Docs sheets injected here -->
+        </div>
+      </div>
+
+      <!-- Right Side Panel (360px on Desktop) -->
+      <aside
+        id="sideDictionaryPanel"
+        class="hidden lg:flex flex-col w-full lg:w-[360px] shrink-0 bg-white border-t lg:border-t-0 lg:border-r border-g-border lg:sticky lg:top-[109px] lg:h-[calc(100vh-109px)] overflow-y-auto z-30"
+      >
+        <!-- Panel Top Bar -->
+        <div class="px-4 py-3 border-b border-g-border flex items-center justify-between bg-white sticky top-0 z-10">
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-g-text">
+            <span class="material-symbols-outlined text-g-blue text-[18px]">translate</span>
+            <span>الترجمة والشرح السياقي</span>
+          </div>
+          <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub" title="إغلاق">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>
+        </div>
+
+        <!-- Skeleton Loading State -->
+        <div id="panelSkeleton" class="hidden p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="space-y-2">
+              <div class="h-6 w-32 rounded skeleton"></div>
+              <div class="h-3.5 w-20 rounded skeleton"></div>
+            </div>
+            <div class="flex gap-1.5">
+              <div class="w-9 h-9 rounded-full skeleton"></div>
+              <div class="w-9 h-9 rounded-full skeleton"></div>
+            </div>
+          </div>
+          <div class="h-16 w-full rounded-xl skeleton"></div>
+          <div class="h-24 w-full rounded-xl skeleton"></div>
+          <div class="h-20 w-full rounded-xl skeleton"></div>
+        </div>
+
+        <!-- Word Analysis Content -->
+        <div id="panelContent" class="hidden p-5 space-y-4">
+          <!-- Word Header & Bookmark -->
+          <div class="flex items-start justify-between gap-2 pb-3.5 border-b border-g-border">
+            <div dir="ltr" class="text-left min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 id="panelWordTitle" class="font-docSans text-2xl font-semibold text-g-text break-words"></h2>
+                <span id="panelLangBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-g-bg border border-g-border text-g-sub uppercase"></span>
+              </div>
+              <div class="flex items-center gap-2 mt-1 text-xs text-g-sub">
+                <span id="panelIpa" class="font-mono text-g-text"></span>
+                <span>•</span>
+                <span id="panelPosBadge" class="font-sans font-medium text-g-green"></span>
+              </div>
+            </div>
+
+            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0" title="حفظ الكلمة">
+              <span id="bookmarkWordIcon" class="material-symbols-outlined text-[20px]">bookmark_add</span>
+            </button>
+          </div>
+
+          <!-- 3-Control Word Pronunciation Bar (1.0x Normal, 0.65x Slow, Repeat Loop) -->
+          <div class="bg-g-bg border border-g-border rounded-xl p-2.5 flex items-center justify-between gap-1.5">
+            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer" title="نطق عادي">
+              <span class="material-symbols-outlined filled text-[17px]">volume_up</span>
+              <span>نطق 1.0x</span>
+            </button>
+
+            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-white hover:bg-g-blueSoft text-g-text hover:text-g-blue border border-g-border text-xs font-medium py-1.5 px-2.5 rounded-lg flex items-center justify-center gap-1 transition cursor-pointer" title="نطق بطيء للتعلم">
+              <span class="material-symbols-outlined text-[17px]">slow_motion_video</span>
+              <span>بطيء 0.65x</span>
+            </button>
+
+            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer" title="تكرار النطق تلقائياً">
+              <span class="material-symbols-outlined text-[18px]">repeat</span>
+            </button>
+          </div>
+
+          <!-- Direct Arabic Translation -->
+          <div class="bg-white border border-g-border rounded-xl p-3.5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[11px] font-semibold text-g-blue">الترجمة العربية</span>
+              <button onclick="copyCurrentTranslation()" class="text-[11px] text-g-sub hover:text-g-blue flex items-center gap-0.5 cursor-pointer">
+                <span class="material-symbols-outlined text-[14px]">content_copy</span>
+                <span>نسخ</span>
+              </button>
+            </div>
+            <p id="panelTranslationAr" class="text-lg font-bold text-g-text leading-snug"></p>
+            <p id="panelLemma" class="text-[11px] text-g-sub mt-1"></p>
+          </div>
+
+          <!-- Contextual Explanation -->
+          <div class="bg-g-bg border border-g-border rounded-xl p-3.5">
+            <h3 class="text-xs font-semibold text-g-text mb-1.5">المعنى في سياق الجملة</h3>
+            <p id="panelExplanationAr" class="text-[13px] text-g-text leading-relaxed"></p>
+          </div>
+
+          <!-- Example Sentence -->
+          <div class="bg-white border border-g-border rounded-xl p-3.5 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-g-sub">مثال تطبيقي</span>
+              <div class="flex items-center gap-1">
+                <button onclick="pronounceExample(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded flex items-center gap-0.5 cursor-pointer">
+                  <span class="material-symbols-outlined text-[14px]">volume_up</span>
+                  <span>1.0x</span>
+                </button>
+                <button onclick="pronounceExample(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-1.5 py-0.5 rounded cursor-pointer">
+                  0.65x
+                </button>
+              </div>
+            </div>
+            <p id="panelExampleOrig" dir="ltr" class="font-docSans text-xs text-g-text leading-relaxed"></p>
+            <p id="panelExampleAr" class="text-xs text-g-sub leading-relaxed"></p>
+          </div>
+
+          <!-- Surrounding Sentence with 3 Audio Controls -->
+          <div class="border-t border-g-border pt-3.5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-g-sub">الجملة الكاملة</span>
+              <div class="flex items-center gap-1">
+                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-g-blue hover:bg-g-blueSoft px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer" title="نطق الجملة">
+                  <span class="material-symbols-outlined text-[15px]">volume_up</span>
+                  <span>1.0x</span>
+                </button>
+                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-g-sub hover:text-g-text hover:bg-g-bg px-2 py-0.5 rounded-full font-medium transition cursor-pointer" title="نطق الجملة ببطء">
+                  0.65x
+                </button>
+                <button id="sentenceRepeatBtn" onclick="toggleSentenceRepeatLoop()" class="p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer" title="تكرار الجملة">
+                  <span class="material-symbols-outlined text-[15px]">repeat</span>
+                </button>
+              </div>
+            </div>
+            <p id="panelSentenceOrig" dir="ltr" class="font-docSans text-xs text-g-text bg-g-bg p-2.5 rounded-lg border border-g-border leading-relaxed"></p>
+            <p id="panelSentenceAr" class="text-xs text-g-sub leading-relaxed"></p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ==================== 5. SAVED VOCABULARY SLIDE-OVER DRAWER ==================== -->
+  <div id="vocabDrawerBackdrop" onclick="toggleVocabDrawer(false)" class="hidden fixed inset-0 z-50 bg-black/25 transition-opacity"></div>
+  <aside id="vocabDrawer" class="fixed top-0 left-0 z-50 h-full w-full max-w-sm bg-white shadow-g-modal border-r border-g-border transform -translate-x-full transition-transform duration-200 flex flex-col">
+    <div class="h-16 px-4 border-b border-g-border flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-g-blue">bookmarks</span>
+        <h2 class="font-semibold text-sm text-g-text">الكلمات المحفوظة</h2>
+        <span id="drawerCountPill" class="text-xs bg-g-bg border border-g-border px-2 py-0.5 rounded-full text-g-sub">0</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-g-blue hover:bg-g-blueSoft px-3 py-1.5 rounded-full font-medium flex items-center gap-1 transition cursor-pointer" title="تصدير CSV">
+          <span class="material-symbols-outlined text-[16px]">download</span>
+          <span>CSV</span>
+        </button>
+        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-full hover:bg-[#F1F3F4] text-g-sub">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Input -->
+    <div class="p-3 border-b border-g-border shrink-0">
+      <div class="relative">
+        <span class="material-symbols-outlined text-[18px] text-g-sub absolute right-3 top-2.5">search</span>
+        <input
+          id="vocabSearchInput"
+          type="text"
+          oninput="renderVocabDrawerList()"
+          placeholder="بحث في المفردات..."
+          class="w-full bg-g-bg border border-g-border focus:bg-white focus:border-g-blue rounded-full pr-9 pl-3 py-1.5 text-xs text-g-text focus:outline-none transition"
+        />
+      </div>
+    </div>
+
+    <!-- Saved Words List -->
+    <div id="vocabDrawerList" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
+  </aside>
+
+  <!-- ==================== PASTE TEXT MODAL ==================== -->
+  <div id="pasteModal" class="hidden fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-g-modal border border-g-border overflow-hidden">
+      <div class="px-5 py-4 border-b border-g-border flex items-center justify-between">
+        <h3 class="font-semibold text-sm text-g-text">لصق نص مباشرة</h3>
+        <button onclick="closePasteModal()" class="p-1 rounded-full hover:bg-[#F1F3F4] text-g-sub">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div class="p-5">
+        <textarea
+          id="pasteTextInput"
+          dir="auto"
+          rows="8"
+          class="w-full rounded-xl border border-g-border focus:border-g-blue p-3.5 font-docSans text-sm text-g-text focus:outline-none"
+        ></textarea>
+      </div>
+      <div class="px-5 py-3.5 bg-g-bg border-t border-g-border flex items-center justify-end gap-2">
+        <button onclick="closePasteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-g-sub hover:bg-[#E8EAED] transition cursor-pointer">إلغاء</button>
+        <button onclick="processPastedText()" class="px-5 py-2 rounded-full text-xs font-medium bg-g-blue hover:bg-g-blueHover text-white transition cursor-pointer">فتح</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MINIMAL SNACKBAR TOAST ==================== -->
+  <div id="snackbar" class="fixed bottom-5 right-5 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none">
+    <div class="bg-[#202124] text-white text-xs px-4 py-2.5 rounded-lg shadow-g-elevated flex items-center gap-2">
+      <span id="snackbarText"></span>
+    </div>
+  </div>
+
+  <script>
+    // Initialize PDF.js Worker
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    .input-section {
-      padding: 12px 20px 18px;
-      background-color: var(--bg-main);
+    // ==================== APPLICATION STATE ====================
+    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v2';
+    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v2';
+
+    const appState = {
+      docTitle: '',
+      pages: [], // Array of { pageNumber, blocks: Array<{ type: 'h1'|'h2'|'p'|'li', text: string, indent?: number }> }
+      sentenceRecords: [], // Flat list of { text, tokens: HTMLElement[] } for document audio player
+      languageOverride: 'auto',
+      detectedLang: 'en',
+      fontFamily: 'sans', // 'sans' (Inter) | 'serif' (Literata)
+      fontSize: 17, // 16px to 24px
+      activeWordEl: null,
+      activeSentenceTokens: [],
+      selectedSentenceIndex: -1,
+      selectedAnalysis: null,
+      memoryCache: new Map(),
+      savedWords: []
+    };
+
+    // ==================== UPGRADED SPEECH MANAGER (WEB SPEECH API ENGINE) ====================
+    const SpeechManager = {
+      voices: [],
+      selectedVoiceURI: '',
+      docRate: 1.0,
+      isPlayingDoc: false,
+      isPausedDoc: false,
+      currentSentenceIdx: 0,
+      repeatMode: null, // 'word' | 'sentence' | null
+      repeatTimer: null,
+      keepAliveTimer: null,
+
+      init() {
+        if (!('speechSynthesis' in window)) return;
+        const load = () => {
+          this.voices = window.speechSynthesis.getVoices() || [];
+          this.populateVoiceDropdown(appState.detectedLang);
+        };
+        load();
+        window.speechSynthesis.onvoiceschanged = load;
+      },
+
+      rankVoice(voice, targetPrefix) {
+        const name = voice.name.toLowerCase();
+        const lang = voice.lang.toLowerCase();
+        if (!lang.startsWith(targetPrefix)) return -1;
+
+        let score = 10;
+        if (name.includes('google uk english') || name.includes('google us english') || name.includes('google français')) score += 50;
+        else if (name.includes('google')) score += 40;
+
+        if (name.includes('natural') || name.includes('neural') || name.includes('online')) score += 35;
+        if (name.includes('premium') || name.includes('enhanced')) score += 30;
+        if (name.includes('aria') || name.includes('denise') || name.includes('henri') || name.includes('samantha') || name.includes('thomas') || name.includes('amélie') || name.includes('amelie') || name.includes('daniel')) score += 25;
+        if (!voice.localService) score += 10;
+        return score;
+      },
+
+      getRankedVoicesForLang(lang) {
+        const prefix = lang === 'fr' ? 'fr' : 'en';
+        return this.voices
+          .map(v => ({ voice: v, score: this.rankVoice(v, prefix) }))
+          .filter(item => item.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .map(item => item.voice);
+      },
+
+      populateVoiceDropdown(lang) {
+        const select = document.getElementById('voiceSelector');
+        if (!select) return;
+        const ranked = this.getRankedVoicesForLang(lang);
+        if (ranked.length === 0) {
+          select.innerHTML = `<option value="">الصوت الافتراضي (${lang.toUpperCase()})</option>`;
+          return;
+        }
+
+        select.innerHTML = ranked.map(v => {
+          const cleanName = v.name.replace(/Microsoft |Google |Apple /g, '');
+          return `<option value="${v.voiceURI}">${cleanName} (${v.lang})</option>`;
+        }).join('');
+
+        // Preserve user selection if still valid for this language, otherwise pick top ranked
+        if (ranked.some(v => v.voiceURI === this.selectedVoiceURI)) {
+          select.value = this.selectedVoiceURI;
+        } else {
+          this.selectedVoiceURI = ranked[0].voiceURI;
+          select.value = this.selectedVoiceURI;
+        }
+      },
+
+      selectVoiceByURI(uri) {
+        this.selectedVoiceURI = uri;
+      },
+
+      getBestVoice(lang) {
+        if (this.selectedVoiceURI) {
+          const chosen = this.voices.find(v => v.voiceURI === this.selectedVoiceURI);
+          if (chosen && chosen.lang.toLowerCase().startsWith(lang === 'fr' ? 'fr' : 'en')) {
+            return chosen;
+          }
+        }
+        const ranked = this.getRankedVoicesForLang(lang);
+        return ranked[0] || null;
+      },
+
+      setDocRate(rate) {
+        this.docRate = rate;
+        if (this.isPlayingDoc && !this.isPausedDoc) {
+          // Restart current sentence smoothly at the new rate
+          this.playDocumentFromIndex(this.currentSentenceIdx);
+        }
+      },
+
+      setVisualSpeaking(active) {
+        const wave = document.getElementById('globalSpeakingWave');
+        if (!wave) return;
+        if (active) {
+          wave.classList.remove('hidden');
+          wave.classList.add('flex');
+        } else {
+          wave.classList.add('hidden');
+          wave.classList.remove('flex');
+        }
+      },
+
+      clearTimers() {
+        if (this.repeatTimer) {
+          clearTimeout(this.repeatTimer);
+          this.repeatTimer = null;
+        }
+        if (this.keepAliveTimer) {
+          clearInterval(this.keepAliveTimer);
+          this.keepAliveTimer = null;
+        }
+      },
+
+      // Speak single utterance cleanly (cancels any active speech first)
+      speakSingle(text, lang, rate = 1.0, loopMode = null) {
+        if (!('speechSynthesis' in window) || !text) return;
+        this.stop(false);
+        this.repeatMode = loopMode;
+
+        const runUtterance = () => {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
+          utterance.rate = rate;
+          const voice = this.getBestVoice(lang);
+          if (voice) utterance.voice = voice;
+
+          utterance.onstart = () => this.setVisualSpeaking(true);
+          utterance.onend = () => {
+            this.setVisualSpeaking(false);
+            if (this.repeatMode === loopMode && loopMode !== null) {
+              this.repeatTimer = setTimeout(runUtterance, 650);
+            }
+          };
+          utterance.onerror = () => {
+            this.setVisualSpeaking(false);
+          };
+
+          window.speechSynthesis.speak(utterance);
+        };
+
+        runUtterance();
+      },
+
+      // Chunked Sentence-by-Sentence Document Playback (Prevents Chrome 15s cutoff)
+      playDocumentFromIndex(startIdx = 0) {
+        if (!('speechSynthesis' in window) || appState.sentenceRecords.length === 0) return;
+        this.stop(false);
+
+        this.isPlayingDoc = true;
+        this.isPausedDoc = false;
+        this.currentSentenceIdx = Math.max(0, Math.min(startIdx, appState.sentenceRecords.length - 1));
+        this.updateDocPlayerUI();
+
+        // Chrome bug workaround: periodic pause/resume keeps synthesis alive on long sessions
+        this.keepAliveTimer = setInterval(() => {
+          if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+          }
+        }, 10000);
+
+        const speakNextSentence = () => {
+          if (!this.isPlayingDoc || this.isPausedDoc) return;
+          if (this.currentSentenceIdx >= appState.sentenceRecords.length) {
+            this.stop();
+            return;
+          }
+
+          const record = appState.sentenceRecords[this.currentSentenceIdx];
+          highlightSentenceTokens(record.tokens);
+          if (record.tokens[0]) {
+            record.tokens[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(record.text);
+          utterance.lang = appState.detectedLang === 'fr' ? 'fr-FR' : 'en-US';
+          utterance.rate = this.docRate;
+          const voice = this.getBestVoice(appState.detectedLang);
+          if (voice) utterance.voice = voice;
+
+          utterance.onstart = () => this.setVisualSpeaking(true);
+          utterance.onend = () => {
+            if (!this.isPlayingDoc || this.isPausedDoc) return;
+            this.currentSentenceIdx++;
+            speakNextSentence();
+          };
+          utterance.onerror = () => {
+            if (!this.isPlayingDoc) return;
+            this.currentSentenceIdx++;
+            speakNextSentence();
+          };
+
+          window.speechSynthesis.speak(utterance);
+        };
+
+        speakNextSentence();
+      },
+
+      pauseDocument() {
+        if (!this.isPlayingDoc) return;
+        this.isPausedDoc = true;
+        window.speechSynthesis.cancel();
+        this.setVisualSpeaking(false);
+        this.updateDocPlayerUI();
+      },
+
+      resumeDocument() {
+        if (!this.isPlayingDoc || !this.isPausedDoc) return;
+        this.playDocumentFromIndex(this.currentSentenceIdx);
+      },
+
+      stop(resetUI = true) {
+        this.clearTimers();
+        this.repeatMode = null;
+        this.isPlayingDoc = false;
+        this.isPausedDoc = false;
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        this.setVisualSpeaking(false);
+        if (resetUI) {
+          this.updateDocPlayerUI();
+          updateRepeatButtonsUI();
+        }
+      },
+
+      updateDocPlayerUI() {
+        const icon = document.getElementById('docAudioPlayIcon');
+        const label = document.getElementById('docAudioPlayLabel');
+        const stopBtn = document.getElementById('docAudioStopBtn');
+        if (!icon || !label || !stopBtn) return;
+
+        if (this.isPlayingDoc && !this.isPausedDoc) {
+          icon.textContent = 'pause';
+          label.textContent = 'إيقاف مؤقت';
+          stopBtn.classList.remove('hidden');
+        } else if (this.isPlayingDoc && this.isPausedDoc) {
+          icon.textContent = 'play_arrow';
+          label.textContent = 'متابعة الاستماع';
+          stopBtn.classList.remove('hidden');
+        } else {
+          icon.textContent = 'play_arrow';
+          label.textContent = 'استماع للمستند';
+          stopBtn.classList.add('hidden');
+        }
+      }
+    };
+
+    // Load persisted vocabulary and cache
+    (function hydrateStorage() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_VOCAB_KEY) || '[]');
+        if (Array.isArray(saved)) appState.savedWords = saved;
+
+        const cachedObj = JSON.parse(localStorage.getItem(STORAGE_CACHE_KEY) || '{}');
+        Object.entries(cachedObj).forEach(([k, v]) => appState.memoryCache.set(k, v));
+      } catch (_) {}
+    })();
+
+    // ==================== DOM & EVENT INITIALIZATION ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      SpeechManager.init();
+      updateSavedBadges();
+      setupFileInputAndDragDrop();
+
+      document.getElementById('docTitleInput').addEventListener('input', (e) => {
+        appState.docTitle = e.target.value;
+      });
+    });
+
+    function setupFileInputAndDragDrop() {
+      const fileInput = document.getElementById('fileInput');
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          handleFileIngestion(file);
+          fileInput.value = '';
+        }
+      });
+
+      const dropTargets = [document.getElementById('emptyDropzone'), document.getElementById('canvasDropArea')];
+      dropTargets.forEach((target) => {
+        if (!target) return;
+        target.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          target.classList.add('border-g-blue', 'bg-g-blueSoft/20');
+        });
+        target.addEventListener('dragleave', () => {
+          target.classList.remove('border-g-blue', 'bg-g-blueSoft/20');
+        });
+        target.addEventListener('drop', (e) => {
+          e.preventDefault();
+          target.classList.remove('border-g-blue', 'bg-g-blueSoft/20');
+          const file = e.dataTransfer?.files?.[0];
+          if (file) handleFileIngestion(file);
+        });
+      });
     }
 
-    .input-wrapper {
-      max-width: 780px;
-      margin: 0 auto;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-lg);
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: border-color var(--transition);
+    function triggerFileUpload() {
+      document.getElementById('fileInput').click();
     }
 
-    .input-wrapper:focus-within {
-      border-color: var(--text-secondary);
+    function resetToEmptyState() {
+      SpeechManager.stop();
+      appState.pages = [];
+      appState.sentenceRecords = [];
+      appState.docTitle = '';
+      appState.selectedAnalysis = null;
+      appState.selectedSentenceIndex = -1;
+      document.getElementById('emptyStateView').classList.remove('hidden');
+      document.getElementById('workspaceView').classList.add('hidden');
+      document.getElementById('headerDocMeta').classList.add('hidden');
+      closeSidePanel();
     }
 
-    .attachments-preview {
-      display: none;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding-bottom: 4px;
+    // ==================== PROGRESS & LANGUAGE DETECTION ====================
+    function setExtractionProgress(visible, text = '', percent = 0) {
+      const container = document.getElementById('extractionProgressContainer');
+      if (!visible) {
+        container.classList.add('hidden');
+        return;
+      }
+      container.classList.remove('hidden');
+      document.getElementById('extractionStatusText').textContent = text;
+      document.getElementById('extractionPercentText').textContent = `${Math.round(percent)}%`;
+      document.getElementById('extractionProgressBar').style.width = `${Math.round(percent)}%`;
     }
 
-    .attachments-preview.has-items {
-      display: flex;
+    function detectTextLanguage(text) {
+      if (appState.languageOverride !== 'auto') return appState.languageOverride;
+      const sample = text.slice(0, 2000).toLowerCase();
+      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc)\b/g) || []).length;
+      const enScore = (sample.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could)\b/g) || []).length;
+      return frScore > enScore ? 'fr' : 'en';
     }
 
-    .preview-item {
-      position: relative;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      background-color: var(--bg-main);
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6p
+    function handleLanguageChange(val) {
+      appState.languageOverride = val;
+      const allText = appState.pages.flatMap(p => p.blocks.map(b => b.text)).join(' ');
+      appState.detectedLang = detectTextLanguage(allText);
+      SpeechManager.populateVoiceDropdown(appState.detectedLang);
+    }
+
+    // ==================== 3. HIGH-FIDELITY DOCUMENT EXTRACTION ENGINE ====================
+    async function handleFileIngestion(file) {
+      SpeechManager.stop();
+      const name = file.name;
+      const lower = name.toLowerCase();
+
+      try {
+        if (lower.endsWith('.pdf') || file.type === 'application/pdf') {
+          await extractPDFWithLayout(file);
+        } else if (lower.endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          await extractDOCXWithMammoth(file);
+        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(lower)) {
+          await extractImageWithOCR(file);
+        } else {
+          await extractPlainText(file);
+        }
+      } catch (err) {
+        setExtractionProgress(false);
+        showSnackbar('تعذر استخراج محتوى الملف. يرجى التحقق من صيغة الملف.');
+      }
+    }
+
+    // A. PDF Layout-Preserving Extraction
+    async function extractPDFWithLayout(file) {
+      setExtractionProgress(true, 'جاري قراءة صفحات PDF...', 10);
+      const buffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+      const extractedPages = [];
+
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        setExtractionProgress(true, `استخراج الصفحة ${pageNum} من ${pdf.numPages}...`, 10 + (pageNum / pdf.numPages) * 85);
+        const page = await pdf.getPage(pageNum);
+        const content = await page.getTextContent();
+
+        const rawItems = content.items
+          .filter(it => it.str && it.str.trim().length > 0)
+          .map(it => {
+            const fontSize = Math.round(Math.hypot(it.transform[0], it.transform[1]) * 10) / 10;
+            return {
+              str: it.str,
+              x: it.transform[4],
+              y: it.transform[5],
+              width: it.width || 0,
+              height: it.height || fontSize,
+              fontSize
+            };
+          });
+
+        if (rawItems.length === 0) {
+          extractedPages.push({ pageNumber: pageNum, blocks: [] });
+          continue;
+        }
+
+        const sortedSizes = [...rawItems.map(i => i.fontSize)].sort((a, b) => a - b);
+        const medianFontSize = sortedSizes[Math.floor(sortedSizes.length / 2)] || 12;
+
+        rawItems.sort((a, b) => {
+          if (Math.abs(b.y - a.y) > Math.max(4, a.fontSize * 0.35)) {
+            return b.y - a.y;
+          }
+          return a.x - b.x;
+        });
+
+        const lines = [];
+        let currentLine = [rawItems[0]];
+        for (let i = 1; i < rawItems.length; i++) {
+          const item = rawItems[i];
+          const prev = currentLine[currentLine.length - 1];
+          const yTolerance = Math.max(4, prev.fontSize * 0.4);
+          if (Math.abs(item.y - prev.y) <= yTolerance) {
+            currentLine.push(item);
+          } else {
+            lines.push(currentLine);
+            currentLine = [item];
+          }
+        }
+        lines.push(currentLine);
+
+        const minX = Math.min(...lines.map(l => Math.min(...l.map(it => it.x))));
+
+        const lineObjects = lines.map(lineItems => {
+          lineItems.sort((a, b) => a.x - b.x);
+          const avgFontSize = lineItems.reduce((acc, it) => acc + it.fontSize, 0) / lineItems.length;
+          const startX = lineItems[0].x;
+          const y = lineItems[0].y;
+
+          let lineText = '';
+          for (let j = 0; j < lineItems.length; j++) {
+            const curr = lineItems[j];
+            if (j > 0) {
+              const prev = lineItems[j - 1];
+              const gap = curr.x - (prev.x + prev.width);
+              if (gap > curr.fontSize * 0.2) {
+                lineText += ' ';
+              }
+            }
+            lineText += curr.str;
+          }
+
+          return {
+            text: lineText.replace(/\s+/g, ' ').trim(),
+            y,
+            indent: Math.max(0, Math.round(startX - minX)),
+            fontSize: avgFontSize
+          };
+        }).filter(l => l.text.length > 0);
+
+        const blocks = [];
+        let activeBlock = null;
+
+        for (let i = 0; i < lineObjects.length; i++) {
+          const line = lineObjects[i];
+          const prevLine = i > 0 ? lineObjects[i - 1] : null;
+          const verticalGap = prevLine ? (prevLine.y - line.y) : 0;
+
+          const isHeading = line.fontSize >= medianFontSize * 1.25 && line.text.length < 140;
+          const isListItem = /^([•\-–—*]|\d+[.)])\s+/.test(line.text);
+          const isNewParagraph = !prevLine || verticalGap > line.fontSize * 1.45 || isHeading || isListItem;
+
+          if (isNewParagraph) {
+            if (activeBlock) blocks.push(activeBlock);
+            let blockType = 'p';
+            if (line.fontSize >= medianFontSize * 1.5 && line.text.length < 120) blockType = 'h1';
+            else if (isHeading) blockType = 'h2';
+            else if (isListItem) blockType = 'li';
+
+            activeBlock = {
+              type: blockType,
+              text: line.text,
+              indent: line.indent > 18 ? Math.min(line.indent, 48) : 0
+            };
+          } else {
+            if (activeBlock.text.endsWith('-')) {
+              activeBlock.text = activeBlock.text.slice(0, -1) + line.text;
+            } else {
+              activeBlock.text += ' ' + line.text;
+            }
+          }
+        }
+        if (activeBlock) blocks.push(activeBlock);
+
+        extractedPages.push({ pageNumber: pageNum, blocks });
+      }
+
+      openExtractedDocument(file.name, extractedPages);
+    }
+
+    // B. DOCX Extraction via Mammoth.js
+    async function extractDOCXWithMammoth(file) {
+      setExtractionProgress(true, 'جاري تحليل مستند Word (DOCX)...', 45);
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(result.value, 'text/html');
+
+      const blocks = [];
+      doc.body.childNodes.forEach(node => {
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        const tag = node.tagName.toLowerCase();
+        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        if (!text) return;
+
+        if (tag === 'h1') blocks.push({ type: 'h1', text });
+        else if (tag === 'h2' || tag === 'h3') blocks.push({ type: 'h2', text });
+        else if (tag === 'ul' || tag === 'ol') {
+          node.querySelectorAll('li').forEach(li => {
+            const liText = li.textContent.replace(/\s+/g, ' ').trim();
+            if (liText) blocks.push({ type: 'li', text: liText });
+          });
+        } else {
+          blocks.push({ type: 'p', text });
+        }
+      });
+
+      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
+    }
+
+    // C. Image OCR via Tesseract.js (eng + fra)
+    async function extractImageWithOCR(file) {
+      setExtractionProgress(true, 'تهيئة محرك التعرف الضوئي (OCR)...', 10);
+      const worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
+        logger: (m) => {
+          if (m.status === 'recognizing text') {
+            setExtractionProgress(true, 'جاري استخراج النص من الصورة...', 15 + m.progress * 80);
+          }
+        }
+      });
+
+      const { data: { text } } = await worker.recognize(file);
+      await worker.terminate();
+
+      const blocks = text
+        .split(/\n\s*\n/)
+        .map(p => p.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+        .map(p => ({ type: 'p', text: p }));
+
+      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
+    }
+
+    // D. Plain Text Extraction
+    async function extractPlainText(file) {
+      setExtractionProgress(true, 'جاري قراءة الملف النصي...', 60);
+      const text = await file.text();
+      const blocks = text
+        .split(/\n\s*\n|\r\n\s*\r\n/)
+        .map(p => p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+        .map(p => ({ type: 'p', text: p }));
+
+      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
+    }
+
+    // Paste Modal Handlers
+    function openPasteModal() {
+      document.getElementById('pasteModal').classList.remove('hidden');
+      document.getElementById('pasteTextInput').focus();
+    }
+    function closePasteModal() {
+      document.getElementById('pasteModal').classList.add('hidden');
+    }
+    function processPastedText() {
+      const raw = document.getElementById('pasteTextInput').value.trim();
+      if (!raw) return;
+      const blocks = raw
+        .split(/\n\s*\n|\r\n\s*\r\n/)
+        .map(p => p.replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+        .map(p => ({ type: 'p', text: p }));
+
+      document.getElementById('pasteTextInput').value = '';
+      closePasteModal();
+      openExtractedDocument('مستند نصي', [{ pageNumber: 1, blocks }]);
+    }
+
+    // ==================== RENDER PAGINATED DOCUMENT & TYPOGRAPHY ====================
+    function openExtractedDocument(title, pages) {
+      setExtractionProgress(false);
+      appState.docTitle = title;
+      appState.pages = pages;
+
+      const allText = pages.flatMap(p => p.blocks.map(b => b.text)).join(' ');
+      appState.detectedLang = detectTextLanguage(allText);
+      SpeechManager.populateVoiceDropdown(appState.detectedLang);
+
+      document.getElementById('emptyStateView').classList.add('hidden');
+      document.getElementById('workspaceView').classList.remove('hidden');
+      document.getElementById('headerDocMeta').classList.remove('hidden');
+      document.getElementById('docTitleInput').value = title;
+      document.getElementById('pageCountIndicator').textContent = `${pages.length} ${pages.length === 1 ? 'صفحة' : 'صفحات'}`;
+
+      renderPaginatedSheets();
+    }
+
+    function renderPaginatedSheets() {
+      const container = document.getElementById('paginatedDocumentContainer');
+      container.innerHTML = '';
+      appState.sentenceRecords = [];
+      const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
+      const fontClass = appState.fontFamily === 'serif' ? 'doc-font-serif' : 'doc-font-sans';
+
+      appState.pages.forEach((page) => {
+        const sheet = document.createElement('article');
+        sheet.className = 'g-doc-sheet px-6 py-8 sm:px-14 sm:py-12 md:px-16 md:py-14 relative';
+        sheet.dir = 'ltr';
+
+        const contentWrapper = document.createElement('div');
+        contentWrapper.className = `doc-content-body ${fontClass} text-g-text leading-[1.85] space-y-5`;
+        contentWrapper.style.fontSize = `${appState.fontSize}px`;
+
+        page.blocks.forEach((block) => {
+          let el;
+          if (block.type === 'h1') {
+            el = document.createElement('h1');
+            el.className = 'text-[1.5em] font-bold text-g-text leading-snug mt-2 mb-3';
+          } else if (block.type === 'h2') {
+            el = document.createElement('h2');
+            el.className = 'text-[1.22em] font-semibold text-g-text leading-snug mt-2 mb-2';
+          } else if (block.type === 'li') {
+            el = document.createElement('div');
+            el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:text-g-sub';
+          } else {
+            el = document.createElement('p');
+            el.className = 'text-left';
+            if (block.indent) el.style.paddingLeft = `${block.indent}px`;
+          }
+
+          tokenizeBlockIntoElement(el, block.text, savedSet);
+          contentWrapper.appendChild(el);
+        });
+
+        sheet.appendChild(contentWrapper);
+
+        // Minimal Google Docs Page Footer
+        const pageFooter = document.createElement('div');
+        pageFooter.className = 'mt-10 pt-3 border-t border-g-borderSubtle flex justify-between items-center text-[11px] text-g-sub select-none';
+        pageFooter.innerHTML = `<span>Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
+        sheet.appendChild(pageFooter);
+
+        container.appendChild(sheet);
+      });
+    }
+
+    function tokenizeBlockIntoElement(parentEl, blockText, savedSet) {
+      const sentences = blockText.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [blockText];
+
+      sentences.forEach((sentenceStr) => {
+        const cleanSentence = sentenceStr.trim();
+        if (!cleanSentence) return;
+
+        const sentenceTokens = [];
+        const sentenceIndex = appState.sentenceRecords.length;
+        appState.sentenceRecords.push({ text: cleanSentence, tokens: sentenceTokens });
+
+        const parts = sentenceStr.split(/(\s+)/);
+        parts.forEach((part) => {
+          if (/^\s+$/.test(part)) {
+            parentEl.appendChild(document.createTextNode(part));
+            return;
+          }
+
+          const match = part.match(/^([^\p{L}\p{N}]*)([\p{L}\p{N}’'-]+)([^\p{L}\p{N}]*)$/u);
+          if (!match) {
+            parentEl.appendChild(document.createTextNode(part));
+            return;
+          }
+
+          const [, lead, word, trail] = match;
+          if (lead) parentEl.appendChild(document.createTextNode(lead));
+
+          const span = document.createElement('span');
+          span.textContent = word;
+          span.className = 'word-token';
+          if (savedSet.has(word.toLowerCase())) {
+            span.classList.add('bookmarked-token');
+          }
+
+          sentenceTokens.push(span);
+          span.addEventListener('click', () => {
+            onWordTokenClicked(span, word, cleanSentence, sentenceTokens, sentenceIndex);
+          });
+
+          parentEl.appendChild(span);
+          if (trail) parentEl.appendChild(document.createTextNode(trail));
+        });
+      });
+    }
+
+    function setDocFontFamily(mode) {
+      appState.fontFamily = mode;
+      const sansBtn = document.getElementById('fontSansBtn');
+      const serifBtn = document.getElementById('fontSerifBtn');
+
+      if (mode === 'sans') {
+        sansBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
+        serifBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
+      } else {
+        serifBtn.className = 'px-2.5 py-1 rounded-full bg-white text-g-text font-medium border border-g-border transition cursor-pointer';
+        sansBtn.className = 'px-2.5 py-1 rounded-full text-g-sub hover:text-g-text font-medium border border-transparent transition cursor-pointer';
+      }
+
+      document.querySelectorAll('.doc-content-body').forEach(el => {
+        el.classList.remove('doc-font-sans', 'doc-font-serif');
+        el.classList.add(mode === 'serif' ? 'doc-font-serif' : 'doc-font-sans');
+      });
+    }
+
+    function adjustFontSize(delta) {
+      appState.fontSize = Math.min(24, Math.max(16, appState.fontSize + delta));
+      document.getElementById('fontSizeIndicator').textContent = `${appState.fontSize}px`;
+      document.querySelectorAll('.doc-content-body').forEach(el => {
+        el.style.fontSize = `${appState.fontSize}px`;
+      });
+    }
+
+    function highlightSentenceTokens(tokens) {
+      appState.activeSentenceTokens.forEach(t => t.classList.remove('sentence-highlight'));
+      tokens.forEach(t => t.classList.add('sentence-highlight'));
+      appState.activeSentenceTokens = tokens;
+    }
+
+    // ==================== 4. WORD CLICK -> GEMINI AI TRANSLATION & EXPLANATION ====================
+    async function onWordTokenClicked(tokenEl, word, surroundingSentence, sentenceTokenList, sentenceIndex) {
+      if (appState.activeWordEl) {
+        appState.activeWordEl.classList.remove('active-token');
+      }
+      highlightSentenceTokens(sentenceTokenList);
+      tokenEl.classList.add('active-token');
+      appState.activeWordEl = tokenEl;
+      appState.selectedSentenceIndex = sentenceIndex;
+
+      // Stop repeat loops when user selects a new word
+      if (SpeechManager.repeatMode) {
+        SpeechManager.stop();
+      }
+
+      const panel = document.getElementById('sideDictionaryPanel');
+      panel.classList.remove('hidden');
+      panel.classList.add('flex');
+
+      const lang = appState.detectedLang;
+      const cacheKey = `${lang}::${word.toLowerCase()}::${surroundingSentence.slice(0, 80)}`;
+
+      if (appState.memoryCache.has(cacheKey)) {
+        renderSidePanelAnalysis(appState.memoryCache.get(cacheKey));
+        return;
+      }
+
+      document.getElementById('panelContent').classList.add('hidden');
+      document.getElementById('panelSkeleton').classList.remove('hidden');
+
+      try {
+        const analysis = await queryGeminiDictionary(word, surroundingSentence, lang);
+        const fullRecord = {
+          word,
+          lang,
+          sentence_original: surroundingSentence,
+          ...analysis
+        };
+
+        appState.memoryCache.set(cacheKey, fullRecord);
+        persistCacheToStorage();
+        renderSidePanelAnalysis(fullRecord);
+      } catch (err) {
+        const fallbackRecord = {
+          word,
+          lang,
+          translation_ar: 'تعذر جلب الترجمة الآلية',
+          explanation_ar: 'يرجى التحقق من الاتصال بالشبكة لإظهار الشرح السياقي المفصل. يمكنك الاستماع للنطق الصوتي للكلمة والجملة.',
+          ipa: `/${word.toLowerCase()}/`,
+          pos_ar: lang === 'fr' ? 'كلمة فرنسية' : 'كلمة إنجليزية',
+          lemma: word.toLowerCase(),
+          example_original: surroundingSentence,
+          example_ar: '',
+          sentence_original: surroundingSentence,
+          sentence_ar: ''
+        };
+        renderSidePanelAnalysis(fallbackRecord);
+      }
+    }
+
+    async function queryGeminiDictionary(word, sentence, lang) {
+      const apiKey = "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+      const sourceLang = lang === 'fr' ? 'French' : 'English';
+      const systemInstruction = `You are a precision bilingual dictionary engine for Arabic speakers reading ${sourceLang} documents. Analyze the target word within its exact context sentence and output structured JSON.`;
+
+      const prompt = `Target word: "${word}"
+Language: ${sourceLang}
+Context sentence: "${sentence}"
+
+Provide:
+- translation_ar: accurate direct Arabic translation for this exact context
+- explanation_ar: clear, concise Arabic explanation of the word's meaning and nuance in this sentence
+- ipa: IPA phonetic transcription
+- pos_ar: Arabic grammatical part of speech (e.g. اسم، فعل، صفة، ظرف)
+- lemma: base dictionary form of the word
+- example_original: one natural ${sourceLang} example sentence using the word
+- example_ar: Arabic translation of example_original
+- sentence_ar: Arabic translation of the context sentence`;
+
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              translation_ar: { type: "STRING" },
+              explanation_ar: { type: "STRING" },
+              ipa: { type: "STRING" },
+              pos_ar: { type: "STRING" },
+              lemma: { type: "STRING" },
+              example_original: { type: "STRING" },
+              example_ar: { type: "STRING" },
+              sentence_ar: { type: "STRING" }
+            },
+            required: [
+              "translation_ar",
+              "explanation_ar",
+              "ipa",
+              "pos_ar",
+              "lemma",
+              "example_original",
+              "example_ar",
+              "sentence_ar"
+            ]
+          }
+        }
+      };
+
+      const retryDelays = [1000, 2000, 4000];
+      for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
+        try {
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          const rawJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!rawJson) throw new Error('Empty response');
+          return JSON.parse(rawJson);
+        } catch (err) {
+          if (attempt === retryDelays.length) throw err;
+          await new Promise(r => setTimeout(r, retryDelays[attempt]));
+        }
+      }
+    }
+
+    function persistCacheToStorage() {
+      try {
+        const entries = Array.from(appState.memoryCache.entries()).slice(-120);
+        localStorage.setItem(STORAGE_CACHE_KEY, JSON.stringify(Object.fromEntries(entries)));
+      } catch (_) {}
+    }
+
+    function renderSidePanelAnalysis(data) {
+      appState.selectedAnalysis = data;
+
+      document.getElementById('panelSkeleton').classList.add('hidden');
+      document.getElementById('panelContent').classList.remove('hidden');
+
+      document.getElementById('panelWordTitle').textContent = data.word;
+      document.getElementById('panelLangBadge').textContent = data.lang.toUpperCase();
+      document.getElementById('panelIpa').textContent = data.ipa || '';
+      document.getElementById('panelPosBadge').textContent = data.pos_ar || '';
+      document.getElementById('panelTranslationAr').textContent = data.translation_ar;
+      document.getElementById('panelLemma').textContent = data.lemma ? `الأصل اللغوي: ${data.lemma}` : '';
+      document.getElementById('panelExplanationAr').textContent = data.explanation_ar;
+      document.getElementById('panelExampleOrig').textContent = data.example_original;
+      document.getElementById('panelExampleAr').textContent = data.example_ar;
+      document.getElementById('panelSentenceOrig').textContent = data.sentence_original;
+      document.getElementById('panelSentenceAr').textContent = data.sentence_ar;
+
+      updateBookmarkButtonUI();
+      updateRepeatButtonsUI();
+    }
+
+    function closeSidePanel() {
+      const panel = document.getElementById('sideDictionaryPanel');
+      panel.classList.add('hidden');
+      panel.classList.remove('flex');
+      if (appState.activeWordEl) {
+        appState.activeWordEl.classList.remove('active-token');
+        appState.activeWordEl = null;
+      }
+      appState.activeSentenceTokens.forEach(t => t.classList.remove('sentence-highlight'));
+      appState.activeSentenceTokens = [];
+      appState.selectedSentenceIndex = -1;
+    }
+
+    function copyCurrentTranslation() {
+      if (!appState.selectedAnalysis) return;
+      const text = `${appState.selectedAnalysis.word} — ${appState.selectedAnalysis.translation_ar}`;
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showSnackbar('تم نسخ الترجمة');
+    }
+
+    // ==================== AUDIO CONTROL HELPERS ====================
+    function pronounceSelectedWord(rate) {
+      if (!appState.selectedAnalysis) return;
+      const keepLoop = SpeechManager.repeatMode === 'word' ? 'word' : null;
+      SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, rate, keepLoop);
+      updateRepeatButtonsUI();
+    }
+
+    function toggleWordRepeatLoop() {
+      if (!appState.selectedAnalysis) return;
+      if (SpeechManager.repeatMode === 'word') {
+        SpeechManager.stop();
+      } else {
+        SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, 0.85, 'word');
+        updateRepeatButtonsUI();
+      }
+    }
+
+    function pronounceExample(rate = 1.0) {
+      if (!appState.selectedAnalysis?.example_original) return;
+      SpeechManager.speakSingle(appState.selectedAnalysis.example_original, appState.selectedAnalysis.lang, rate, null);
+      updateRepeatButtonsUI();
+    }
+
+    function pronounceSurroundingSentence(rate = 1.0) {
+      if (!appState.selectedAnalysis?.sentence_original) return;
+      const keepLoop = SpeechManager.repeatMode === 'sentence' ? 'sentence' : null;
+      SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, rate, keepLoop);
+      updateRepeatButtonsUI();
+    }
+
+    function toggleSentenceRepeatLoop() {
+      if (!appState.selectedAnalysis?.sentence_original) return;
+      if (SpeechManager.repeatMode === 'sentence') {
+        SpeechManager.stop();
+      } else {
+        SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, 0.9, 'sentence');
+        updateRepeatButtonsUI();
+      }
+    }
+
+    function updateRepeatButtonsUI() {
+      const wordBtn = document.getElementById('wordRepeatToggleBtn');
+      const sentBtn = document.getElementById('sentenceRepeatBtn');
+      if (wordBtn) {
+        if (SpeechManager.repeatMode === 'word') {
+          wordBtn.className = 'bg-g-blueSoft text-g-blue border border-g-blue p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
+        } else {
+          wordBtn.className = 'bg-white hover:bg-[#F1F3F4] text-g-sub border border-g-border p-1.5 rounded-lg flex items-center justify-center transition cursor-pointer';
+        }
+      }
+      if (sentBtn) {
+        if (SpeechManager.repeatMode === 'sentence') {
+          sentBtn.className = 'p-1 rounded-full bg-g-blueSoft text-g-blue transition cursor-pointer';
+        } else {
+          sentBtn.className = 'p-1 rounded-full text-g-sub hover:bg-g-bg transition cursor-pointer';
+        }
+      }
+    }
+
+    function toggleDocumentAudioPlayback() {
+      if (SpeechManager.isPlayingDoc && !SpeechManager.isPausedDoc) {
+        SpeechManager.pauseDocument();
+      } else if (SpeechManager.isPlayingDoc && SpeechManager.isPausedDoc) {
+        SpeechManager.resumeDocument();
+      } else {
+        const startIdx = appState.selectedSentenceIndex >= 0 ? appState.selectedSentenceIndex : 0;
+        SpeechManager.playDocumentFromIndex(startIdx);
+      }
+    }
+
+    // ==================== 5. SAVED VOCABULARY MANAGEMENT ====================
+    function isWordBookmarked(word) {
+      return appState.savedWords.some(item => item.word.toLowerCase() === word.toLowerCase());
+    }
+
+    function updateBookmarkButtonUI() {
+      if (!appState.selectedAnalysis) return;
+      const btn = document.getElementById('bookmarkWordBtn');
+      const icon = document.getElementById('bookmarkWordIcon');
+      const bookmarked = isWordBookmarked(appState.selectedAnalysis.word);
+
+      if (bookmarked) {
+        btn.className = 'w-9 h-9 rounded-full border border-g-green bg-[#E6F4EA] text-g-green flex items-center justify-center transition shrink-0';
+        icon.textContent = 'bookmark_added';
+        icon.classList.add('filled');
+      } else {
+        btn.className = 'w-9 h-9 rounded-full border border-g-border bg-white hover:bg-[#F8F9FA] text-g-sub flex items-center justify-center transition shrink-0';
+        icon.textContent = 'bookmark_add';
+        icon.classList.remove('filled');
+      }
+    }
+
+    function toggleBookmarkCurrentWord() {
+      if (!appState.selectedAnalysis) return;
+      const targetLower = appState.selectedAnalysis.word.toLowerCase();
+      const idx = appState.savedWords.findIndex(w => w.word.toLowerCase() === targetLower);
+
+      if (idx >= 0) {
+        appState.savedWords.splice(idx, 1);
+        showSnackbar('تمت إزالة الكلمة من المحفوظات');
+      } else {
+        appState.savedWords.unshift({
+          word: appState.selectedAnalysis.word,
+          lang: appState.selectedAnalysis.lang,
+          ipa: appState.selectedAnalysis.ipa || '',
+          translation_ar: appState.selectedAnalysis.translation_ar,
+          pos_ar: appState.selectedAnalysis.pos_ar || ''
+        });
+        showSnackbar('تم حفظ الكلمة في المفردات');
+      }
+
+      localStorage.setItem(STORAGE_VOCAB_KEY, JSON.stringify(appState.savedWords));
+      updateBookmarkButtonUI();
+      updateSavedBadges();
+      renderVocabDrawerList();
+      if (appState.pages.length > 0) renderPaginatedSheets();
+    }
+
+    function deleteSavedWord(word) {
+      appState.savedWords = appState.savedWords.filter(w => w.word.toLowerCase() !== word.toLowerCase());
+      localStorage.setItem(STORAGE_VOCAB_KEY, JSON.stringify(appState.savedWords));
+      updateBookmarkButtonUI();
+      updateSavedBadges();
+      renderVocabDrawerList();
+      if (appState.pages.length > 0) renderPaginatedSheets();
+    }
+
+    function updateSavedBadges() {
+      const count = appState.savedWords.length;
+      const badge = document.getElementById('savedCountBadge');
+      const pill = document.getElementById('drawerCountPill');
+      pill.textContent = count;
+      if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function toggleVocabDrawer(open) {
+      const drawer = document.getElementById('vocabDrawer');
+      const backdrop = document.getElementById('vocabDrawerBackdrop');
+      if (open) {
+        renderVocabDrawerList();
+        backdrop.classList.remove('hidden');
+        drawer.classList.remove('-translate-x-full');
+      } else {
+        backdrop.classList.add('hidden');
+        drawer.classList.add('-translate-x-full');
+      }
+    }
+
+    function renderVocabDrawerList() {
+      const listEl = document.getElementById('vocabDrawerList');
+      const query = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
+
+      const filtered = appState.savedWords.filter(item =>
+        item.word.toLowerCase().includes(query) || item.translation_ar.includes(query)
+      );
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-12 text-center text-g-sub text-xs">
+            <span class="material-symbols-outlined text-[30px] text-g-border mb-2">bookmark_border</span>
+            <p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(item => `
+        <div class="p-3 rounded-xl border border-g-border bg-white flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div dir="ltr" class="flex items-center gap-1.5 justify-end">
+              <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-g-bg border border-g-border text-g-sub uppercase">${item.lang}</span>
+              <span class="font-docSans font-semibold text-sm text-g-text truncate">${item.word}</span>
+            </div>
+            <p class="text-xs font-medium text-g-blue mt-0.5 truncate">${item.translation_ar}</p>
+          </div>
+          <div class="flex items-center gap-0.5 shrink-0">
+            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-full hover:bg-g-blueSoft text-g-blue cursor-pointer" title="نطق">
+              <span class="material-symbols-outlined text-[18px]">volume_up</span>
+            </button>
+            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full hover:bg-[#FCE8E6] text-g-red cursor-pointer" title="حذف">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function exportSavedVocabularyCSV() {
+      if (appState.savedWords.length === 0) {
+        showSnackbar('لا توجد كلمات محفوظة للتصدير');
+        return;
+      }
+      const header = 'Word,Language,IPA,PartOfSpeech,ArabicTranslation';
+      const rows = appState.savedWords.map(w =>
+        [w.word, w.lang.toUpperCase(), w.ipa, w.pos_ar, w.translation_ar]
+          .map(val => `"${(val || '').replace(/"/g, '""')}"`)
+          .join(',')
+      );
+      const csvContent = '\uFEFF' + [header, ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'readdy-vocabulary.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showSnackbar('تم تصدير ملف المفردات بنجاح');
+    }
+
+    // ==================== SNACKBAR ====================
+    let snackbarTimer;
+    function showSnackbar(message) {
+      const el = document.getElementById('snackbar');
+      document.getElementById('snackbarText').textContent = message;
+      el.classList.remove('translate-y-16', 'opacity-0');
+      clearTimeout(snackbarTimer);
+      snackbarTimer = setTimeout(() => {
+        el.classList.add('translate-y-16', 'opacity-0');
+      }, 2600);
+    }
+  </script>
+</body>
+</html>
