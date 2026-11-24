@@ -1,2045 +1,538 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Readdy — منصة القراءة والترجمة السياقية</title>
-
-  <!-- Fonts: IBM Plex Sans Arabic, Inter, Literata, Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0" />
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
-            sans: ['"Inter"', '"IBM Plex Sans Arabic"', 'sans-serif'],
-            docSerif: ['"Literata"', 'Georgia', 'serif'],
-            brand: ['"Outfit"', 'sans-serif']
-          },
-          colors: {
-            gem: {
-              bgLight: '#FFFFFF',
-              surfaceLight: '#F8FAFD',
-              cardLight: '#F0F4F9',
-              borderLight: '#DDE3EA',
-              textLight: '#1F1F1F',
-              subLight: '#444746',
-              accentLight: '#1A73E8',
-              accentHoverLight: '#1557B0',
-              accentSoftLight: '#D3E3FD',
-
-              bgDark: '#131314',
-              surfaceDark: '#1E1F20',
-              cardDark: '#282A2C',
-              borderDark: '#333537',
-              textDark: '#E3E3E3',
-              subDark: '#C4C7C5',
-              accentDark: '#8AB4F8',
-              accentHoverDark: '#AECBFA',
-              accentSoftDark: '#004A77'
-            }
-          },
-          boxShadow: {
-            'gem-sheet': '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04)',
-            'gem-modal': '0 12px 32px rgba(0, 0, 0, 0.18)'
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- PDF.js, Mammoth.js, Tesseract.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
-      margin: 0;
-      -webkit-font-smoothing: antialiased;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-      vertical-align: middle;
-      user-select: none;
-    }
-    .material-symbols-outlined.filled {
-      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
-    }
-
-    /* Unified Open Book Logo */
-    .readdy-book-logo {
-      display: inline-flex;
-      align-items: center;
-      cursor: pointer;
-    }
-    .readdy-play-icon {
-      transform-origin: 43px 32px;
-      transition: transform 0.25s ease;
-    }
-    .readdy-book-logo:hover .readdy-play-icon {
-      transform: scale(1.1);
-    }
-
-    /* Document Page Sheet */
-    .gem-doc-sheet {
-      width: 100%;
-      max-width: 820px;
-      min-height: 980px;
-      background-color: #FFFFFF;
-      color: #1F1F1F;
-      border: 1px solid #DDE3EA;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    }
-    html.dark .gem-doc-sheet {
-      background-color: #1E1F20;
-      color: #E3E3E3;
-      border-color: #333537;
-    }
-
-    .doc-font-serif { font-family: 'Literata', Georgia, serif; }
-    .doc-font-sans  { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-
-    /* Interactive Word Tokens */
-    .word-token {
-      display: inline;
-      border-radius: 4px;
-      padding: 0 2px;
-      margin: 0 -1px;
-      cursor: pointer;
-      transition: background-color 0.12s ease, color 0.12s ease;
-    }
-    .word-token:hover {
-      background-color: #E8F0FE;
-      color: #1A73E8;
-    }
-    html.dark .word-token:hover {
-      background-color: #282A2C;
-      color: #8AB4F8;
-    }
-
-    .word-token.sentence-highlight {
-      background-color: #F0F4F9;
-    }
-    html.dark .word-token.sentence-highlight {
-      background-color: #282A2C;
-    }
-
-    .word-token.active-token {
-      background-color: #D3E3FD !important;
-      color: #041E49 !important;
-      font-weight: 600;
-      outline: 1px solid #1A73E8;
-    }
-    html.dark .word-token.active-token {
-      background-color: #004A77 !important;
-      color: #D3E3FD !important;
-      outline: 1px solid #8AB4F8;
-    }
-
-    .word-token.bookmarked-token {
-      border-bottom: 1.5px solid #1E8E3E;
-    }
-    html.dark .word-token.bookmarked-token {
-      border-bottom: 1.5px solid #81C995;
-    }
-
-    /* Soundwave Animation */
-    .soundwave-bar {
-      width: 2.5px;
-      background-color: #1A73E8;
-      border-radius: 2px;
-      animation: soundPulse 0.8s ease-in-out infinite;
-    }
-    html.dark .soundwave-bar { background-color: #8AB4F8; }
-    .soundwave-bar:nth-child(2) { animation-delay: 0.2s; }
-    .soundwave-bar:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes soundPulse {
-      0%, 100% { height: 4px; }
-      50% { height: 13px; }
-    }
-
-    /* Modal Entrance */
-    @keyframes sajModalPop {
-      from { opacity: 0; transform: translateY(10px) scale(0.98); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .animate-saj-modal {
-      animation: sajModalPop 0.22s ease-out forwards;
-    }
-
-    /* Skeleton Loader */
-    @keyframes shimmer {
-      0% { background-position: -300px 0; }
-      100% { background-position: 300px 0; }
-    }
-    .skeleton {
-      background: linear-gradient(90deg, #F0F4F9 25%, #E4EAF2 50%, #F0F4F9 75%);
-      background-size: 600px 100%;
-      animation: shimmer 1.2s infinite linear;
-    }
-    html.dark .skeleton {
-      background: linear-gradient(90deg, #282A2C 25%, #333537 50%, #282A2C 75%);
-      background-size: 600px 100%;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Readdy — منصة القراءة والترجمة السياقية</title>
+<script>try{var t=localStorage.getItem('readdy_theme_mode_v1')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.classList.toggle('dark',t==='dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
+html.dark{--bg:#131314;--cv:#131314;--sheet:#1e1f20;--s1:#1e1f20;--s2:#282a2c;--bd:#333537;--tx:#e3e3e3;--sub:#c4c7c5;--ac:#8ab4f8;--ach:#aecbfa;--acs:#004a77;--onac:#041e49;--onact:#d3e3fd;--ok:#81c995;--hl:#282a2c}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column;transition:background .2s,color .2s}
+button,select,input,textarea{font:inherit;color:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+select option{background:var(--s1);color:var(--tx)}
+.ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;font-size:20px;line-height:1;display:inline-block;width:1em;height:1em;overflow:hidden;white-space:nowrap;direction:ltr;vertical-align:middle;user-select:none;font-feature-settings:'liga';-webkit-font-feature-settings:'liga';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20}
+.ms.fill{font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 20}
+html:not(.icons) .ms{visibility:hidden}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);background:var(--s2);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:500;transition:.15s;white-space:nowrap;flex:none}
+.btn:hover{border-color:var(--ac)}.btn:active{transform:scale(.96)}
+.btn.pri{background:var(--ac);color:var(--onac);border-color:transparent;font-weight:600}.btn.pri:hover{background:var(--ach)}
+.btn.lg{padding:12px 22px;font-size:14px}
+.ibtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--s2);display:inline-grid;place-items:center;flex:none;transition:.15s;position:relative;padding:0}
+.ibtn:hover{border-color:var(--ac)}.ibtn:active{transform:scale(.92)}.ibtn.sm{width:30px;height:30px}.ibtn.on{background:var(--acs);color:var(--ac);border-color:var(--ac)}
+.pill{display:inline-flex;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:4px 10px;font-size:12px;white-space:nowrap;flex:none}
+.pill select,.pill input{background:none;border:0;outline:0;font-weight:500;cursor:pointer;max-width:130px}.pill input{width:42px;text-align:center;cursor:text}
+.k{color:var(--sub)}.tag{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--s2);border:1px solid var(--bd);color:var(--sub);text-transform:uppercase}
+.hdr{position:sticky;top:0;z-index:30;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);background:var(--bg);border-bottom:1px solid var(--bd)}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;flex:none;color:inherit}
+.brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
+.play{transform-origin:43px 32px;animation:pulse 2.6s ease-in-out infinite}
+.sp{flex:1;min-width:0}
+#docTitleInput{display:none;width:clamp(120px,22vw,240px);background:none;border:1px solid transparent;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:500;outline:0;text-overflow:ellipsis}
+#docTitleInput:hover{background:var(--s2)}#docTitleInput:focus{border-color:var(--ac)}
+@media(min-width:768px){body.has-doc #docTitleInput{display:block}}
+.badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
+#empty{flex:1;display:grid;place-items:center;padding:24px 16px}
+.hero{position:relative;width:100%;max-width:640px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,6vw,48px);text-align:center;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:-40%;background:radial-gradient(closest-side at 30% 30%,rgba(26,115,232,.13),transparent 60%),radial-gradient(closest-side at 70% 70%,rgba(138,180,248,.15),transparent 60%);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
+.hero>*{position:relative;animation:rise .6s both}.hero>:nth-child(2){animation-delay:.08s}.hero>:nth-child(3){animation-delay:.16s}.hero>:nth-child(4){animation-delay:.24s}.hero>:nth-child(5){animation-delay:.32s}
+.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:430px;margin:0 auto 24px}
+.hero .big{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:14px}.hero .big svg{width:56px;height:56px}.hero .big span{font:700 clamp(28px,8vw,34px)/1 Outfit,sans-serif}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;direction:ltr}
+.chips span{padding:3px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);font:500 13px Literata,serif;color:var(--ac);animation:float 4s ease-in-out infinite;animation-delay:var(--d)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.fmts{margin-top:22px;gap:8px}.fmts span{font-size:11px;padding:3px 12px;border-radius:99px;background:var(--s2);border:1px solid var(--bd);color:var(--sub)}
+.prog{margin:22px auto 0;max-width:420px;text-align:right}.prog div:first-child{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--ac);margin-bottom:6px}
+.bar{height:6px;border-radius:9px;background:var(--s2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+#work{flex:1;flex-direction:column;display:flex}
+.tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
+.tb::-webkit-scrollbar{display:none}.tb>*{flex:none}.tb .sp{flex:1 0 0}
+.seg{display:inline-flex;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:2px}.seg button{border:0;background:none;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500;color:var(--sub)}.seg button.on{background:var(--bg);color:var(--tx)}
+.seg .v{font-size:11px;color:var(--sub);align-self:center;padding:0 4px;min-width:34px;text-align:center}
+.wave{display:none;gap:2px;align-items:center;height:18px}.wave.on{display:flex}.wave i{width:3px;height:4px;border-radius:2px;background:var(--ac);animation:sp .8s ease-in-out infinite}.wave i:nth-child(2){animation-delay:.2s}.wave i:nth-child(3){animation-delay:.4s}
+.split{flex:1;display:flex;align-items:flex-start}
+.canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(8px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
+#pages{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
+.sheet{width:100%;max-width:820px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow:hidden}
+.sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:700px}}
+.body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.9;overflow-wrap:break-word}
+.body>*{margin:0 0 .9em}.body h1{font-size:1.5em;line-height:1.35}.body h2{font-size:1.22em;line-height:1.35}
+.body .li{padding-left:1.3em;position:relative}.body .li::before{content:'•';position:absolute;left:.3em;opacity:.6}
+.sf{margin-top:36px;padding-top:10px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-size:11px;color:var(--sub);direction:ltr;user-select:none}.sf b{font-family:Outfit,sans-serif}
+.wt{border-radius:4px;padding:0 2px;margin:0 -1px;cursor:pointer;transition:background .12s,color .12s}
+@media(hover:hover){.wt:hover{background:var(--hl);color:var(--ac)}}
+.wt.sh{background:var(--s2)}.wt.bm{border-bottom:1.5px solid var(--ok)}
+.wt.act{background:var(--acs);color:var(--onact);font-weight:600;outline:1px solid var(--ac);animation:pop .25s}
+#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:58dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
+body.panel-open .canvas{padding-bottom:62dvh}
+@media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:380px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
+.ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
+.pc{padding:16px;display:grid;gap:12px;animation:rise .25s both}
+.card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px}.card h3{margin:0 0 6px;font-size:12px}.card p{margin:0}
+.wh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.wr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.wr h2{margin:0;font:600 24px Literata,serif;overflow-wrap:anywhere}
+.wm{display:flex;gap:8px;font-size:12px;color:var(--sub);margin-top:4px;flex-wrap:wrap}.wm span:first-child{font-family:monospace;color:var(--tx)}#pPos{color:var(--ok);font-weight:500}
+.lbl2{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:var(--ac);margin-bottom:4px}.lbl2.g{color:var(--sub)}
+.lbl2 button,.mini{background:none;border:0;font-size:11px;color:var(--ac);display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:99px}.mini.g{color:var(--sub)}.mini.on{background:var(--acs)}
+#pTr{font-size:19px;font-weight:700;line-height:1.5!important}.sm2{font-size:11px;color:var(--sub);margin-top:4px!important}
+.ex{direction:ltr;font:12px/1.7 Literata,serif}.exa{font-size:12px;color:var(--sub);line-height:1.7}
+.sk{border-radius:12px;background:linear-gradient(90deg,var(--s2) 25%,var(--bd) 50%,var(--s2) 75%);background-size:600px 100%;animation:shim 1.2s linear infinite}
+.drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,380px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
+.bdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:55}.bdrop.open{opacity:1;pointer-events:auto}
+.dh{height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid var(--bd);font-weight:600;font-size:14px}.dh .sp{flex:1}
+.dsr{padding:10px 12px;border-bottom:1px solid var(--bd)}.dsr input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:7px 14px;font-size:13px;outline:0}.dsr input:focus{border-color:var(--ac)}
+#vlist{flex:1;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start}
+.vitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--bd);border-radius:16px;background:var(--s2);animation:rise .25s both}
+.vitem>div:first-child{min-width:0}.vw{display:flex;gap:6px;align-items:center;justify-content:flex-end}.vw b{font:600 14px Literata,serif;overflow:hidden;text-overflow:ellipsis}.vitem p{margin:2px 0 0;font-size:12px;color:var(--ac);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.none{padding:48px 0;text-align:center;font-size:12px;color:var(--sub)}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:16px;animation:fade .2s}
+.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:24px;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:var(--sh);animation:modal .22s ease-out}.mbox.w{max-width:560px}
+.mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.mbox textarea,.mbox input[type=password]{width:100%;border-radius:14px;background:var(--s2);border:1px solid var(--bd);padding:12px;font-size:14px;outline:0}.mbox textarea{font-family:Literata,serif;resize:vertical}
+.feat{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:var(--s2);border:1px solid var(--bd);text-align:right}.feat .ms{color:var(--ac);background:var(--acs);border-radius:10px;padding:5px;box-sizing:content-box}.feat b{display:block;color:var(--tx);font-size:12px}.feat small{font-size:11px}
+.toast{position:fixed;top:calc(var(--hh) + 10px);left:50%;transform:translate(-50%,-16px);opacity:0;pointer-events:none;transition:.25s;background:#1f1f1f;color:#fff;font-size:12px;font-weight:500;padding:9px 18px;border-radius:99px;box-shadow:var(--sh);z-index:80;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}html.dark .toast{background:#e3e3e3;color:#131314}
+body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;border:2px dashed var(--ac);border-radius:24px;background:rgba(26,115,232,.08);display:grid;place-items:center;z-index:90;pointer-events:none;font-weight:700;color:var(--ac)}
+@keyframes pulse{50%{transform:scale(1.14)}}@keyframes float{50%{transform:translateY(-6px)}}@keyframes drift{to{transform:translate(6%,4%) rotate(8deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes pop{50%{transform:scale(1.06)}}
+@keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}}@keyframes sheet{from{transform:translateY(100%)}}@keyframes slide{from{opacity:0;transform:translateX(-24px)}}
+@keyframes sp{50%{height:14px}}@keyframes shim{to{background-position:600px 0}}
+@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}}
+@media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
+@media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
-<body class="bg-gem-bgLight dark:bg-gem-bgDark text-gem-textLight dark:text-gem-textDark min-h-screen flex flex-col">
+<body>
+<input id="fileInput" type="file" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" hidden>
 
-  <!-- Hidden File Input -->
-  <input id="fileInput" type="file" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" class="hidden" />
+<header class="hdr">
+  <button class="brand" onclick="goHome()" aria-label="Readdy — الرئيسية">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg>
+    <span dir="ltr">Readdy</span>
+  </button>
+  <input id="docTitleInput" dir="ltr" type="text" aria-label="عنوان المستند">
+  <div class="sp"></div>
+  <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
+    <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
+  <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
+  <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
+  <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
+  <button class="ibtn" onclick="show('apiModal',1)" aria-label="إعدادات الترجمة"><i class="ms">tune</i></button>
+  <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
+</header>
 
-  <!-- ==================== 1. GEMINI TOP HEADER ==================== -->
-  <header class="sticky top-0 z-30 h-16 bg-gem-bgLight/95 dark:bg-gem-bgDark/95 backdrop-blur-sm border-b border-gem-borderLight dark:border-gem-borderDark px-4 sm:px-6 flex items-center justify-between gap-3">
-    <!-- Brand -->
-    <div class="flex items-center gap-3 min-w-0">
-      <div onclick="resetToEmptyState()" class="readdy-book-logo gap-2.5 shrink-0 select-none" title="Readdy — الرئيسية">
-        <svg class="w-8 h-8 shrink-0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/>
-          <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/>
-          <path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/>
-          <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-          <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-          <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FFFFFF"/>
-          <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/>
-        </svg>
-        <span dir="ltr" class="font-brand text-[21px] font-bold tracking-tight text-gem-textLight dark:text-gem-textDark leading-none">Readdy</span>
-      </div>
-
-      <div id="headerDocMeta" class="hidden md:flex items-center gap-2 min-w-0 border-r border-gem-borderLight dark:border-gem-borderDark pr-3">
-        <input
-          id="docTitleInput"
-          type="text"
-          dir="ltr"
-          class="bg-transparent hover:bg-gem-cardLight dark:hover:bg-gem-cardDark focus:bg-gem-surfaceLight dark:focus:bg-gem-surfaceDark text-sm font-medium text-gem-textLight dark:text-gem-textDark px-2.5 py-1 rounded-lg border border-transparent focus:border-gem-accentLight dark:focus:border-gem-accentDark focus:outline-none truncate max-w-[230px]"
-          value="Document"
-        />
-      </div>
+<main id="empty">
+  <div class="hero">
+    <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
+    <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، وانقر على أي كلمة للحصول على ترجمتها الدقيقة داخل السياق مع النطق الصوتي.</p></div>
+    <div class="row">
+      <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
+      <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
-
-    <!-- Header Controls -->
-    <div class="flex items-center gap-2 shrink-0">
-      <!-- Language Pill -->
-      <div class="flex items-center bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-2.5 py-1 text-xs">
-        <span class="material-symbols-outlined text-[16px] text-gem-subLight dark:text-gem-subDark ml-1">language</span>
-        <select id="docLanguageSelect" onchange="handleLanguageChange(this.value)" class="bg-transparent text-gem-textLight dark:text-gem-textDark font-medium focus:outline-none cursor-pointer">
-          <option value="auto" class="dark:bg-gem-surfaceDark">Auto</option>
-          <option value="en" class="dark:bg-gem-surfaceDark">English</option>
-          <option value="fr" class="dark:bg-gem-surfaceDark">Français</option>
-        </select>
-      </div>
-
-      <!-- Primary Upload Button -->
-      <button onclick="triggerFileUpload()" class="bg-gem-accentLight hover:bg-gem-accentHoverLight dark:bg-gem-accentDark dark:hover:bg-gem-accentHoverDark text-white dark:text-[#041E49] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 transition cursor-pointer">
-        <span class="material-symbols-outlined text-[17px]">upload_file</span>
-        <span>رفع ملف</span>
-      </button>
-
-      <!-- Theme Toggle (Light / Dark) -->
-      <button onclick="toggleThemeMode()" class="p-2 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark hover:border-gem-accentLight dark:hover:border-gem-accentDark text-gem-textLight dark:text-gem-textDark transition cursor-pointer" title="تبديل الوضع الليلي / النهاري">
-        <span id="themeToggleIcon" class="material-symbols-outlined text-[19px]">dark_mode</span>
-      </button>
-
-      <!-- Welcome / Guide Popup Trigger -->
-      <button onclick="openWelcomeModal(true)" class="p-2 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark hover:border-gem-accentLight dark:hover:border-gem-accentDark text-gem-subLight dark:text-gem-subDark transition cursor-pointer" title="بطاقة الترحيب ودليل المنصة">
-        <span class="material-symbols-outlined text-[19px]">info</span>
-      </button>
-
-      <!-- API Settings -->
-      <button onclick="openApiSettingsModal()" class="p-2 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark hover:border-gem-accentLight dark:hover:border-gem-accentDark text-gem-subLight dark:text-gem-subDark transition cursor-pointer" title="إعدادات الترجمة">
-        <span class="material-symbols-outlined text-[19px]">tune</span>
-      </button>
-
-      <!-- Saved Words Drawer -->
-      <button onclick="toggleVocabDrawer(true)" class="relative p-2 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark hover:border-gem-accentLight dark:hover:border-gem-accentDark text-gem-textLight dark:text-gem-textDark transition cursor-pointer" title="الكلمات المحفوظة">
-        <span class="material-symbols-outlined text-[19px]">bookmarks</span>
-        <span id="savedCountBadge" class="hidden absolute -top-1 -right-1 bg-gem-accentLight dark:bg-gem-accentDark text-white dark:text-[#041E49] text-[10px] font-bold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center">0</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- ==================== 2. EMPTY STATE VIEW (GEMINI CLEAN) ==================== -->
-  <main id="emptyStateView" class="flex-1 flex flex-col items-center justify-center px-4 py-12">
-    <div id="emptyDropzone" class="w-full max-w-2xl bg-gem-surfaceLight dark:bg-gem-surfaceDark border border-gem-borderLight dark:border-gem-borderDark rounded-3xl p-8 sm:p-12 text-center transition-colors">
-
-      <!-- Unified Open Book Logo -->
-      <div class="flex justify-center mb-5">
-        <div class="readdy-book-logo gap-3.5 select-none">
-          <svg class="w-14 h-14 shrink-0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/>
-            <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/>
-            <path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/>
-            <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-            <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-            <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FFFFFF"/>
-            <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/>
-          </svg>
-          <span dir="ltr" class="font-brand text-[34px] font-bold tracking-tight text-gem-textLight dark:text-gem-textDark leading-none">Readdy</span>
-        </div>
-      </div>
-
-      <h1 class="text-xl sm:text-2xl font-bold text-gem-textLight dark:text-gem-textDark mb-2">
-        اقرأ المستندات الإنجليزية والفرنسية بذكاء
-      </h1>
-      <p class="text-sm text-gem-subLight dark:text-gem-subDark max-w-md mx-auto mb-8 leading-relaxed">
-        ارفع ملف PDF أو مستند Word أو صورة نصية، وانقر على أي كلمة للحصول على ترجمتها النحوية الدقيقة داخل السياق مع النطق الصوتي.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <button onclick="triggerFileUpload()" class="bg-gem-accentLight hover:bg-gem-accentHoverLight dark:bg-gem-accentDark dark:hover:bg-gem-accentHoverDark text-white dark:text-[#041E49] text-sm font-semibold px-6 py-3 rounded-full flex items-center gap-2 transition cursor-pointer">
-          <span class="material-symbols-outlined text-[20px]">folder_open</span>
-          <span>اختيار ملف من الجهاز</span>
-        </button>
-
-        <button onclick="openPasteModal()" class="bg-gem-cardLight dark:bg-gem-cardDark hover:bg-gem-borderLight/60 dark:hover:bg-gem-borderDark text-gem-textLight dark:text-gem-textDark border border-gem-borderLight dark:border-gem-borderDark text-sm font-medium px-5 py-3 rounded-full flex items-center gap-2 transition cursor-pointer">
-          <span class="material-symbols-outlined text-[19px]">content_paste</span>
-          <span>لصق نص مباشرة</span>
-        </button>
-      </div>
-
-      <div class="mt-7 flex items-center justify-center gap-2 text-xs text-gem-subLight dark:text-gem-subDark">
-        <span class="px-3 py-1 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">PDF</span>
-        <span class="px-3 py-1 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">DOCX</span>
-        <span class="px-3 py-1 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">TXT</span>
-        <span class="px-3 py-1 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">OCR صور</span>
-      </div>
-
-      <!-- Extraction Progress -->
-      <div id="extractionProgressContainer" class="hidden mt-8 max-w-md mx-auto text-right">
-        <div class="flex items-center justify-between text-xs font-medium text-gem-accentLight dark:text-gem-accentDark mb-1.5">
-          <span id="extractionStatusText">جاري استخراج النص...</span>
-          <span id="extractionPercentText">0%</span>
-        </div>
-        <div class="w-full h-1.5 bg-gem-cardLight dark:bg-gem-cardDark rounded-full overflow-hidden">
-          <div id="extractionProgressBar" class="h-full bg-gem-accentLight dark:bg-gem-accentDark transition-all duration-200" style="width: 0%"></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ==================== 3. WORKSPACE VIEW ==================== -->
-  <div id="workspaceView" class="hidden flex-1 flex flex-col">
-
-    <!-- Secondary Toolbar -->
-    <div class="sticky top-16 z-20 bg-gem-surfaceLight/95 dark:bg-gem-surfaceDark/95 backdrop-blur-sm border-b border-gem-borderLight dark:border-gem-borderDark px-3 sm:px-6 py-2">
-      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-
-        <!-- Document Audio Controls -->
-        <div class="flex items-center gap-1.5 flex-wrap">
-          <button id="docAudioPlayBtn" onclick="toggleDocumentAudioPlayback()" class="bg-gem-accentLight hover:bg-gem-accentHoverLight dark:bg-gem-accentDark dark:hover:bg-gem-accentHoverDark text-white dark:text-[#041E49] text-xs font-semibold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition cursor-pointer">
-            <span id="docAudioPlayIcon" class="material-symbols-outlined filled text-[17px]">play_arrow</span>
-            <span id="docAudioPlayLabel">استماع للمستند</span>
-          </button>
-
-          <button id="docAudioStopBtn" onclick="SpeechManager.stop()" class="hidden bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark text-gem-textLight dark:text-gem-textDark text-xs font-medium px-2.5 py-1.5 rounded-full flex items-center gap-1 transition cursor-pointer" title="إيقاف">
-            <span class="material-symbols-outlined text-[16px]">stop</span>
-          </button>
-
-          <!-- Speed Selector -->
-          <div class="flex items-center bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-2.5 py-1 text-xs">
-            <span class="text-gem-subLight dark:text-gem-subDark ml-1">السرعة:</span>
-            <select id="docSpeechRateSelect" onchange="SpeechManager.setDocRate(parseFloat(this.value))" class="bg-transparent font-semibold text-gem-textLight dark:text-gem-textDark focus:outline-none cursor-pointer">
-              <option value="0.7" class="dark:bg-gem-surfaceDark">0.7x</option>
-              <option value="0.85" class="dark:bg-gem-surfaceDark">0.85x</option>
-              <option value="1.0" selected class="dark:bg-gem-surfaceDark">1.0x</option>
-              <option value="1.25" class="dark:bg-gem-surfaceDark">1.25x</option>
-              <option value="1.5" class="dark:bg-gem-surfaceDark">1.5x</option>
-            </select>
-          </div>
-
-          <!-- Voice Picker -->
-          <div class="hidden sm:flex items-center bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-2.5 py-1 text-xs">
-            <span class="material-symbols-outlined text-[15px] text-gem-subLight dark:text-gem-subDark ml-1">record_voice_over</span>
-            <select id="voiceSelector" onchange="SpeechManager.selectVoiceByURI(this.value)" class="bg-transparent text-gem-textLight dark:text-gem-textDark font-medium max-w-[140px] truncate focus:outline-none cursor-pointer" dir="ltr">
-              <option value="">الصوت الافتراضي</option>
-            </select>
-          </div>
-
-          <!-- Active Speaking Indicator -->
-          <div id="globalSpeakingWave" class="hidden items-center gap-0.5 px-2 h-5" title="جاري القراءة الصوتية">
-            <span class="soundwave-bar"></span>
-            <span class="soundwave-bar"></span>
-            <span class="soundwave-bar"></span>
-          </div>
-        </div>
-
-        <!-- Typography & Page Jump -->
-        <div class="flex items-center gap-2">
-          <div class="flex items-center bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full p-0.5 text-xs">
-            <button id="fontSerifBtn" onclick="setDocFontFamily('serif')" class="px-2.5 py-1 rounded-full bg-gem-bgLight dark:bg-gem-surfaceDark text-gem-textLight dark:text-gem-textDark font-medium transition cursor-pointer">Literata</button>
-            <button id="fontSansBtn" onclick="setDocFontFamily('sans')" class="px-2.5 py-1 rounded-full text-gem-subLight dark:text-gem-subDark font-medium transition cursor-pointer">Inter</button>
-          </div>
-
-          <div class="flex items-center gap-1 bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-1.5 py-0.5">
-            <button onclick="adjustFontSize(-1)" class="w-6 h-6 rounded-full hover:bg-gem-bgLight dark:hover:bg-gem-surfaceDark text-gem-textLight dark:text-gem-textDark text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تصغير الخط">A-</button>
-            <span id="fontSizeIndicator" class="text-[11px] text-gem-subLight dark:text-gem-subDark px-1 select-none font-medium">18px</span>
-            <button onclick="adjustFontSize(1)" class="w-6 h-6 rounded-full hover:bg-gem-bgLight dark:hover:bg-gem-surfaceDark text-gem-textLight dark:text-gem-textDark text-xs font-medium flex items-center justify-center transition cursor-pointer" title="تكبير الخط">A+</button>
-          </div>
-
-          <div class="hidden sm:flex items-center gap-1 bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-2.5 py-1 text-xs text-gem-subLight dark:text-gem-subDark">
-            <span>صفحة</span>
-            <input id="jumpPageInput" type="number" min="1" value="1" onchange="jumpToPageNumber(this.value)" class="w-11 bg-gem-bgLight dark:bg-gem-surfaceDark border border-gem-borderLight dark:border-gem-borderDark rounded-full px-1 text-center text-gem-textLight dark:text-gem-textDark font-medium focus:outline-none" />
-            <span id="pageCountIndicator">/ 1</span>
-          </div>
-
-          <button onclick="resetToEmptyState()" class="text-xs text-gem-subLight dark:text-gem-subDark hover:text-gem-textLight dark:hover:text-gem-textDark bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark px-3 py-1.5 rounded-full transition flex items-center gap-1 font-medium cursor-pointer">
-            <span class="material-symbols-outlined text-[15px]">add</span>
-            <span>جديد</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Split Layout -->
-    <div class="flex-1 flex flex-col lg:flex-row relative items-start">
-
-      <!-- Document Canvas -->
-      <div id="canvasDropArea" class="flex-1 w-full py-6 sm:py-8 px-3 sm:px-6 pb-24 lg:pb-12 flex flex-col items-center gap-6">
-        <div id="paginatedDocumentContainer" class="w-full flex flex-col items-center gap-6"></div>
-      </div>
-
-      <!-- Right Contextual Dictionary Panel -->
-      <aside
-        id="sideDictionaryPanel"
-        class="hidden flex-col fixed inset-x-0 bottom-0 max-h-[75vh] rounded-t-3xl shadow-gem-modal lg:rounded-none lg:shadow-none w-full lg:w-[380px] shrink-0 bg-gem-surfaceLight dark:bg-gem-surfaceDark border-t lg:border-t-0 lg:border-r border-gem-borderLight dark:border-gem-borderDark lg:sticky lg:top-[113px] lg:h-[calc(100vh-113px)] lg:max-h-none overflow-y-auto z-40"
-      >
-        <div class="px-4 py-3 border-b border-gem-borderLight dark:border-gem-borderDark flex items-center justify-between bg-gem-surfaceLight dark:bg-gem-surfaceDark sticky top-0 z-10">
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-gem-textLight dark:text-gem-textDark">
-            <span class="material-symbols-outlined text-gem-accentLight dark:text-gem-accentDark text-[18px]">translate</span>
-            <span>الترجمة والشرح السياقي</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span id="engineSourceTag" class="text-[10px] px-2.5 py-0.5 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark text-gem-subLight dark:text-gem-subDark"></span>
-            <button onclick="closeSidePanel()" class="p-1 rounded-full hover:bg-gem-cardLight dark:hover:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark cursor-pointer" title="إغلاق">
-              <span class="material-symbols-outlined text-[18px]">close</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Skeleton -->
-        <div id="panelSkeleton" class="hidden p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="space-y-2">
-              <div class="h-6 w-32 rounded-lg skeleton"></div>
-              <div class="h-3.5 w-20 rounded-lg skeleton"></div>
-            </div>
-            <div class="w-9 h-9 rounded-full skeleton"></div>
-          </div>
-          <div class="h-12 w-full rounded-2xl skeleton"></div>
-          <div class="h-20 w-full rounded-2xl skeleton"></div>
-          <div class="h-24 w-full rounded-2xl skeleton"></div>
-        </div>
-
-        <!-- Content -->
-        <div id="panelContent" class="hidden p-5 space-y-4">
-          <div class="flex items-start justify-between gap-2 pb-3.5 border-b border-gem-borderLight dark:border-gem-borderDark">
-            <div dir="ltr" class="text-left min-w-0">
-              <div class="flex items-center gap-2 flex-wrap">
-                <h2 id="panelWordTitle" class="font-docSerif text-2xl font-semibold text-gem-textLight dark:text-gem-textDark break-words"></h2>
-                <span id="panelLangBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark text-gem-subLight dark:text-gem-subDark uppercase"></span>
-              </div>
-              <div class="flex items-center gap-2 mt-1 text-xs text-gem-subLight dark:text-gem-subDark flex-wrap">
-                <span id="panelIpa" class="font-mono text-gem-textLight dark:text-gem-textDark"></span>
-                <span id="panelIpaDot">•</span>
-                <span id="panelPosBadge" class="font-sans font-medium text-[#1E8E3E] dark:text-[#81C995]"></span>
-              </div>
-            </div>
-
-            <button id="bookmarkWordBtn" onclick="toggleBookmarkCurrentWord()" class="w-9 h-9 rounded-full border border-gem-borderLight dark:border-gem-borderDark bg-gem-cardLight dark:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark flex items-center justify-center transition shrink-0 cursor-pointer" title="حفظ الكلمة">
-              <span id="bookmarkWordIcon" class="material-symbols-outlined text-[20px]">bookmark_add</span>
-            </button>
-          </div>
-
-          <div class="bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-2xl p-2 flex items-center justify-between gap-1.5">
-            <button onclick="pronounceSelectedWord(1.0)" class="flex-1 bg-gem-surfaceLight dark:bg-gem-surfaceDark hover:bg-gem-accentSoftLight dark:hover:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark border border-gem-borderLight dark:border-gem-borderDark text-xs font-medium py-1.5 px-2.5 rounded-xl flex items-center justify-center gap-1 transition cursor-pointer">
-              <span class="material-symbols-outlined filled text-[17px]">volume_up</span>
-              <span>نطق 1.0x</span>
-            </button>
-            <button onclick="pronounceSelectedWord(0.65)" class="flex-1 bg-gem-surfaceLight dark:bg-gem-surfaceDark hover:bg-gem-accentSoftLight dark:hover:bg-gem-accentSoftDark text-gem-textLight dark:text-gem-textDark border border-gem-borderLight dark:border-gem-borderDark text-xs font-medium py-1.5 px-2.5 rounded-xl flex items-center justify-center gap-1 transition cursor-pointer">
-              <span class="material-symbols-outlined text-[17px]">slow_motion_video</span>
-              <span>بطيء 0.65x</span>
-            </button>
-            <button id="wordRepeatToggleBtn" onclick="toggleWordRepeatLoop()" class="bg-gem-surfaceLight dark:bg-gem-surfaceDark text-gem-subLight dark:text-gem-subDark border border-gem-borderLight dark:border-gem-borderDark p-1.5 rounded-xl flex items-center justify-center transition cursor-pointer" title="تكرار النطق">
-              <span class="material-symbols-outlined text-[18px]">repeat</span>
-            </button>
-          </div>
-
-          <div class="bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-2xl p-3.5">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-[11px] font-semibold text-gem-accentLight dark:text-gem-accentDark">الترجمة السياقية الدقيقة</span>
-              <button onclick="copyCurrentTranslation()" class="text-[11px] text-gem-subLight dark:text-gem-subDark hover:text-gem-accentLight dark:hover:text-gem-accentDark flex items-center gap-0.5 cursor-pointer">
-                <span class="material-symbols-outlined text-[14px]">content_copy</span>
-                <span>نسخ</span>
-              </button>
-            </div>
-            <p id="panelTranslationAr" class="text-lg font-bold text-gem-textLight dark:text-gem-textDark leading-snug"></p>
-            <p id="panelLemma" class="text-[11px] text-gem-subLight dark:text-gem-subDark mt-1"></p>
-          </div>
-
-          <div class="bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-2xl p-3.5">
-            <h3 class="text-xs font-semibold text-gem-textLight dark:text-gem-textDark mb-1.5">المعنى والشرح النحوي</h3>
-            <p id="panelExplanationAr" class="text-[13px] text-gem-textLight dark:text-gem-textDark leading-relaxed"></p>
-          </div>
-
-          <div id="exampleBox" class="bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-2xl p-3.5 space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-semibold text-gem-subLight dark:text-gem-subDark">مثال تطبيقي</span>
-              <div class="flex items-center gap-1">
-                <button onclick="pronounceExample(1.0)" class="text-[11px] text-gem-accentLight dark:text-gem-accentDark px-2 py-0.5 rounded-full flex items-center gap-0.5 cursor-pointer">
-                  <span class="material-symbols-outlined text-[14px]">volume_up</span>
-                  <span>1.0x</span>
-                </button>
-                <button onclick="pronounceExample(0.65)" class="text-[11px] text-gem-subLight dark:text-gem-subDark px-1.5 py-0.5 rounded-full cursor-pointer">0.65x</button>
-              </div>
-            </div>
-            <p id="panelExampleOrig" dir="ltr" class="font-docSerif text-xs text-gem-textLight dark:text-gem-textDark leading-relaxed"></p>
-            <p id="panelExampleAr" class="text-xs text-gem-subLight dark:text-gem-subDark leading-relaxed"></p>
-          </div>
-
-          <div class="border-t border-gem-borderLight dark:border-gem-borderDark pt-3.5 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-semibold text-gem-subLight dark:text-gem-subDark">الجملة الكاملة في النص</span>
-              <div class="flex items-center gap-1">
-                <button onclick="pronounceSurroundingSentence(1.0)" class="text-[11px] text-gem-accentLight dark:text-gem-accentDark px-2 py-0.5 rounded-full flex items-center gap-0.5 font-medium transition cursor-pointer">
-                  <span class="material-symbols-outlined text-[15px]">volume_up</span>
-                  <span>1.0x</span>
-                </button>
-                <button onclick="pronounceSurroundingSentence(0.65)" class="text-[11px] text-gem-subLight dark:text-gem-subDark px-2 py-0.5 rounded-full font-medium transition cursor-pointer">0.65x</button>
-                <button id="sentenceRepeatBtn" onclick="toggleSentenceRepeatLoop()" class="p-1 rounded-full text-gem-subLight dark:text-gem-subDark transition cursor-pointer" title="تكرار الجملة">
-                  <span class="material-symbols-outlined text-[15px]">repeat</span>
-                </button>
-              </div>
-            </div>
-            <p id="panelSentenceOrig" dir="ltr" class="font-docSerif text-xs text-gem-textLight dark:text-gem-textDark bg-gem-cardLight dark:bg-gem-cardDark p-3 rounded-xl border border-gem-borderLight dark:border-gem-borderDark leading-relaxed"></p>
-            <p id="panelSentenceAr" class="text-xs font-medium text-gem-textLight dark:text-gem-textDark leading-relaxed"></p>
-          </div>
-        </div>
-      </aside>
+    <div>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور</span></div>
+      <div id="prog" class="prog" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
     </div>
   </div>
+</main>
 
-  <!-- ==================== 4. SAVED VOCABULARY DRAWER ==================== -->
-  <div id="vocabDrawerBackdrop" onclick="toggleVocabDrawer(false)" class="hidden fixed inset-0 z-50 bg-black/40 transition-opacity"></div>
-  <aside id="vocabDrawer" class="fixed top-0 left-0 z-50 h-full w-full max-w-sm bg-gem-surfaceLight dark:bg-gem-surfaceDark shadow-gem-modal border-r border-gem-borderLight dark:border-gem-borderDark transform -translate-x-full transition-transform duration-200 flex flex-col">
-    <div class="h-16 px-4 border-b border-gem-borderLight dark:border-gem-borderDark flex items-center justify-between shrink-0">
-      <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-gem-accentLight dark:text-gem-accentDark">bookmarks</span>
-        <h2 class="font-semibold text-sm text-gem-textLight dark:text-gem-textDark">الكلمات المحفوظة</h2>
-        <span id="drawerCountPill" class="text-xs bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark px-2 py-0.5 rounded-full text-gem-subLight dark:text-gem-subDark">0</span>
-      </div>
-      <div class="flex items-center gap-1">
-        <button onclick="exportSavedVocabularyCSV()" class="text-xs text-gem-accentLight dark:text-gem-accentDark hover:bg-gem-accentSoftLight dark:hover:bg-gem-accentSoftDark px-3 py-1.5 rounded-full font-medium flex items-center gap-1 transition cursor-pointer">
-          <span class="material-symbols-outlined text-[16px]">download</span>
-          <span>CSV</span>
-        </button>
-        <button onclick="toggleVocabDrawer(false)" class="p-1.5 rounded-full hover:bg-gem-cardLight dark:hover:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark cursor-pointer">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </div>
-    </div>
-    <div class="p-3 border-b border-gem-borderLight dark:border-gem-borderDark shrink-0">
-      <div class="relative">
-        <span class="material-symbols-outlined text-[18px] text-gem-subLight dark:text-gem-subDark absolute right-3 top-2.5">search</span>
-        <input id="vocabSearchInput" type="text" oninput="renderVocabDrawerList()" placeholder="بحث في المفردات..." class="w-full bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark rounded-full pr-9 pl-3 py-1.5 text-xs text-gem-textLight dark:text-gem-textDark focus:outline-none transition" />
-      </div>
-    </div>
-    <div id="vocabDrawerList" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
-  </aside>
-
-  <!-- ==================== 5. SAJ-INSPIRED WELCOME POPUP MODAL ==================== -->
-  <div id="welcomeModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px] flex items-center justify-center p-4">
-    <div class="bg-gem-surfaceLight dark:bg-gem-surfaceDark rounded-3xl max-w-md w-full shadow-gem-modal border border-gem-borderLight dark:border-gem-borderDark overflow-hidden animate-saj-modal">
-      <div class="bg-gem-cardLight dark:bg-gem-cardDark px-6 pt-5 pb-4 border-b border-gem-borderLight dark:border-gem-borderDark relative">
-        <button onclick="closeWelcomeModal()" class="absolute left-4 top-4 p-1.5 rounded-full hover:bg-gem-borderLight/50 dark:hover:bg-gem-borderDark text-gem-subLight dark:text-gem-subDark cursor-pointer" title="إغلاق">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-
-        <div class="flex flex-col items-center text-center">
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark text-[11px] font-semibold mb-3">
-            <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
-            <span>منصة القراءة الذكية • Readdy</span>
-          </div>
-
-          <div class="readdy-book-logo gap-3 mb-2">
-            <svg class="w-11 h-11" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/>
-              <path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/>
-              <path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/>
-              <rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-              <rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#FFFFFF"/>
-              <rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#FFFFFF"/>
-              <path class="readdy-play-icon" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/>
-            </svg>
-            <span dir="ltr" class="font-brand text-[28px] font-bold tracking-tight text-gem-textLight dark:text-gem-textDark leading-none">Readdy</span>
-          </div>
-
-          <p class="text-xs text-gem-subLight dark:text-gem-subDark leading-relaxed max-w-xs">
-            بيئة مطالعة أكاديمية وأدبية متكاملة لفهم النصوص الإنجليزية والفرنسية دون انقطاع.
-          </p>
-        </div>
-      </div>
-
-      <div class="p-6 space-y-4">
-        <div class="space-y-2.5 text-right">
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">
-            <div class="w-8 h-8 rounded-xl bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark flex items-center justify-center shrink-0 mt-0.5">
-              <span class="material-symbols-outlined text-[18px]">psychology</span>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-gem-textLight dark:text-gem-textDark">ترجمة سياقية ونحوية دقيقة</p>
-              <p class="text-[11px] text-gem-subLight dark:text-gem-subDark mt-0.5">تحليل ذكي للكلمة داخل الجملة مع معالجة الضمائر وتصريف الأفعال.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">
-            <div class="w-8 h-8 rounded-xl bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark flex items-center justify-center shrink-0 mt-0.5">
-              <span class="material-symbols-outlined text-[18px]">description</span>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-gem-textLight dark:text-gem-textDark">قراءة شاملة لكل الصيغ</p>
-              <p class="text-[11px] text-gem-subLight dark:text-gem-subDark mt-0.5">استعراض كتب PDF وملفات DOCX واستخراج النصوص من الصور (OCR).</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3 p-3 rounded-2xl bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark">
-            <div class="w-8 h-8 rounded-xl bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark flex items-center justify-center shrink-0 mt-0.5">
-              <span class="material-symbols-outlined text-[18px]">record_voice_over</span>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-gem-textLight dark:text-gem-textDark">نطق صوتي وحقيبة مفردات</p>
-              <p class="text-[11px] text-gem-subLight dark:text-gem-subDark mt-0.5">استماع للنص بسرعات متعددة مع إمكانية تصدير كلماتك المحفوظة.</p>
-            </div>
-          </div>
-        </div>
-
-        <button onclick="closeWelcomeModal()" class="w-full bg-gem-accentLight hover:bg-gem-accentHoverLight dark:bg-gem-accentDark dark:hover:bg-gem-accentHoverDark text-white dark:text-[#041E49] font-semibold text-sm py-3 rounded-full transition cursor-pointer flex items-center justify-center gap-2">
-          <span>الدخول إلى مساحة القراءة</span>
-          <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-        </button>
-
-        <div class="text-center">
-          <label class="inline-flex items-center gap-2 text-xs text-gem-subLight dark:text-gem-subDark cursor-pointer select-none">
-            <input id="dontShowWelcomeCheckbox" type="checkbox" class="rounded border-gem-borderLight dark:border-gem-borderDark text-gem-accentLight focus:ring-gem-accentLight cursor-pointer" />
-            <span>عدم إظهار هذه البطاقة عند الفتح مجدداً</span>
-          </label>
-        </div>
-      </div>
-    </div>
+<section id="work" hidden>
+  <div class="tb">
+    <button id="playBtn" class="btn pri" onclick="toggleDocAudio()"><i id="playIcon" class="ms fill">play_arrow</i><span id="playLbl">استماع للمستند</span></button>
+    <button id="stopBtn" class="ibtn sm" onclick="Speech.stop()" aria-label="إيقاف" hidden><i class="ms">stop</i></button>
+    <label class="pill"><span class="k">السرعة:</span><select onchange="Speech.setRate(parseFloat(this.value))"><option>0.7</option><option>0.85</option><option selected>1</option><option>1.25</option><option>1.5</option></select></label>
+    <label class="pill hide-sm"><i class="ms k" style="font-size:15px">record_voice_over</i><select id="voiceSel" dir="ltr" onchange="Speech.uri=this.value"></select></label>
+    <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="sp"></div>
+    <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
+    <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
+    <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
+    <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">add</i>جديد</button>
   </div>
-
-  <!-- ==================== 6. PASTE TEXT MODAL ==================== -->
-  <div id="pasteModal" class="hidden fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4">
-    <div class="bg-gem-surfaceLight dark:bg-gem-surfaceDark rounded-3xl max-w-xl w-full shadow-gem-modal border border-gem-borderLight dark:border-gem-borderDark overflow-hidden">
-      <div class="px-5 py-4 border-b border-gem-borderLight dark:border-gem-borderDark flex items-center justify-between">
-        <h3 class="font-semibold text-sm text-gem-textLight dark:text-gem-textDark">لصق نص للقراءة</h3>
-        <button onclick="closePasteModal()" class="p-1 rounded-full hover:bg-gem-cardLight dark:hover:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark cursor-pointer">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </div>
-      <div class="p-5">
-        <textarea id="pasteTextInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..." class="w-full rounded-2xl bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark p-3.5 font-docSerif text-sm text-gem-textLight dark:text-gem-textDark focus:outline-none"></textarea>
-      </div>
-      <div class="px-5 py-3.5 bg-gem-cardLight dark:bg-gem-cardDark border-t border-gem-borderLight dark:border-gem-borderDark flex items-center justify-end gap-2">
-        <button onclick="closePasteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-gem-subLight dark:text-gem-subDark cursor-pointer">إلغاء</button>
-        <button onclick="processPastedText()" class="px-5 py-2 rounded-full text-xs font-semibold bg-gem-accentLight dark:bg-gem-accentDark text-white dark:text-[#041E49] cursor-pointer">فتح للقراءة</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== 7. API SETTINGS MODAL ==================== -->
-  <div id="apiSettingsModal" class="hidden fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4">
-    <div class="bg-gem-surfaceLight dark:bg-gem-surfaceDark rounded-3xl max-w-md w-full shadow-gem-modal border border-gem-borderLight dark:border-gem-borderDark overflow-hidden">
-      <div class="px-5 py-4 border-b border-gem-borderLight dark:border-gem-borderDark flex items-center justify-between">
-        <h3 class="font-semibold text-sm text-gem-textLight dark:text-gem-textDark">إعدادات محرك الترجمة</h3>
-        <button onclick="closeApiSettingsModal()" class="p-1 rounded-full hover:bg-gem-cardLight dark:hover:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark cursor-pointer">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </div>
-      <div class="p-5 space-y-3 text-xs text-gem-subLight dark:text-gem-subDark leading-relaxed">
-        <p class="text-gem-textLight dark:text-gem-textDark font-medium">
-          يعمل التطبيق بنظام التحليل النحوي السياقي + 3 محركات ترجمة تلقائية مجاناً.
-        </p>
-        <p>
-          اختياري: لتفعيل التحليل الأدبي عبر <strong>Gemini AI</strong>، أدخل مفتاح API هنا:
-        </p>
-        <input id="geminiKeyInput" type="password" dir="ltr" placeholder="AIzaSy..." class="w-full rounded-xl bg-gem-cardLight dark:bg-gem-cardDark border border-gem-borderLight dark:border-gem-borderDark px-3.5 py-2.5 font-mono text-xs text-gem-textLight dark:text-gem-textDark focus:outline-none" />
-      </div>
-      <div class="px-5 py-3.5 bg-gem-cardLight dark:bg-gem-cardDark border-t border-gem-borderLight dark:border-gem-borderDark flex items-center justify-between">
-        <button onclick="clearStoredCache()" class="text-xs text-red-500 hover:underline cursor-pointer">مسح ذاكرة الترجمة</button>
-        <div class="flex items-center gap-2">
-          <button onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-full text-xs font-medium text-gem-subLight dark:text-gem-subDark cursor-pointer">إغلاق</button>
-          <button onclick="saveGeminiApiKey()" class="px-5 py-2 rounded-full text-xs font-semibold bg-gem-accentLight dark:bg-gem-accentDark text-white dark:text-[#041E49] cursor-pointer">حفظ</button>
+  <div class="split">
+    <div class="canvas"><div id="pages"></div></div>
+    <aside id="panel" hidden aria-live="polite">
+      <div class="ph"><b><i class="ms">translate</i>الترجمة والشرح السياقي</b><span id="engineTag" class="tag"></span><button class="ibtn sm" onclick="closePanel()" aria-label="إغلاق"><i class="ms">close</i></button></div>
+      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:48px"></div><div class="sk" style="height:80px"></div><div class="sk" style="height:96px"></div></div>
+      <div id="pContent" class="pc" hidden>
+        <div class="wh">
+          <div dir="ltr"><div class="wr"><h2 id="pTitle"></h2><span id="pLang" class="tag"></span></div><div class="wm"><span id="pIpa"></span><span id="pDot">•</span><span id="pPos"></span></div></div>
+          <button id="bmBtn" class="ibtn" onclick="toggleBookmark()" aria-label="حفظ الكلمة"><i id="bmIcon" class="ms">bookmark_add</i></button>
+        </div>
+        <div class="card row" style="flex-wrap:nowrap;gap:6px;padding:8px">
+          <button class="btn" style="flex:1;justify-content:center;color:var(--ac)" onclick="sayWord(1)"><i class="ms fill" style="font-size:17px">volume_up</i>نطق</button>
+          <button class="btn" style="flex:1;justify-content:center" onclick="sayWord(.65)"><i class="ms" style="font-size:17px">slow_motion_video</i>بطيء</button>
+          <button id="wRepeat" class="ibtn" style="border-radius:12px" onclick="loopWord()" aria-label="تكرار"><i class="ms" style="font-size:18px">repeat</i></button>
+        </div>
+        <div class="card"><div class="lbl2"><span>الترجمة السياقية الدقيقة</span><button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></div><p id="pTr"></p><p id="pLemma" class="sm2"></p></div>
+        <div class="card"><h3>المعنى والشرح</h3><p id="pExp" style="font-size:13px;line-height:1.8"></p></div>
+        <div id="exBox" class="card"><div class="lbl2 g"><span>مثال تطبيقي</span><span><button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button><button class="mini g" onclick="sayEx(.65)">0.65x</button></span></div><p id="pExO" class="ex"></p><p id="pExA" class="exa"></p></div>
+        <div style="border-top:1px solid var(--bd);padding-top:12px;display:grid;gap:8px">
+          <div class="lbl2 g"><span>الجملة الكاملة في النص</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button></span></div>
+          <p id="pSO" class="card ex" style="padding:10px 12px"></p><p id="pSA" style="font-size:12px;font-weight:500;line-height:1.8;margin:0"></p>
         </div>
       </div>
-    </div>
+    </aside>
   </div>
-
-  <!-- ==================== 8. SNACKBAR ==================== -->
-  <div id="snackbar" class="fixed bottom-5 right-5 z-50 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none">
-    <div class="bg-[#1F1F1F] dark:bg-[#E3E3E3] text-white dark:text-[#131314] text-xs font-medium px-4 py-2.5 rounded-full shadow-gem-modal flex items-center gap-2">
-      <span id="snackbarText"></span>
-    </div>
-  </div>
-
-  <script>
-    if (window.pdfjsLib) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    }
-
-    const STORAGE_VOCAB_KEY = 'readdy_saved_vocabulary_prod_v5';
-    const STORAGE_CACHE_KEY = 'readdy_ai_cache_prod_v5';
-    const STORAGE_GEMINI_KEY = 'readdy_user_gemini_api_key';
-    const STORAGE_WELCOME_KEY = 'readdy_hide_welcome_modal_saj_v1';
-    const STORAGE_THEME_KEY = 'readdy_theme_mode_v1';
-
-    // ==================== BUILT-IN GRAMMATICAL & FUNCTION WORDS LEXICON ====================
-    const FUNCTION_LEXICON = {
-      fr: {
-        'mon': { tr: 'ـي / خاصتي (للمفرد المذكر)', pos: 'صفة ملكية', lemma: 'mon', exp: 'صفة ملكية تُستخدم قبل الاسم المفرد المذكر (أو المؤنث المبدوء بحرف متحرك) للدلالة على ملكية المتكلم.' },
-        'ma': { tr: 'ـي / خاصتي (للمفرد المؤنث)', pos: 'صفة ملكية', lemma: 'mon', exp: 'صفة ملكية تُستخدم قبل الاسم المفرد المؤنث للدلالة على ملكية المتكلم.' },
-        'mes': { tr: 'ـي / خاصتي (للجمع)', pos: 'صفة ملكية', lemma: 'mon', exp: 'صفة ملكية تُستخدم قبل الأسماء الجمع (مذكر أو مؤنث) للدلالة على ملكية المتكلم.' },
-        'ton': { tr: 'ـكَ / خاصتكَ (للمفرد المذكر)', pos: 'صفة ملكية', lemma: 'ton', exp: 'صفة ملكية للمخاطب المفرد تُستخدم قبل الاسم المفرد المذكر.' },
-        'ta': { tr: 'ـكَ / خاصتكَ (للمفرد المؤنث)', pos: 'صفة ملكية', lemma: 'ton', exp: 'صفة ملكية للمخاطب المفرد تُستخدم قبل الاسم المفرد المؤنث.' },
-        'tes': { tr: 'ـكَ / خاصتكَ (للجمع)', pos: 'صفة ملكية', lemma: 'ton', exp: 'صفة ملكية للمخاطب المفرد تُستخدم قبل الأسماء الجمع.' },
-        'son': { tr: 'ـهُ / ـها (للمفرد المذكر)', pos: 'صفة ملكية', lemma: 'son', exp: 'صفة ملكية للغائب المفرد تُستخدم قبل الاسم المفرد المذكر (وتُفهم من سياق المالك).' },
-        'sa': { tr: 'ـهُ / ـها (للمفرد المؤنث)', pos: 'صفة ملكية', lemma: 'son', exp: 'صفة ملكية للغائب المفرد تُستخدم قبل الاسم المفرد المؤنث.' },
-        'ses': { tr: 'ـهُ / ـها (للجمع)', pos: 'صفة ملكية', lemma: 'son', exp: 'صفة ملكية للغائب المفرد تُستخدم قبل الأسماء الجمع.' },
-        'notre': { tr: 'ـنا / خاصتنا (للمفرد)', pos: 'صفة ملكية', lemma: 'notre', exp: 'صفة ملكية للمتكلمين تُستخدم قبل الاسم المفرد.' },
-        'nos': { tr: 'ـنا / خاصتنا (للجمع)', pos: 'صفة ملكية', lemma: 'notre', exp: 'صفة ملكية للمتكلمين تُستخدم قبل الاسم الجمع.' },
-        'votre': { tr: 'ـكم / خاصتكم (للمفرد)', pos: 'صفة ملكية', lemma: 'votre', exp: 'صفة ملكية للمخاطبين أو للاحترام قبل الاسم المفرد.' },
-        'vos': { tr: 'ـكم / خاصتكم (للجمع)', pos: 'صفة ملكية', lemma: 'votre', exp: 'صفة ملكية للمخاطبين قبل الاسم الجمع.' },
-        'leur': { tr: 'ـهم / له (ضمير أو صفة ملكية)', pos: 'صفة ملكية / ضمير', lemma: 'leur', exp: 'تدل على ملكية الغائبين للمفرد أو تأتي ضمير مفعول غير مباشر بمعنى "لهم".' },
-        'leurs': { tr: 'ـهم / خاصتهم (للجمع)', pos: 'صفة ملكية', lemma: 'leur', exp: 'صفة ملكية للغائبين تُستخدم قبل الأسماء الجمع.' },
-        'je': { tr: 'أنا', pos: 'ضمير فاعل', lemma: 'je', exp: 'ضمير المتكلم المفرد في محل رفع فاعل.' },
-        'tu': { tr: 'أنتَ / أنتِ', pos: 'ضمير فاعل', lemma: 'tu', exp: 'ضمير المخاطب المفرد في محل رفع فاعل.' },
-        'il': { tr: 'هو', pos: 'ضمير فاعل', lemma: 'il', exp: 'ضمير الغائب المفرد المذكر في محل رفع فاعل.' },
-        'elle': { tr: 'هي', pos: 'ضمير فاعل', lemma: 'elle', exp: 'ضمير الغائب المفرد المؤنث في محل رفع فاعل.' },
-        'nous': { tr: 'نحن / إيّانا', pos: 'ضمير', lemma: 'nous', exp: 'ضمير المتكلمين للرفع أو النصب.' },
-        'vous': { tr: 'أنتم / حضرتك', pos: 'ضمير', lemma: 'vous', exp: 'ضمير المخاطبين للجمع أو لصيغة الاحترام.' },
-        'ils': { tr: 'هم', pos: 'ضمير فاعل', lemma: 'ils', exp: 'ضمير الغائبين الجمع المذكر.' },
-        'elles': { tr: 'هنّ', pos: 'ضمير فاعل', lemma: 'elles', exp: 'ضمير الغائبات الجمع المؤنث.' },
-        'moi': { tr: 'أنا / إياي', pos: 'ضمير توكيد', lemma: 'moi', exp: 'ضمير توكيد للمتكلم المفرد يُستخدم بعد حروف الجر أو للتأكيد.' },
-        'toi': { tr: 'أنتَ / إياك', pos: 'ضمير توكيد', lemma: 'toi', exp: 'ضمير توكيد للمخاطب المفرد.' },
-        'lui': { tr: 'هو / له / لها', pos: 'ضمير', lemma: 'lui', exp: 'ضمير توكيد للغائب المذكر أو ضمير مفعول به غير مباشر.' },
-        'eux': { tr: 'هم / إياهم', pos: 'ضمير توكيد', lemma: 'eux', exp: 'ضمير توكيد للغائبين الجمع المذكر.' },
-        'le': { tr: 'الـ (للمذكر) / إيّاه', pos: 'أداة تعريف / ضمير', lemma: 'le', exp: 'أداة تعريف للمفرد المذكر أو ضمير مفعول به مباشر.' },
-        'la': { tr: 'الـ (للمؤنث) / إيّاها', pos: 'أداة تعريف / ضمير', lemma: 'la', exp: 'أداة تعريف للمفرد المؤنث أو ضمير مفعول به مباشر.' },
-        'les': { tr: 'الـ (للجمع) / إيّاهم', pos: 'أداة تعريف / ضمير', lemma: 'les', exp: 'أداة تعريف للجمع بنوعيه أو ضمير مفعول به مباشر.' },
-        'un': { tr: 'أداة تنكير (مذكر) / واحد', pos: 'أداة تنكير', lemma: 'un', exp: 'أداة تنكير تسبق الاسم المفرد المذكر.' },
-        'une': { tr: 'أداة تنكير (مؤنث) / واحدة', pos: 'أداة تنكير', lemma: 'une', exp: 'أداة تنكير تسبق الاسم المفرد المؤنث.' },
-        'des': { tr: 'أداة تنكير (للجمع) / من الـ', pos: 'أداة تنكير / إدغام', lemma: 'des', exp: 'أداة تنكير للجمع أو إدغام حرف الجر (de + les).' },
-        'du': { tr: 'من الـ / بعض (تجزئة)', pos: 'أداة تجزئة / إدغام', lemma: 'du', exp: 'إدغام (de + le) أو أداة تجزئة للمفرد المذكر.' },
-        'au': { tr: 'إلى الـ / في الـ', pos: 'حرف جر مُدغم', lemma: 'au', exp: 'إدغام حرف الجر (à) مع أداة التعريف (le).' },
-        'aux': { tr: 'إلى الـ / في الـ (للجمع)', pos: 'حرف جر مُدغم', lemma: 'aux', exp: 'إدغام حرف الجر (à) مع أداة التعريف للجمع (les).' },
-        'ce': { tr: 'هذا / ذلك', pos: 'اسم إشارة', lemma: 'ce', exp: 'صفة أو ضمير إشارة للمفرد المذكر.' },
-        'cet': { tr: 'هذا / ذلك', pos: 'اسم إشارة', lemma: 'ce', exp: 'صفة إشارة للمفرد المذكر المبدوء بحرف متحرك أو (h) صامتة.' },
-        'cette': { tr: 'هذه / تلك', pos: 'اسم إشارة', lemma: 'ce', exp: 'صفة إشارة للمفرد المؤنث.' },
-        'ces': { tr: 'هؤلاء / تلك', pos: 'اسم إشارة', lemma: 'ce', exp: 'صفة إشارة للجمع بنوعيه.' },
-        'et': { tr: 'و (حرف عطف)', pos: 'حرف عطف', lemma: 'et', exp: 'أداة ربط وعطف بين الكلمات والجمل.' },
-        'ou': { tr: 'أو', pos: 'حرف عطف', lemma: 'ou', exp: 'أداة عطف تفيد التخيير.' },
-        'où': { tr: 'أين / حيث', pos: 'ظرف مكان / اسم موصول', lemma: 'où', exp: 'تُستخدم للسؤال عن المكان أو كضمير وصل للمكان والزمان.' },
-        'mais': { tr: 'لكن', pos: 'حرف استدراك', lemma: 'mais', exp: 'أداة ربط تفيد الاستدراك أو التعارض.' },
-        'car': { tr: 'لأنّ', pos: 'أداة تعليل', lemma: 'car', exp: 'أداة ربط تُستخدم لتوضيح السبب والتعليل.' },
-        'donc': { tr: 'إذن / وبالتالي', pos: 'أداة استنتاج', lemma: 'donc', exp: 'أداة ربط تفيد النتيجة المنطقية.' },
-        'ni': { tr: 'ولا', pos: 'أداة نفي وعطف', lemma: 'ni', exp: 'تُستخدم لعطف النفي في الجمل المنفية.' },
-        'dans': { tr: 'في / داخل', pos: 'حرف جر', lemma: 'dans', exp: 'حرف جر يدل على الظرفية المكانية أو الزمانية.' },
-        'sur': { tr: 'على / فوق / حول', pos: 'حرف جر', lemma: 'sur', exp: 'حرف جر يدل على الاستعلاء أو الموضوع.' },
-        'sous': { tr: 'تحت', pos: 'حرف جر', lemma: 'sous', exp: 'حرف جر يدل على المكان السفلي.' },
-        'avec': { tr: 'مع / بواسطة', pos: 'حرف جر', lemma: 'avec', exp: 'حرف جر يدل على المصاحبة أو الوسيلة.' },
-        'sans': { tr: 'بدون / بلا', pos: 'حرف جر', lemma: 'sans', exp: 'حرف جر يفيد النفي والاستثناء.' },
-        'pour': { tr: 'لأجل / من أجل / لـ', pos: 'حرف جر', lemma: 'pour', exp: 'حرف جر يفيد الغاية أو الهدف أو الوجهة.' },
-        'par': { tr: 'بواسطة / عبر / من قِبل', pos: 'حرف جر', lemma: 'par', exp: 'حرف جر يدل على الوسيلة أو المرور أو الفاعل في المبني للمجهول.' },
-        'après': { tr: 'بعد', pos: 'حرف جر / ظرف', lemma: 'après', exp: 'يدل على التتابع الزمني أو المكاني.' },
-        'avant': { tr: 'قبل', pos: 'حرف جر / ظرف', lemma: 'avant', exp: 'يدل على الأسبقية الزمنية.' },
-        'vers': { tr: 'نحو / باتجاه / حوالي', pos: 'حرف جر', lemma: 'vers', exp: 'يدل على الاتجاه المكاني أو التقريب الزمني.' },
-        'chez': { tr: 'عند / لدى / في بيت', pos: 'حرف جر', lemma: 'chez', exp: 'حرف جر يُستخدم مع الأشخاص للدلالة على المكان أو الانتماء.' },
-        'entre': { tr: 'بين', pos: 'حرف جر', lemma: 'entre', exp: 'حرف جر يدل على التوسط بين شيئين أو أكثر.' },
-        'qui': { tr: 'الذي / التي / مَن', pos: 'اسم موصول / استفهام', lemma: 'qui', exp: 'ضمير وصل يحل محل الفاعل أو اسم استفهام للعاقل.' },
-        'que': { tr: 'الذي / أن / ماذا', pos: 'اسم موصول / أداة ربط', lemma: 'que', exp: 'ضمير وصل يحل محل المفعول به المباشر أو أداة ربط.' },
-        'dont': { tr: 'الذي... منه / عنه', pos: 'اسم موصول', lemma: 'dont', exp: 'ضمير وصل يحل محل المفعول المسبوق بحرف الجر (de).' },
-        'ne': { tr: 'لا / لم (أداة نفي)', pos: 'أداة نفي', lemma: 'ne', exp: 'الجزء الأول من صيغة النفي في الفرنسية (غالباً مع pas أو plus).' },
-        'pas': { tr: 'ليس / لا (تتمة النفي)', pos: 'أداة نفي', lemma: 'pas', exp: 'تُستخدم مع (ne) لتأكيد نفي الفعل.' },
-        'plus': { tr: 'أكثر / لم يعد', pos: 'ظرف كمية / نفي', lemma: 'plus', exp: 'تفيد الزيادة والمقارنة، أو انتهاء الفعل إذا سبقتها (ne).' },
-        'est': { tr: 'يكون / هو (فعل الكينونة)', pos: 'فعل (être)', lemma: 'être', exp: 'تصريف فعل الكينونة (être) في الحاضر مع الغائب المفرد.' },
-        'sont': { tr: 'يكونون / هم (فعل الكينونة)', pos: 'فعل (être)', lemma: 'être', exp: 'تصريف فعل الكينونة (être) في الحاضر مع الغائب الجمع.' },
-        'suis': { tr: 'أكون (فعل الكينونة)', pos: 'فعل (être)', lemma: 'être', exp: 'تصريف فعل الكينونة (être) في الحاضر مع المتكلم (je).' },
-        'ont': { tr: 'لديهم / يملكون', pos: 'فعل (avoir)', lemma: 'avoir', exp: 'تصريف فعل الملكية (avoir) في الحاضر مع الغائب الجمع.' }
-      },
-      en: {
-        'the': { tr: 'الـ (أداة تعريف)', pos: 'أداة تعريف', lemma: 'the', exp: 'أداة التعريف الوحيدة في الإنجليزية وتُستخدم للمفرد والجمع.' },
-        'a': { tr: 'أداة تنكير (للمفرد)', pos: 'أداة تنكير', lemma: 'a', exp: 'أداة تنكير تسبق الاسم المفرد المعدود المبدوء بصوت ساكن.' },
-        'an': { tr: 'أداة تنكير (للمفرد)', pos: 'أداة تنكير', lemma: 'an', exp: 'أداة تنكير تسبق الاسم المفرد المعدود المبدوء بصوت متحرك.' },
-        'my': { tr: 'ـي / خاصتي', pos: 'صفة ملكية', lemma: 'my', exp: 'صفة ملكية للمتكلم المفرد.' },
-        'your': { tr: 'ـكَ / ـكم / خاصتكم', pos: 'صفة ملكية', lemma: 'your', exp: 'صفة ملكية للمخاطب المفرد والجمع.' },
-        'his': { tr: 'ـهُ / خاصته', pos: 'صفة ملكية', lemma: 'his', exp: 'صفة ملكية للغائب المفرد المذكر.' },
-        'her': { tr: 'ـها / إيّاها', pos: 'صفة ملكية / ضمير', lemma: 'her', exp: 'صفة ملكية للغائبة المؤنثة أو ضمير مفعول به.' },
-        'its': { tr: 'ـهُ / ـها (لغير العاقل)', pos: 'صفة ملكية', lemma: 'its', exp: 'صفة ملكية للمفرد غير العاقل.' },
-        'our': { tr: 'ـنا / خاصتنا', pos: 'صفة ملكية', lemma: 'our', exp: 'صفة ملكية للمتكلمين.' },
-        'their': { tr: 'ـهم / خاصتهم', pos: 'صفة ملكية', lemma: 'their', exp: 'صفة ملكية للغائبين الجمع.' },
-        'this': { tr: 'هذا / هذه (للقريب)', pos: 'اسم إشارة', lemma: 'this', exp: 'يُستخدم للإشارة إلى المفرد القريب.' },
-        'that': { tr: 'ذلك / تلك / الذي / أن', pos: 'اسم إشارة / وصل', lemma: 'that', exp: 'يُستخدم للإشارة إلى المفرد البعيد أو كأداة ربط.' },
-        'these': { tr: 'هؤلاء (للقريب)', pos: 'اسم إشارة', lemma: 'this', exp: 'يُستخدم للإشارة إلى الجمع القريب.' },
-        'those': { tr: 'أولئك (للبعيد)', pos: 'اسم إشارة', lemma: 'that', exp: 'يُستخدم للإشارة إلى الجمع البعيد.' },
-        'in': { tr: 'في / داخل', pos: 'حرف جر', lemma: 'in', exp: 'حرف جر يدل على المكان أو الزمان.' },
-        'on': { tr: 'على / في', pos: 'حرف جر', lemma: 'on', exp: 'حرف جر يدل على السطح أو الأيام والتواريخ.' },
-        'at': { tr: 'عند / في', pos: 'حرف جر', lemma: 'at', exp: 'حرف جر يدل على نقطة مكانية أو زمنية محددة.' },
-        'to': { tr: 'إلى / لـ / أن', pos: 'حرف جر / مصدر', lemma: 'to', exp: 'حرف جر يدل على الاتجاه أو يسبق الفعل في المصدر.' },
-        'from': { tr: 'من', pos: 'حرف جر', lemma: 'from', exp: 'حرف جر يدل على نقطة البداية أو المصدر.' },
-        'with': { tr: 'مع / بـ', pos: 'حرف جر', lemma: 'with', exp: 'حرف جر يدل على المصاحبة أو الأداة.' },
-        'by': { tr: 'بواسطة / بجانب / بحلول', pos: 'حرف جر', lemma: 'by', exp: 'حرف جر يدل على الوسيلة أو القرب أو الموعد النهائي.' },
-        'for': { tr: 'لأجل / لمدة / لـ', pos: 'حرف جر', lemma: 'for', exp: 'حرف جر يدل على الغرض أو المدة الزمنية.' },
-        'of': { tr: 'من / الـ (للملكية والإضافة)', pos: 'حرف جر', lemma: 'of', exp: 'حرف جر يربط المضاف بالمضاف إليه.' }
-      }
-    };
-
-    const appState = {
-      docTitle: '',
-      pages: [],
-      sentenceRecords: [],
-      languageOverride: 'auto',
-      detectedLang: 'en',
-      fontFamily: 'serif',
-      fontSize: 18,
-      activeWordEl: null,
-      activeSentenceTokens: [],
-      selectedSentenceIndex: -1,
-      selectedAnalysis: null,
-      activeRequestToken: 0,
-      memoryCache: new Map(),
-      savedWords: [],
-      geminiApiKey: ''
-    };
-
-    // ==================== THEME SWITCHER (LIGHT / DARK GEMINI) ====================
-    function initTheme() {
-      const savedTheme = localStorage.getItem(STORAGE_THEME_KEY) || 'light';
-      applyTheme(savedTheme);
-    }
-
-    function applyTheme(mode) {
-      const htmlEl = document.documentElement;
-      const iconEl = document.getElementById('themeToggleIcon');
-      if (mode === 'dark') {
-        htmlEl.classList.add('dark');
-        if (iconEl) iconEl.textContent = 'light_mode';
-      } else {
-        htmlEl.classList.remove('dark');
-        if (iconEl) iconEl.textContent = 'dark_mode';
-      }
-      localStorage.setItem(STORAGE_THEME_KEY, mode);
-    }
-
-    function toggleThemeMode() {
-      const isDark = document.documentElement.classList.contains('dark');
-      applyTheme(isDark ? 'light' : 'dark');
-    }
-
-    // ==================== WELCOME MODAL (SAJ STYLE) ====================
-    function openWelcomeModal(force = false) {
-      if (!force && localStorage.getItem(STORAGE_WELCOME_KEY) === 'true') return;
-      document.getElementById('dontShowWelcomeCheckbox').checked = localStorage.getItem(STORAGE_WELCOME_KEY) === 'true';
-      document.getElementById('welcomeModal').classList.remove('hidden');
-    }
-
-    function closeWelcomeModal() {
-      const hideForever = document.getElementById('dontShowWelcomeCheckbox')?.checked;
-      if (hideForever) localStorage.setItem(STORAGE_WELCOME_KEY, 'true');
-      else localStorage.removeItem(STORAGE_WELCOME_KEY);
-      document.getElementById('welcomeModal').classList.add('hidden');
-    }
-
-    // ==================== SPEECH MANAGER ====================
-    const SpeechManager = {
-      voices: [],
-      selectedVoiceURI: '',
-      docRate: 1.0,
-      isPlayingDoc: false,
-      isPausedDoc: false,
-      currentSentenceIdx: 0,
-      repeatMode: null,
-      repeatTimer: null,
-      keepAliveTimer: null,
-
-      init() {
-        if (!('speechSynthesis' in window)) return;
-        const load = () => {
-          const list = window.speechSynthesis.getVoices() || [];
-          if (list.length > 0) {
-            this.voices = list;
-            this.populateVoiceDropdown(appState.detectedLang);
-          }
-        };
-        load();
-        window.speechSynthesis.onvoiceschanged = load;
-        setTimeout(load, 600);
-      },
-
-      rankVoice(voice, targetPrefix) {
-        const name = voice.name.toLowerCase();
-        const lang = voice.lang.toLowerCase();
-        if (!lang.startsWith(targetPrefix)) return -1;
-        let score = 10;
-        if (name.includes('google')) score += 45;
-        if (name.includes('natural') || name.includes('neural') || name.includes('online')) score += 35;
-        if (name.includes('premium') || name.includes('enhanced')) score += 30;
-        if (name.includes('aria') || name.includes('denise') || name.includes('henri') || name.includes('samantha') || name.includes('thomas') || name.includes('amélie') || name.includes('amelie')) score += 25;
-        return score;
-      },
-
-      getRankedVoicesForLang(lang) {
-        const prefix = lang === 'fr' ? 'fr' : 'en';
-        return this.voices
-          .map(v => ({ voice: v, score: this.rankVoice(v, prefix) }))
-          .filter(item => item.score > 0)
-          .sort((a, b) => b.score - a.score)
-          .map(item => item.voice);
-      },
-
-      populateVoiceDropdown(lang) {
-        const select = document.getElementById('voiceSelector');
-        if (!select) return;
-        const ranked = this.getRankedVoicesForLang(lang);
-        if (ranked.length === 0) {
-          select.innerHTML = `<option value="">الصوت الافتراضي (${lang.toUpperCase()})</option>`;
-          return;
-        }
-        select.innerHTML = ranked.map(v => {
-          const cleanName = v.name.replace(/Microsoft |Google |Apple /g, '');
-          return `<option value="${v.voiceURI}" class="dark:bg-gem-surfaceDark">${cleanName} (${v.lang})</option>`;
-        }).join('');
-        if (ranked.some(v => v.voiceURI === this.selectedVoiceURI)) {
-          select.value = this.selectedVoiceURI;
-        } else {
-          this.selectedVoiceURI = ranked[0].voiceURI;
-          select.value = this.selectedVoiceURI;
-        }
-      },
-
-      selectVoiceByURI(uri) { this.selectedVoiceURI = uri; },
-
-      getBestVoice(lang) {
-        if (this.selectedVoiceURI) {
-          const chosen = this.voices.find(v => v.voiceURI === this.selectedVoiceURI);
-          if (chosen && chosen.lang.toLowerCase().startsWith(lang === 'fr' ? 'fr' : 'en')) return chosen;
-        }
-        return this.getRankedVoicesForLang(lang)[0] || null;
-      },
-
-      setDocRate(rate) {
-        this.docRate = rate;
-        if (this.isPlayingDoc && !this.isPausedDoc) {
-          this.playDocumentFromIndex(this.currentSentenceIdx);
-        }
-      },
-
-      setVisualSpeaking(active) {
-        const wave = document.getElementById('globalSpeakingWave');
-        if (!wave) return;
-        wave.classList.toggle('hidden', !active);
-        wave.classList.toggle('flex', active);
-      },
-
-      clearTimers() {
-        if (this.repeatTimer) { clearTimeout(this.repeatTimer); this.repeatTimer = null; }
-        if (this.keepAliveTimer) { clearInterval(this.keepAliveTimer); this.keepAliveTimer = null; }
-      },
-
-      speakSingle(text, lang, rate = 1.0, loopMode = null) {
-        if (!('speechSynthesis' in window) || !text) return;
-        this.stop(false);
-        this.repeatMode = loopMode;
-
-        const runUtterance = () => {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
-          utterance.rate = rate;
-          const voice = this.getBestVoice(lang);
-          if (voice) utterance.voice = voice;
-
-          utterance.onstart = () => this.setVisualSpeaking(true);
-          utterance.onend = () => {
-            this.setVisualSpeaking(false);
-            if (this.repeatMode === loopMode && loopMode !== null) {
-              this.repeatTimer = setTimeout(runUtterance, 650);
-            }
-          };
-          utterance.onerror = () => this.setVisualSpeaking(false);
-          window.speechSynthesis.speak(utterance);
-        };
-        runUtterance();
-      },
-
-      playDocumentFromIndex(startIdx = 0) {
-        if (!('speechSynthesis' in window) || appState.sentenceRecords.length === 0) return;
-        this.stop(false);
-        this.isPlayingDoc = true;
-        this.isPausedDoc = false;
-        this.currentSentenceIdx = Math.max(0, Math.min(startIdx, appState.sentenceRecords.length - 1));
-        this.updateDocPlayerUI();
-
-        this.keepAliveTimer = setInterval(() => {
-          if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-            window.speechSynthesis.pause();
-            window.speechSynthesis.resume();
-          }
-        }, 10000);
-
-        const speakNextSentence = () => {
-          if (!this.isPlayingDoc || this.isPausedDoc) return;
-          if (this.currentSentenceIdx >= appState.sentenceRecords.length) {
-            this.stop();
-            return;
-          }
-          const record = appState.sentenceRecords[this.currentSentenceIdx];
-          highlightSentenceTokens(record.tokens);
-          if (record.tokens[0]) record.tokens[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(record.text);
-          utterance.lang = appState.detectedLang === 'fr' ? 'fr-FR' : 'en-US';
-          utterance.rate = this.docRate;
-          const voice = this.getBestVoice(appState.detectedLang);
-          if (voice) utterance.voice = voice;
-
-          utterance.onstart = () => this.setVisualSpeaking(true);
-          utterance.onend = () => {
-            if (!this.isPlayingDoc || this.isPausedDoc) return;
-            this.currentSentenceIdx++;
-            speakNextSentence();
-          };
-          utterance.onerror = () => {
-            if (!this.isPlayingDoc) return;
-            this.currentSentenceIdx++;
-            speakNextSentence();
-          };
-          window.speechSynthesis.speak(utterance);
-        };
-        speakNextSentence();
-      },
-
-      pauseDocument() {
-        if (!this.isPlayingDoc) return;
-        this.isPausedDoc = true;
-        window.speechSynthesis.cancel();
-        this.setVisualSpeaking(false);
-        this.updateDocPlayerUI();
-      },
-
-      resumeDocument() {
-        if (!this.isPlayingDoc || !this.isPausedDoc) return;
-        this.playDocumentFromIndex(this.currentSentenceIdx);
-      },
-
-      stop(resetUI = true) {
-        this.clearTimers();
-        this.repeatMode = null;
-        this.isPlayingDoc = false;
-        this.isPausedDoc = false;
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-        this.setVisualSpeaking(false);
-        if (resetUI) {
-          this.updateDocPlayerUI();
-          updateRepeatButtonsUI();
-        }
-      },
-
-      updateDocPlayerUI() {
-        const icon = document.getElementById('docAudioPlayIcon');
-        const label = document.getElementById('docAudioPlayLabel');
-        const stopBtn = document.getElementById('docAudioStopBtn');
-        if (!icon || !label || !stopBtn) return;
-
-        if (this.isPlayingDoc && !this.isPausedDoc) {
-          icon.textContent = 'pause';
-          label.textContent = 'إيقاف مؤقت';
-          stopBtn.classList.remove('hidden');
-        } else if (this.isPlayingDoc && this.isPausedDoc) {
-          icon.textContent = 'play_arrow';
-          label.textContent = 'متابعة الاستماع';
-          stopBtn.classList.remove('hidden');
-        } else {
-          icon.textContent = 'play_arrow';
-          label.textContent = 'استماع للمستند';
-          stopBtn.classList.add('hidden');
-        }
-      }
-    };
-
-    (function hydrateStorage() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_VOCAB_KEY) || '[]');
-        if (Array.isArray(saved)) appState.savedWords = saved;
-        const cachedObj = JSON.parse(localStorage.getItem(STORAGE_CACHE_KEY) || '{}');
-        Object.entries(cachedObj).forEach(([k, v]) => appState.memoryCache.set(k, v));
-        appState.geminiApiKey = localStorage.getItem(STORAGE_GEMINI_KEY) || '';
-      } catch (_) {}
-    })();
-
-    window.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      SpeechManager.init();
-      updateSavedBadges();
-      setupFileInputAndDragDrop();
-      openWelcomeModal(false);
-      document.getElementById('docTitleInput').addEventListener('input', (e) => {
-        appState.docTitle = e.target.value;
-      });
-    });
-
-    function setupFileInputAndDragDrop() {
-      const fileInput = document.getElementById('fileInput');
-      fileInput.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (file) { handleFileIngestion(file); fileInput.value = ''; }
-      });
-
-      [document.getElementById('emptyDropzone'), document.getElementById('canvasDropArea')].forEach((target) => {
-        if (!target) return;
-        target.addEventListener('dragover', (e) => { e.preventDefault(); target.classList.add('border-gem-accentLight', 'dark:border-gem-accentDark'); });
-        target.addEventListener('dragleave', () => { target.classList.remove('border-gem-accentLight', 'dark:border-gem-accentDark'); });
-        target.addEventListener('drop', (e) => {
-          e.preventDefault();
-          target.classList.remove('border-gem-accentLight', 'dark:border-gem-accentDark');
-          const file = e.dataTransfer?.files?.[0];
-          if (file) handleFileIngestion(file);
-        });
-      });
-    }
-
-    function triggerFileUpload() { document.getElementById('fileInput').click(); }
-
-    function resetToEmptyState() {
-      SpeechManager.stop();
-      appState.pages = [];
-      appState.sentenceRecords = [];
-      appState.docTitle = '';
-      appState.selectedAnalysis = null;
-      appState.selectedSentenceIndex = -1;
-      document.getElementById('emptyStateView').classList.remove('hidden');
-      document.getElementById('workspaceView').classList.add('hidden');
-      document.getElementById('headerDocMeta').classList.add('hidden');
-      closeSidePanel();
-    }
-
-    function sanitizeExtractedText(text) {
-      return text
-        .replace(/[\u200B-\u200D\uFEFF]/g, '')
-        .replace(/\u00A0/g, ' ')
-        .replace(/[“”]/g, '"')
-        .replace(/[‘’]/g, "'")
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    function setExtractionProgress(visible, text = '', percent = 0) {
-      const container = document.getElementById('extractionProgressContainer');
-      if (!visible) { container.classList.add('hidden'); return; }
-      container.classList.remove('hidden');
-      document.getElementById('extractionStatusText').textContent = text;
-      document.getElementById('extractionPercentText').textContent = `${Math.round(percent)}%`;
-      document.getElementById('extractionProgressBar').style.width = `${Math.round(percent)}%`;
-    }
-
-    function detectTextLanguage(text) {
-      if (appState.languageOverride !== 'auto') return appState.languageOverride;
-      const sample = text.slice(0, 3000).toLowerCase();
-      const frScore = (sample.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes)\b/g) || []).length;
-      const enScore = (sample.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g) || []).length;
-      return frScore > enScore ? 'fr' : 'en';
-    }
-
-    function handleLanguageChange(val) {
-      appState.languageOverride = val;
-      const allText = appState.pages.slice(0, 5).flatMap(p => p.blocks.map(b => b.text)).join(' ');
-      appState.detectedLang = detectTextLanguage(allText);
-      SpeechManager.populateVoiceDropdown(appState.detectedLang);
-      showSnackbar(`اللغة المختارة: ${appState.detectedLang === 'fr' ? 'الفرنسية (FR)' : 'الإنجليزية (EN)'}`);
-    }
-
-    // ==================== FILE EXTRACTION ====================
-    async function handleFileIngestion(file) {
-      SpeechManager.stop();
-      const lower = file.name.toLowerCase();
-      try {
-        if (lower.endsWith('.pdf') || file.type === 'application/pdf') {
-          await extractPDFWithLayout(file);
-        } else if (lower.endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-          await extractDOCXWithMammoth(file);
-        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(lower)) {
-          await extractImageWithOCR(file);
-        } else {
-          await extractPlainText(file);
-        }
-      } catch (err) {
-        setExtractionProgress(false);
-        showSnackbar('تعذر استخراج محتوى الملف.');
-      }
-    }
-
-    async function extractPDFWithLayout(file) {
-      setExtractionProgress(true, 'جاري قراءة صفحات PDF...', 8);
-      const buffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
-      const extractedPages = [];
-
-      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        if (pageNum % 5 === 1 || pageNum === pdf.numPages) {
-          setExtractionProgress(true, `استخراج الصفحة ${pageNum} من ${pdf.numPages}...`, 10 + (pageNum / pdf.numPages) * 85);
-          await new Promise(r => setTimeout(r, 0));
-        }
-        const page = await pdf.getPage(pageNum);
-        const content = await page.getTextContent();
-
-        const rawItems = content.items
-          .filter(it => it.str && it.str.trim().length > 0)
-          .map(it => {
-            const fontSize = Math.round(Math.hypot(it.transform[0], it.transform[1]) * 10) / 10;
-            return { str: it.str, x: it.transform[4], y: it.transform[5], width: it.width || 0, fontSize };
-          });
-
-        if (rawItems.length === 0) {
-          extractedPages.push({ pageNumber: pageNum, blocks: [] });
-          continue;
-        }
-
-        const sortedSizes = [...rawItems.map(i => i.fontSize)].sort((a, b) => a - b);
-        const medianFontSize = sortedSizes[Math.floor(sortedSizes.length / 2)] || 12;
-
-        rawItems.sort((a, b) => {
-          if (Math.abs(b.y - a.y) > Math.max(4, a.fontSize * 0.35)) return b.y - a.y;
-          return a.x - b.x;
-        });
-
-        const lines = [];
-        let currentLine = [rawItems[0]];
-        for (let i = 1; i < rawItems.length; i++) {
-          const item = rawItems[i];
-          const prev = currentLine[currentLine.length - 1];
-          const yTolerance = Math.max(4, prev.fontSize * 0.4);
-          if (Math.abs(item.y - prev.y) <= yTolerance) currentLine.push(item);
-          else { lines.push(currentLine); currentLine = [item]; }
-        }
-        lines.push(currentLine);
-
-        const minX = Math.min(...lines.map(l => Math.min(...l.map(it => it.x))));
-        const lineObjects = lines.map(lineItems => {
-          lineItems.sort((a, b) => a.x - b.x);
-          const avgFontSize = lineItems.reduce((acc, it) => acc + it.fontSize, 0) / lineItems.length;
-          const startX = lineItems[0].x;
-          const y = lineItems[0].y;
-
-          let lineText = '';
-          for (let j = 0; j < lineItems.length; j++) {
-            const curr = lineItems[j];
-            if (j > 0) {
-              const prev = lineItems[j - 1];
-              const gap = curr.x - (prev.x + prev.width);
-              if (gap > curr.fontSize * 0.2 && !lineText.endsWith(' ') && !curr.str.startsWith(' ')) lineText += ' ';
-            }
-            lineText += curr.str;
-          }
-          return { text: sanitizeExtractedText(lineText), y, indent: Math.max(0, Math.round(startX - minX)), fontSize: avgFontSize };
-        }).filter(l => l.text.length > 0);
-
-        const blocks = [];
-        let activeBlock = null;
-        for (let i = 0; i < lineObjects.length; i++) {
-          const line = lineObjects[i];
-          const prevLine = i > 0 ? lineObjects[i - 1] : null;
-          const verticalGap = prevLine ? (prevLine.y - line.y) : 0;
-          const isHeading = line.fontSize >= medianFontSize * 1.25 && line.text.length < 140;
-          const isListItem = /^([•\-–—*]|\d+[.)])\s+/.test(line.text);
-          const isNewParagraph = !prevLine || verticalGap > line.fontSize * 1.45 || isHeading || isListItem;
-
-          if (isNewParagraph) {
-            if (activeBlock) blocks.push(activeBlock);
-            let blockType = 'p';
-            if (line.fontSize >= medianFontSize * 1.5 && line.text.length < 120) blockType = 'h1';
-            else if (isHeading) blockType = 'h2';
-            else if (isListItem) blockType = 'li';
-            activeBlock = { type: blockType, text: line.text, indent: line.indent > 18 ? Math.min(line.indent, 48) : 0 };
-          } else {
-            if (activeBlock.text.endsWith('-')) activeBlock.text = activeBlock.text.slice(0, -1) + line.text;
-            else activeBlock.text += ' ' + line.text;
-          }
-        }
-        if (activeBlock) blocks.push(activeBlock);
-        extractedPages.push({ pageNumber: pageNum, blocks });
-      }
-
-      if (!extractedPages.some(p => p.blocks.length > 0)) {
-        setExtractionProgress(false);
-        showSnackbar('ملف PDF عبارة عن صور ممسوحة ضوئياً بدون نص.');
-        return;
-      }
-      openExtractedDocument(file.name, extractedPages);
-    }
-
-    async function extractDOCXWithMammoth(file) {
-      setExtractionProgress(true, 'جاري تحليل مستند Word (DOCX)...', 45);
-      const arrayBuffer = await file.arrayBuffer();
-      const result = await mammoth.convertToHtml({ arrayBuffer });
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(result.value, 'text/html');
-      const blocks = [];
-      doc.body.childNodes.forEach(node => {
-        if (node.nodeType !== Node.ELEMENT_NODE) return;
-        const tag = node.tagName.toLowerCase();
-        const text = sanitizeExtractedText(node.textContent);
-        if (!text) return;
-        if (tag === 'h1') blocks.push({ type: 'h1', text });
-        else if (tag === 'h2' || tag === 'h3') blocks.push({ type: 'h2', text });
-        else if (tag === 'ul' || tag === 'ol') {
-          node.querySelectorAll('li').forEach(li => {
-            const liText = sanitizeExtractedText(li.textContent);
-            if (liText) blocks.push({ type: 'li', text: liText });
-          });
-        } else blocks.push({ type: 'p', text });
-      });
-      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
-    }
-
-    async function extractImageWithOCR(file) {
-      setExtractionProgress(true, 'تهيئة محرك التعرف الضوئي (OCR)...', 10);
-      const worker = await Tesseract.createWorker(['eng', 'fra'], 1, {
-        logger: (m) => {
-          if (m.status === 'recognizing text') setExtractionProgress(true, 'جاري استخراج النص من الصورة...', 15 + m.progress * 80);
-        }
-      });
-      const { data: { text } } = await worker.recognize(file);
-      await worker.terminate();
-      const blocks = text.split(/\n\s*\n/).map(p => sanitizeExtractedText(p.replace(/\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
-      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
-    }
-
-    async function extractPlainText(file) {
-      setExtractionProgress(true, 'جاري قراءة الملف النصي...', 60);
-      const text = await file.text();
-      const blocks = text.split(/\n\s*\n|\r\n\s*\r\n/).map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
-      openExtractedDocument(file.name, [{ pageNumber: 1, blocks }]);
-    }
-
-    function openPasteModal() { document.getElementById('pasteModal').classList.remove('hidden'); document.getElementById('pasteTextInput').focus(); }
-    function closePasteModal() { document.getElementById('pasteModal').classList.add('hidden'); }
-    function processPastedText() {
-      const raw = document.getElementById('pasteTextInput').value.trim();
-      if (!raw) return;
-      const blocks = raw.split(/\n\s*\n|\r\n\s*\r\n/).map(p => sanitizeExtractedText(p.replace(/\r?\n/g, ' '))).filter(Boolean).map(p => ({ type: 'p', text: p }));
-      document.getElementById('pasteTextInput').value = '';
-      closePasteModal();
-      openExtractedDocument('مستند نصي', [{ pageNumber: 1, blocks }]);
-    }
-
-    // ==================== RENDER DOCUMENT ====================
-    function openExtractedDocument(title, pages) {
-      setExtractionProgress(false);
-      appState.docTitle = title;
-      appState.pages = pages;
-
-      const sampleText = pages.slice(0, 6).flatMap(p => p.blocks.map(b => b.text)).join(' ');
-      appState.detectedLang = detectTextLanguage(sampleText);
-      SpeechManager.populateVoiceDropdown(appState.detectedLang);
-
-      document.getElementById('emptyStateView').classList.add('hidden');
-      document.getElementById('workspaceView').classList.remove('hidden');
-      document.getElementById('headerDocMeta').classList.remove('hidden');
-      document.getElementById('docTitleInput').value = title;
-      document.getElementById('jumpPageInput').max = pages.length;
-      document.getElementById('jumpPageInput').value = 1;
-      document.getElementById('pageCountIndicator').textContent = `/ ${pages.length}`;
-
-      renderPaginatedSheets();
-    }
-
-    function splitTextIntoSentences(text) {
-      const protectedText = text
-        .replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|M|Mme|Mlle|etc|vs|fig|vol|no|pp|p)\./gi, '$1\u0000')
-        .replace(/(\d)\.(\d)/g, '$1\u0000$2');
-      const rawSentences = protectedText.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [protectedText];
-      return rawSentences.map(s => s.replace(/\u0000/g, '.'));
-    }
-
-    function renderPaginatedSheets() {
-      const container = document.getElementById('paginatedDocumentContainer');
-      container.innerHTML = '';
-      appState.sentenceRecords = [];
-      const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
-      const fontClass = appState.fontFamily === 'serif' ? 'doc-font-serif' : 'doc-font-sans';
-
-      const fragment = document.createDocumentFragment();
-      appState.pages.forEach((page) => {
-        const sheet = document.createElement('article');
-        sheet.id = `doc-page-${page.pageNumber}`;
-        sheet.className = 'gem-doc-sheet px-6 py-8 sm:px-14 sm:py-12 md:px-16 md:py-14 relative';
-        sheet.dir = 'ltr';
-
-        const contentWrapper = document.createElement('div');
-        contentWrapper.className = `doc-content-body ${fontClass} leading-[1.9] space-y-5`;
-        contentWrapper.style.fontSize = `${appState.fontSize}px`;
-
-        page.blocks.forEach((block) => {
-          let el;
-          if (block.type === 'h1') { el = document.createElement('h1'); el.className = 'text-[1.5em] font-bold leading-snug mt-2 mb-3'; }
-          else if (block.type === 'h2') { el = document.createElement('h2'); el.className = 'text-[1.22em] font-semibold leading-snug mt-2 mb-2'; }
-          else if (block.type === 'li') { el = document.createElement('div'); el.className = 'pl-5 relative before:content-["•"] before:absolute before:left-1.5 before:opacity-60'; }
-          else { el = document.createElement('p'); el.className = 'text-left'; if (block.indent) el.style.paddingLeft = `${block.indent}px`; }
-
-          tokenizeBlockIntoElement(el, block.text, savedSet);
-          contentWrapper.appendChild(el);
-        });
-
-        sheet.appendChild(contentWrapper);
-
-        const pageFooter = document.createElement('div');
-        pageFooter.className = 'mt-10 pt-3 border-t border-gem-borderLight dark:border-gem-borderDark flex justify-between items-center text-[11px] text-gem-subLight dark:text-gem-subDark select-none';
-        pageFooter.innerHTML = `<span class="font-brand font-semibold">Readdy</span><span>${page.pageNumber} / ${appState.pages.length}</span>`;
-        sheet.appendChild(pageFooter);
-
-        fragment.appendChild(sheet);
-      });
-      container.appendChild(fragment);
-    }
-
-    function jumpToPageNumber(numStr) {
-      const pageNum = Math.max(1, Math.min(appState.pages.length, parseInt(numStr, 10) || 1));
-      document.getElementById('jumpPageInput').value = pageNum;
-      const target = document.getElementById(`doc-page-${pageNum}`);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function tokenizeBlockIntoElement(parentEl, blockText, savedSet) {
-      const sentences = splitTextIntoSentences(blockText);
-      sentences.forEach((sentenceStr) => {
-        const cleanSentence = sentenceStr.trim();
-        if (!cleanSentence) return;
-
-        const sentenceTokens = [];
-        const sentenceIndex = appState.sentenceRecords.length;
-        appState.sentenceRecords.push({ text: cleanSentence, tokens: sentenceTokens });
-
-        const parts = sentenceStr.split(/(\s+)/);
-        parts.forEach((part) => {
-          if (/^\s+$/.test(part)) { parentEl.appendChild(document.createTextNode(part)); return; }
-
-          const match = part.match(/^([^\p{L}\p{N}]*)([\p{L}\p{N}’'-]+)([^\p{L}\p{N}]*)$/u);
-          if (!match) { parentEl.appendChild(document.createTextNode(part)); return; }
-
-          const [, lead, word, trail] = match;
-          if (lead) parentEl.appendChild(document.createTextNode(lead));
-
-          const span = document.createElement('span');
-          span.textContent = word;
-          span.dataset.wordLower = word.toLowerCase();
-          span.className = 'word-token';
-          if (savedSet.has(word.toLowerCase())) span.classList.add('bookmarked-token');
-
-          sentenceTokens.push(span);
-          span.addEventListener('click', () => {
-            onWordTokenClicked(span, word, cleanSentence, sentenceTokens, sentenceIndex);
-          });
-
-          parentEl.appendChild(span);
-          if (trail) parentEl.appendChild(document.createTextNode(trail));
-        });
-      });
-    }
-
-    function setDocFontFamily(mode) {
-      appState.fontFamily = mode;
-      const sansBtn = document.getElementById('fontSansBtn');
-      const serifBtn = document.getElementById('fontSerifBtn');
-      if (mode === 'serif') {
-        serifBtn.className = 'px-2.5 py-1 rounded-full bg-gem-bgLight dark:bg-gem-surfaceDark text-gem-textLight dark:text-gem-textDark font-medium transition cursor-pointer';
-        sansBtn.className = 'px-2.5 py-1 rounded-full text-gem-subLight dark:text-gem-subDark font-medium transition cursor-pointer';
-      } else {
-        sansBtn.className = 'px-2.5 py-1 rounded-full bg-gem-bgLight dark:bg-gem-surfaceDark text-gem-textLight dark:text-gem-textDark font-medium transition cursor-pointer';
-        serifBtn.className = 'px-2.5 py-1 rounded-full text-gem-subLight dark:text-gem-subDark font-medium transition cursor-pointer';
-      }
-      document.querySelectorAll('.doc-content-body').forEach(el => {
-        el.classList.remove('doc-font-sans', 'doc-font-serif');
-        el.classList.add(mode === 'serif' ? 'doc-font-serif' : 'doc-font-sans');
-      });
-    }
-
-    function adjustFontSize(delta) {
-      appState.fontSize = Math.min(24, Math.max(16, appState.fontSize + delta));
-      document.getElementById('fontSizeIndicator').textContent = `${appState.fontSize}px`;
-      document.querySelectorAll('.doc-content-body').forEach(el => { el.style.fontSize = `${appState.fontSize}px`; });
-    }
-
-    function highlightSentenceTokens(tokens) {
-      appState.activeSentenceTokens.forEach(t => t.classList.remove('sentence-highlight'));
-      tokens.forEach(t => t.classList.add('sentence-highlight'));
-      appState.activeSentenceTokens = tokens;
-    }
-
-    // ==================== 4-LAYER HIGH-PRECISION CONTEXTUAL TRANSLATION ENGINE ====================
-    function extractLocalPhraseWindow(sentence, targetWord) {
-      const words = sentence.split(/\s+/);
-      const cleanTarget = targetWord.toLowerCase().replace(/^[’'-]+|[’'-]+$/g, '');
-      const idx = words.findIndex(w => w.toLowerCase().replace(/[^\p{L}\p{N}’'-]/gu, '') === cleanTarget);
-      if (idx === -1) return targetWord;
-      const start = Math.max(0, idx - 1);
-      const end = Math.min(words.length, idx + 3);
-      return words.slice(start, end).join(' ');
-    }
-
-    async function onWordTokenClicked(tokenEl, word, surroundingSentence, sentenceTokenList, sentenceIndex) {
-      if (appState.activeWordEl) appState.activeWordEl.classList.remove('active-token');
-      highlightSentenceTokens(sentenceTokenList);
-      tokenEl.classList.add('active-token');
-      appState.activeWordEl = tokenEl;
-      appState.selectedSentenceIndex = sentenceIndex;
-
-      if (SpeechManager.repeatMode) SpeechManager.stop();
-
-      const panel = document.getElementById('sideDictionaryPanel');
-      panel.classList.remove('hidden');
-      panel.classList.add('flex');
-      panel.scrollTop = 0;
-
-      const lang = appState.detectedLang;
-      const cleanLower = word.toLowerCase().replace(/^[’'-]+|[’'-]+$/g, '');
-
-      // LAYER 1: Instant Built-in Grammatical & Function Lexicon
-      const lexiconHit = FUNCTION_LEXICON[lang]?.[cleanLower];
-      if (lexiconHit) {
-        const sentenceAr = await translateTextWithFallback(surroundingSentence, lang, 'ar').catch(() => '');
-        renderSidePanelAnalysis({
-          word,
-          lang,
-          source_label: 'قاموس نحوي',
-          translation_ar: lexiconHit.tr,
-          explanation_ar: lexiconHit.exp,
-          ipa: '',
-          pos_ar: lexiconHit.pos,
-          lemma: lexiconHit.lemma,
-          example_original: '',
-          example_ar: '',
-          sentence_original: surroundingSentence,
-          sentence_ar: sentenceAr
-        });
-        return;
-      }
-
-      const cacheKey = `${lang}::${cleanLower}::${surroundingSentence.slice(0, 80)}`;
-      if (appState.memoryCache.has(cacheKey)) {
-        renderSidePanelAnalysis(appState.memoryCache.get(cacheKey));
-        return;
-      }
-
-      const currentRequest = ++appState.activeRequestToken;
-      document.getElementById('panelContent').classList.add('hidden');
-      document.getElementById('panelSkeleton').classList.remove('hidden');
-
-      try {
-        let analysis;
-        if (appState.geminiApiKey && appState.geminiApiKey.trim().length > 10) {
-          try {
-            analysis = await queryGeminiDictionary(word, surroundingSentence, lang, appState.geminiApiKey.trim());
-            analysis.source_label = 'Gemini AI';
-          } catch (_) {
-            analysis = await queryHybridContextualDictionary(word, surroundingSentence, lang);
-          }
-        } else {
-          analysis = await queryHybridContextualDictionary(word, surroundingSentence, lang);
-        }
-
-        if (currentRequest !== appState.activeRequestToken) return;
-
-        const fullRecord = { word, lang, sentence_original: surroundingSentence, ...analysis };
-        appState.memoryCache.set(cacheKey, fullRecord);
-        persistCacheToStorage();
-        renderSidePanelAnalysis(fullRecord);
-      } catch (err) {
-        if (currentRequest !== appState.activeRequestToken) return;
-        renderSidePanelAnalysis({
-          word,
-          lang,
-          source_label: 'Offline',
-          translation_ar: 'تعذر الاتصال بخدمة الترجمة',
-          explanation_ar: 'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',
-          ipa: '',
-          pos_ar: lang === 'fr' ? 'كلمة فرنسية' : 'كلمة إنجليزية',
-          lemma: cleanLower,
-          example_original: '',
-          example_ar: '',
-          sentence_original: surroundingSentence,
-          sentence_ar: ''
-        });
-      }
-    }
-
-    async function queryHybridContextualDictionary(word, sentence, lang) {
-      const cleanWord = word.replace(/^[’'-]+|[’'-]+$/g, '');
-      const localPhrase = extractLocalPhraseWindow(sentence, cleanWord);
-
-      const [wordTransResult, phraseTransText, sentenceTransText, lexicalMeta] = await Promise.all([
-        translateWordWithFallback(cleanWord, lang, 'ar'),
-        localPhrase !== cleanWord ? translateTextWithFallback(localPhrase, lang, 'ar').catch(() => '') : Promise.resolve(''),
-        translateTextWithFallback(sentence, lang, 'ar').catch(() => ''),
-        fetchLexicalMetadata(cleanWord, lang)
-      ]);
-
-      let exampleAr = '';
-      if (lexicalMeta.example_original) {
-        exampleAr = await translateTextWithFallback(lexicalMeta.example_original, lang, 'ar').catch(() => '');
-      }
-
-      const explanationParts = [];
-      if (phraseTransText && localPhrase !== cleanWord) {
-        explanationParts.push(`في العبارة المجاورة ("${localPhrase}"): تعني "${phraseTransText}".`);
-      }
-      if (lexicalMeta.definition_orig) {
-        const defAr = await translateTextWithFallback(lexicalMeta.definition_orig, lang, 'ar').catch(() => '');
-        if (defAr) explanationParts.push(defAr);
-      }
-      if (wordTransResult.alternatives && wordTransResult.alternatives.length > 0) {
-        explanationParts.push(`معانٍ أخرى: ${wordTransResult.alternatives.join('، ')}.`);
-      }
-      if (explanationParts.length === 0) {
-        explanationParts.push(`تُترجم كلمة "${cleanWord}" في هذا السياق إلى "${wordTransResult.primary}".`);
-      }
-
-      return {
-        source_label: wordTransResult.provider,
-        translation_ar: wordTransResult.primary || '—',
-        explanation_ar: explanationParts.join(' '),
-        ipa: lexicalMeta.ipa || '',
-        pos_ar: lexicalMeta.pos_ar || (lang === 'fr' ? 'مفردة فرنسية' : 'مفردة إنجليزية'),
-        lemma: lexicalMeta.lemma || cleanWord.toLowerCase(),
-        example_original: lexicalMeta.example_original || '',
-        example_ar: exampleAr || '',
-        sentence_ar: sentenceTransText || ''
-      };
-    }
-
-    async function fetchWithTimeout(url, ms = 3500) {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), ms);
-      try {
-        const res = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
-        return res;
-      } catch (e) {
-        clearTimeout(id);
-        throw e;
-      }
-    }
-
-    async function translateWordWithFallback(word, sourceLang, targetLang = 'ar') {
-      try {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&dt=bd&q=${encodeURIComponent(word)}`;
-        const res = await fetchWithTimeout(url, 3500);
-        if (res.ok) {
-          const data = await res.json();
-          const primary = (data[0] || []).map(chunk => chunk[0]).join('').trim();
-          const alternatives = [];
-          if (Array.isArray(data[1])) {
-            data[1].forEach(group => {
-              if (Array.isArray(group[1])) {
-                group[1].slice(0, 3).forEach(alt => {
-                  if (alt && alt !== primary && !alternatives.includes(alt)) alternatives.push(alt);
-                });
-              }
-            });
-          }
-          if (primary) return { primary, alternatives: alternatives.slice(0, 4), provider: 'Google' };
-        }
-      } catch (_) {}
-
-      try {
-        const lingvaUrl = `https://lingva.ml/api/v1/${sourceLang}/${targetLang}/${encodeURIComponent(word)}`;
-        const res = await fetchWithTimeout(lingvaUrl, 3500);
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.translation) return { primary: data.translation.trim(), alternatives: [], provider: 'Lingva' };
-        }
-      } catch (_) {}
-
-      try {
-        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=${sourceLang}|${targetLang}`;
-        const res = await fetchWithTimeout(mmUrl, 4000);
-        if (res.ok) {
-          const data = await res.json();
-          const translated = data?.responseData?.translatedText?.trim();
-          if (translated && !translated.includes('MYMEMORY WARNING')) {
-            return { primary: translated, alternatives: [], provider: 'MyMemory' };
-          }
-        }
-      } catch (_) {}
-
-      throw new Error('All providers failed');
-    }
-
-    async function translateTextWithFallback(text, sourceLang, targetLang = 'ar') {
-      if (!text || !text.trim()) return '';
-      try {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.slice(0, 600))}`;
-        const res = await fetchWithTimeout(url, 3800);
-        if (res.ok) {
-          const data = await res.json();
-          const primary = (data[0] || []).map(chunk => chunk[0]).join('').trim();
-          if (primary) return primary;
-        }
-      } catch (_) {}
-
-      try {
-        const lingvaUrl = `https://lingva.ml/api/v1/${sourceLang}/${targetLang}/${encodeURIComponent(text.slice(0, 400))}`;
-        const res = await fetchWithTimeout(lingvaUrl, 3800);
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.translation) return data.translation.trim();
-        }
-      } catch (_) {}
-
-      try {
-        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 450))}&langpair=${sourceLang}|${targetLang}`;
-        const res = await fetchWithTimeout(mmUrl, 4000);
-        if (res.ok) {
-          const data = await res.json();
-          const translated = data?.responseData?.translatedText?.trim();
-          if (translated && !translated.includes('MYMEMORY WARNING')) return translated;
-        }
-      } catch (_) {}
-
-      return '';
-    }
-
-    async function fetchLexicalMetadata(word, lang) {
-      const lower = word.toLowerCase();
-      const posMap = {
-        noun: 'اسم', verb: 'فعل', adjective: 'صفة', adverb: 'ظرف / حال',
-        pronoun: 'ضمير', preposition: 'حرف جر', conjunction: 'أداة ربط', interjection: 'تعجب',
-        nom: 'اسم', verbe: 'فعل', adjectif: 'صفة', adverbe: 'ظرف', préposition: 'حرف جر', pronom: 'ضمير'
-      };
-
-      if (lang === 'en') {
-        try {
-          const res = await fetchWithTimeout(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(lower)}`, 3000);
-          if (res.ok) {
-            const data = await res.json();
-            const entry = data[0];
-            const phonetic = entry.phonetic || (entry.phonetics || []).find(p => p.text)?.text || '';
-            const meaning = entry.meanings?.[0];
-            const posRaw = meaning?.partOfSpeech?.toLowerCase() || '';
-            const defObj = meaning?.definitions?.[0];
-            return {
-              ipa: phonetic,
-              pos_ar: posMap[posRaw] || posRaw,
-              lemma: entry.word || lower,
-              definition_orig: defObj?.definition || '',
-              example_original: defObj?.example || ''
-            };
-          }
-        } catch (_) {}
-      } else if (lang === 'fr') {
-        try {
-          const res = await fetchWithTimeout(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(lower)}`, 3000);
-          if (res.ok) {
-            const data = await res.json();
-            const frEntry = data.fr?.[0];
-            const posRaw = frEntry?.partOfSpeech?.toLowerCase() || '';
-            const defItem = frEntry?.definitions?.[0];
-            const cleanDef = defItem?.definition ? defItem.definition.replace(/<[^>]+>/g, '').trim() : '';
-            const cleanEx = defItem?.examples?.[0] ? defItem.examples[0].replace(/<[^>]+>/g, '').trim() : '';
-            return {
-              ipa: '',
-              pos_ar: posMap[posRaw] || posRaw,
-              lemma: lower,
-              definition_orig: cleanDef.slice(0, 180),
-              example_original: cleanEx.slice(0, 180)
-            };
-          }
-        } catch (_) {}
-      }
-      return { ipa: '', pos_ar: '', lemma: lower, definition_orig: '', example_original: '' };
-    }
-
-    async function queryGeminiDictionary(word, sentence, lang, apiKey) {
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-      const sourceLang = lang === 'fr' ? 'French' : 'English';
-      const payload = {
-        contents: [{ parts: [{ text: `Word: "${word}" (${sourceLang})\nSentence: "${sentence}"` }] }],
-        systemInstruction: { parts: [{ text: `Bilingual contextual dictionary engine for Arabic speakers reading ${sourceLang}. Return JSON.` }] },
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              translation_ar: { type: "STRING" },
-              explanation_ar: { type: "STRING" },
-              ipa: { type: "STRING" },
-              pos_ar: { type: "STRING" },
-              lemma: { type: "STRING" },
-              example_original: { type: "STRING" },
-              example_ar: { type: "STRING" },
-              sentence_ar: { type: "STRING" }
-            },
-            required: ["translation_ar", "explanation_ar", "ipa", "pos_ar", "lemma", "example_original", "example_ar", "sentence_ar"]
-          }
-        }
-      };
-      const res = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      return JSON.parse(data.candidates[0].content.parts[0].text);
-    }
-
-    function persistCacheToStorage() {
-      try {
-        const entries = Array.from(appState.memoryCache.entries()).slice(-150);
-        localStorage.setItem(STORAGE_CACHE_KEY, JSON.stringify(Object.fromEntries(entries)));
-      } catch (_) {}
-    }
-
-    function renderSidePanelAnalysis(data) {
-      appState.selectedAnalysis = data;
-      document.getElementById('panelSkeleton').classList.add('hidden');
-      document.getElementById('panelContent').classList.remove('hidden');
-
-      document.getElementById('engineSourceTag').textContent = data.source_label || 'Readdy';
-      document.getElementById('panelWordTitle').textContent = data.word;
-      document.getElementById('panelLangBadge').textContent = data.lang.toUpperCase();
-
-      const ipaEl = document.getElementById('panelIpa');
-      const dotEl = document.getElementById('panelIpaDot');
-      if (data.ipa) {
-        ipaEl.textContent = data.ipa;
-        ipaEl.classList.remove('hidden');
-        dotEl.classList.remove('hidden');
-      } else {
-        ipaEl.classList.add('hidden');
-        dotEl.classList.add('hidden');
-      }
-
-      document.getElementById('panelPosBadge').textContent = data.pos_ar || '';
-      document.getElementById('panelTranslationAr').textContent = data.translation_ar;
-      document.getElementById('panelLemma').textContent = data.lemma ? `الأصل اللغوي: ${data.lemma}` : '';
-      document.getElementById('panelExplanationAr').textContent = data.explanation_ar;
-
-      const exampleBox = document.getElementById('exampleBox');
-      if (data.example_original) {
-        exampleBox.classList.remove('hidden');
-        document.getElementById('panelExampleOrig').textContent = data.example_original;
-        document.getElementById('panelExampleAr').textContent = data.example_ar || '';
-      } else {
-        exampleBox.classList.add('hidden');
-      }
-
-      document.getElementById('panelSentenceOrig').textContent = data.sentence_original;
-      document.getElementById('panelSentenceAr').textContent = data.sentence_ar || '';
-
-      updateBookmarkButtonUI();
-      updateRepeatButtonsUI();
-    }
-
-    function closeSidePanel() {
-      const panel = document.getElementById('sideDictionaryPanel');
-      panel.classList.add('hidden');
-      panel.classList.remove('flex');
-      if (appState.activeWordEl) { appState.activeWordEl.classList.remove('active-token'); appState.activeWordEl = null; }
-      appState.activeSentenceTokens.forEach(t => t.classList.remove('sentence-highlight'));
-      appState.activeSentenceTokens = [];
-      appState.selectedSentenceIndex = -1;
-    }
-
-    function copyCurrentTranslation() {
-      if (!appState.selectedAnalysis) return;
-      const text = `${appState.selectedAnalysis.word} — ${appState.selectedAnalysis.translation_ar}`;
-      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => {});
-      showSnackbar('تم نسخ الترجمة');
-    }
-
-    function pronounceSelectedWord(rate) {
-      if (!appState.selectedAnalysis) return;
-      SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, rate, SpeechManager.repeatMode === 'word' ? 'word' : null);
-      updateRepeatButtonsUI();
-    }
-
-    function toggleWordRepeatLoop() {
-      if (!appState.selectedAnalysis) return;
-      if (SpeechManager.repeatMode === 'word') SpeechManager.stop();
-      else { SpeechManager.speakSingle(appState.selectedAnalysis.word, appState.selectedAnalysis.lang, 0.85, 'word'); updateRepeatButtonsUI(); }
-    }
-
-    function pronounceExample(rate = 1.0) {
-      if (!appState.selectedAnalysis?.example_original) return;
-      SpeechManager.speakSingle(appState.selectedAnalysis.example_original, appState.selectedAnalysis.lang, rate, null);
-      updateRepeatButtonsUI();
-    }
-
-    function pronounceSurroundingSentence(rate = 1.0) {
-      if (!appState.selectedAnalysis?.sentence_original) return;
-      SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, rate, SpeechManager.repeatMode === 'sentence' ? 'sentence' : null);
-      updateRepeatButtonsUI();
-    }
-
-    function toggleSentenceRepeatLoop() {
-      if (!appState.selectedAnalysis?.sentence_original) return;
-      if (SpeechManager.repeatMode === 'sentence') SpeechManager.stop();
-      else { SpeechManager.speakSingle(appState.selectedAnalysis.sentence_original, appState.selectedAnalysis.lang, 0.9, 'sentence'); updateRepeatButtonsUI(); }
-    }
-
-    function updateRepeatButtonsUI() {
-      const wordBtn = document.getElementById('wordRepeatToggleBtn');
-      const sentBtn = document.getElementById('sentenceRepeatBtn');
-      if (wordBtn) wordBtn.className = SpeechManager.repeatMode === 'word'
-        ? 'bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark border border-gem-accentLight p-1.5 rounded-xl flex items-center justify-center transition cursor-pointer'
-        : 'bg-gem-surfaceLight dark:bg-gem-surfaceDark text-gem-subLight dark:text-gem-subDark border border-gem-borderLight dark:border-gem-borderDark p-1.5 rounded-xl flex items-center justify-center transition cursor-pointer';
-      if (sentBtn) sentBtn.className = SpeechManager.repeatMode === 'sentence'
-        ? 'p-1 rounded-full bg-gem-accentSoftLight dark:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark transition cursor-pointer'
-        : 'p-1 rounded-full text-gem-subLight dark:text-gem-subDark transition cursor-pointer';
-    }
-
-    function toggleDocumentAudioPlayback() {
-      if (SpeechManager.isPlayingDoc && !SpeechManager.isPausedDoc) SpeechManager.pauseDocument();
-      else if (SpeechManager.isPlayingDoc && SpeechManager.isPausedDoc) SpeechManager.resumeDocument();
-      else SpeechManager.playDocumentFromIndex(appState.selectedSentenceIndex >= 0 ? appState.selectedSentenceIndex : 0);
-    }
-
-    function isWordBookmarked(word) { return appState.savedWords.some(item => item.word.toLowerCase() === word.toLowerCase()); }
-
-    function syncBookmarkedHighlightsInDOM() {
-      const savedSet = new Set(appState.savedWords.map(w => w.word.toLowerCase()));
-      document.querySelectorAll('.word-token').forEach(span => {
-        span.classList.toggle('bookmarked-token', savedSet.has(span.dataset.wordLower));
-      });
-    }
-
-    function updateBookmarkButtonUI() {
-      if (!appState.selectedAnalysis) return;
-      const btn = document.getElementById('bookmarkWordBtn');
-      const icon = document.getElementById('bookmarkWordIcon');
-      const bookmarked = isWordBookmarked(appState.selectedAnalysis.word);
-      if (bookmarked) {
-        btn.className = 'w-9 h-9 rounded-full border border-[#1E8E3E] bg-[#E6F4EA] dark:bg-[#1E3A2F] text-[#1E8E3E] dark:text-[#81C995] flex items-center justify-center transition shrink-0 cursor-pointer';
-        icon.textContent = 'bookmark_added';
-        icon.classList.add('filled');
-      } else {
-        btn.className = 'w-9 h-9 rounded-full border border-gem-borderLight dark:border-gem-borderDark bg-gem-cardLight dark:bg-gem-cardDark text-gem-subLight dark:text-gem-subDark flex items-center justify-center transition shrink-0 cursor-pointer';
-        icon.textContent = 'bookmark_add';
-        icon.classList.remove('filled');
-      }
-    }
-
-    function toggleBookmarkCurrentWord() {
-      if (!appState.selectedAnalysis) return;
-      const targetLower = appState.selectedAnalysis.word.toLowerCase();
-      const idx = appState.savedWords.findIndex(w => w.word.toLowerCase() === targetLower);
-      if (idx >= 0) { appState.savedWords.splice(idx, 1); showSnackbar('تمت إزالة الكلمة من المحفوظات'); }
-      else {
-        appState.savedWords.unshift({
-          word: appState.selectedAnalysis.word,
-          lang: appState.selectedAnalysis.lang,
-          ipa: appState.selectedAnalysis.ipa || '',
-          translation_ar: appState.selectedAnalysis.translation_ar,
-          pos_ar: appState.selectedAnalysis.pos_ar || ''
-        });
-        showSnackbar('تم حفظ الكلمة في المفردات');
-      }
-      localStorage.setItem(STORAGE_VOCAB_KEY, JSON.stringify(appState.savedWords));
-      updateBookmarkButtonUI();
-      updateSavedBadges();
-      renderVocabDrawerList();
-      syncBookmarkedHighlightsInDOM();
-    }
-
-    function deleteSavedWord(word) {
-      appState.savedWords = appState.savedWords.filter(w => w.word.toLowerCase() !== word.toLowerCase());
-      localStorage.setItem(STORAGE_VOCAB_KEY, JSON.stringify(appState.savedWords));
-      updateBookmarkButtonUI();
-      updateSavedBadges();
-      renderVocabDrawerList();
-      syncBookmarkedHighlightsInDOM();
-    }
-
-    function updateSavedBadges() {
-      const count = appState.savedWords.length;
-      const badge = document.getElementById('savedCountBadge');
-      document.getElementById('drawerCountPill').textContent = count;
-      badge.textContent = count;
-      badge.classList.toggle('hidden', count === 0);
-    }
-
-    function toggleVocabDrawer(open) {
-      const drawer = document.getElementById('vocabDrawer');
-      const backdrop = document.getElementById('vocabDrawerBackdrop');
-      if (open) { renderVocabDrawerList(); backdrop.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); }
-      else { backdrop.classList.add('hidden'); drawer.classList.add('-translate-x-full'); }
-    }
-
-    function renderVocabDrawerList() {
-      const listEl = document.getElementById('vocabDrawerList');
-      const query = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
-      const filtered = appState.savedWords.filter(item => item.word.toLowerCase().includes(query) || item.translation_ar.includes(query));
-      if (filtered.length === 0) {
-        listEl.innerHTML = `<div class="py-12 text-center text-gem-subLight dark:text-gem-subDark text-xs"><span class="material-symbols-outlined text-[30px] opacity-50 mb-2">bookmark_border</span><p>${appState.savedWords.length === 0 ? 'لا توجد كلمات محفوظة' : 'لا توجد نتائج مطابقة'}</p></div>`;
-        return;
-      }
-      listEl.innerHTML = filtered.map(item => `
-        <div class="p-3 rounded-2xl border border-gem-borderLight dark:border-gem-borderDark bg-gem-cardLight dark:bg-gem-cardDark flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <div dir="ltr" class="flex items-center gap-1.5 justify-end">
-              <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded-full bg-gem-surfaceLight dark:bg-gem-surfaceDark border border-gem-borderLight dark:border-gem-borderDark text-gem-subLight dark:text-gem-subDark uppercase">${item.lang}</span>
-              <span class="font-docSerif font-semibold text-sm text-gem-textLight dark:text-gem-textDark truncate">${item.word}</span>
-            </div>
-            <p class="text-xs font-medium text-gem-accentLight dark:text-gem-accentDark mt-0.5 truncate">${item.translation_ar}</p>
-          </div>
-          <div class="flex items-center gap-0.5 shrink-0">
-            <button onclick="SpeechManager.speakSingle('${item.word.replace(/'/g, "\\'")}', '${item.lang}', 1.0, null)" class="p-1.5 rounded-full hover:bg-gem-accentSoftLight dark:hover:bg-gem-accentSoftDark text-gem-accentLight dark:text-gem-accentDark cursor-pointer" title="نطق"><span class="material-symbols-outlined text-[18px]">volume_up</span></button>
-            <button onclick="deleteSavedWord('${item.word.replace(/'/g, "\\'")}')" class="p-1.5 rounded-full hover:bg-red-500/10 text-red-500 cursor-pointer" title="حذف"><span class="material-symbols-outlined text-[18px]">delete</span></button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function exportSavedVocabularyCSV() {
-      if (appState.savedWords.length === 0) { showSnackbar('لا توجد كلمات محفوظة للتصدير'); return; }
-      const header = 'Word,Language,IPA,PartOfSpeech,ArabicTranslation';
-      const rows = appState.savedWords.map(w => [w.word, w.lang.toUpperCase(), w.ipa, w.pos_ar, w.translation_ar].map(val => `"${(val || '').replace(/"/g, '""')}"`).join(','));
-      const blob = new Blob(['\uFEFF' + [header, ...rows].join('\n')], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'readdy-vocabulary.csv'; a.click();
-      URL.revokeObjectURL(url);
-      showSnackbar('تم تصدير ملف المفردات بنجاح');
-    }
-
-    function openApiSettingsModal() { document.getElementById('geminiKeyInput').value = appState.geminiApiKey; document.getElementById('apiSettingsModal').classList.remove('hidden'); }
-    function closeApiSettingsModal() { document.getElementById('apiSettingsModal').classList.add('hidden'); }
-    function saveGeminiApiKey() {
-      const val = document.getElementById('geminiKeyInput').value.trim();
-      appState.geminiApiKey = val;
-      localStorage.setItem(STORAGE_GEMINI_KEY, val);
-      closeApiSettingsModal();
-      showSnackbar(val ? 'تم تفعيل مفتاح Gemini AI بنجاح' : 'تم اعتماد المحركات المدمجة');
-    }
-    function clearStoredCache() { appState.memoryCache.clear(); localStorage.removeItem(STORAGE_CACHE_KEY); showSnackbar('تم مسح الذاكرة المؤقتة'); }
-
-    let snackbarTimer;
-    function showSnackbar(message) {
-      const el = document.getElementById('snackbar');
-      document.getElementById('snackbarText').textContent = message;
-      el.classList.remove('translate-y-16', 'opacity-0');
-      clearTimeout(snackbarTimer);
-      snackbarTimer = setTimeout(() => { el.classList.add('translate-y-16', 'opacity-0'); }, 2600);
-    }
-  </script>
+</section>
+
+<div id="bdrop" class="bdrop" onclick="drawer(0)"></div>
+<aside id="drawer" class="drawer" inert aria-label="الكلمات المحفوظة">
+  <div class="dh"><i class="ms" style="color:var(--ac)">bookmarks</i><span>الكلمات المحفوظة</span><span id="vCount" class="tag">0</span><span class="sp"></span>
+    <button class="btn" style="color:var(--ac)" onclick="exportCSV()"><i class="ms" style="font-size:16px">download</i>CSV</button><button class="ibtn sm" onclick="drawer(0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="dsr"><input id="vsearch" type="search" placeholder="بحث في المفردات..." oninput="renderVocab()"></div>
+  <div id="vlist"></div>
+</aside>
+
+<div id="welcomeModal" class="modal" hidden><div class="mbox">
+  <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mb">
+    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية دقيقة</b><small>تحليل الكلمة داخل الجملة مع معالجة الضمائر وتصريف الأفعال.</small></div></div>
+    <div class="feat"><i class="ms">description</i><div><b>قراءة شاملة لكل الصيغ</b><small>ملفات PDF وDOCX واستخراج النص من الصور (OCR).</small></div></div>
+    <div class="feat"><i class="ms">record_voice_over</i><div><b>نطق صوتي وحقيبة مفردات</b><small>استماع بسرعات متعددة وتصدير كلماتك المحفوظة.</small></div></div>
+    <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
+    <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
+  </div></div></div>
+
+<div id="pasteModal" class="modal" hidden><div class="mbox w">
+  <div class="mh"><span>لصق نص للقراءة</span><button class="ibtn sm" onclick="show('pasteModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mb"><textarea id="pasteInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..."></textarea></div>
+  <div class="mf"><button class="btn" onclick="show('pasteModal',0)">إلغاء</button><button class="btn pri" onclick="readPasted()">فتح للقراءة</button></div></div></div>
+
+<div id="apiModal" class="modal" hidden><div class="mbox">
+  <div class="mh"><span>إعدادات محرك الترجمة</span><button class="ibtn sm" onclick="show('apiModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mb"><b style="color:var(--tx)">يعمل التطبيق بالتحليل السياقي + 3 محركات ترجمة مجانية.</b><span>اختياري: لتفعيل التحليل عبر <b>Gemini AI</b> أدخل مفتاح API (يُحفظ في متصفحك فقط):</span><input id="gemKey" type="password" dir="ltr" placeholder="AIzaSy..." autocomplete="off"></div>
+  <div class="mf" style="justify-content:space-between"><button class="btn" style="color:#d93025" onclick="clearCache()">مسح ذاكرة الترجمة</button><span style="display:flex;gap:8px"><button class="btn" onclick="show('apiModal',0)">إغلاق</button><button class="btn pri" onclick="saveKey()">حفظ</button></span></div></div></div>
+
+<div id="toast" class="toast" role="status"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const K={vocab:'readdy_saved_vocabulary_prod_v5',cache:'readdy_ai_cache_prod_v5',gem:'readdy_user_gemini_api_key',wel:'readdy_hide_welcome_modal_saj_v1',theme:'readdy_theme_mode_v1'};
+const store={get(k,d=null){try{const v=localStorage.getItem(k);return v===null?d:v}catch{return d}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const S={title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],gem:store.get(K.gem,''),io:null};
+try{const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v))}catch{}
+
+/* ---------- built-in function-word lexicon: word|translation|pos|lemma ---------- */
+const LEX={fr:{},en:{}};
+const load=(l,t)=>t.trim().split('\n').forEach(r=>{const[w,tr,pos,lem]=r.split('|');LEX[l][w]={tr,pos,lemma:lem||w}});
+load('fr',`mon|ـي / خاصتي (مذكر مفرد)|صفة ملكية|mon
+ma|ـي (مؤنث مفرد)|صفة ملكية|mon
+mes|ـي (جمع)|صفة ملكية|mon
+ton|ـكَ (مذكر مفرد)|صفة ملكية|ton
+ta|ـكَ (مؤنث مفرد)|صفة ملكية|ton
+tes|ـكَ (جمع)|صفة ملكية|ton
+son|ـهُ / ـها (مذكر مفرد)|صفة ملكية|son
+sa|ـهُ / ـها (مؤنث مفرد)|صفة ملكية|son
+ses|ـهُ / ـها (جمع)|صفة ملكية|son
+notre|ـنا (مفرد)|صفة ملكية|notre
+nos|ـنا (جمع)|صفة ملكية|notre
+votre|ـكم (مفرد)|صفة ملكية|votre
+vos|ـكم (جمع)|صفة ملكية|votre
+leur|ـهم / لهم|صفة ملكية / ضمير|leur
+leurs|ـهم (جمع)|صفة ملكية|leur
+je|أنا|ضمير فاعل
+tu|أنتَ / أنتِ|ضمير فاعل
+il|هو|ضمير فاعل
+elle|هي|ضمير فاعل
+nous|نحن / إيّانا|ضمير
+vous|أنتم / حضرتك|ضمير
+ils|هم|ضمير فاعل
+elles|هنّ|ضمير فاعل
+moi|أنا / إياي|ضمير توكيد
+toi|أنتَ / إياك|ضمير توكيد
+lui|هو / له / لها|ضمير
+eux|هم / إياهم|ضمير توكيد
+le|الـ (مذكر) / إيّاه|أداة تعريف / ضمير
+la|الـ (مؤنث) / إيّاها|أداة تعريف / ضمير
+les|الـ (جمع) / إيّاهم|أداة تعريف / ضمير
+l'|الـ|أداة تعريف
+un|أداة تنكير (مذكر) / واحد|أداة تنكير
+une|أداة تنكير (مؤنث) / واحدة|أداة تنكير
+des|أداة تنكير (جمع) / من الـ|أداة تنكير / إدغام|des
+du|من الـ / بعض|أداة تجزئة / إدغام (de+le)|du
+au|إلى الـ / في الـ|حرف جر مُدغم (à+le)|au
+aux|إلى الـ / في الـ (جمع)|حرف جر مُدغم (à+les)|aux
+de|من / عن / ـ(للإضافة)|حرف جر|de
+à|إلى / في / عند|حرف جر|à
+en|في / بـ / منه|حرف جر / ضمير|en
+ce|هذا / ذلك|اسم إشارة|ce
+cet|هذا / ذلك|اسم إشارة|ce
+cette|هذه / تلك|اسم إشارة|ce
+ces|هؤلاء / تلك|اسم إشارة|ce
+et|و|حرف عطف
+ou|أو|حرف عطف
+où|أين / حيث|ظرف مكان / اسم موصول
+mais|لكن|حرف استدراك
+car|لأنّ|أداة تعليل
+donc|إذن / وبالتالي|أداة استنتاج
+ni|ولا|أداة نفي وعطف
+dans|في / داخل|حرف جر
+sur|على / فوق / حول|حرف جر
+sous|تحت|حرف جر
+avec|مع / بواسطة|حرف جر
+sans|بدون / بلا|حرف جر
+pour|من أجل / لـ|حرف جر
+par|بواسطة / عبر / من قِبل|حرف جر
+après|بعد|حرف جر / ظرف
+avant|قبل|حرف جر / ظرف
+vers|نحو / حوالي|حرف جر
+chez|عند / لدى|حرف جر
+entre|بين|حرف جر
+qui|الذي / التي / مَن|اسم موصول / استفهام
+que|الذي / أن / ماذا|اسم موصول / أداة ربط
+dont|الذي... منه / عنه|اسم موصول
+ne|لا / لم|أداة نفي
+pas|ليس / لا|أداة نفي
+plus|أكثر / لم يعد|ظرف كمية / نفي
+est|يكون / هو|فعل (être) – الغائب المفرد|être
+sont|يكونون / هم|فعل (être) – الغائب الجمع|être
+suis|أكون|فعل (être) – المتكلم|être
+a|لديه / يملك|فعل (avoir) – الغائب المفرد|avoir
+ont|لديهم / يملكون|فعل (avoir) – الغائب الجمع|avoir`);
+load('en',`the|الـ|أداة تعريف
+a|أداة تنكير (مفرد)|أداة تنكير
+an|أداة تنكير (مفرد)|أداة تنكير
+my|ـي / خاصتي|صفة ملكية
+your|ـكَ / ـكم|صفة ملكية
+his|ـهُ / خاصته|صفة ملكية
+her|ـها / إيّاها|صفة ملكية / ضمير
+its|ـهُ / ـها (لغير العاقل)|صفة ملكية
+our|ـنا / خاصتنا|صفة ملكية
+their|ـهم / خاصتهم|صفة ملكية
+this|هذا / هذه|اسم إشارة
+that|ذلك / تلك / الذي / أن|اسم إشارة / وصل
+these|هؤلاء|اسم إشارة|this
+those|أولئك|اسم إشارة|that
+in|في / داخل|حرف جر
+on|على / في|حرف جر
+at|عند / في|حرف جر
+to|إلى / لـ / أن|حرف جر / مصدر
+from|من|حرف جر
+with|مع / بـ|حرف جر
+by|بواسطة / بجانب|حرف جر
+for|لأجل / لمدة|حرف جر
+of|من / الـ (للإضافة)|حرف جر
+and|و|حرف عطف
+or|أو|حرف عطف
+but|لكن|حرف استدراك
+not|لا / ليس|أداة نفي
+is|يكون (هو)|فعل (be)|be
+are|يكونون|فعل (be)|be
+was|كان|فعل (be)|be
+were|كانوا|فعل (be)|be`);
+
+/* ---------- theme / modals / toast ---------- */
+function setThemeIcon(){$('themeIcon').textContent=document.documentElement.classList.contains('dark')?'light_mode':'dark_mode'}
+function toggleTheme(){const d=document.documentElement.classList.toggle('dark');store.set(K.theme,d?'dark':'light');setThemeIcon()}
+function show(id,o){$(id).hidden=!o;if(o){const f=$(id).querySelector('textarea,input[type=password]');f&&setTimeout(()=>{if(id==='apiModal')$('gemKey').value=S.gem;f.focus()},50)}}
+function openWelcome(f){if(!f&&store.get(K.wel)==='true')return;$('noWelcome').checked=store.get(K.wel)==='true';$('welcomeModal').hidden=false}
+function closeWelcome(){$('noWelcome').checked?store.set(K.wel,'true'):store.del(K.wel);$('welcomeModal').hidden=true}
+let tt;function toast(m){const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2600)}
+
+/* ---------- speech ---------- */
+const Speech={voices:[],uri:'',rate:1,playing:false,paused:false,idx:0,loop:null,timer:null,sid:0,
+init(){if(!('speechSynthesis' in window))return;const l=()=>{const v=speechSynthesis.getVoices()||[];if(v.length){this.voices=v;this.fill(S.lang)}};l();speechSynthesis.onvoiceschanged=l;setTimeout(l,600)},
+rank(v,p){const n=v.name.toLowerCase();if(!v.lang.toLowerCase().replace('_','-').startsWith(p))return -1;let s=10;if(n.includes('google'))s+=45;if(/natural|neural|online/.test(n))s+=35;if(/premium|enhanced/.test(n))s+=30;if(/aria|denise|henri|samantha|thomas|am[ée]lie/.test(n))s+=25;return s},
+ranked(l){const p=l==='fr'?'fr':'en';return this.voices.map(v=>[v,this.rank(v,p)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).map(x=>x[0])},
+fill(l){const s=$('voiceSel');if(!s)return;const r=this.ranked(l);s.replaceChildren();if(!r.length){s.add(new Option(`الصوت الافتراضي (${l.toUpperCase()})`,''));this.uri='';return}
+ r.forEach(v=>s.add(new Option(`${v.name.replace(/Microsoft |Google |Apple /g,'')} (${v.lang})`,v.voiceURI)));if(!r.some(v=>v.voiceURI===this.uri))this.uri=r[0].voiceURI;s.value=this.uri},
+best(l){const r=this.ranked(l);return r.find(v=>v.voiceURI===this.uri)||r[0]||null},
+utter(t,l,rate){const u=new SpeechSynthesisUtterance(t);u.lang=l==='fr'?'fr-FR':'en-US';u.rate=rate;const v=this.best(l);if(v)u.voice=v;return u},
+setRate(r){this.rate=r;if(this.playing&&!this.paused)this.playFrom(this.idx)},
+wave(a){$('wave').classList.toggle('on',a)},
+speak(text,lang,rate=1,loop=null){if(!('speechSynthesis' in window)||!text)return;this.stop(false);this.loop=loop;const sid=this.sid;
+ const run=()=>{if(sid!==this.sid)return;speechSynthesis.cancel();const u=this.utter(text,lang,rate);u.onstart=()=>this.wave(true);
+  u.onend=()=>{if(sid!==this.sid)return;this.wave(false);if(loop)this.timer=setTimeout(run,650)};u.onerror=()=>{if(sid===this.sid)this.wave(false)};speechSynthesis.speak(u)};run()},
+playFrom(i=0){if(!('speechSynthesis' in window)||!S.recs.length)return;this.stop(false);this.playing=true;this.paused=false;this.idx=Math.max(0,Math.min(i,S.recs.length-1));this.ui();const sid=this.sid;
+ const next=()=>{if(sid!==this.sid||!this.playing||this.paused)return;if(this.idx>=S.recs.length){this.stop();return}
+  const r=S.recs[this.idx];renderPage(r.page);hl(r.tokens);r.tokens[0]?.scrollIntoView({behavior:'smooth',block:'center'});
+  speechSynthesis.cancel();const u=this.utter(r.text,S.lang,this.rate);u.onstart=()=>this.wave(true);
+  const adv=()=>{if(sid!==this.sid||!this.playing||this.paused)return;this.idx++;next()};u.onend=adv;u.onerror=adv;speechSynthesis.speak(u)};next()},
+pause(){if(!this.playing)return;this.paused=true;speechSynthesis.cancel();this.wave(false);this.ui()},
+resume(){if(this.playing&&this.paused)this.playFrom(this.idx)},
+stop(ui=true){this.sid++;clearTimeout(this.timer);this.loop=null;this.playing=false;this.paused=false;if('speechSynthesis' in window)speechSynthesis.cancel();this.wave(false);if(ui){this.ui();repeatUI()}},
+ui(){const on=this.playing&&!this.paused;$('playIcon').textContent=on?'pause':'play_arrow';$('playLbl').textContent=on?'إيقاف مؤقت':this.playing?'متابعة الاستماع':'استماع للمستند';$('stopBtn').hidden=!this.playing}};
+function toggleDocAudio(){Speech.playing?(Speech.paused?Speech.resume():Speech.pause()):Speech.playFrom(Math.max(0,S.selIdx))}
+
+/* ---------- language ---------- */
+function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,3000).toLowerCase();
+ const fr=(s.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes)\b/g)||[]).length;
+ const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
+function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
+
+/* ---------- ingestion ---------- */
+const clean=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\u00A0/g,' ').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/\s+/g,' ').trim();
+const paras=t=>t.split(/\r?\n\s*\r?\n/).map(p=>clean(p.replace(/\r?\n/g,' '))).filter(Boolean).map(p=>({type:'p',text:p}));
+function progress(v,t='',p=0){$('prog').hidden=!v;if(!v)return;$('pgText').textContent=t;$('pgPct').textContent=Math.round(p)+'%';$('pgBar').style.width=Math.round(p)+'%'}
+const need=x=>{if(!x)throw new Error('lib')};
+async function ingest(f){Speech.stop();const n=f.name.toLowerCase();
+ try{if(n.endsWith('.pdf')||f.type==='application/pdf')await readPDF(f);else if(n.endsWith('.docx'))await readDOCX(f);else if(f.type.startsWith('image/')||/\.(png|jpe?g|webp|bmp)$/.test(n))await readImage(f);else openDoc(f.name,[{pageNumber:1,blocks:paras(await f.text())}])}
+ catch(e){console.error(e);progress(false);toast(e.message==='lib'?'تعذر تحميل مكتبة القراءة، تحقق من الاتصال.':'تعذر استخراج محتوى الملف.')}}
+function pdfBlocks(items){
+ const sz=items.map(i=>i.fs).sort((a,b)=>a-b),med=sz[sz.length>>1]||12;items.sort((a,b)=>b.y-a.y||a.x-b.x);
+ const lines=[];let cur=[items[0]];for(let i=1;i<items.length;i++){const it=items[i];if(Math.abs(it.y-cur[0].y)<=Math.max(4,cur[0].fs*.4))cur.push(it);else{lines.push(cur);cur=[it]}}lines.push(cur);
+ const minX=items.reduce((m,i)=>Math.min(m,i.x),Infinity);
+ const L=lines.map(l=>{l.sort((a,b)=>a.x-b.x);let t='';l.forEach((it,j)=>{if(j){const p=l[j-1];if(it.x-(p.x+p.w)>it.fs*.2&&!t.endsWith(' ')&&!it.s.startsWith(' '))t+=' '}t+=it.s});
+  return{t:clean(t),y:l[0].y,ind:Math.max(0,Math.round(l[0].x-minX)),fs:l.reduce((a,i)=>a+i.fs,0)/l.length}}).filter(l=>l.t);
+ const blocks=[];let a=null;
+ L.forEach((ln,i)=>{const pv=L[i-1],gap=pv?pv.y-ln.y:0,head=ln.fs>=med*1.25&&ln.t.length<140,li=/^([•\-–—*]|\d+[.)])\s+/.test(ln.t);
+  if(!pv||gap>ln.fs*1.45||head||li||a.type[0]==='h'){a&&blocks.push(a);a={type:ln.fs>=med*1.5&&ln.t.length<120?'h1':head?'h2':li?'li':'p',text:ln.t,indent:ln.ind>18?Math.min(ln.ind,48):0}}
+  else if(/[A-Za-zÀ-ÿ]-$/.test(a.text)&&/^[a-zà-ÿ]/.test(ln.t))a.text=a.text.slice(0,-1)+ln.t;else a.text+=' '+ln.t});
+ a&&blocks.push(a);return blocks}
+async function readPDF(f){need(window.pdfjsLib);pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ progress(true,'جاري قراءة صفحات PDF...',8);const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,pages=[];
+ for(let n=1;n<=pdf.numPages;n++){if(n%3===1||n===pdf.numPages){progress(true,`استخراج الصفحة ${n} من ${pdf.numPages}...`,10+n/pdf.numPages*85);await new Promise(r=>setTimeout(r))}
+  const pg=await pdf.getPage(n),ct=await pg.getTextContent();
+  const items=ct.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0,fs:Math.round(Math.hypot(i.transform[0],i.transform[1])*10)/10}));
+  pages.push({pageNumber:n,blocks:items.length?pdfBlocks(items):[]});pg.cleanup()}
+ pdf.destroy();openDoc(f.name,pages)}
+async function readDOCX(f){need(window.mammoth);progress(true,'جاري تحليل مستند Word...',45);
+ const r=await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()}),d=new DOMParser().parseFromString(r.value,'text/html'),blocks=[];
+ d.body.childNodes.forEach(n=>{if(n.nodeType!==1)return;const tg=n.tagName.toLowerCase(),t=clean(n.textContent);if(!t)return;
+  if(tg==='h1')blocks.push({type:'h1',text:t});else if(/^h[2-6]$/.test(tg))blocks.push({type:'h2',text:t});
+  else if(tg==='ul'||tg==='ol')n.querySelectorAll('li').forEach(li=>{const x=clean(li.textContent);x&&blocks.push({type:'li',text:x})});else blocks.push({type:'p',text:t})});
+ openDoc(f.name,[{pageNumber:1,blocks}])}
+async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
+ const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
+ try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:paras(text)}])}finally{await w.terminate()}}
+function readPasted(){const t=$('pasteInput').value.trim();if(!t)return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي',[{pageNumber:1,blocks:paras(t)}])}
+
+/* ---------- document model & lazy rendering ---------- */
+function splitSentences(text){
+ const N='\u0000',p=text.replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|Mme|Mlle|etc|vs|fig|vol|M)\./g,'$1'+N).replace(/\b([ei])\.([ge])\./g,'$1'+N+'$2'+N).replace(/(\d)\.(\d)/g,'$1'+N+'$2');
+ const out=[],re=/[.!?…]+["'»”)\]]*\s*/g;let last=0,m;
+ while((m=re.exec(p))){const end=m.index+m[0].length;if(!/\s$/.test(m[0])&&end<p.length)continue;out.push(p.slice(last,end));last=end}
+ if(last<p.length)out.push(p.slice(last));return out.map(s=>s.split(N).join('.'))}
+function openDoc(title,pages){progress(false);
+ if(!pages.some(p=>p.blocks.length)){toast('لا يوجد نص قابل للقراءة (قد يكون الملف ممسوحاً ضوئياً — جرّبه كصور).');return}
+ S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);
+ pages.forEach((pg,pi)=>pg.blocks.forEach(b=>{b.sents=splitSentences(b.text).map(raw=>{const text=raw.trim();if(!text)return null;S.recs.push({text,tokens:[],page:pi});return{raw,id:S.recs.length-1}}).filter(Boolean)}));
+ $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('docTitleInput').value=title;$('jump').max=pages.length;$('jump').value=1;$('pgCount').textContent=`/ ${pages.length}`;
+ closePanel();scrollTo(0,0);buildSheets()}
+function buildSheets(){const c=$('pages');S.io?.disconnect();c.replaceChildren();
+ S.io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){renderPage(+e.target.dataset.p);S.io.unobserve(e.target)}}),{rootMargin:'1500px 0px'}):null;
+ const fr=document.createDocumentFragment();
+ S.pages.forEach((pg,i)=>{const a=document.createElement('article');a.className='sheet pending';a.id='doc-page-'+pg.pageNumber;a.dataset.p=i;
+  a.innerHTML=`<div class="body"></div><div class="sf"><b>Readdy</b><span>${pg.pageNumber} / ${S.pages.length}</span></div>`;fr.append(a)});
+ c.append(fr);[...c.children].forEach(a=>S.io?S.io.observe(a):renderPage(+a.dataset.p))}
+const WORD=/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
+function renderPage(pi){const a=$('pages').children[pi];if(!a||a.dataset.done)return;a.dataset.done=1;a.classList.remove('pending');
+ const saved=new Set(S.saved.map(w=>w.word.toLowerCase())),body=a.firstChild,tag={h1:'h1',h2:'h2'};
+ S.pages[pi].blocks.forEach(b=>{const el=document.createElement(tag[b.type]||(b.type==='li'?'div':'p'));if(b.type==='li')el.className='li';if(b.indent)el.style.paddingLeft=b.indent+'px';
+  b.sents.forEach(({raw,id})=>{const rec=S.recs[id];rec.tokens=[];let last=0;for(const m of raw.matchAll(WORD)){const w=m[0];if(m.index>last)el.append(raw.slice(last,m.index));
+   const s=document.createElement('span');s.className='wt'+(saved.has(w.toLowerCase())?' bm':'');s.textContent=w;s.dataset.s=id;s.dataset.w=w.toLowerCase();rec.tokens.push(s);el.append(s);last=m.index+w.length}
+   if(last<raw.length)el.append(raw.slice(last))});body.append(el)})}
+$('pages').addEventListener('click',e=>{const t=e.target.closest('.wt');if(!t)return;const id=+t.dataset.s;onWord(t,t.textContent,S.recs[id].text,S.recs[id].tokens,id)});
+function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||1));$('jump').value=n;$('doc-page-'+n)?.scrollIntoView({behavior:'smooth',block:'start'})}
+function setFont(m){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif')}
+function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px')}
+function hl(t){S.toks.forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
+function goHome(){Speech.stop();S.io?.disconnect();S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();scrollTo(0,0)}
+
+/* ---------- translation engine ---------- */
+async function jfetch(url,ms=3500,opt={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}}
+async function translate(q,sl,tl='ar',max=500){const e=encodeURIComponent(q.slice(0,max));
+ const tries=[async()=>{const d=await jfetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&dt=bd&q=${e}`);const p=(d[0]||[]).map(c=>c[0]).join('').trim();if(!p)throw 0;const alt=[];
+   (d[1]||[]).forEach(g=>(g[1]||[]).slice(0,3).forEach(a=>{if(a&&a!==p&&!alt.includes(a))alt.push(a)}));return{primary:p,alternatives:alt.slice(0,4),provider:'Google'}},
+  async()=>{const d=await jfetch(`https://lingva.ml/api/v1/${sl}/${tl}/${e}`);if(!d.translation)throw 0;return{primary:d.translation.trim(),alternatives:[],provider:'Lingva'}},
+  async()=>{const d=await jfetch(`https://api.mymemory.translated.net/get?q=${e}&langpair=${sl}|${tl}`,4000),t=d?.responseData?.translatedText?.trim();if(!t||t.includes('MYMEMORY WARNING'))throw 0;return{primary:t,alternatives:[],provider:'MyMemory'}}];
+ for(const f of tries){try{return await f()}catch{}}throw new Error('fail')}
+const trText=(t,l)=>t&&t.trim()?translate(t,l).then(r=>r.primary).catch(()=>''):Promise.resolve('');
+async function lexMeta(w,lang){const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:''};
+ const pm={noun:'اسم',verb:'فعل',adjective:'صفة',adverb:'ظرف / حال',pronoun:'ضمير',preposition:'حرف جر',conjunction:'أداة ربط',interjection:'تعجب',nom:'اسم',verbe:'فعل',adjectif:'صفة',adverbe:'ظرف','préposition':'حرف جر',pronom:'ضمير'};
+ try{if(lang==='en'){const e=(await jfetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w.toLowerCase())}`,3000))[0],m=e.meanings?.[0],d=m?.definitions?.[0],pr=(m?.partOfSpeech||'').toLowerCase();
+   Object.assign(o,{ipa:e.phonetic||(e.phonetics||[]).find(p=>p.text)?.text||'',pos_ar:pm[pr]||pr,lemma:e.word||o.lemma,def:d?.definition||'',ex:d?.example||''})}
+  else{const d=(await jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(w.toLowerCase())}`,3000)).fr?.[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase(),st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,180);
+   Object.assign(o,{pos_ar:pm[pr]||pr,def:st(i?.definition),ex:st(i?.examples?.[0])})}}catch{}return o}
+function localPhrase(sent,w){const ws=sent.split(/\s+/),t=w.toLowerCase(),i=ws.findIndex(x=>x.toLowerCase().replace(/[^\p{L}\p{N}'’-]/gu,'')===t);return i<0?w:ws.slice(Math.max(0,i-1),i+3).join(' ')}
+async function hybrid(word,sent,lang){const w=word.replace(/^['’-]+|['’-]+$/g,''),ph=localPhrase(sent,w);
+ const[wt,pt,st,m]=await Promise.all([translate(w,lang,'ar',100),ph!==w?trText(ph,lang):'',trText(sent,lang),lexMeta(w,lang)]);
+ const[exA,defA]=await Promise.all([m.ex?trText(m.ex,lang):'',m.def?trText(m.def,lang):'']),parts=[];
+ if(pt&&ph!==w)parts.push(`في العبارة المجاورة («${ph}»): تعني «${pt}».`);if(defA)parts.push(defA);if(wt.alternatives.length)parts.push(`معانٍ أخرى: ${wt.alternatives.join('، ')}.`);
+ if(!parts.length)parts.push(`تُترجم «${w}» في هذا السياق إلى «${wt.primary}».`);
+ return{source_label:wt.provider,translation_ar:wt.primary||'—',explanation_ar:parts.join(' '),ipa:m.ipa,pos_ar:m.pos_ar||(lang==='fr'?'مفردة فرنسية':'مفردة إنجليزية'),lemma:m.lemma,example_original:m.ex,example_ar:exA,sentence_ar:st}}
+async function gemini(word,sent,lang,key){const sl=lang==='fr'?'French':'English',str={type:'STRING'},keys=['translation_ar','explanation_ar','ipa','pos_ar','lemma','example_original','example_ar','sentence_ar'];
+ const d=await jfetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',12000,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
+  body:JSON.stringify({contents:[{parts:[{text:`Word: "${word}" (${sl})\nSentence: "${sent}"`}]}],systemInstruction:{parts:[{text:`Bilingual contextual dictionary engine for Arabic speakers reading ${sl}. Return JSON.`}]},
+   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,str])),required:keys}}})});
+ return JSON.parse(d.candidates[0].content.parts[0].text)}
+
+async function onWord(el,word,sent,toks,sIdx){
+ S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;if(Speech.loop)Speech.stop();openPanel();
+ if(innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
+ const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
+ if(hit){const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',pos_ar:hit.pos,lemma:hit.lemma,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  renderPanel(rec);trText(sent,lang).then(t=>{if(req===S.req&&t){rec.sentence_ar=t;$('pSA').textContent=t}});return}
+ const key=`${lang}::${low}::${sent.length}::${sent.slice(0,60)}`;
+ if(S.cache.has(key)){renderPanel(S.cache.get(key));return}
+ showSkel(true);
+ try{let a;if(S.gem.trim().length>10){try{a=await gemini(word,sent,lang,S.gem.trim());a.source_label='Gemini AI'}catch{a=await hybrid(word,sent,lang)}}else a=await hybrid(word,sent,lang);
+  if(req!==S.req)return;const rec={word,lang,sentence_original:sent,...a};S.cache.set(key,rec);try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}renderPanel(rec)}
+ catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
+function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
+function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
+function closePanel(){$('panel').hidden=true;document.body.classList.remove('panel-open');S.activeEl?.classList.remove('act');S.activeEl=null;hl([]);S.selIdx=-1}
+function renderPanel(d){S.sel=d;showSkel(false);const c=$('pContent');c.style.animation='none';c.offsetWidth;c.style.animation='';
+ $('engineTag').textContent=d.source_label||'Readdy';$('pTitle').textContent=d.word;$('pLang').textContent=d.lang.toUpperCase();$('pIpa').textContent=d.ipa||'';$('pIpa').hidden=$('pDot').hidden=!d.ipa;
+ $('pPos').textContent=d.pos_ar||'';$('pTr').textContent=d.translation_ar;$('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';$('pExp').textContent=d.explanation_ar;
+ $('exBox').hidden=!d.example_original;$('pExO').textContent=d.example_original||'';$('pExA').textContent=d.example_ar||'';$('pSO').textContent=d.sentence_original;$('pSA').textContent=d.sentence_ar||'';
+ $('panel').scrollTop=0;updBm();repeatUI()}
+function copyTr(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.word} — ${S.sel.translation_ar}`).catch(()=>{});toast('تم نسخ الترجمة')}
+function sayWord(r){S.sel&&(Speech.speak(S.sel.word,S.sel.lang,r,Speech.loop==='word'?'word':null),repeatUI())}
+function loopWord(){if(!S.sel)return;Speech.loop==='word'?Speech.stop():(Speech.speak(S.sel.word,S.sel.lang,.85,'word'),repeatUI())}
+function sayEx(r){S.sel?.example_original&&(Speech.speak(S.sel.example_original,S.sel.lang,r),repeatUI())}
+function saySent(r){S.sel&&(Speech.speak(S.sel.sentence_original,S.sel.lang,r,Speech.loop==='sentence'?'sentence':null),repeatUI())}
+function loopSent(){if(!S.sel)return;Speech.loop==='sentence'?Speech.stop():(Speech.speak(S.sel.sentence_original,S.sel.lang,.9,'sentence'),repeatUI())}
+function repeatUI(){$('wRepeat').classList.toggle('on',Speech.loop==='word');$('sRepeat').classList.toggle('on',Speech.loop==='sentence')}
+
+/* ---------- vocabulary ---------- */
+const isBm=w=>S.saved.some(x=>x.word.toLowerCase()===w.toLowerCase());
+const saveVocab=()=>store.set(K.vocab,JSON.stringify(S.saved));
+function syncBm(){const s=new Set(S.saved.map(w=>w.word.toLowerCase()));document.querySelectorAll('.wt').forEach(x=>x.classList.toggle('bm',s.has(x.dataset.w)))}
+function updBm(){if(!S.sel)return;const b=isBm(S.sel.word);$('bmBtn').classList.toggle('on',b);$('bmIcon').textContent=b?'bookmark_added':'bookmark_add';$('bmIcon').classList.toggle('fill',b)}
+function updBadge(){const n=S.saved.length;$('vCount').textContent=n;$('badge').textContent=n;$('badge').hidden=!n}
+function afterVocab(){saveVocab();updBm();updBadge();renderVocab();syncBm()}
+function toggleBookmark(){if(!S.sel)return;const i=S.saved.findIndex(w=>w.word.toLowerCase()===S.sel.word.toLowerCase());
+ if(i>=0){S.saved.splice(i,1);toast('تمت إزالة الكلمة من المحفوظات')}else{const d=S.sel;S.saved.unshift({word:d.word,lang:d.lang,ipa:d.ipa||'',translation_ar:d.translation_ar,pos_ar:d.pos_ar||''});toast('تم حفظ الكلمة في المفردات')}afterVocab()}
+function drawer(o){$('drawer').classList.toggle('open',!!o);$('drawer').inert=!o;$('bdrop').classList.toggle('open',!!o);if(o)renderVocab()}
+function renderVocab(){const q=$('vsearch').value.trim().toLowerCase(),l=$('vlist'),it=S.saved.filter(x=>x.word.toLowerCase().includes(q)||x.translation_ar.includes(q));
+ if(!it.length){l.innerHTML=`<div class="none"><i class="ms" style="font-size:30px;opacity:.5">bookmark_border</i><p>${S.saved.length?'لا توجد نتائج مطابقة':'لا توجد كلمات محفوظة'}</p></div>`;return}
+ l.innerHTML=it.map(x=>`<div class="vitem"><div><div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div><p>${esc(x.translation_ar)}</p></div>
+  <div style="display:flex;flex:none"><button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-a="say" data-w="${esc(x.word)}" data-l="${esc(x.lang)}" aria-label="نطق"><i class="ms">volume_up</i></button>
+  <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-a="del" data-w="${esc(x.word)}" aria-label="حذف"><i class="ms">delete</i></button></div></div>`).join('')}
+$('vlist').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;
+ if(b.dataset.a==='say')Speech.speak(b.dataset.w,b.dataset.l);else{S.saved=S.saved.filter(w=>w.word.toLowerCase()!==b.dataset.w.toLowerCase());afterVocab()}});
+function exportCSV(){if(!S.saved.length){toast('لا توجد كلمات محفوظة للتصدير');return}
+ const q=v=>{v=String(v||'');if(/^[=+\-@\t\r]/.test(v))v="'"+v;return`"${v.replace(/"/g,'""')}"`};
+ const rows=S.saved.map(w=>[w.word,w.lang.toUpperCase(),w.ipa,w.pos_ar,w.translation_ar].map(q).join(','));
+ const u=URL.createObjectURL(new Blob(['\uFEFF'+['Word,Language,IPA,PartOfSpeech,ArabicTranslation',...rows].join('\n')],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');
+ a.href=u;a.download='readdy-vocabulary.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('تم تصدير ملف المفردات بنجاح')}
+function saveKey(){S.gem=$('gemKey').value.trim();S.gem?store.set(K.gem,S.gem):store.del(K.gem);show('apiModal',0);toast(S.gem?'تم تفعيل مفتاح Gemini AI':'تم اعتماد المحركات المدمجة')}
+function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
+
+/* ---------- init ---------- */
+setThemeIcon();Speech.init();updBadge();openWelcome(false);
+Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
+$('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
+$('docTitleInput').addEventListener('input',e=>S.title=e.target.value);
+let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
+addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
+addEventListener('dragover',e=>e.preventDefault());
+addEventListener('drop',e=>{e.preventDefault();dc=0;document.body.classList.remove('drag');const f=e.dataTransfer?.files?.[0];if(f)ingest(f)});
+addEventListener('keydown',e=>{if(e.key!=='Escape')return;let c=false;['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
+ if($('drawer').classList.contains('open')){drawer(0);c=true}if(!c&&!$('panel').hidden)closePanel()});
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
+</script>
 </body>
 </html>
