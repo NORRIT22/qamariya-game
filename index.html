@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Readdy — منصة القراءة والترجمة السياقية</title>
+<title>Readdy — منصة القراءة والتحليل النحوي السياقي</title>
 <script>try{var t=localStorage.getItem('readdy_theme_mode_v1')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.classList.toggle('dark',t==='dark')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +46,7 @@ html:not(.icons) .ms{visibility:hidden}
 .hero{position:relative;width:100%;max-width:640px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,6vw,48px);text-align:center;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:-40%;background:radial-gradient(closest-side at 30% 30%,rgba(26,115,232,.13),transparent 60%),radial-gradient(closest-side at 70% 70%,rgba(138,180,248,.15),transparent 60%);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
 .hero>*{position:relative;animation:rise .6s both}.hero>:nth-child(2){animation-delay:.08s}.hero>:nth-child(3){animation-delay:.16s}.hero>:nth-child(4){animation-delay:.24s}.hero>:nth-child(5){animation-delay:.32s}
-.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:430px;margin:0 auto 24px}
+.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:450px;margin:0 auto 24px}
 .hero .big{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:14px}.hero .big svg{width:56px;height:56px}.hero .big span{font:700 clamp(28px,8vw,34px)/1 Outfit,sans-serif}
 .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;direction:ltr}
 .chips span{padding:3px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);font:500 13px Literata,serif;color:var(--ac);animation:float 4s ease-in-out infinite;animation-delay:var(--d)}
@@ -81,8 +81,8 @@ body.sent-mode .sent-span{cursor:pointer;padding:1px 3px}
 /* Vocalized Arabic typography */
 .ar-vow{font-family:'Amiri','IBM Plex Sans Arabic',serif;letter-spacing:0;line-height:1.85!important}
 
-#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:65dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
-body.panel-open .canvas{padding-bottom:66dvh}
+#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:62dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
+body.panel-open .canvas{padding-bottom:64dvh}
 @media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
 .ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
 .pc{padding:16px;display:grid;gap:12px;animation:rise .25s both}
@@ -101,15 +101,14 @@ body.panel-open .canvas{padding-bottom:66dvh}
 .conj-trigger:hover{background:var(--acs)}
 
 /* Nature & Fonction Grammaticale Card */
-.gram-card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;display:grid;gap:8px}
-.gram-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ac);border-bottom:1px dashed var(--bd);padding-bottom:6px}
-.gram-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.gram-cell{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:3px}
-.gram-lbl{font-size:10px;font-weight:600;color:var(--sub);display:flex;align-items:center;justify-content:space-between}
-.gram-lbl span:last-child{font-family:Inter,sans-serif;font-size:9.5px;opacity:.85;direction:ltr}
-.gram-val{font-size:13px;font-weight:700;color:var(--tx);line-height:1.45}
-.gram-sub{font-family:Inter,sans-serif;font-size:11px;color:var(--ac);font-weight:500;direction:ltr;text-align:right}
-.gram-note{font-size:12px;color:var(--sub);line-height:1.65;padding-top:2px}
+.gram-box{background:linear-gradient(135deg,var(--s2),var(--bg));border:1px solid var(--ac);border-radius:16px;padding:12px 14px;display:grid;gap:10px}
+.gram-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ac);border-bottom:1px solid var(--bd);padding-bottom:6px}
+.gram-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.gram-item{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:8px 11px}
+.gram-lbl{font-size:10px;font-weight:700;color:var(--sub);display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.gram-lbl span:last-child{font-family:Literata,serif;direction:ltr;color:var(--ac);font-size:11px}
+.gram-val-orig{direction:ltr;text-align:left;font:600 13px Literata,serif;color:var(--tx)}
+.gram-val-ar{font-size:14px;font-weight:700;color:var(--ok);margin-top:2px}
 
 /* Side Drawer (Vocabulary & Conjugation) */
 .drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,420px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
@@ -187,7 +186,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، وانقر على أي كلمة أو جملة كاملة للحصول على ترجمتها المشكولة بالعربية، الطبيعة والوظيفة النحوية (Nature & Fonction)، ونطقها الصوتي.</p></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، وانقر على أي كلمة أو جملة كاملة للحصول على ترجمتها المشكولة بالعربية وتحليل طبيعتها ووظيفتها النحوية (Nature &amp; Fonction) ونطقها الصوتي.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
@@ -220,7 +219,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div class="canvas"><div id="pages"></div></div>
     <aside id="panel" hidden aria-live="polite">
       <div class="ph"><b><i class="ms">translate</i><span id="panelHeadTitle">الترجمة والتحليل النحوي</span></b><span id="engineTag" class="tag"></span><button class="ibtn sm" onclick="closePanel()" aria-label="إغلاق"><i class="ms">close</i></button></div>
-      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:92px"></div><div class="sk" style="height:80px"></div><div class="sk" style="height:96px"></div></div>
+      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:80px"></div><div class="sk" style="height:96px"></div></div>
       <div id="pContent" class="pc" hidden>
         <!-- Word Header -->
         <div id="wordHeaderBox" class="wh">
@@ -233,6 +232,33 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
           <button class="btn" style="flex:1;justify-content:center" onclick="sayWord(.65)"><i class="ms" style="font-size:17px">slow_motion_video</i>بطيء</button>
           <button id="wRepeat" class="ibtn" style="border-radius:12px" onclick="loopWord()" aria-label="تكرار"><i class="ms" style="font-size:18px">repeat</i></button>
         </div>
+
+        <!-- Always-Visible Nature & Fonction Grammaticale Card -->
+        <div id="gramAnalysisBox" class="gram-box">
+          <div class="gram-head">
+            <span>التَّحْلِيلُ النَّحْوِيُّ (Nature &amp; Fonction)</span>
+            <span id="gramLangBadge" dir="ltr">FR / EN</span>
+          </div>
+          <div class="gram-grid">
+            <div class="gram-item">
+              <div class="gram-lbl">
+                <span>طَبِيعَةُ الكَلِمَةِ (الأَقْسَامُ النَّحْوِيَّةُ)</span>
+                <span id="natureLblOrig">Nature grammaticale</span>
+              </div>
+              <div id="pNatureOrig" class="gram-val-orig"></div>
+              <div id="pNatureAr" class="gram-val-ar ar-vow"></div>
+            </div>
+            <div class="gram-item">
+              <div class="gram-lbl">
+                <span>الوَظِيفَةُ النَّحْوِيَّةُ فِي الجُمْلَةِ</span>
+                <span id="fonctionLblOrig">Fonction grammaticale</span>
+              </div>
+              <div id="pFonctionOrig" class="gram-val-orig"></div>
+              <div id="pFonctionAr" class="gram-val-ar ar-vow"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Contextual Translation (Vocalized Arabic + Arabic Speech + Lemma) -->
         <div id="wordTrBox" class="card">
           <div class="lbl2">
@@ -252,28 +278,6 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
             </div>
           </div>
         </div>
-
-        <!-- Always Visible: La Nature et La Fonction des Mots -->
-        <div id="gramBox" class="gram-card">
-          <div class="gram-head">
-            <span style="display:flex;align-items:center;gap:5px"><i class="ms" style="font-size:16px">account_tree</i>التَّحْلِيلُ النَّحْوِيُّ (Nature &amp; Fonction)</span>
-            <span class="tag" style="font-size:9px">دَائِمٌ</span>
-          </div>
-          <div class="gram-grid">
-            <div class="gram-cell">
-              <div class="gram-lbl"><span>الطَّبِيعَةُ النَّحْوِيَّةُ</span><span id="pNatLbl">Nature</span></div>
-              <div id="pNatAr" class="gram-val ar-vow">—</div>
-              <div id="pNatOrig" class="gram-sub">—</div>
-            </div>
-            <div class="gram-cell">
-              <div class="gram-lbl"><span>الوَظِيفَةُ فِي الجُمْلَةِ</span><span id="pFuncLbl">Fonction</span></div>
-              <div id="pFuncAr" class="gram-val ar-vow">—</div>
-              <div id="pFuncOrig" class="gram-sub">—</div>
-            </div>
-          </div>
-          <div id="pGramNote" class="gram-note ar-vow"></div>
-        </div>
-
         <!-- Conjugation Drawer Trigger -->
         <div id="conjBtnWrap">
           <button class="btn conj-trigger" onclick="openConjugationDrawer()"><i class="ms">table_chart</i>تصريف الفعل في جميع الأزمنة (قائمة جانبية)</button>
@@ -354,9 +358,9 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">account_tree</i><div><b>الطبيعة والوظيفة النحوية دائماً (Nature &amp; Fonction)</b><small>تحديد دقيق لنوع الكلمة (Nature) ووظيفتها الإعرابية داخل الجملة (Fonction) لكل كلمة تنقر عليها.</small></div></div>
+    <div class="feat"><i class="ms">account_tree</i><div><b>التحليل النحوي الدائم (Nature &amp; Fonction)</b><small>تحديد طبيعة كل كلمة ووظيفتها الإعرابية داخل الجملة بالفرنسية والإنجليزية والعربية.</small></div></div>
     <div class="feat"><i class="ms">spellcheck</i><div><b>ترجمة عربية مشكولة وقابلة للنطق</b><small>تشكيل تلقائي للنصوص العربية مع إمكانية الاستماع للنطق العربي والأجنبي.</small></div></div>
-    <div class="feat"><i class="ms">style</i><div><b>بطاقات مراجعة (Flashcards) وتصريف الأفعال</b><small>راجع كلماتك المحفوظة بنظام البطاقات التفاعلية مع تصريف الأفعال في جميع الأزمنة.</small></div></div>
+    <div class="feat"><i class="ms">style</i><div><b>بطاقات مراجعة وتصريف الأفعال</b><small>راجع كلماتك المحفوظة بنظام البطاقات التفاعلية مع جدول تصريف الأفعال.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
   </div></div></div>
@@ -368,7 +372,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 
 <div id="apiModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>إعدادات محرك الترجمة</span><button class="ibtn sm" onclick="show('apiModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
-  <div class="mb"><b style="color:var(--tx)">يعمل التطبيق بالتحليل النحوي (Nature &amp; Fonction) + التشكيل العربي الآلي + 3 محركات ترجمة مجانية.</b><span>اختياري: لتفعيل التحليل النحوي العميق والترجمة السياقية عبر <b>Gemini AI</b> أدخل مفتاح API:</span><input id="gemKey" type="password" dir="ltr" placeholder="AIzaSy..." autocomplete="off"></div>
+  <div class="mb"><b style="color:var(--tx)">يعمل التطبيق بالتحليل النحوي (Nature &amp; Fonction) + التشكيل العربي + 3 محركات ترجمة مجانية.</b><span>اختياري: لتفعيل التحليل النحوي العميق عبر <b>Gemini AI</b> أدخل مفتاح API:</span><input id="gemKey" type="password" dir="ltr" placeholder="AIzaSy..." autocomplete="off"></div>
   <div class="mf" style="justify-content:space-between"><button class="btn" style="color:#d93025" onclick="clearCache()">مسح ذاكرة الترجمة</button><span style="display:flex;gap:8px"><button class="btn" onclick="show('apiModal',0)">إغلاق</button><button class="btn pri" onclick="saveKey()">حفظ</button></span></div></div></div>
 
 <div id="toast" class="toast" role="status"></div>
@@ -379,7 +383,15 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const K={vocab:'readdy_saved_vocabulary_prod_v6',cache:'readdy_ai_cache_prod_v8',gem:'readdy_user_gemini_api_key',wel:'readdy_hide_welcome_modal_saj_v1',theme:'readdy_theme_mode_v1'};
 const store={get(k,d=null){try{const v=localStorage.getItem(k);return v===null?d:v}catch{return d}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
 const S={title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,selectMode:'word',activeEl:null,activeSentEl:null,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),conjCache:new Map(),saved:[],gem:store.get(K.gem,''),io:null};
-try{const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v))}catch{}
+try{
+  const v=JSON.parse(store.get(K.vocab,'[]'));
+  if(Array.isArray(v))S.saved=v;
+  const cObj=JSON.parse(store.get(K.cache,'{}'));
+  if(cObj&&typeof cObj==='object')Object.entries(cObj).forEach(([k,val])=>S.cache.set(k,val));
+}catch(e){
+  store.del(K.vocab);
+  store.del(K.cache);
+}
 
 /* ---------- Arabic Diacritization (Tashkeel) Engine ---------- */
 const AR_DIAC_MAP={
@@ -400,13 +412,13 @@ const AR_DIAC_MAP={
   'مهم':'مُهِمٌّ','مختلف':'مُخْتَلِفٌ','ممكن':'مُمْكِنٌ','ضروري':'ضَرُورِيٌّ','خاص':'خَاصٌّ','عام':'عَامٌّ','أول':'أَوَّلُ','آخر':'آخِرُ',
   'جدا':'جِدًّا','دائما':'دَائِمًا','أحيانا':'أَحْيَانًا','أبدا':'أَبَدًا','هنا':'هُنَا','هناك':'هُنَاكَ','الآن':'الْآنَ','اليوم':'الْيَوْمَ'
 };
-const hasTashkeel=s=>/[ً-ٰٟ]/.test(s);
+const hasTashkeel=s=>/[\u064B-\u065F\u0670]/.test(s);
 function vocalizeArabic(text){
   if(!text)return'';
   if(hasTashkeel(text))return text;
   return text.split(/(\s+|[،؛؟!."«»()\-—:/])/).map(tok=>{
-    if(!/[ء-ي]/.test(tok))return tok;
-    const cleanTok=tok.replace(/[^ء-ي]/g,'');
+    if(!/[\u0621-\u064A]/.test(tok))return tok;
+    const cleanTok=tok.replace(/[^\u0621-\u064A]/g,'');
     if(AR_DIAC_MAP[cleanTok])return AR_DIAC_MAP[cleanTok];
     let w=tok,prefix='';
     if(w.startsWith('و')&&w.length>3){prefix+='وَ';w=w.slice(1)}
@@ -417,7 +429,7 @@ function vocalizeArabic(text){
     if(w.startsWith('ال')&&w.length>4){
       const stem=w.slice(2);
       const sun=/^[تثدذرزسشصضطظلن]/.test(stem);
-      const vStem=AR_DIAC_MAP[stem]?AR_DIAC_MAP[stem].replace(/[ًٌٍ]$/,'ُ'):morphVocalize(stem,true);
+      const vStem=AR_DIAC_MAP[stem]?AR_DIAC_MAP[stem].replace(/[\u064B\u064C\u064D]$/,'\u064F'):morphVocalize(stem,true);
       return prefix+(sun?'ال'+vStem[0]+'ّ'+vStem.slice(1):'الْ'+vStem);
     }
     return prefix+morphVocalize(w,false);
@@ -426,9 +438,9 @@ function vocalizeArabic(text){
 function morphVocalize(w,definite){
   if(w.length<=2)return w;
   if(/^مُ?سْتَ/.test(w)&&w.length>=6)return'مُسْتَ'+w.slice(3);
-  if(w.startsWith('تَ')||(/^ت[ء-ي]{2}ي[ء-ي]$/.test(w)))return'تَ'+w[1]+'ْ'+w[2]+'ِي'+w[4]+(definite?'ُ':'ٌ');
-  if(/^م[ء-ي]{2}و[ء-ي]$/.test(w))return'مَ'+w[1]+'ْ'+w[2]+'ُو'+w[4]+(definite?'ُ':'ٌ');
-  if(/^[ء-ي]ا[ء-ي]{2}$/.test(w))return w[0]+'َا'+w[2]+'ِ'+w[3]+(definite?'ُ':'ٌ');
+  if(w.startsWith('تَ')||(/^ت[\u0621-\u064A]{2}ي[\u0621-\u064A]$/.test(w)))return'تَ'+w[1]+'ْ'+w[2]+'ِي'+w[4]+(definite?'ُ':'ٌ');
+  if(/^م[\u0621-\u064A]{2}و[\u0621-\u064A]$/.test(w))return'مَ'+w[1]+'ْ'+w[2]+'ُو'+w[4]+(definite?'ُ':'ٌ');
+  if(/^[\u0621-\u064A]ا[\u0621-\u064A]{2}$/.test(w))return w[0]+'َا'+w[2]+'ِ'+w[3]+(definite?'ُ':'ٌ');
   if(w.endsWith('ة')&&w.length>=4)return w.slice(0,-1)+'َة'+(definite?'ُ':'ٌ');
   if(w.endsWith('ات')&&w.length>=5)return w.slice(0,-2)+'َات'+(definite?'ُ':'ٌ');
   if(w.endsWith('ون')&&w.length>=5)return w.slice(0,-2)+'ُونَ';
@@ -446,282 +458,205 @@ async function fetchVocalizedArabic(text){
   return vocalizeArabic(text);
 }
 
-/* ---------- built-in function-word lexicon with Nature & Fonction ---------- */
+/* ---------- Built-in Lexicon with Nature & Fonction ---------- */
 const LEX={fr:{},en:{}};
-const load=(l,t)=>t.trim().split('
-').forEach(r=>{
-  const[w,tr,pos,lem,natOrig,funcAr,funcOrig,note]=r.split('|');
-  LEX[l][w]={tr,pos,lemma:lem||w,natOrig:natOrig||'',funcAr:funcAr||'',funcOrig:funcOrig||'',note:note||''};
+const load=(l,t)=>t.trim().split('\n').forEach(r=>{
+  const[w,tr,pos,lem,natOrig,natAr,fnOrig,fnAr]=r.split('|');
+  LEX[l][w]={tr,pos,lemma:lem||w,nature_orig:natOrig||'',nature_ar:natAr||pos,fonction_orig:fnOrig||'',fonction_ar:fnAr||''};
 });
-load('fr',`mon|ـي / خَاصَّتِي (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ المُفْرَدُ المُذَكَّرُ لِلدَّلَالَةِ عَلَى المِلْكِيَّةِ.
-ma|ـي (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ المُفْرَدُ المُؤَنَّثُ لِلدَّلَالَةِ عَلَى المِلْكِيَّةِ.
-mes|ـي (جَمْع)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ الجَمْعُ لِلدَّلَالَةِ عَلَى المِلْكِيَّةِ.
-ton|ـكَ (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُذَكَّرَ المُخَاطَبَ.
-ta|ـكِ (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُؤَنَّثَ.
-tes|ـكَ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ لِلْمُخَاطَبِ.
-son|ـهُ / ـهَا (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُذَكَّرَ لِلْغَائِبِ.
-sa|ـهُ / ـهَا (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُؤَنَّثَ لِلْغَائِبِ.
-ses|ـهُ / ـهَا (جَمْع)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ لِلْغَائِبِ.
-notre|ـنَا (مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|notre|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ لِلْمُتَكَلِّمِينَ.
-nos|ـنَا (جَمْع)|صِفَةُ مِلْكِيَّةٍ|notre|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ لِلْمُتَكَلِّمِينَ.
-votre|ـكُمْ (مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|votre|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ لِلْمُخَاطَبِينَ.
-vos|ـكُمْ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|votre|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ لِلْمُخَاطَبِينَ.
-leur|ـهُمْ / لَهُمْ|صِفَةُ مِلْكِيَّةٍ / ضَمِيرٌ|leur|Déterminant / Pronom|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ غَيْرُ مُبَاشِرٍ|Déterminant / COI|يَعْمَلُ كَمُحَدِّدِ مِلْكِيَّةٍ قَبْلَ الِاسْمِ أَوْ كَضَمِيرٍ قَبْلَ الفِعْلِ.
-leurs|ـهُمْ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|leur|Déterminant possessif|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ لِلْغَائِبِينَ.
-je|أَنَا|ضَمِيرٌ شَخْصِيٌّ|je|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ مُتَّصِلٌ بِالفِعْلِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-tu|أَنْتَ / أَنْتِ|ضَمِيرٌ شَخْصِيٌّ|tu|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ لِلْمُخَاطَبِ المُفْرَدِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-il|هُوَ|ضَمِيرٌ شَخْصِيٌّ|il|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ لِلْغَائِبِ المُذَكَّرِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-elle|هِيَ|ضَمِيرٌ شَخْصِيٌّ|elle|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ لِلْغَائِبَةِ المُؤَنَّثَةِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-nous|نَحْنُ / إِيَّانَا|ضَمِيرٌ شَخْصِيٌّ|nous|Pronom personnel|فَاعِلٌ أَوْ مَفْعُولٌ بِهِ|Sujet / Complément (COD/COI)|يَقَعُ فَاعِلًا لِلْفِعْلِ أَوْ مَفْعُولًا بِهِ حَسَبَ مَوْقِعِهِ.
-vous|أَنْتُمْ / حَضْرَتُكَ|ضَمِيرٌ شَخْصِيٌّ|vous|Pronom personnel|فَاعِلٌ أَوْ مَفْعُولٌ بِهِ|Sujet / Complément (COD/COI)|يَقَعُ فَاعِلًا لِلْفِعْلِ أَوْ مَفْعُولًا بِهِ لِلْمُخَاطَبِ.
-ils|هُمْ|ضَمِيرٌ شَخْصِيٌّ|ils|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ لِلْجَمْعِ المُذَكَّرِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-elles|هُنَّ|ضَمِيرٌ شَخْصِيٌّ|elles|Pronom personnel|فَاعِلٌ (مُسْنَدٌ إِلَيْهِ)|Sujet du verbe|ضَمِيرُ رَفْعٍ لِلْجَمْعِ المُؤَنَّثِ يَقُومُ بِوَظِيفَةِ الفَاعِلِ.
-moi|أَنَا / إِيَّايَ|ضَمِيرٌ شَخْصِيٌّ مُنْفَصِلٌ|moi|Pronom personnel tonique|تَوْكِيدٌ لِلْفَاعِلِ أَوْ مَجْرُورٌ|Apostrophe / Complément|ضَمِيرُ تَوْكِيدٍ يَأْتِي بَعْدَ حُرُوفِ الجَرِّ أَوْ لِلتَّأْكِيدِ.
-toi|أَنْتَ / إِيَّاكَ|ضَمِيرٌ شَخْصِيٌّ مُنْفَصِلٌ|toi|Pronom personnel tonique|تَوْكِيدٌ أَوْ مَجْرُورٌ|Complément prépositionnel|ضَمِيرُ تَوْكِيدٍ لِلْمُخَاطَبِ المُفْرَدِ.
-lui|هُوَ / لَهُ / لَهَا|ضَمِيرٌ شَخْصِيٌّ|lui|Pronom personnel|مَفْعُولٌ بِهِ غَيْرُ مُبَاشِرٍ|COI / Pronom tonique|يَقَعُ مَفْعُولًا غَيْرَ مُبَاشِرٍ قَبْلَ الفِعْلِ أَوْ ضَمِيرَ تَوْكِيدٍ.
-eux|هُمْ / إِيَّاهُمْ|ضَمِيرٌ شَخْصِيٌّ مُنْفَصِلٌ|eux|Pronom personnel tonique|تَوْكِيدٌ أَوْ مَجْرُورٌ|Complément prépositionnel|ضَمِيرُ تَوْكِيدٍ لِلْجَمْعِ المُذَكَّرِ الغَائِبِ.
-le|الْـ (مُذَكَّر) / إِيَّاهُ|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|le|Article défini / Pronom|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ مُبَاشِرٌ|Déterminant / COD|أَدَاةُ تَعْرِيفٍ قَبْلَ الِاسْمِ، أَوْ ضَمِيرُ مَفْعُولٍ مُبَاشِرٍ قَبْلَ الفِعْلِ.
-la|الْـ (مُؤَنَّث) / إِيَّاهَا|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|la|Article défini / Pronom|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ مُبَاشِرٌ|Déterminant / COD|أَدَاةُ تَعْرِيفٍ قَبْلَ الِاسْمِ المُؤَنَّثِ، أَوْ ضَمِيرُ مَفْعُولٍ مُبَاشِرٍ.
-les|الْـ (جَمْع) / إِيَّاهُمْ|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|les|Article défini / Pronom|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ مُبَاشِرٌ|Déterminant / COD|أَدَاةُ تَعْرِيفٍ لِلْجَمْعِ، أَوْ ضَمِيرُ مَفْعُولٍ مُبَاشِرٍ قَبْلَ الفِعْلِ.
-l'|الْـ|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|le|Article défini élidé / Pronom|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ مُبَاشِرٌ|Déterminant / COD|صِيغَةٌ مُخْتَصَرَةٌ قَبْلَ حَرْفٍ مُتَحَرِّكٍ أَوْ صَامِتٍ.
-un|أَدَاةُ تَنْكِيرٍ (مُذَكَّر)|أَدَاةُ تَنْكِيرٍ|un|Article indéfini|مُحَدِّدٌ لِلِاسْمِ المُفْرَدِ المُذَكَّرِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ النَّكِرَةُ المُفْرَدُ المُذَكَّرُ.
-une|أَدَاةُ تَنْكِيرٍ (مُؤَنَّث)|أَدَاةُ تَنْكِيرٍ|un|Article indéfini|مُحَدِّدٌ لِلِاسْمِ المُفْرَدِ المُؤَنَّثِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ النَّكِرَةُ المُفْرَدُ المُؤَنَّثُ.
-des|أَدَاةُ تَنْكِيرٍ (جَمْع)|أَدَاةُ تَنْكِيرٍ|des|Article indéfini|مُحَدِّدٌ لِلِاسْمِ الجَمْعِ|Déterminant du nom|يُسْبَقُ بِهِ الِاسْمُ النَّكِرَةُ الجَمْعُ.
-du|مِنَ الْـ / بَعْضُ|أَدَاةُ تَجْزِئَةٍ / جَرٍّ|du|Article partitif / contracté|مُحَدِّدٌ لِلِاسْمِ غَيْرِ المَعْدُودِ|Déterminant du nom|يَدُلُّ عَلَى جُزْءٍ مِنْ كَمِّيَّةٍ أَوْ إِدْغَامِ (de + le).
-au|إِلَى الْـ / فِي الْـ|حَرْفُ جَرٍّ مُدْغَمٌ|au|Article défini contracté|أَدَاةُ رَبْطٍ لِلْمَفْعُولِ أَوِ الظَّرْفِ|Introducteur de complément|إِدْغَامٌ لِحَرْفِ الجَرِّ (à) مَعَ أَدَاةِ التَّعْرِيفِ (le).
-aux|إِلَى الْـ / فِي الْـ (جَمْع)|حَرْفُ جَرٍّ مُدْغَمٌ|aux|Article défini contracté|أَدَاةُ رَبْطٍ لِلْمَفْعُولِ الجَمْعِ|Introducteur de complément|إِدْغَامٌ لِحَرْفِ الجَرِّ (à) مَعَ أَدَاةِ التَّعْرِيفِ (les).
-de|مِنْ / عَنْ|حَرْفُ جَرٍّ|de|Préposition|رَبْطُ المُضَافِ أَوِ المَفْعُولِ|Introducteur de complément|يَرْبِطُ الِاسْمَ بِمَا قَبْلَهُ لِلدَّلَالَةِ عَلَى المِلْكِيَّةِ أَوِ المَصْدَرِ.
-à|إِلَى / فِي / عِنْدَ|حَرْفُ جَرٍّ|à|Préposition|رَبْطُ المَفْعُولِ غَيْرِ المُبَاشِرِ أَوِ الظَّرْفِ|Introducteur de COI / CC|يُدْخِلُ مَفْعُولًا غَيْرَ مُبَاشِرٍ أَوْ ظَرْفَ مَكَانٍ أَوْ زَمَانٍ.
-en|فِي / بِـ / مِنْهُ|حَرْفُ جَرٍّ / ضَمِيرٌ|en|Préposition / Pronom adverbial|ظَرْفٌ أَوْ مَفْعُولٌ بِهِ|Introducteur de CC / COI|حَرْفُ جَرٍّ قَبْلَ الِاسْمِ أَوْ ضَمِيرٌ يَنُوبُ عَنْ مَسْبُوقٍ بـ (de).
-ce|هَذَا / ذَلِكَ|اسْمُ / صِفَةُ إِشَارَةٍ|ce|Déterminant / Pronom démonstratif|مُحَدِّدٌ لِلِاسْمِ أَوْ فَاعِلٌ|Déterminant / Sujet|يُحَدِّدُ الِاسْمَ المُذَكَّرَ أَوْ يَقَعُ فَاعِلًا قَبْلَ الفِعْلِ (être).
-cet|هَذَا / ذَلِكَ|صِفَةُ إِشَارَةٍ|ce|Déterminant démonstratif|مُحَدِّدٌ لِلِاسْمِ المُذَكَّرِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُذَكَّرَ المَبْدُوءَ بِحَرْفٍ مُتَحَرِّكٍ.
-cette|هَذِهِ / تِلْكَ|صِفَةُ إِشَارَةٍ|ce|Déterminant démonstratif|مُحَدِّدٌ لِلِاسْمِ المُؤَنَّثِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ المُفْرَدَ المُؤَنَّثَ.
-ces|هَؤُلَاءِ / تِلْكَ|صِفَةُ إِشَارَةٍ|ce|Déterminant démonstratif|مُحَدِّدٌ لِلِاسْمِ الجَمْعِ|Déterminant du nom|يُحَدِّدُ الِاسْمَ الجَمْعَ بِنَوْعَيْهِ.
-et|وَ|حَرْفُ عَطْفٍ|et|Conjonction de coordination|رَبْطُ المُفْرَدَاتِ أَوِ الجُمَلِ|Mot de liaison (Coordination)|يَعْطِفُ كَلِمَةً عَلَى كَلِمَةٍ أَوْ جُمْلَةً عَلَى جُمْلَةٍ.
-ou|أَوْ|حَرْفُ عَطْفٍ|ou|Conjonction de coordination|رَبْطٌ لِلتَّخْيِيرِ|Mot de liaison (Coordination)|يَرْبِطُ بَيْنَ خِيَارَيْنِ فِي الجُمْلَةِ.
-où|أَيْنَ / حَيْثُ|ظَرْفُ مَكَانٍ / اسْمٌ مَوْصُولٌ|où|Pronom relatif / Adverbe|ظَرْفُ مَكَانٍ أَوْ زَمَانٍ|Complément circonstanciel de lieu/temps|يُشِيرُ إِلَى المَكَانِ أَوِ الزَّمَانِ فِي الجُمْلَةِ الفَرْعِيَّةِ.
-mais|لَكِنْ|حَرْفُ اسْتِدْرَاكٍ|mais|Conjonction de coordination|رَبْطٌ لِلِاسْتِدْرَاكِ وَالتَّعَارُضِ|Mot de liaison (Opposition)|يَرْبِطُ بَيْنَ فِكْرَتَيْنِ مُتَعَارِضَتَيْنِ.
-car|لِأَنَّ|أَدَاةُ تَعْلِيلٍ|car|Conjonction de coordination|رَبْطٌ لِلتَّعْلِيلِ وَالسَّبَبِيَّةِ|Mot de liaison (Cause)|يُقَدِّمُ سَبَبًا أَوْ تَفْسِيرًا لِلْجُمْلَةِ السَّابِقَةِ.
-donc|إِذَنْ / وَبِالتَّالِي|أَدَاةُ اسْتِنْتَاجٍ|donc|Conjonction de coordination|رَبْطٌ لِلِاسْتِنْتَاجِ وَالنَّتِيجَةِ|Mot de liaison (Conséquence)|يُقَدِّمُ نَتِيجَةً مَنْطِقِيَّةً لِمَا قَبْلَهُ.
-ni|وَلَا|أَدَاةُ نَفْيٍ|ni|Conjonction de coordination|رَبْطٌ لِلنَّفْيِ المُتَكَرِّرِ|Mot de liaison (Négation)|يَرْبِطُ بَيْنَ عُنْصُرَيْنِ مَنْفِيَّيْنِ.
-dans|فِي / دَاخِلَ|حَرْفُ جَرٍّ|dans|Préposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ الزَّمَانِ|Introducteur de CC de lieu/temps|يُدْخِلُ ظَرْفَ مَكَانٍ أَوْ زَمَانٍ.
-sur|عَلَى / فَوْقَ|حَرْفُ جَرٍّ|sur|Préposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ المَوْضُوعِ|Introducteur de CC de lieu|يُدْخِلُ ظَرْفَ مَكَانٍ يَدُلُّ عَلَى الِاسْتِعْلَاءِ.
-sous|تَحْتَ|حَرْفُ جَرٍّ|sous|Préposition|رَبْطُ ظَرْفِ المَكَانِ|Introducteur de CC de lieu|يُدْخِلُ ظَرْفَ مَكَانٍ يَدُلُّ عَلَى السُّفْلِيَّةِ.
-avec|مَعَ / بِوَاسِطَةِ|حَرْفُ جَرٍّ|avec|Préposition|رَبْطُ ظَرْفِ المُصَاحَبَةِ أَوِ الوَسِيلَةِ|Introducteur de CC d'accompagnement/moyen|يُدْخِلُ ظَرْفًا يَدُلُّ عَلَى المُصَاحَبَةِ أَوِ الأَدَاةِ.
-sans|بِدُونِ / بِلَا|حَرْفُ جَرٍّ|sans|Préposition|رَبْطُ ظَرْفِ النَّفْيِ|Introducteur de CC de manière|يَدُلُّ عَلَى انْتِفَاءِ الشَّيْءِ أَوْ غِيَابِهِ.
-pour|مِنْ أَجْلِ / لِـ|حَرْفُ جَرٍّ|pour|Préposition|رَبْطُ ظَرْفِ الغَايَةِ أَوِ الهَدَفِ|Introducteur de CC de but|يُدْخِلُ ظَرْفَ غَايَةٍ أَوْ هَدَفٍ.
-par|بِوَاسِطَةِ / عَبْرَ|حَرْفُ جَرٍّ|par|Préposition|رَبْطُ نَائِبِ الفَاعِلِ أَوِ الوَسِيلَةِ|Introducteur de complément d'agent / CC|يُقَدِّمُ الفَاعِلَ الحَقِيقِيَّ فِي المَبْنِيِّ لِلْمَجْهُولِ أَوِ الوَسِيلَةَ.
-après|بَعْدَ|حَرْفُ جَرٍّ / ظَرْفٌ|après|Préposition / Adverbe|رَبْطُ ظَرْفِ الزَّمَانِ|Introducteur de CC de temps|يَدُلُّ عَلَى التَّرْتِيبِ الزَّمَنِيِّ اللَّاحِقِ.
-avant|قَبْلَ|حَرْفُ جَرٍّ / ظَرْفٌ|avant|Préposition / Adverbe|رَبْطُ ظَرْفِ الزَّمَانِ|Introducteur de CC de temps|يَدُلُّ عَلَى التَّرْتِيبِ الزَّمَنِيِّ السَّابِقِ.
-vers|نَحْوَ / حَوَالَيْ|حَرْفُ جَرٍّ|vers|Préposition|رَبْطُ ظَرْفِ الِاتِّجَاهِ أَوِ الزَّمَانِ|Introducteur de CC de lieu/temps|يُشِيرُ إِلَى الِاتِّجَاهِ المَكَانِيِّ أَوِ التَّقْرِيبِ الزَّمَنِيِّ.
-chez|عِنْدَ / لَدَى|حَرْفُ جَرٍّ|chez|Préposition|رَبْطُ ظَرْفِ المَكَانِ|Introducteur de CC de lieu|يُشِيرُ إِلَى مَكَانِ إِقَامَةِ الشَّخْصِ أَوْ عِنْدَهُ.
-entre|بَيْنَ|حَرْفُ جَرٍّ|entre|Préposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ الزَّمَانِ|Introducteur de CC de lieu/temps|يَدُلُّ عَلَى التَّوَسُّطِ بَيْنَ شَيْئَيْنِ.
-qui|الَّذِي / الَّتِي / مَنْ|اسْمٌ مَوْصُولٌ|qui|Pronom relatif / interrogatif|فَاعِلُ الفِعْلِ فِي الصِّلَةِ|Sujet du verbe subordonné|يَقُومُ بِوَظِيفَةِ الفَاعِلِ لِلْفِعْلِ الَّذِي يَلِيهِ مُبَاشَرَةً.
-que|الَّذِي / أَنَّ / مَاذَا|اسْمٌ مَوْصُولٌ / أَدَاةُ رَبْطٍ|que|Pronom relatif / Conjonction|مَفْعُولٌ بِهِ مُبَاشِرٌ أَوْ أَدَاةُ رَبْطٍ|COD / Mot subordonnant|يَقَعُ مَفْعُولًا بِهِ مُبَاشِرًا فِي جُمْلَةِ الصِّلَةِ أَوْ يَرْبِطُ الجُمْلَةَ المَصْدَرِيَّةَ.
-dont|الَّذِي... مِنْهُ|اسْمٌ مَوْصُولٌ|dont|Pronom relatif|مُكَمِّلٌ لِلْفِعْلِ أَوِ الِاسْمِ|COI / Complément du nom|يَنُوبُ عَنْ مَفْعُولٍ مَسْبُوقٍ بِحَرْفِ الجَرِّ (de).
-ne|لَا / لَمْ|أَدَاةُ نَفْيٍ|ne|Adverbe de négation|ظَرْفُ نَفْيٍ مُرَافِقٌ لِلْفِعْلِ|Modificateur du verbe (Négation)|الجُزْءُ الأَوَّلُ مِنْ أَدَاةِ النَّفْيِ المُرَكَّبَةِ (ne ... pas).
-pas|لَيْسَ / لَا|أَدَاةُ نَفْيٍ|pas|Adverbe de négation|ظَرْفُ نَفْيٍ مُكَمِّلٌ|Modificateur du verbe (Négation)|الجُزْءُ الثَّانِي مِنْ أَدَاةِ النَّفْيِ المُرَكَّبَةِ بَعْدَ الفِعْلِ.
-plus|أَكْثَرُ / لَمْ يَعُدْ|ظَرْفُ كَمِّيَّةٍ / نَفْيٍ|plus|Adverbe d'intensité / négation|ظَرْفٌ يُعَدِّلُ الصِّفَةَ أَوِ الفِعْلَ|Modificateur d'adjectif/verbe|يُفِيدُ التَّفْضِيلَ وَالزِّيَادَةَ أَوِ النَّفْيَ مَعَ (ne).
-est|يَكُونُ / هُوَ|فِعْلٌ (être)|être|Verbe (Auxiliaire / d'état)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ كَيْنُونَةٍ يَرْبِطُ الفَاعِلَ بِالْخَبَرِ (Attribut du sujet).
-sont|يَكُونُونَ / هُمْ|فِعْلٌ (être)|être|Verbe (Auxiliaire / d'état)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ كَيْنُونَةٍ مُصَرَّفٌ مَعَ الجَمْعِ الغَائِبِ.
-suis|أَكُونُ|فِعْلٌ (être)|être|Verbe (Auxiliaire / d'état)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ كَيْنُونَةٍ مُصَرَّفٌ مَعَ المُتَكَلِّمِ المُفْرَدِ.
-était|كَانَ / كَانَتْ|فِعْلٌ (être)|être|Verbe (Auxiliaire / d'état)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ كَيْنُونَةٍ فِي المَاضِي النَّاقِصِ (Imparfait).
-été|كَانَ (اسْمُ مَفْعُولٍ)|فِعْلٌ (être)|être|Participe passé|جُزْءٌ مِنَ الفِعْلِ المُرَكَّبِ|Noyau verbal composé|اسْمُ المَفْعُولِ مِنَ الفِعْلِ (être).
-sera|سَيَكُونُ|فِعْلٌ (être)|être|Verbe (Auxiliaire / d'état)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ كَيْنُونَةٍ فِي المُسْتَقْبَلِ البَسِيطِ.
-a|لَدَيْهِ / يَمْلِكُ|فِعْلٌ (avoir)|avoir|Verbe transitif / Auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُتَعَدٍّ يَأْخُذُ مَفْعُولًا بِهِ مُبَاشِرًا أَوْ فِعْلٌ مُسَاعِدٌ.
-ont|لَدَيْهِمْ / يَمْلِكُونَ|فِعْلٌ (avoir)|avoir|Verbe transitif / Auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُصَرَّفٌ مَعَ الجَمْعِ الغَائِبِ فِي الحَاضِرِ.
-ai|لَدَيَّ / أَمْلِكُ|فِعْلٌ (avoir)|avoir|Verbe transitif / Auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُصَرَّفٌ مَعَ المُتَكَلِّمِ المُفْرَدِ فِي الحَاضِرِ.
-avait|كَانَ يَمْلِكُ|فِعْلٌ (avoir)|avoir|Verbe transitif / Auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُصَرَّفٌ فِي المَاضِي النَّاقِصِ.
-fait|يَفْعَلُ / مَصْنُوعٌ|فِعْلٌ (faire)|faire|Verbe transitif|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُتَعَدٍّ يَدُلُّ عَلَى الفِعْلِ وَالصُّنْعِ.
-font|يَفْعَلُونَ|فِعْلٌ (faire)|faire|Verbe transitif|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُصَرَّفٌ مَعَ الجَمْعِ الغَائِبِ.
-va|يَذْهَبُ|فِعْلٌ (aller)|aller|Verbe intransitif / Semi-auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلُ حَرَكَةٍ لَازِمٌ أَوْ فِعْلٌ مُسَاعِدٌ لِلْمُسْتَقْبَلِ القَرِيبِ.
-vont|يَذْهَبُونَ|فِعْلٌ (aller)|aller|Verbe intransitif / Semi-auxiliaire|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ مُصَرَّفٌ مَعَ الجَمْعِ الغَائِبِ.
-peut|يَسْتَطِيعُ|فِعْلٌ (pouvoir)|pouvoir|Verbe modal|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ يُعَبِّرُ عَنِ القُدْرَةِ أَوِ الِاحْتِمَالِ.
-doit|يَجِبُ عَلَيْهِ|فِعْلٌ (devoir)|devoir|Verbe modal|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ يُعَبِّرُ عَنِ الوُجُوبِ وَالِالْتِزَامِ.
-veut|يُرِيدُ|فِعْلٌ (vouloir)|vouloir|Verbe modal|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Noyau verbal / Prédicat|فِعْلٌ يُعَبِّرُ عَنِ الإِرَادَةِ وَالرَّغْبَةِ.`);
+load('fr',`mon|ـي / خَاصَّتِي (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif (masculin singulier)|مُحَدِّدُ مِلْكِيَّةٍ (مُذَكَّرٌ مُفْرَدٌ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ وَيُبَيِّنُ مِلْكِيَّتَهُ
+ma|ـي (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif (féminin singulier)|مُحَدِّدُ مِلْكِيَّةٍ (مُؤَنَّثٌ مُفْرَدٌ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ وَيُبَيِّنُ مِلْكِيَّتَهُ
+mes|ـي (جَمْع)|صِفَةُ مِلْكِيَّةٍ|mon|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel qui suit|يُحَدِّدُ الِاسْمَ الجَمْعَ الَّذِي يَلِيهِ
+ton|ـكَ (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif (2e pers. sg.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُخَاطَبِ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+ta|ـكِ (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif (féminin sg.)|مُحَدِّدُ مِلْكِيَّةٍ (مُؤَنَّثٌ مُفْرَدٌ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+tes|ـكَ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|ton|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ الجَمْعَ
+son|ـهُ / ـهَا (مُذَكَّر مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif (3e pers. sg.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْغَائِبِ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+sa|ـهُ / ـهَا (مُؤَنَّث مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif (féminin sg.)|مُحَدِّدُ مِلْكِيَّةٍ (مُؤَنَّثٌ مُفْرَدٌ)|Détermine le nom qui suit|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+ses|ـهُ / ـهَا (جَمْع)|صِفَةُ مِلْكِيَّةٍ|son|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ الجَمْعَ
+notre|ـنَا (مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|notre|Déterminant possessif (1re pers. pl.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُتَكَلِّمِينَ)|Détermine le nom singulier|يُحَدِّدُ الِاسْمَ المُفْرَدَ
+nos|ـنَا (جَمْع)|صِفَةُ مِلْكِيَّةٍ|notre|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ الجَمْعَ
+votre|ـكُمْ (مُفْرَد)|صِفَةُ مِلْكِيَّةٍ|votre|Déterminant possessif (2e pers. pl.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُخَاطَبِينَ)|Détermine le nom singulier|يُحَدِّدُ الِاسْمَ المُفْرَدَ
+vos|ـكُمْ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|votre|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ الجَمْعَ
+leur|ـهُمْ / لَهُمْ|صِفَةُ مِلْكِيَّةٍ / ضَمِيرٌ|leur|Déterminant possessif ou Pronom COI|مُحَدِّدُ مِلْكِيَّةٍ أَوْ ضَمِيرُ مَفْعُولٍ بِهِ|Détermine le nom ou COI du verbe|يُحَدِّدُ الِاسْمَ أَوْ يَقَعُ مَفْعُولًا بِهِ غَيْرَ مُبَاشِرٍ
+leurs|ـهُمْ (جَمْع)|صِفَةُ مِلْكِيَّةٍ|leur|Déterminant possessif (pluriel)|مُحَدِّدُ مِلْكِيَّةٍ (جَمْعٌ)|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ الجَمْعَ
+je|أَنَا|ضَمِيرُ فَاعِلٍ|je|Pronom personnel sujet (1re pers. sg.)|ضَمِيرٌ شَخْصِيٌّ لِلْمُتَكَلِّمِ المُفْرَدِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+tu|أَنْتَ / أَنْتِ|ضَمِيرُ فَاعِلٍ|tu|Pronom personnel sujet (2e pers. sg.)|ضَمِيرٌ شَخْصِيٌّ لِلْمُخَاطَبِ المُفْرَدِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+il|هُوَ|ضَمِيرُ فَاعِلٍ|il|Pronom personnel sujet (3e pers. masc. sg.)|ضَمِيرٌ شَخْصِيٌّ لِلْغَائِبِ المُذَكَّرِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+elle|هِيَ|ضَمِيرُ فَاعِلٍ|elle|Pronom personnel sujet (3e pers. fém. sg.)|ضَمِيرٌ شَخْصِيٌّ لِلْغَائِبَةِ المُؤَنَّثَةِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+nous|نَحْنُ / إِيَّانَا|ضَمِيرٌ|nous|Pronom personnel (1re pers. pl.)|ضَمِيرٌ شَخْصِيٌّ لِلْمُتَكَلِّمِينَ|Sujet ou Complément du verbe|فَاعِلُ الفِعْلِ أَوْ مَفْعُولٌ بِهِ
+vous|أَنْتُمْ / حَضْرَتُكَ|ضَمِيرٌ|vous|Pronom personnel (2e pers. pl.)|ضَمِيرٌ شَخْصِيٌّ لِلْمُخَاطَبِينَ|Sujet ou Complément du verbe|فَاعِلُ الفِعْلِ أَوْ مَفْعُولٌ بِهِ
+ils|هُمْ|ضَمِيرُ فَاعِلٍ|ils|Pronom personnel sujet (3e pers. masc. pl.)|ضَمِيرٌ شَخْصِيٌّ لِلْغَائِبِينَ المُذَكَّرِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+elles|هُنَّ|ضَمِيرُ فَاعِلٍ|elles|Pronom personnel sujet (3e pers. fém. pl.)|ضَمِيرٌ شَخْصِيٌّ لِلْغَائِبَاتِ المُؤَنَّثِ|Sujet du verbe|فَاعِلُ الفِعْلِ (Sujet)
+le|الْـ (مُذَكَّر) / إِيَّاهُ|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|le|Article défini (masc. sg.) ou Pronom COD|أَدَاةُ تَعْرِيفٍ أَوْ ضَمِيرُ نَصْبٍ|Détermine le nom ou COD du verbe|يُعَرِّفُ الِاسْمَ أَوْ يَقَعُ مَفْعُولًا بِهِ مُبَاشِرًا
+la|الْـ (مُؤَنَّث) / إِيَّاهَا|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|la|Article défini (fém. sg.) ou Pronom COD|أَدَاةُ تَعْرِيفٍ أَوْ ضَمِيرُ نَصْبٍ|Détermine le nom ou COD du verbe|يُعَرِّفُ الِاسْمَ أَوْ يَقَعُ مَفْعُولًا بِهِ مُبَاشِرًا
+les|الْـ (جَمْع) / إِيَّاهُمْ|أَدَاةُ تَعْرِيفٍ / ضَمِيرٌ|les|Article défini (pluriel) ou Pronom COD|أَدَاةُ تَعْرِيفٍ لِلْجَمْعِ أَوْ ضَمِيرٌ|Détermine le nom pluriel ou COD|يُعَرِّفُ الِاسْمَ الجَمْعَ أَوْ يَقَعُ مَفْعُولًا بِهِ
+un|أَدَاةُ تَنْكِيرٍ (مُذَكَّر) / وَاحِدٌ|أَدَاةُ تَنْكِيرٍ|un|Article indéfini (masculin singulier)|أَدَاةُ تَنْكِيرٍ (مُذَكَّرٌ مُفْرَدٌ)|Détermine le nom commun|يُحَدِّدُ الِاسْمَ النَّكِرَةَ المُذَكَّرَ
+une|أَدَاةُ تَنْكِيرٍ (مُؤَنَّث) / وَاحِدَةٌ|أَدَاةُ تَنْكِيرٍ|un|Article indéfini (féminin singulier)|أَدَاةُ تَنْكِيرٍ (مُؤَنَّثٌ مُفْرَدٌ)|Détermine le nom commun|يُحَدِّدُ الِاسْمَ النَّكِرَةَ المُؤَنَّثَ
+des|أَدَاةُ تَنْكِيرٍ (جَمْع) / مِنَ الْـ|أَدَاةُ تَنْكِيرٍ|des|Article indéfini (pluriel) ou contracté|أَدَاةُ تَنْكِيرٍ لِلْجَمْعِ|Détermine le nom pluriel|يُحَدِّدُ الِاسْمَ النَّكِرَةَ الجَمْعَ
+du|مِنَ الْـ / بَعْضُ|أَدَاةُ تَجْزِئَةٍ|du|Article partitif ou article contracté|أَدَاةُ تَجْزِئَةٍ أَوْ تَعْرِيفٍ مُدْغَمَةٍ|Détermine un nom indénombrable|يُحَدِّدُ الِاسْمَ غَيْرَ المَعْدُودِ
+au|إِلَى الْـ / فِي الْـ|حَرْفُ جَرٍّ مُدْغَمٌ|au|Article défini contracté (à + le)|حَرْفُ جَرٍّ وَتَعْرِيفٍ مُدْغَمٌ|Introduit un complément (COI/CC)|يَرْبِطُ الفِعْلَ بِالمَفْعُولِ أَوِ الظَّرْفِ
+aux|إِلَى الْـ / فِي الْـ (جَمْع)|حَرْفُ جَرٍّ مُدْغَمٌ|aux|Article défini contracté (à + les)|حَرْفُ جَرٍّ وَتَعْرِيفٍ لِلْجَمْعِ|Introduit un complément pluriel|يَرْبِطُ الفِعْلَ بِالمَفْعُولِ الجَمْعِ
+de|مِنْ / عَنْ|حَرْفُ جَرٍّ|de|Préposition|حَرْفُ جَرٍّ|Introduit un complément du nom ou du verbe|يَرْبِطُ المُضَافَ إِلَيْهِ أَوِ المَفْعُولَ بِهِ
+à|إِلَى / فِي / عِنْدَ|حَرْفُ جَرٍّ|à|Préposition|حَرْفُ جَرٍّ|Introduit un COI ou complément circonstanciel|يَرْبِطُ المَفْعُولَ غَيْرَ المُبَاشِرِ أَوِ الظَّرْفَ
+en|فِي / بِـ / مِنْهُ|حَرْفُ جَرٍّ / ضَمِيرٌ|en|Préposition ou Pronom adverbial|حَرْفُ جَرٍّ أَوْ ضَمِيرٌ ظَرْفِيٌّ|Introduit un CC ou remplace un complément|يُفِيدُ الظَّرْفِيَّةَ أَوْ يَنُوبُ عَنِ المَفْعُولِ
+ce|هَذَا / ذَلِكَ|اسْمُ إِشَارَةٍ|ce|Déterminant ou Pronom démonstratif|اسْمُ إِشَارَةٍ (مُذَكَّرٌ مُفْرَدٌ)|Détermine le nom ou sujet du verbe être|يُشِيرُ إِلَى الِاسْمِ أَوْ يَقَعُ مُبْتَدَأً
+cette|هَذِهِ / تِلْكَ|اسْمُ إِشَارَةٍ|ce|Déterminant démonstratif (fém. sg.)|اسْمُ إِشَارَةٍ (مُؤَنَّثٌ مُفْرَدٌ)|Détermine le nom féminin qui suit|يُشِيرُ إِلَى الِاسْمِ المُؤَنَّثِ الَّذِي يَلِيهِ
+ces|هَؤُلَاءِ / تِلْكَ|اسْمُ إِشَارَةٍ|ce|Déterminant démonstratif (pluriel)|اسْمُ إِشَارَةٍ (لِلْجَمْعِ)|Détermine le nom pluriel qui suit|يُشِيرُ إِلَى الِاسْمِ الجَمْعِ الَّذِي يَلِيهِ
+et|وَ|حَرْفُ عَطْفٍ|et|Conjonction de coordination|حَرْفُ عَطْفٍ|Relie deux mots ou propositions de même fonction|يَعْطِفُ مُفْرَدَةً أَوْ جُمْلَةً عَلَى مَا قَبْلَهَا
+ou|أَوْ|حَرْفُ عَطْفٍ|ou|Conjonction de coordination (choix)|حَرْفُ عَطْفٍ لِلتَّخْيِيرِ|Relie deux éléments en exprimant l'alternative|يَرْبِطُ بَيْنَ خِيَارَيْنِ فِي الجُمْلَةِ
+mais|لَكِنْ|حَرْفُ اسْتِدْرَاكٍ|mais|Conjonction de coordination (opposition)|حَرْفُ عَطْفٍ وَاسْتِدْرَاكٍ|Exprime une opposition entre deux propositions|يَرْبِطُ جُمْلَتَيْنِ لِبَيَانِ الِاسْتِدْرَاكِ
+car|لِأَنَّ|أَدَاةُ تَعْلِيلٍ|car|Conjonction de coordination (cause)|حَرْفُ عَطْفٍ لِلتَّعْلِيلِ|Introduit une proposition exprimant la cause|يَرْبِطُ جُمْلَةَ السَّبَبِ بِمَا قَبْلَهَا
+donc|إِذَنْ / وَبِالتَّالِي|أَدَاةُ اسْتِنْتَاجٍ|donc|Conjonction de coordination (conséquence)|حَرْفُ عَطْفٍ لِلِاسْتِنْتَاجِ|Introduit une conséquence logique|يَرْبِطُ النَّتِيجَةَ بِالمُقَدِّمَةِ
+dans|فِي / دَاخِلَ|حَرْفُ جَرٍّ|dans|Préposition de lieu ou de temps|حَرْفُ جَرٍّ لِلْمَكَانِ أَوِ الزَّمَانِ|Introduit un complément circonstanciel (CCL/CCT)|يُدْخِلُ ظَرْفَ المَكَانِ أَوِ الزَّمَانِ
+sur|عَلَى / فَوْقَ|حَرْفُ جَرٍّ|sur|Préposition|حَرْفُ جَرٍّ|Introduit un complément circonstanciel ou COI|يُدْخِلُ ظَرْفَ المَكَانِ أَوِ المَوْضُوعَ
+avec|مَعَ / بِوَاسِطَةِ|حَرْفُ جَرٍّ|avec|Préposition|حَرْفُ جَرٍّ|Introduit un CC d'accompagnement ou de moyen|يُفِيدُ المُصَاحَبَةَ أَوِ الوَسِيلَةَ
+sans|بِدُونِ / بِلَا|حَرْفُ جَرٍّ|sans|Préposition|حَرْفُ جَرٍّ لِلنَّفْيِ|Introduit un CC de manière ou d'exclusion|يُفِيدُ نَفْيَ المُصَاحَبَةِ أَوِ الشَّرْطِ
+pour|مِنْ أَجْلِ / لِـ|حَرْفُ جَرٍّ|pour|Préposition|حَرْفُ جَرٍّ لِلتَّعْلِيلِ|Introduit un complément circonstanciel de but|يُدْخِلُ مَفْعُولًا لِأَجْلِهِ (بَيَانُ الغَايَةِ)
+par|بِوَاسِطَةِ / عَبْرَ|حَرْفُ جَرٍّ|par|Préposition|حَرْفُ جَرٍّ|Introduit un complément d'agent ou de moyen|يُدْخِلُ نَائِبَ الفَاعِلِ أَوِ الوَسِيلَةَ
+qui|الَّذِي / الَّتِي / مَنْ|اسْمٌ مَوْصُولٌ|qui|Pronom relatif ou interrogatif|اسْمٌ مَوْصُولٌ أَوِ اسْتِفْهَامٍ|Sujet du verbe de la subordonnée relative|فَاعِلُ فِعْلِ جُمْلَةِ الصِّلَةِ
+que|الَّذِي / أَنَّ / مَاذَا|اسْمٌ مَوْصُولٌ|que|Pronom relatif ou Conjonction de subordination|اسْمٌ مَوْصُولٌ أَوْ حَرْفٌ مَصْدَرِيٌّ|COD du verbe ou introduit une subordonnée|مَفْعُولٌ بِهِ أَوْ أَدَاةُ رَبْطٍ مَصْدَرِيَّةٌ
+ne|لَا / لَمْ|أَدَاةُ نَفْيٍ|ne|Adverbe de négation|حَرْفُ نَفْيٍ|Participe à la négation du verbe|يَنْفِي وُقُوعَ الفِعْلِ مَعَ أَدَاةِ النَّفْيِ الثَّانِيَةِ
+pas|لَيْسَ / لَا|أَدَاةُ نَفْيٍ|pas|Adverbe de négation|ظَرْفُ نَفْيٍ|Complète la négation du verbe|يُتِمُّ مَعْنَى النَّفْيِ لِلْفِعْلِ
+est|يَكُونُ / هُوَ|فِعْلٌ (être)|être|Verbe « être » (3e pers. sg. présent)|فِعْلُ الكَيْنُونَةِ (مُضَارِعٌ مَرْفُوعٌ)|Noyau verbal de la proposition|رُكْنُ الجُمْلَةِ الفِعْلِيَّةِ (فِعْلٌ مُسْنَدٌ)
+sont|يَكُونُونَ / هُمْ|فِعْلٌ (être)|être|Verbe « être » (3e pers. pl. présent)|فِعْلُ الكَيْنُونَةِ (لِلْجَمْعِ المُضَارِعِ)|Noyau verbal de la proposition|رُكْنُ الجُمْلَةِ الفِعْلِيَّةِ (فِعْلٌ مُسْنَدٌ)
+suis|أَكُونُ|فِعْلٌ (être)|être|Verbe « être » (1re pers. sg. présent)|فِعْلُ الكَيْنُونَةِ (لِلْمُتَكَلِّمِ المُضَارِعِ)|Noyau verbal de la proposition|رُكْنُ الجُمْلَةِ الفِعْلِيَّةِ
+était|كَانَ / كَانَتْ|فِعْلٌ (être)|être|Verbe « être » (3e pers. sg. imparfait)|فِعْلُ الكَيْنُونَةِ (مَاضٍ نَاقِصٌ)|Noyau verbal de la proposition|رُكْنُ الجُمْلَةِ الفِعْلِيَّةِ فِي المَاضِي
+a|لَدَيْهِ / يَمْلِكُ|فِعْلٌ (avoir)|avoir|Verbe « avoir » (3e pers. sg. présent)|فِعْلُ المِلْكِيَّةِ أَوْ فِعْلٌ مُسَاعِدٌ|Noyau verbal ou auxiliaire du passé composé|فِعْلٌ أَسَاسِيٌّ أَوْ مُسَاعِدٌ لِتَكْوِينِ المَاضِي
+ont|لَدَيْهِمْ / يَمْلِكُونَ|فِعْلٌ (avoir)|avoir|Verbe « avoir » (3e pers. pl. présent)|فِعْلُ المِلْكِيَّةِ (لِلْجَمْعِ)|Noyau verbal ou auxiliaire|فِعْلٌ أَسَاسِيٌّ أَوْ مُسَاعِدٌ`);
+load('en',`the|الْـ|أَدَاةُ تَعْرِيفٍ|the|Definite article|أَدَاةُ تَعْرِيفٍ|Determines a specific noun phrase|يُعَرِّفُ الِاسْمَ الَّذِي يَلِيهِ وَيُخَصِّصُهُ
+a|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أَدَاةُ تَنْكِيرٍ|a|Indefinite article (singular)|أَدَاةُ تَنْكِيرٍ لِلْمُفْرَدِ|Determines a singular countable noun|يُحَدِّدُ الِاسْمَ المُفْرَدَ النَّكِرَةَ
+an|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أَدَاةُ تَنْكِيرٍ|a|Indefinite article (before vowel sound)|أَدَاةُ تَنْكِيرٍ (قَبْلَ صَوْتٍ مُتَحَرِّكٍ)|Determines a singular countable noun|يُحَدِّدُ الِاسْمَ المُفْرَدَ النَّكِرَةَ
+my|ـي / خَاصَّتِي|صِفَةُ مِلْكِيَّةٍ|my|Possessive determiner (1st pers. sg.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُتَكَلِّمِ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ وَيَنْسُبُهُ لِلْمُتَكَلِّمِ
+your|ـكَ / ـكُمْ|صِفَةُ مِلْكِيَّةٍ|your|Possessive determiner (2nd pers.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُخَاطَبِ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+his|ـهُ / خَاصَّتُهُ|صِفَةُ مِلْكِيَّةٍ|his|Possessive determiner (3rd pers. masc.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْغَائِبِ المُذَكَّرِ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+her|ـهَا / إِيَّاهَا|صِفَةُ مِلْكِيَّةٍ / ضَمِيرٌ|her|Possessive determiner or Object pronoun|مُحَدِّدُ مِلْكِيَّةٍ أَوْ ضَمِيرُ مَفْعُولٍ بِهِ|Modifies a noun or acts as object|يُحَدِّدُ الِاسْمَ أَوْ يَقَعُ مَفْعُولًا بِهِ
+its|ـهُ / ـهَا (لِغَيْرِ العَاقِلِ)|صِفَةُ مِلْكِيَّةٍ|its|Possessive determiner (neuter)|مُحَدِّدُ مِلْكِيَّةٍ (لِغَيْرِ العَاقِلِ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+our|ـنَا / خَاصَّتُنَا|صِفَةُ مِلْكِيَّةٍ|our|Possessive determiner (1st pers. pl.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْمُتَكَلِّمِينَ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+their|ـهُمْ / خَاصَّتُهُمْ|صِفَةُ مِلْكِيَّةٍ|their|Possessive determiner (3rd pers. pl.)|مُحَدِّدُ مِلْكِيَّةٍ (لِلْغَائِبِينَ)|Modifies the following noun|يُحَدِّدُ الِاسْمَ الَّذِي يَلِيهِ
+this|هَذَا / هَذِهِ|اسْمُ إِشَارَةٍ|this|Demonstrative determiner / pronoun (sg.)|اسْمُ إِشَارَةٍ لِلْمُفْرَدِ القَرِيبِ|Determines a noun or acts as subject/object|يُشِيرُ إِلَى الِاسْمِ أَوْ يَقَعُ فَاعِلًا / مَفْعُولًا
+that|ذَلِكَ / تِلْكَ / الَّذِي|اسْمُ إِشَارَةٍ|that|Demonstrative / Relative pronoun / Conjunction|اسْمُ إِشَارَةٍ أَوِ اسْمٌ مَوْصُولٌ|Introduces a clause or modifies a noun|يُشِيرُ إِلَى البَعِيدِ أَوْ يَرْبِطُ الجُمْلَةَ الفَرْعِيَّةَ
+in|فِي / دَاخِلَ|حَرْفُ جَرٍّ|in|Preposition of place or time|حَرْفُ جَرٍّ|Head of a prepositional phrase (adverbial)|يَرْبِطُ الِاسْمَ المَجْرُورَ لِبَيَانِ المَكَانِ أَوِ الزَّمَانِ
+on|عَلَى / فِي|حَرْفُ جَرٍّ|on|Preposition|حَرْفُ جَرٍّ|Head of a prepositional phrase|يَرْبِطُ الِاسْمَ المَجْرُورَ بِمَا قَبْلَهُ
+at|عِنْدَ / فِي|حَرْفُ جَرٍّ|at|Preposition|حَرْفُ جَرٍّ|Head of a prepositional phrase|يَرْبِطُ الِاسْمَ المَجْرُورَ لِبَيَانِ المَوْضِعِ أَوِ الوَقْتِ
+to|إِلَى / لِـ / أَنْ|حَرْفُ جَرٍّ|to|Preposition or Infinitive marker|حَرْفُ جَرٍّ أَوْ أَدَاةُ مَصْدَرٍ|Introduces a prepositional object or infinitive|يُدْخِلُ المَفْعُولَ أَوْ يَسْبِقُ الفِعْلَ المَصْدَرِيَّ
+from|مِنْ|حَرْفُ جَرٍّ|from|Preposition|حَرْفُ جَرٍّ لِلِابْتِدَاءِ|Head of a prepositional phrase (source)|يُبَيِّنُ مَصْدَرَ الحَدَثِ أَوِ انْطِلَاقَهُ
+with|مَعَ / بِـ|حَرْفُ جَرٍّ|with|Preposition|حَرْفُ جَرٍّ|Head of a prepositional phrase (instrument/accompaniment)|يُفِيدُ المُصَاحَبَةَ أَوِ الوَسِيلَةَ
+by|بِوَاسِطَةِ / بِجَانِبِ|حَرْفُ جَرٍّ|by|Preposition|حَرْفُ جَرٍّ|Introduces agent in passive voice or means|يُدْخِلُ الفَاعِلَ فِي المَبْنِيِّ لِلْمَجْهُولِ أَوِ الوَسِيلَةَ
+for|لِأَجْلِ / لِمُدَّةِ|حَرْفُ جَرٍّ|for|Preposition or Coordinating conjunction|حَرْفُ جَرٍّ أَوْ رَابِطٌ تَعْلِيلِيٌّ|Introduces purpose, beneficiary, or duration|يُبَيِّنُ الغَايَةَ أَوِ المُسْتَفِيدَ أَوِ المُدَّةَ
+of|مِنْ / الْـ (لِلْإِضَافَةِ)|حَرْفُ جَرٍّ|of|Preposition|حَرْفُ جَرٍّ لِلْإِضَافَةِ|Links a noun to its genitive/possessive complement|يَرْبِطُ المُضَافَ بِالمُضَافِ إِلَيْهِ
+and|وَ|حَرْفُ عَطْفٍ|and|Coordinating conjunction|حَرْفُ عَطْفٍ|Connects words, phrases, or clauses of equal rank|يَعْطِفُ المُفْرَدَاتِ أَوِ الجُمَلَ المُتَسَاوِيَةَ
+or|أَوْ|حَرْفُ عَطْفٍ|or|Coordinating conjunction|حَرْفُ عَطْفٍ لِلتَّخْيِيرِ|Connects alternatives|يَرْبِطُ بَيْنَ البَدَائِلِ وَالخِيَارَاتِ
+but|لَكِنْ|حَرْفُ اسْتِدْرَاكٍ|but|Coordinating conjunction|حَرْفُ اسْتِدْرَاكٍ|Connects contrasting ideas or clauses|يَرْبِطُ بَيْنَ جُمْلَتَيْنِ مُتَقَابِلَتَيْنِ
+not|لَا / لَيْسَ|أَدَاةُ نَفْيٍ|not|Adverb of negation|أَدَاةُ نَفْيٍ|Negates the main verb or adjective|يَنْفِي الفِعْلَ أَوِ الصِّفَةَ
+is|يَكُونُ (هُوَ)|فِعْلٌ (be)|be|Verb « be » (3rd pers. sg. present)|فِعْلُ الكَيْنُونَةِ (مُضَارِعٌ مُفْرَدٌ)|Main linking verb (copula) or auxiliary|فِعْلُ رَبْطٍ أَسَاسِيٌّ أَوْ فِعْلٌ مُسَاعِدٌ
+are|يَكُونُونَ|فِعْلٌ (be)|be|Verb « be » (present plural/2nd pers.)|فِعْلُ الكَيْنُونَةِ (مُضَارِعٌ لِلْجَمْعِ)|Main linking verb (copula) or auxiliary|فِعْلُ رَبْطٍ أَسَاسِيٌّ أَوْ فِعْلٌ مُسَاعِدٌ
+was|كَانَ|فِعْلٌ (be)|be|Verb « be » (past singular)|فِعْلُ الكَيْنُونَةِ (مَاضٍ مُفْرَدٌ)|Main linking verb or past auxiliary|فِعْلُ رَبْطٍ فِي المَاضِي أَوْ فِعْلٌ مُسَاعِدٌ
+were|كَانُوا|فِعْلٌ (be)|be|Verb « be » (past plural/subjunctive)|فِعْلُ الكَيْنُونَةِ (مَاضٍ لِلْجَمْعِ)|Main linking verb or past auxiliary|فِعْلُ رَبْطٍ فِي المَاضِي أَوْ فِعْلٌ مُسَاعِدٌ
+has|يَمْلِكُ (هُوَ/هِيَ)|فِعْلٌ (have)|have|Verb « have » (3rd pers. sg. present)|فِعْلُ المِلْكِيَّةِ أَوْ فِعْلٌ مُسَاعِدٌ|Main transitive verb or perfect auxiliary|فِعْلٌ مُتَعَدٍّ أَوْ مُسَاعِدٌ لِلزَّمَنِ التَّامِّ
+had|مَلَكَ|فِعْلٌ (have)|have|Verb « have » (past tense)|فِعْلُ المِلْكِيَّةِ (مَاضٍ)|Main verb or past perfect auxiliary|فِعْلٌ أَسَاسِيٌّ أَوْ مُسَاعِدٌ لِلْمَاضِي التَّامِّ`);
 
-load('en',`the|الْـ|أَدَاةُ تَعْرِيفٍ|the|Definite Article (Determiner)|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|أَدَاةُ تَعْرِيفٍ تُسْبَقُ بِهَا الأَسْمَاءُ لِتَحْدِيدِهَا.
-a|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أَدَاةُ تَنْكِيرٍ|a|Indefinite Article (Determiner)|مُحَدِّدٌ لِلِاسْمِ المُفْرَدِ النَّكِرَةِ|Determiner of the Noun|تُسْبَقُ بِهَا الأَسْمَاءُ المُفْرَدَةُ المَعْدُودَةُ المَبْدُوءَةُ بِصَوْتٍ سَاكِنٍ.
-an|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أَدَاةُ تَنْكِيرٍ|a|Indefinite Article (Determiner)|مُحَدِّدٌ لِلِاسْمِ المُفْرَدِ النَّكِرَةِ|Determiner of the Noun|تُسْبَقُ بِهَا الأَسْمَاءُ المُفْرَدَةُ المَبْدُوءَةُ بِصَوْتٍ مُتَحَرِّكٍ.
-my|ـي / خَاصَّتِي|صِفَةُ مِلْكِيَّةٍ|my|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يُحَدِّدُ الِاسْمَ وَيَنْسِبُ مِلْكِيَّتَهُ لِلْمُتَكَلِّمِ.
-your|ـكَ / ـكُمْ|صِفَةُ مِلْكِيَّةٍ|your|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يُحَدِّدُ الِاسْمَ وَيَنْسِبُ مِلْكِيَّتَهُ لِلْمُخَاطَبِ.
-his|ـهُ / خَاصَّتُهُ|صِفَةُ مِلْكِيَّةٍ|his|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يُحَدِّدُ الِاسْمَ وَيَنْسِبُ مِلْكِيَّتَهُ لِلْغَائِبِ المُذَكَّرِ.
-her|ـهَا / إِيَّاهَا|صِفَةُ مِلْكِيَّةٍ / ضَمِيرٌ|her|Possessive Determiner / Pronoun|مُحَدِّدٌ لِلِاسْمِ أَوْ مَفْعُولٌ بِهِ|Determiner / Object|يُحَدِّدُ الِاسْمَ لِلْغَائِبَةِ أَوْ يَقَعُ مَفْعُولًا بِهِ بَعْدَ الفِعْلِ.
-its|ـهُ / ـهَا (لِغَيْرِ العَاقِلِ)|صِفَةُ مِلْكِيَّةٍ|its|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يَنْسِبُ المِلْكِيَّةَ لِغَيْرِ العَاقِلِ.
-our|ـنَا / خَاصَّتُنَا|صِفَةُ مِلْكِيَّةٍ|our|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يَنْسِبُ المِلْكِيَّةَ لِلْمُتَكَلِّمِينَ.
-their|ـهُمْ / خَاصَّتُهُمْ|صِفَةُ مِلْكِيَّةٍ|their|Possessive Determiner|مُحَدِّدٌ لِلِاسْمِ الَّذِي يَلِيهِ|Determiner of the Noun|يَنْسِبُ المِلْكِيَّةَ لِلْغَائِبِينَ.
-this|هَذَا / هَذِهِ|اسْمُ / صِفَةُ إِشَارَةٍ|this|Demonstrative Determiner / Pronoun|مُحَدِّدٌ لِلِاسْمِ أَوْ فَاعِلٌ / مَفْعُولٌ|Determiner / Subject / Object|يُشِيرُ إِلَى المُفْرَدِ القَرِيبِ.
-that|ذَلِكَ / تِلْكَ / الَّذِي|اسْمُ إِشَارَةٍ / مَوْصُولٌ|that|Demonstrative / Relative Pronoun|مُحَدِّدٌ أَوْ أَدَاةُ رَبْطٍ|Determiner / Subordinator|يُشِيرُ إِلَى المُفْرَدِ البَعِيدِ أَوْ يَرْبِطُ الجُمْلَةَ الفَرْعِيَّةَ.
-these|هَؤُلَاءِ|اسْمُ / صِفَةُ إِشَارَةٍ|this|Demonstrative Determiner / Pronoun|مُحَدِّدٌ لِلْجَمْعِ أَوْ فَاعِلٌ|Determiner / Subject|يُشِيرُ إِلَى الجَمْعِ القَرِيبِ.
-those|أُولَئِكَ|اسْمُ / صِفَةُ إِشَارَةٍ|that|Demonstrative Determiner / Pronoun|مُحَدِّدٌ لِلْجَمْعِ أَوْ فَاعِلٌ|Determiner / Subject|يُشِيرُ إِلَى الجَمْعِ البَعِيدِ.
-in|فِي / دَاخِلَ|حَرْفُ جَرٍّ|in|Preposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ الزَّمَانِ|Head of Prepositional Phrase|يُدْخِلُ شِبْهَ جُمْلَةٍ تَدُلُّ عَلَى الظَّرْفِيَّةِ.
-on|عَلَى / فِي|حَرْفُ جَرٍّ|on|Preposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ الزَّمَانِ|Head of Prepositional Phrase|يُدْخِلُ شِبْهَ جُمْلَةٍ تَدُلُّ عَلَى الِاسْتِعْلَاءِ أَوِ الوَقْتِ.
-at|عِنْدَ / فِي|حَرْفُ جَرٍّ|at|Preposition|رَبْطُ ظَرْفِ المَكَانِ أَوِ الزَّمَانِ|Head of Prepositional Phrase|يُحَدِّدُ نُقْطَةً مَكَانِيَّةً أَوْ زَمَنِيَّةً دَقِيقَةً.
-to|إِلَى / لِـ / أَنْ|حَرْفُ جَرٍّ / أَدَاةُ مَصْدَرٍ|to|Preposition / Infinitive Marker|رَبْطُ المَفْعُولِ أَوْ تَقْدِيمُ المَصْدَرِ|Preposition / Infinitive Marker|يُدْخِلُ الِاتِّجَاهَ أَوْ يَسْبِقُ الفِعْلَ فِي المَصْدَرِ.
-from|مِنْ|حَرْفُ جَرٍّ|from|Preposition|رَبْطُ مَصْدَرِ الحَرَكَةِ أَوِ البِدَايَةِ|Head of Prepositional Phrase|يَدُلُّ عَلَى نُقْطَةِ الِانْطِلَاقِ أَوِ المَصْدَرِ.
-with|مَعَ / بِـ|حَرْفُ جَرٍّ|with|Preposition|رَبْطُ ظَرْفِ المُصَاحَبَةِ أَوِ الوَسِيلَةِ|Head of Prepositional Phrase|يَدُلُّ عَلَى المُصَاحَبَةِ أَوِ الأَدَاةِ.
-by|بِوَاسِطَةِ / بِجَانِبِ|حَرْفُ جَرٍّ|by|Preposition|رَبْطُ الفَاعِلِ أَوِ الوَسِيلَةِ|Preposition (Agent / Manner)|يُقَدِّمُ الفَاعِلَ فِي المَبْنِيِّ لِلْمَجْهُولِ أَوِ الوَسِيلَةَ.
-for|لِأَجْلِ / لِمُدَّةِ|حَرْفُ جَرٍّ|for|Preposition|رَبْطُ الغَايَةِ أَوِ المُدَّةِ الزَّمَنِيَّةِ|Head of Prepositional Phrase|يَدُلُّ عَلَى الغَايَةِ أَوِ الفَتْرَةِ الزَّمَنِيَّةِ.
-of|مِنْ / الْـ (لِلْإِضَافَةِ)|حَرْفُ جَرٍّ|of|Preposition|رَبْطُ المُضَافِ إِلَيْهِ|Post-modifier Connector|يَرْبِطُ بَيْنَ اسْمَيْنِ لِلدَّلَالَةِ عَلَى التَّبَعِيَّةِ أَوِ التَّخْصِيصِ.
-and|وَ|حَرْفُ عَطْفٍ|and|Coordinating Conjunction|رَبْطُ المُفْرَدَاتِ أَوِ الجُمَلِ|Coordinator|يَعْطِفُ عُنْصُرَيْنِ مُتَكَافِئَيْنِ نَحْوِيًّا.
-or|أَوْ|حَرْفُ عَطْفٍ|or|Coordinating Conjunction|رَبْطٌ لِلتَّخْيِيرِ|Coordinator|يَرْبِطُ بَيْنَ بَدِيلَيْنِ أَوْ خِيَارَيْنِ.
-but|لَكِنْ|حَرْفُ اسْتِدْرَاكٍ|but|Coordinating Conjunction|رَبْطٌ لِلِاسْتِدْرَاكِ|Coordinator (Contrast)|يَرْبِطُ بَيْنَ جُمْلَتَيْنِ مُتَبَايِنَتَيْنِ.
-not|لَا / لَيْسَ|أَدَاةُ نَفْيٍ|not|Adverb of Negation|نَفْيُ الفِعْلِ أَوِ الصِّفَةِ|Negator|يُعَدِّلُ الفِعْلَ المُسَاعِدَ لِإِفَادَةِ النَّفْيِ.
-is|يَكُونُ (هُوَ)|فِعْلٌ (be)|be|Verb (Linking / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلُ رَبْطٍ يَرْبِطُ الفَاعِلَ بِالْخَبَرِ (Subject Complement).
-are|يَكُونُونَ|فِعْلٌ (be)|be|Verb (Linking / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلُ رَبْطٍ مُصَرَّفٌ مَعَ الجَمْعِ فِي الحَاضِرِ.
-am|أَكُونُ|فِعْلٌ (be)|be|Verb (Linking / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلُ رَبْطٍ مُصَرَّفٌ مَعَ المُتَكَلِّمِ المُفْرَدِ.
-was|كَانَ|فِعْلٌ (be)|be|Verb (Linking / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلُ رَبْطٍ فِي المَاضِي البَسِيطِ لِلْمُفْرَدِ.
-were|كَانُوا|فِعْلٌ (be)|be|Verb (Linking / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلُ رَبْطٍ فِي المَاضِي البَسِيطِ لِلْجَمْعِ.
-been|كَانَ (تَصْرِيفٌ ثَالِثٌ)|فِعْلٌ (be)|be|Past Participle|جُزْءٌ مِنَ الفِعْلِ التَّامِّ|Participle in Perfect Aspect|التَّصْرِيفُ الثَّالِثُ لِفِعْلِ الكَيْنُونَةِ.
-has|يَمْلِكُ (هُوَ/هِيَ)|فِعْلٌ (have)|have|Verb (Transitive / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلٌ مُتَعَدٍّ أَوْ فِعْلٌ مُسَاعِدٌ لِلْأَزْمِنَةِ التَّامَّةِ.
-had|مَلَكَ|فِعْلٌ (have)|have|Verb (Transitive / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلٌ مُصَرَّفٌ فِي المَاضِي.
-does|يَفْعَلُ (هُوَ/هِيَ)|فِعْلٌ (do)|do|Verb (Transitive / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلٌ أَسَاسِيٌّ أَوْ مُسَاعِدٌ لِلنَّفْيِ وَالِاسْتِفْهَامِ.
-did|فَعَلَ|فِعْلٌ (do)|do|Verb (Transitive / Auxiliary)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb / Auxiliary|فِعْلٌ مُصَرَّفٌ فِي المَاضِي.
-went|ذَهَبَ|فِعْلٌ (go)|go|Verb (Intransitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ لَازِمٌ فِي المَاضِي البَسِيطِ.
-gone|ذَاهِبٌ|فِعْلٌ (go)|go|Past Participle|جُزْءٌ مِنَ الفِعْلِ التَّامِّ|Participle in Perfect Aspect|التَّصْرِيفُ الثَّالِثُ لِلْفِعْلِ (go).
-saw|رَأَى|فِعْلٌ (see)|see|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ يَأْخُذُ مَفْعُولًا بِهِ مُبَاشِرًا.
-took|أَخَذَ|فِعْلٌ (take)|take|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ فِي المَاضِي البَسِيطِ.
-made|صَنَعَ|فِعْلٌ (make)|make|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ فِي المَاضِي البَسِيطِ.
-said|قَالَ|فِعْلٌ (say)|say|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ يُقَدِّمُ القَوْلَ.
-came|جَاءَ|فِعْلٌ (come)|come|Verb (Intransitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ لَازِمٌ فِي المَاضِي البَسِيطِ.
-knew|عَرَفَ|فِعْلٌ (know)|know|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ يَدُلُّ عَلَى المَعْرِفَةِ.
-thought|فَكَّرَ / اعْتَقَدَ|فِعْلٌ (think)|think|Verb|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ يَدُلُّ عَلَى التَّفْكِيرِ وَالِاعْتِقَادِ.
-wrote|كَتَبَ|فِعْلٌ (write)|write|Verb (Transitive)|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ مُتَعَدٍّ فِي المَاضِي البَسِيطِ.
-spoke|تَكَلَّمَ|فِعْلٌ (speak)|speak|Verb|مُسْنَدٌ (فِعْلُ الجُمْلَةِ)|Main Verb (Predicate)|فِعْلٌ فِي المَاضِي البَسِيطِ.`);
-
-/* ---------- Contextual Grammar Analyzer (La Nature et La Fonction des Mots) ---------- */
-function analyzeGrammarContext(word,sent,lang,posAr){
+/* ---------- Contextual Nature & Fonction Analyzer (Heuristic + Grammar Rules) ---------- */
+function analyzeNatureAndFonction(word,sent,lang,posAr){
   const wClean=word.replace(/^['’-]+|['’-]+$/g,'');
   const low=wClean.toLowerCase();
-  const isCap=/^[A-ZÀ-Ÿ]/.test(wClean);
-
-  if(LEX[lang]&&LEX[lang][low]&&LEX[lang][low].funcAr){
-    const lx=LEX[lang][low];
+  const hit=LEX[lang]&&LEX[lang][low];
+  if(hit&&hit.nature_orig&&hit.fonction_orig){
     return{
-      nature_ar:lx.pos,
-      nature_orig:lx.natOrig,
-      fonction_ar:lx.funcAr,
-      fonction_orig:lx.funcOrig,
-      gram_note_ar:lx.note
+      nature_orig:hit.nature_orig,
+      nature_ar:hit.nature_ar,
+      fonction_orig:hit.fonction_orig,
+      fonction_ar:hit.fonction_ar
     };
   }
 
-  // Tokenize sentence to inspect neighboring words (determiners, prepositions, auxiliaries, punctuation)
-  const words=(sent.match(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu)||[]).map(x=>x.toLowerCase());
-  const idx=words.indexOf(low);
-  const prev=idx>0?words[idx-1]:'';
-  const next=idx>=0&&idx<words.length-1?words[idx+1]:'';
+  // Tokenize sentence to inspect neighboring words for syntactic role (Fonction)
+  const tokens=(sent.match(/[\p{L}\p{N}'’-]+/gu)||[]);
+  const idx=tokens.findIndex(t=>t.toLowerCase()===low);
+  const prev=idx>0?tokens[idx-1].toLowerCase():'';
+  const next=idx>=0&&idx<tokens.length-1?tokens[idx+1].toLowerCase():'';
+
+  const isCap=/^[A-ZÀ-Ý]/.test(wClean)&&idx>0;
+  const isVerbHint=/فِعْل/.test(posAr);
+  const isAdjHint=/صِفَة/.test(posAr);
+  const isAdvHint=/ظَرْف|حَال/.test(posAr);
+  const isNounHint=/اسْم/.test(posAr);
 
   if(lang==='fr'){
-    const dets=['le','la','les','un','une','des','du','au','aux','ce','cet','cette','ces','mon','ma','mes','ton','ta','tes','son','sa','ses','notre','nos','votre','vos','leur','leurs','chaque','quelques','plusieurs'];
-    const preps=['de','à','dans','sur','sous','avec','sans','pour','par','après','avant','vers','chez','entre','contre','depuis','pendant'];
-    const subjs=['je','tu','il','elle','on','nous','vous','ils','elles','qui'];
-    const auxs=['ai','as','a','avons','avez','ont','suis','es','est','sommes','êtes','sont','étais','était','étions','étiez','étaient','avais','avait','avions','aviez','avaient'];
-    const linking=['est','sont','était','étaient','semble','paraît','devient','reste','demeure'];
+    const frDets=new Set(['le','la','les','un','une','des','du','au','aux','ce','cet','cette','ces','mon','ma','mes','ton','ta','tes','son','sa','ses','notre','nos','votre','vos','leur','leurs']);
+    const frPreps=new Set(['de','du','des','à','au','aux','dans','sur','sous','avec','sans','pour','par','chez','vers','entre','contre','depuis','pendant']);
+    const frSubjProns=new Set(['je','tu','il','elle','on','nous','vous','ils','elles','qui']);
+    const frAux=new Set(['suis','es','est','sommes','êtes','sont','étais','était','étions','étiez','étaient','ai','as','a','avons','avez','ont','avais','avait']);
 
-    // Determine Nature
-    let natAr=posAr||'اسْمٌ (Nom)',natOrig='Nom commun';
-    if(isCap&&idx>0){natAr='اسْمُ عَلَمٍ';natOrig='Nom propre'}
-    else if(posAr.includes('فِعْل')||/(er|ir|re|ons|ez|ent|ais|ait|aient|erai|era|eront|ant)$/.test(low)){natAr='فِعْلٌ';natOrig='Verbe'}
-    else if(posAr.includes('ظَرْف')||low.endsWith('ment')){natAr='ظَرْفٌ / حَالٌ';natOrig='Adverbe'}
-    else if(posAr.includes('صِفَة')||/(eux|euse|ique|able|ible|if|ive|al|ale|aux)$/.test(low)){natAr='صِفَةٌ نَعْتِيَّةٌ';natOrig='Adjectif qualificatif'}
-    else if(posAr.includes('اسْم')){natAr='اسْمٌ عَامٌّ';natOrig='Nom commun'}
+    let natOrig='Nom commun',natAr='اسْمٌ عَامٌّ (Nom commun)';
+    let fnOrig='Noyau du groupe nominal',fnAr='نَوَاةُ المُرَكَّبِ الِاسْمِيِّ';
 
-    // Determine Fonction based on syntactic neighborhood
-    let funcAr='مُكَوِّنٌ أَسَاسِيٌّ فِي الجُمْلَةِ',funcOrig='Élément de la proposition',note='';
-    if(natOrig==='Verbe'){
-      if(auxs.includes(prev)){
-        funcAr='اسْمُ مَفْعُولٍ / جُزْءٌ مِنَ الفِعْلِ المُرَكَّبِ';funcOrig='Participe passé (Noyau verbal)';
-        note=`يَأْتِي بَعْدَ الفِعْلِ المُسَاعِدِ «${prev}» لِتَشْكِيلِ الزَّمَنِ المُرَكَّبِ فِي الجُمْلَةِ.`;
-      }else{
-        funcAr='نَوَاةُ الجُمْلَةِ الفِعْلِيَّةِ (المُسْنَدُ)';funcOrig='Noyau verbal (Prédicat)';
-        note=subjs.includes(prev)?`فِعْلٌ مُصَرَّفٌ مُسْنَدٌ إِلَى الضَّمِيرِ الفَاعِلِ «${prev}».`:'يُشَكِّلُ الحَدَثَ الرَّئِيسِيَّ فِي الجُمْلَةِ وَيُصَرَّفُ حَسَبَ الفَاعِلِ وَالزَّمَنِ.';
-      }
-    }else if(natOrig==='Adverbe'){
-      funcAr='ظَرْفٌ مُعَدِّلٌ لِلْفِعْلِ أَوِ الصِّفَةِ';funcOrig='Complément circonstanciel / Modificateur';
-      note='كَلِمَةٌ غَيْرُ مُتَغَيِّرَةٍ تُوضِّحُ كَيْفِيَّةَ وُقُوعِ الفِعْلِ أَوْ دَرَجَةَ الصِّفَةِ.';
-    }else if(natOrig==='Adjectif qualificatif'){
-      if(linking.includes(prev)){
-        funcAr='خَبَرٌ لِلْفَاعِلِ (مُسْنَدٌ)';funcOrig='Attribut du sujet';
-        note=`يَصِفُ الفَاعِلَ مِنْ خِلَالِ فِعْلِ الحَالَةِ «${prev}» وَيُطَابِقُهُ فِي الجِنْسِ وَالعَدَدِ.`;
-      }else{
-        funcAr='نَعْتٌ مُبَاشِرٌ لِلِاسْمِ';funcOrig='Épithète du nom';
-        note='يُخَصِّصُ الِاسْمَ المُجَاوِرَ لَهُ وَيُطَابِقُهُ فِي التَّذْكِيرِ وَالتَّأْنِيثِ وَالإِفْرَادِ وَالجَمْعِ.';
-      }
-    }else{
-      // Noun / Proper Noun syntactic role
-      if(prev==='de'||prev==='du'||prev==='des'){
-        funcAr='مُضَافٌ إِلَيْهِ (مُكَمِّلُ الِاسْمِ)';funcOrig='Complément du nom (CDN)';
-        note=`مَسْبُوقٌ بِحَرْفِ الجَرِّ «${prev}» لِتَحْدِيدِ الِاسْمِ الَّذِي يَسْبِقُهُ وَتَخْصِيصِهِ.`;
-      }else if(preps.includes(prev)){
-        funcAr='مَفْعُولٌ غَيْرُ مُبَاشِرٍ أَوْ ظَرْفٌ';funcOrig='COI ou Complément circonstanciel (CC)';
-        note=`مَسْبُوقٌ بِحَرْفِ الجَرِّ «${prev}» لِيُؤَدِّيَ دَوْرَ الظَّرْفِ أَوِ المَفْعُولِ غَيْرِ المُبَاشِرِ.`;
-      }else if(idx<=2&&!preps.includes(prev)){
-        funcAr='فَاعِلُ الجُمْلَةِ (المُسْنَدُ إِلَيْهِ)';funcOrig='Sujet du verbe';
-        note=dets.includes(prev)?`مَسْبُوقٌ بِالمُحَدِّدِ «${prev}» وَيَقَعُ فِي صَدْرِ الجُمْلَةِ كَفَاعِلٍ لِلْفِعْلِ.`:'يَقَعُ فِي صَدْرِ الجُمْلَةِ لِيَقُومَ بِوَظِيفَةِ الفَاعِلِ.';
-      }else if(linking.includes(prev)||(dets.includes(prev)&&idx>1&&linking.includes(words[idx-2]))){
-        funcAr='خَبَرٌ لِلْفَاعِلِ';funcOrig='Attribut du sujet';
-        note='يُتِمُّ مَعْنَى الفَاعِلِ بَعْدَ فِعْلِ كَيْنُونَةٍ أَوْ حَالَةٍ.';
-      }else{
-        funcAr='مَفْعُولٌ بِهِ مُبَاشِرٌ';funcOrig='Complément d’objet direct (COD)';
-        note=dets.includes(prev)?`مَسْبُوقٌ بِالمُحَدِّدِ «${prev}» وَيَقَعُ عَلَيْهِ فِعْلُ الفَاعِلِ مُبَاشَرَةً.`:'يُكَمِّلُ مَعْنَى الفِعْلِ المُتَعَدِّي مُبَاشَرَةً دُونَ حَرْفِ جَرٍّ.';
-      }
+    if(isCap){
+      natOrig='Nom propre';natAr='اسْمُ عَلَمٍ (Nom propre)';
+    }else if(isVerbHint||frSubjProns.has(prev)||frAux.has(prev)||/(er|ir|oir|re|ais|ait|aient|ons|ez|ent|é|ée|és|ées)$/.test(low)&&!frDets.has(prev)){
+      natOrig='Verbe conjugué ou à l’infinitif';natAr='فِعْلٌ (Verbe)';
+      fnOrig='Noyau verbal de la proposition (Prédicat)';fnAr='رُكْنُ الجُمْلَةِ الفِعْلِيَّةِ (فِعْلٌ مُسْنَدٌ)';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
+    }else if(isAdvHint||/(ment)$/.test(low)){
+      natOrig='Adverbe';natAr='ظَرْفٌ / حَالٌ (Adverbe)';
+      fnOrig='Modifie le sens du verbe, de l’adjectif ou de la phrase';fnAr='ظَرْفٌ يُقَيِّدُ مَعْنَى الفِعْلِ أَوِ الصِّفَةِ';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
+    }else if(isAdjHint||/(eux|euse|ique|able|ible|if|ive|al|ale|aux)$/.test(low)){
+      natOrig='Adjectif qualificatif';natAr='صِفَةٌ / نَعْتٌ (Adjectif)';
+      fnOrig=frAux.has(prev)?'Attribut du sujet':'Épithète du nom';
+      fnAr=frAux.has(prev)?'خَبَرٌ لِلْمُبْتَدَأِ (Attribut du sujet)':'نَعْتٌ تَابِعٌ لِلِاسْمِ (Épithète)';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
     }
-    return{nature_ar:natAr,nature_orig:natOrig,fonction_ar:funcAr,fonction_orig:funcOrig,gram_note_ar:note};
+
+    // Determine syntactic function (Fonction) for nouns
+    if(idx===0||(idx===1&&frDets.has(prev))){
+      fnOrig='Sujet du verbe (en tête de phrase)';fnAr='فَاعِلٌ أَوْ مُبْتَدَأٌ فِي صَدْرِ الجُمْلَةِ (Sujet)';
+    }else if(prev==='de'||prev==='du'||prev==='des'){
+      fnOrig='Complément du nom (introduit par « de »)';fnAr='مُضَافٌ إِلَيْهِ مَجْرُورٌ (Complément du nom)';
+    }else if(frPreps.has(prev)){
+      fnOrig='Complément circonstanciel ou COI (introduit par préposition)';fnAr='مَفْعُولٌ غَيْرُ مُبَاشِرٍ أَوْ ظَرْفٌ (COI / CC)';
+    }else if(frAux.has(prev)||(idx>=2&&frDets.has(prev)&&frAux.has(tokens[idx-2]?.toLowerCase()))){
+      fnOrig='Attribut du sujet';fnAr='خَبَرُ فِعْلِ الكَيْنُونَةِ (Attribut du sujet)';
+    }else if(frDets.has(prev)){
+      fnOrig='Complément d’objet direct (COD) du verbe';fnAr='مَفْعُولٌ بِهِ مُبَاشِرٌ (COD)';
+    }
+    return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
   } else {
-    // English Nature & Fonction analysis
-    const dets=['the','a','an','this','that','these','those','my','your','his','her','its','our','their','some','any','each','every','many','much','few','several'];
-    const preps=['in','on','at','to','from','with','by','for','of','about','into','through','during','before','after','above','below','between','under','over','without'];
-    const subjs=['i','you','he','she','it','we','they','who','which','that'];
-    const auxs=['am','is','are','was','were','been','have','has','had','do','does','did','will','would','can','could','shall','should','may','might','must'];
-    const linking=['am','is','are','was','were','become','becomes','became','seem','seems','seemed','appear','appears','feel','felt','look','looks'];
+    // English Nature & Fonction
+    const enDets=new Set(['the','a','an','this','that','these','those','my','your','his','her','its','our','their','some','any','each','every']);
+    const enPreps=new Set(['in','on','at','to','from','with','by','for','of','about','into','through','during','before','after','under','over','between']);
+    const enSubjProns=new Set(['i','you','he','she','it','we','they','who','which','that']);
+    const enAux=new Set(['am','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','can','could','shall','should','may','might','must']);
 
-    let natAr=posAr||'اسْمٌ (Noun)',natOrig='Common Noun';
-    if(isCap&&idx>0){natAr='اسْمُ عَلَمٍ';natOrig='Proper Noun'}
-    else if(posAr.includes('فِعْل')||/(ing|ed)$/.test(low)||auxs.includes(prev)){natAr='فِعْلٌ';natOrig='Verb'}
-    else if(posAr.includes('ظَرْف')||low.endsWith('ly')){natAr='ظَرْفٌ / حَالٌ';natOrig='Adverb'}
-    else if(posAr.includes('صِفَة')||/(ous|ful|less|able|ible|ive|ic|al|ent|ant)$/.test(low)){natAr='صِفَةٌ';natOrig='Adjective'}
-    else if(posAr.includes('اسْم')){natAr='اسْمٌ عَامٌّ';natOrig='Common Noun'}
+    let natOrig='Common Noun',natAr='اسْمٌ عَامٌّ (Common Noun)';
+    let fnOrig='Head of Noun Phrase',fnAr='نَوَاةُ المُرَكَّبِ الِاسْمِيِّ';
 
-    let funcAr='مُكَوِّنٌ أَسَاسِيٌّ فِي الجُمْلَةِ',funcOrig='Clause Constituent',note='';
-    if(natOrig==='Verb'){
-      if(auxs.includes(prev)){
-        funcAr='فِعْلٌ رَئِيسِيٌّ بَعْدَ المُسَاعِدِ';funcOrig='Main Verb (Verb Phrase Head)';
-        note=`يَأْتِي بَعْدَ الفِعْلِ المُسَاعِدِ «${prev}» لِتَكْوِينِ صِيغَةِ الزَّمَنِ أَوِ البِنَاءِ.`;
-      }else{
-        funcAr='فِعْلُ الجُمْلَةِ (المُسْنَدُ)';funcOrig='Predicate / Main Verb';
-        note=subjs.includes(prev)?`فِعْلٌ مُسْنَدٌ إِلَى الضَّمِيرِ الفَاعِلِ «${prev}».`:'يُعَبِّرُ عَنِ الحَدَثِ أَوِ الحَالَةِ الأَسَاسِيَّةِ فِي الجُمْلَةِ.';
-      }
-    }else if(natOrig==='Adverb'){
-      funcAr='ظَرْفٌ مُعَدِّلٌ لِلْفِعْلِ أَوِ الصِّفَةِ';funcOrig='Adverbial / Modifier';
-      note='يُوَضِّحُ كَيْفِيَّةَ أَوْ زَمَانَ أَوْ دَرَجَةَ وُقُوعِ الفِعْلِ أَوِ الصِّفَةِ.';
-    }else if(natOrig==='Adjective'){
-      if(linking.includes(prev)){
-        funcAr='خَبَرٌ لِلْفَاعِلِ';funcOrig='Subject Complement (Predicative)';
-        note=`يَصِفُ الفَاعِلَ بَعْدَ فِعْلِ الرَّبْطِ «${prev}».`;
-      }else{
-        funcAr='نَعْتٌ سَابِقٌ لِلِاسْمِ';funcOrig='Pre-modifier of Noun (Attributive)';
-        note='يَسْبِقُ الِاسْمَ لِوصفِهِ وَتَحْدِيدِ صِفَتِهِ.';
-      }
-    }else{
-      if(prev==='of'){
-        funcAr='مُضَافٌ إِلَيْهِ (مُكَمِّلُ الِاسْمِ)';funcOrig='Post-modifier (Complement of Preposition)';
-        note='مَسْبُوقٌ بِحَرْفِ الإِضَافَةِ «of» لِتَخْصِيصِ الِاسْمِ السَّابِقِ.';
-      }else if(preps.includes(prev)){
-        funcAr='مَجْرُورٌ بِحَرْفِ الجَرِّ / ظَرْفٌ';funcOrig='Object of Preposition (Adverbial)';
-        note=`مَسْبُوقٌ بِحَرْفِ الجَرِّ «${prev}» لِتَكْوِينِ شِبْهِ جُمْلَةٍ ظَرْفِيَّةٍ.`;
-      }else if(idx<=2&&!preps.includes(prev)){
-        funcAr='فَاعِلُ الجُمْلَةِ (المُسْنَدُ إِلَيْهِ)';funcOrig='Subject of the Clause';
-        note=dets.includes(prev)?`مَسْبُوقٌ بِالمُحَدِّدِ «${prev}» وَيَقَعُ فَاعِلًا قَبْلَ الفِعْلِ.`:'يَقَعُ قَبْلَ الفِعْلِ لِيُؤَدِّيَ وَظِيفَةَ الفَاعِلِ.';
-      }else if(linking.includes(prev)||(dets.includes(prev)&&idx>1&&linking.includes(words[idx-2]))){
-        funcAr='خَبَرٌ لِلْفَاعِلِ';funcOrig='Subject Complement';
-        note='يُعَرِّفُ الفَاعِلَ أَوْ يَصِفُهُ بَعْدَ فِعْلِ الرَّبْطِ.';
-      }else{
-        funcAr='مَفْعُولٌ بِهِ مُبَاشِرٌ';funcOrig='Direct Object';
-        note=dets.includes(prev)?`مَسْبُوقٌ بِالمُحَدِّدِ «${prev}» وَيَقَعُ عَلَيْهِ فِعْلُ الفَاعِلِ.`:'يَسْتَقْبِلُ أَثَرَ الفِعْلِ المُتَعَدِّي مُبَاشَرَةً.';
-      }
+    if(isCap){
+      natOrig='Proper Noun';natAr='اسْمُ عَلَمٍ (Proper Noun)';
+    }else if(isVerbHint||enSubjProns.has(prev)||enAux.has(prev)||prev==='to'||/(ing|ed)$/.test(low)&&!enDets.has(prev)){
+      natOrig='Verb (Finite or Non-finite)';natAr='فِعْلٌ (Verb)';
+      fnOrig='Main Predicate / Verb Phrase Head';fnAr='المُسْنَدُ الفِعْلِيُّ فِي الجُمْلَةِ (Predicate)';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
+    }else if(isAdvHint||low.endsWith('ly')){
+      natOrig='Adverb';natAr='ظَرْفٌ / حَالٌ (Adverb)';
+      fnOrig='Adverbial Modifier (modifies verb/adjective)';fnAr='ظَرْفٌ مُقَيِّدٌ لِلْفِعْلِ أَوِ الصِّفَةِ';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
+    }else if(isAdjHint||/(ous|ful|less|able|ible|ive|ic|al|ent|ant)$/.test(low)){
+      natOrig='Adjective';natAr='صِفَةٌ / نَعْتٌ (Adjective)';
+      fnOrig=enAux.has(prev)?'Subject Complement (Predicative)':'Attributive Modifier of Noun';
+      fnAr=enAux.has(prev)?'خَبَرٌ مُكَمِّلٌ لِلْفَاعِلِ (Subject Complement)':'نَعْتٌ سَابِقٌ لِلِاسْمِ (Attributive Modifier)';
+      return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
     }
-    return{nature_ar:natAr,nature_orig:natOrig,fonction_ar:funcAr,fonction_orig:funcOrig,gram_note_ar:note};
+
+    if(idx===0||(idx===1&&enDets.has(prev))){
+      fnOrig='Subject of the Clause';fnAr='فَاعِلٌ أَوْ مُبْتَدَأُ الجُمْلَةِ (Subject)';
+    }else if(enPreps.has(prev)||(idx>=2&&enDets.has(prev)&&enPreps.has(tokens[idx-2]?.toLowerCase()))){
+      fnOrig='Object of Preposition (Adverbial / Genitive)';fnAr='اسْمٌ مَجْرُورٌ بِحَرْفِ الجَرِّ (Object of Preposition)';
+    }else if(enAux.has(prev)||(idx>=2&&enDets.has(prev)&&enAux.has(tokens[idx-2]?.toLowerCase()))){
+      fnOrig='Subject Complement (Predicate Nominative)';fnAr='خَبَرُ فِعْلِ الكَيْنُونَةِ (Subject Complement)';
+    }else if(enDets.has(prev)){
+      fnOrig='Direct Object of the Verb';fnAr='مَفْعُولٌ بِهِ مُبَاشِرٌ (Direct Object)';
+    }
+    return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
   }
 }
 
@@ -739,7 +674,7 @@ function setSelectMode(m){
   $('modeWord').classList.toggle('on',m==='word');
   $('modeSent').classList.toggle('on',m==='sentence');
   document.body.classList.toggle('sent-mode',m==='sentence');
-  toast(m==='sentence'?'وضع اختيار الجملة الكاملة: انقر على أي جملة لترجمتها وسماعها':'وضع اختيار الكلمة: انقر على أي كلمة لتحليلها');
+  toast(m==='sentence'?'وضع اختيار الجملة الكاملة: انقر على أي جملة لترجمتها وسماعها':'وضع اختيار الكلمة: انقر على أي كلمة لتحليلها نحوياً وترجمتها');
 }
 
 /* ---------- speech (Foreign + Vocalized Arabic TTS) ---------- */
@@ -783,19 +718,13 @@ function toggleDocAudio(){Speech.playing?(Speech.paused?Speech.resume():Speech.p
 
 /* ---------- language ---------- */
 function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,3000).toLowerCase();
- const fr=(s.match(/[éèêëàâîïôùûüçœæ]| (le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes) /g)||[]).length;
- const en=(s.match(/ (the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been) /g)||[]).length;return fr>en?'fr':'en'}
+ const fr=(s.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes)\b/g)||[]).length;
+ const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
 function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
 
 /* ---------- ingestion ---------- */
-const clean=t=>t.replace(/[​-‍﻿]/g,'').replace(/ /g,' ').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/\s+/g,' ').trim();
-const paras=t=>t.split(/
-?
-\s*
-?
-/).map(p=>clean(p.replace(/
-?
-/g,' '))).filter(Boolean).map(p=>({type:'p',text:p}));
+const clean=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'').replace(/\u00A0/g,' ').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/\s+/g,' ').trim();
+const paras=t=>t.split(/\r?\n\s*\r?\n/).map(p=>clean(p.replace(/\r?\n/g,' '))).filter(Boolean).map(p=>({type:'p',text:p}));
 function progress(v,t='',p=0){$('prog').hidden=!v;if(!v)return;$('pgText').textContent=t;$('pgPct').textContent=Math.round(p)+'%';$('pgBar').style.width=Math.round(p)+'%'}
 const need=x=>{if(!x)throw new Error('lib')};
 async function ingest(f){Speech.stop();const n=f.name.toLowerCase();
@@ -832,7 +761,7 @@ function readPasted(){const t=$('pasteInput').value.trim();if(!t)return;$('paste
 
 /* ---------- document model & lazy rendering ---------- */
 function splitSentences(text){
- const N=' ',p=text.replace(/ (Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|Mme|Mlle|etc|vs|fig|vol|M)\./g,'$1'+N).replace(/ ([ei])\.([ge])\./g,'$1'+N+'$2'+N).replace(/(\d)\.(\d)/g,'$1'+N+'$2');
+ const N='\u0000',p=text.replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|Mme|Mlle|etc|vs|fig|vol|M)\./g,'$1'+N).replace(/\b([ei])\.([ge])\./g,'$1'+N+'$2'+N).replace(/(\d)\.(\d)/g,'$1'+N+'$2');
  const out=[],re=/[.!?…]+["'»”)\]]*\s*/g;let last=0,m;
  while((m=re.exec(p))){const end=m.index+m[0].length;if(!/\s$/.test(m[0])&&end<p.length)continue;out.push(p.slice(last,end));last=end}
  if(last<p.length)out.push(p.slice(last));return out.map(s=>s.split(N).join('.'))}
@@ -920,7 +849,6 @@ async function hybrid(word,sent,lang){
  const w=word.replace(/^['’-]+|['’-]+$/g,''),ph=localPhrase(sent,w);
  const[wt,pt,st,m]=await Promise.all([translate(w,lang,'ar',100),ph!==w?trText(ph,lang):'',trText(sent,lang),lexMeta(w,lang)]);
  const lemmaWord=(m.lemma||guessLemma(w,lang)).toLowerCase();
- const gram=analyzeGrammarContext(w,sent,lang,m.pos_ar);
  const[exA,defA,lemmaTrRaw]=await Promise.all([
    m.ex?trText(m.ex,lang):'',
    m.def?trText(m.def,lang):'',
@@ -933,6 +861,8 @@ async function hybrid(word,sent,lang){
    exA?fetchVocalizedArabic(exA):'',
    defA?fetchVocalizedArabic(defA):''
  ]);
+ const posAr=m.pos_ar||(lang==='fr'?'مُفْرَدَةٌ فَرَنْسِيَّةٌ':'مُفْرَدَةٌ إِنْجِلِيزِيَّةٌ');
+ const gram=analyzeNatureAndFonction(w,sent,lang,posAr);
  const parts=[];
  if(pt&&ph!==w)parts.push(`فِي العِبَارَةِ المُجَاوِرَةِ («${ph}»): تَعْنِي «${vocalizeArabic(pt)}».`);
  if(defVocal)parts.push(defVocal);
@@ -943,12 +873,11 @@ async function hybrid(word,sent,lang){
    translation_ar:trVocal,
    explanation_ar:parts.join(' '),
    ipa:m.ipa,
-   pos_ar:m.pos_ar||gram.nature_ar,
-   nature_ar:gram.nature_ar,
+   pos_ar:posAr,
    nature_orig:gram.nature_orig,
-   fonction_ar:gram.fonction_ar,
+   nature_ar:gram.nature_ar,
    fonction_orig:gram.fonction_orig,
-   gram_note_ar:gram.gram_note_ar,
+   fonction_ar:gram.fonction_ar,
    lemma:lemmaWord,
    lemma_translation_ar:lemmaVocal,
    example_original:m.ex,
@@ -959,13 +888,9 @@ async function hybrid(word,sent,lang){
 
 async function gemini(word,sent,lang,key){
  const sl=lang==='fr'?'French':'English',str={type:'STRING'};
- const keys=['translation_ar','explanation_ar','ipa','pos_ar','nature_ar','nature_orig','fonction_ar','fonction_orig','gram_note_ar','lemma','lemma_translation_ar','example_original','example_ar','sentence_ar'];
- const gramHint=lang==='fr'
-   ?'Provide exact French grammatical Nature (la nature grammaticale: e.g., Nom commun, Verbe transitif, Adjectif qualificatif, Adverbe, Déterminant, Préposition) in nature_orig & nature_ar, and exact syntactic Fonction in the given sentence (la fonction grammaticale: e.g., Sujet du verbe, Complément d’objet direct (COD), COI, Attribut du sujet, Épithète, Complément circonstanciel) in fonction_orig & fonction_ar, plus a brief Arabic syntactic explanation in gram_note_ar.'
-   :'Provide exact English Part of Speech / Grammatical Nature (e.g., Common Noun, Transitive Verb, Adjective, Adverb, Determiner, Preposition) in nature_orig & nature_ar, and exact syntactic Function in the given sentence (e.g., Subject, Direct Object, Indirect Object, Subject Complement, Pre-modifier, Adverbial) in fonction_orig & fonction_ar, plus a brief Arabic syntactic explanation in gram_note_ar.';
+ const keys=['translation_ar','explanation_ar','ipa','pos_ar','nature_orig','nature_ar','fonction_orig','fonction_ar','lemma','lemma_translation_ar','example_original','example_ar','sentence_ar'];
  const d=await jfetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',12000,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},
-  body:JSON.stringify({contents:[{parts:[{text:`Word: "${word}" (${sl})
-Sentence: "${sent}"`}]}],systemInstruction:{parts:[{text:`Bilingual contextual dictionary and grammatical analyzer for Arabic speakers reading ${sl}. ${gramHint} IMPORTANT: All Arabic outputs (translation_ar, explanation_ar, pos_ar, nature_ar, fonction_ar, gram_note_ar, lemma_translation_ar, example_ar, sentence_ar) MUST include full, accurate Arabic diacritics (التشكيل الكامل بالحركات: الفتحة، الضمة، الكسرة، السكون، الشدة، والتنوين). Return JSON.`}]},
+  body:JSON.stringify({contents:[{parts:[{text:`Word: "${word}" (${sl})\nSentence: "${sent}"`}]}],systemInstruction:{parts:[{text:`Bilingual contextual dictionary and grammatical analyzer for Arabic speakers reading ${sl}. Always provide exact grammatical nature (nature_orig in ${sl} like "Nom commun masculin", "Verbe transitif", "Adjectif qualificatif", and nature_ar in vocalized Arabic) AND exact syntactic function inside the given sentence (fonction_orig in ${sl} like "Sujet du verbe", "Complément d'objet direct (COD)", "Complément circonstanciel de lieu", and fonction_ar in vocalized Arabic). All Arabic outputs MUST include full Arabic diacritics (التشكيل الكامل بالحركات). Return JSON.`}]},
    generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,str])),required:keys}}})});
  return JSON.parse(d.candidates[0].content.parts[0].text)}
 
@@ -1007,8 +932,8 @@ function renderSentencePanel(d,loading){
   $('engineTag').textContent=d.source_label||'Readdy';
   $('wordHeaderBox').hidden=true;
   $('wordAudioBox').hidden=true;
+  $('gramAnalysisBox').hidden=true;
   $('wordTrBox').hidden=true;
-  $('gramBox').hidden=true;
   $('conjBtnWrap').hidden=true;
   $('wordExpBox').hidden=true;
   $('exBox').hidden=true;
@@ -1029,24 +954,30 @@ async function onWord(el,word,sent,toks,sIdx){
  if(hit){
   const lem=hit.lemma||low;
   const lemTr=lem!==low?(LEX[lang][lem]?.tr||hit.tr):hit.tr;
-  const gram=analyzeGrammarContext(word,sent,lang,hit.pos);
-  const rec={word,lang,source_label:'قَامُوسٌ نَحْوِيٌّ',translation_ar:hit.tr,explanation_ar:`${hit.pos}${lem!==low?` — مِنَ المَصْدَرِ «${lem}»`:''}.`,ipa:'',pos_ar:hit.pos,nature_ar:gram.nature_ar,nature_orig:gram.nature_orig,fonction_ar:gram.fonction_ar,fonction_orig:gram.fonction_orig,gram_note_ar:gram.gram_note_ar,lemma:lem,lemma_translation_ar:lemTr,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  const gram=analyzeNatureAndFonction(word,sent,lang,hit.pos);
+  const rec={word,lang,source_label:'قَامُوسٌ نَحْوِيٌّ',translation_ar:hit.tr,explanation_ar:`${hit.pos}${lem!==low?` — مِنَ المَصْدَرِ «${lem}»`:''}.`,ipa:'',pos_ar:hit.pos,nature_orig:gram.nature_orig,nature_ar:gram.nature_ar,fonction_orig:gram.fonction_orig,fonction_ar:gram.fonction_ar,lemma:lem,lemma_translation_ar:lemTr,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
   renderPanel(rec);trText(sent,lang).then(async t=>{if(req===S.req&&t){const vt=await fetchVocalizedArabic(t);if(req===S.req){rec.sentence_ar=vt;$('pSA').textContent=vt}}});return}
  const key=`${lang}::${low}::${sent.length}::${sent.slice(0,60)}`;
  if(S.cache.has(key)){
-  const cached=S.cache.get(key);
-  if(!cached.nature_ar||!cached.fonction_ar){
-    const gram=analyzeGrammarContext(word,sent,lang,cached.pos_ar||'');
-    Object.assign(cached,gram);
-  }
-  renderPanel(cached);return
+   const cached=S.cache.get(key);
+   if(!cached.nature_orig||!cached.fonction_orig){
+     const g=analyzeNatureAndFonction(word,sent,lang,cached.pos_ar||'');
+     Object.assign(cached,g);
+   }
+   renderPanel(cached);return
  }
  showSkel(true);
  try{let a;if(S.gem.trim().length>10){try{a=await gemini(word,sent,lang,S.gem.trim());a.source_label='Gemini AI'}catch{a=await hybrid(word,sent,lang)}}else a=await hybrid(word,sent,lang);
-  if(req!==S.req)return;const rec={word,lang,sentence_original:sent,...a};S.cache.set(key,rec);try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}renderPanel(rec)}
+  if(req!==S.req)return;
+  if(!a.nature_orig||!a.fonction_orig){
+    const g=analyzeNatureAndFonction(word,sent,lang,a.pos_ar||'');
+    Object.assign(a,g);
+  }
+  const rec={word,lang,sentence_original:sent,...a};S.cache.set(key,rec);try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}renderPanel(rec)}
  catch{if(req!==S.req)return;
-  const gram=analyzeGrammarContext(word,sent,lang,'');
-  renderPanel({word,lang,source_label:'Offline',translation_ar:'تَعَذَّرَ الِاتِّصَالُ بِخِدْمَةِ التَّرْجَمَةِ',explanation_ar:'تَحَقَّقْ مِنِ اتِّصَالِ الإِنْتَرْنِت ثُمَّ انْقُرْ عَلَى الكَلِمَةِ مُجَدَّدًا.',ipa:'',pos_ar:gram.nature_ar,nature_ar:gram.nature_ar,nature_orig:gram.nature_orig,fonction_ar:gram.fonction_ar,fonction_orig:gram.fonction_orig,gram_note_ar:gram.gram_note_ar,lemma:guessLemma(low,lang),lemma_translation_ar:'—',example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
+  const posFallback=lang==='fr'?'كَلِمَةٌ فَرَنْسِيَّةٌ':'كَلِمَةٌ إِنْجِلِيزِيَّةٌ';
+  const g=analyzeNatureAndFonction(word,sent,lang,posFallback);
+  renderPanel({word,lang,source_label:'Offline',translation_ar:'تَعَذَّرَ الِاتِّصَالُ بِخِدْمَةِ التَّرْجَمَةِ',explanation_ar:'تَحَقَّقْ مِنِ اتِّصَالِ الإِنْتَرْنِت ثُمَّ انْقُرْ عَلَى الكَلِمَةِ مُجَدَّدًا.',ipa:'',pos_ar:posFallback,nature_orig:g.nature_orig,nature_ar:g.nature_ar,fonction_orig:g.fonction_orig,fonction_ar:g.fonction_ar,lemma:guessLemma(low,lang),lemma_translation_ar:'—',example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
 
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
@@ -1056,8 +987,8 @@ function renderPanel(d){
  $('panelHeadTitle').textContent='التَّرْجَمَةُ وَالتَّحْلِيلُ النَّحْوِيُّ';
  $('wordHeaderBox').hidden=false;
  $('wordAudioBox').hidden=false;
+ $('gramAnalysisBox').hidden=false;
  $('wordTrBox').hidden=false;
- $('gramBox').hidden=false;
  $('conjBtnWrap').hidden=false;
  $('wordExpBox').hidden=false;
  $('sentSectionBox').style.borderTop='1px solid var(--bd)';
@@ -1065,27 +996,26 @@ function renderPanel(d){
  $('sentBoxLabel').textContent='الجُمْلَةُ الكَامِلَةُ فِي النَّصِّ';
 
  $('engineTag').textContent=d.source_label||'Readdy';$('pTitle').textContent=d.word;$('pLang').textContent=d.lang.toUpperCase();$('pIpa').textContent=d.ipa||'';$('pIpa').hidden=$('pDot').hidden=!d.ipa;
- $('pPos').textContent=d.pos_ar||'';$('pTr').textContent=d.translation_ar;
+ $('pPos').textContent=d.pos_ar||'';
+
+ // Populate Nature & Fonction card
+ $('gramLangBadge').textContent=d.lang==='fr'?'Nature & Fonction (FR)':'Nature & Function (EN)';
+ $('natureLblOrig').textContent=d.lang==='fr'?'Nature grammaticale':'Part of Speech (Nature)';
+ $('fonctionLblOrig').textContent=d.lang==='fr'?'Fonction dans la phrase':'Syntactic Function';
+ $('pNatureOrig').textContent=d.nature_orig||'—';
+ $('pNatureAr').textContent=vocalizeArabic(d.nature_ar||d.pos_ar||'—');
+ $('pFonctionOrig').textContent=d.fonction_orig||'—';
+ $('pFonctionAr').textContent=vocalizeArabic(d.fonction_ar||'—');
+
+ $('pTr').textContent=d.translation_ar;
  $('pLemmaWord').textContent=d.lemma||guessLemma(d.word,d.lang);
  $('pLemmaTr').textContent=d.lemma_translation_ar||d.translation_ar||'—';
-
- // Always populate La Nature & La Fonction des Mots
- const gramFallback=analyzeGrammarContext(d.word,d.sentence_original||'',d.lang,d.pos_ar||'');
- $('pNatLbl').textContent=d.lang==='fr'?'Nature':'Nature / POS';
- $('pFuncLbl').textContent=d.lang==='fr'?'Fonction':'Function';
- $('pNatAr').textContent=vocalizeArabic(d.nature_ar||gramFallback.nature_ar);
- $('pNatOrig').textContent=d.nature_orig||gramFallback.nature_orig;
- $('pFuncAr').textContent=vocalizeArabic(d.fonction_ar||gramFallback.fonction_ar);
- $('pFuncOrig').textContent=d.fonction_orig||gramFallback.fonction_orig;
- $('pGramNote').textContent=vocalizeArabic(d.gram_note_ar||gramFallback.gram_note_ar);
-
  $('pExp').textContent=d.explanation_ar;
  $('exBox').hidden=!d.example_original;$('pExO').textContent=d.example_original||'';$('pExA').textContent=d.example_ar||'';$('pSO').textContent=d.sentence_original;$('pSA').textContent=d.sentence_ar||'';
  $('panel').scrollTop=0;updBm();repeatUI()
 }
-function copyTr(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.word} — ${S.sel.translation_ar}`).catch(()=>{});toast('تم نسخ الترجمة المشكولة')}
-function copySent(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.sentence_original}
-${S.sel.sentence_ar||''}`).catch(()=>{});toast('تم نسخ الجملة وترجمتها')}
+function copyTr(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.word} — ${S.sel.translation_ar} (${S.sel.nature_orig} | ${S.sel.fonction_orig})`).catch(()=>{});toast('تم نسخ الترجمة والتحليل النحوي')}
+function copySent(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.sentence_original}\n${S.sel.sentence_ar||''}`).catch(()=>{});toast('تم نسخ الجملة وترجمتها')}
 function sayWord(r){S.sel&&!S.sel.isSentence&&(Speech.speak(S.sel.word,S.sel.lang,r,Speech.loop==='word'?'word':null),repeatUI())}
 function loopWord(){if(!S.sel||S.sel.isSentence)return;Speech.loop==='word'?Speech.stop():(Speech.speak(S.sel.word,S.sel.lang,.85,'word'),repeatUI())}
 function sayEx(r){S.sel?.example_original&&(Speech.speak(S.sel.example_original,S.sel.lang,r),repeatUI())}
@@ -1240,13 +1170,17 @@ function renderConjugationData(inf,trAr,lang,tables){
         ${tb.rows.map(r=>`
           <div class="conj-row">
             <span class="conj-form">${esc(r)}</span>
-            <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" onclick="Speech.speak('${esc(r.replace(/'/g,"\'"))}','${lang}',.95)" aria-label="نطق"><i class="ms" style="font-size:17px">volume_up</i></button>
+            <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-say="${esc(r)}" data-lang="${lang}" aria-label="نطق"><i class="ms" style="font-size:17px">volume_up</i></button>
           </div>
         `).join('')}
       </div>
     `).join('')}
   `;
 }
+$('conjBody').addEventListener('click',e=>{
+  const b=e.target.closest('[data-say]');
+  if(b)Speech.speak(b.dataset.say,b.dataset.lang,.95);
+});
 
 /* ---------- Flashcards Engine ---------- */
 const FC={deck:[],idx:0,flipped:false,reverse:false};
@@ -1268,14 +1202,14 @@ function renderFlashcard(){
   $('fcCard').classList.toggle('flipped',FC.flipped);
 
   const arMeaning=vocalizeArabic(item.translation_ar||'');
-  const arPos=vocalizeArabic(item.pos_ar||'');
+  const arPos=vocalizeArabic(item.nature_ar||item.pos_ar||'');
 
   if(!FC.reverse){
     $('fcFrontTag').textContent=item.lang.toUpperCase();
     $('fcFrontMain').textContent=item.word;
     $('fcFrontMain').className='fc-word';
     $('fcFrontMain').dir='ltr';
-    $('fcFrontSub').textContent=item.ipa||(item.lemma&&item.lemma!==item.word.toLowerCase()?`الأصل: ${item.lemma}`:'');
+    $('fcFrontSub').textContent=item.ipa||(item.nature_orig?`${item.nature_orig}`:'');
 
     $('fcBackTag').textContent=arPos||'المَعْنَى العَرَبِيُّ المَشْكُولُ';
     $('fcBackMain').textContent=arMeaning;
@@ -1332,11 +1266,11 @@ function updBm(){if(!S.sel||S.sel.isSentence)return;const b=isBm(S.sel.word);$('
 function updBadge(){const n=S.saved.length;$('vCount').textContent=n;$('badge').textContent=n;$('badge').hidden=!n}
 function afterVocab(){saveVocab();updBm();updBadge();renderVocab();syncBm()}
 function toggleBookmark(){if(!S.sel||S.sel.isSentence)return;const i=S.saved.findIndex(w=>w.word.toLowerCase()===S.sel.word.toLowerCase());
- if(i>=0){S.saved.splice(i,1);toast('تمت إزالة الكلمة من المحفوظات')}else{const d=S.sel;S.saved.unshift({word:d.word,lang:d.lang,ipa:d.ipa||'',translation_ar:d.translation_ar,pos_ar:d.pos_ar||'',nature_orig:d.nature_orig||'',fonction_orig:d.fonction_orig||'',lemma:d.lemma||'',sentence_original:d.sentence_original||'',sentence_ar:d.sentence_ar||''});toast('تم حفظ الكلمة في المفردات والبطاقات')}afterVocab()}
+ if(i>=0){S.saved.splice(i,1);toast('تمت إزالة الكلمة من المحفوظات')}else{const d=S.sel;S.saved.unshift({word:d.word,lang:d.lang,ipa:d.ipa||'',translation_ar:d.translation_ar,pos_ar:d.pos_ar||'',nature_orig:d.nature_orig||'',nature_ar:d.nature_ar||'',fonction_orig:d.fonction_orig||'',fonction_ar:d.fonction_ar||'',lemma:d.lemma||'',sentence_original:d.sentence_original||'',sentence_ar:d.sentence_ar||''});toast('تم حفظ الكلمة في المفردات والبطاقات')}afterVocab()}
 function drawer(o){if(o)closeConjDrawer();$('drawer').classList.toggle('open',!!o);$('drawer').inert=!o;$('bdrop').classList.toggle('open',!!o||!$('conjDrawer').inert);if(o)renderVocab()}
 function renderVocab(){const q=$('vsearch').value.trim().toLowerCase(),l=$('vlist'),it=S.saved.filter(x=>x.word.toLowerCase().includes(q)||x.translation_ar.includes(q));
  if(!it.length){l.innerHTML=`<div class="none"><i class="ms" style="font-size:30px;opacity:.5">bookmark_border</i><p>${S.saved.length?'لا توجد نتائج مطابقة':'لا توجد كلمات محفوظة'}</p></div>`;return}
- l.innerHTML=it.map(x=>`<div class="vitem"><div><div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div><p class="ar-vow">${esc(vocalizeArabic(x.translation_ar))}</p></div>
+ l.innerHTML=it.map(x=>`<div class="vitem"><div><div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div><p class="ar-vow">${esc(vocalizeArabic(x.translation_ar))}</p><div style="font-size:10px;color:var(--sub);margin-top:2px" dir="ltr">${esc(x.nature_orig||'')} ${x.fonction_orig?'• '+esc(x.fonction_orig):''}</div></div>
   <div style="display:flex;flex:none">
     <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-a="say" data-w="${esc(x.word)}" data-l="${esc(x.lang)}" aria-label="نطق أجنبي"><i class="ms">volume_up</i></button>
     <button class="ibtn sm" style="border:0;background:none;color:var(--ok)" data-a="sayar" data-ar="${esc(vocalizeArabic(x.translation_ar))}" aria-label="نطق عربي"><i class="ms">record_voice_over</i></button>
@@ -1347,34 +1281,38 @@ $('vlist').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(
  else if(b.dataset.a==='sayar')Speech.speakArabic(b.dataset.ar,.9);
  else{S.saved=S.saved.filter(w=>w.word.toLowerCase()!==b.dataset.w.toLowerCase());afterVocab()}});
 function exportCSV(){if(!S.saved.length){toast('لا توجد كلمات محفوظة للتصدير');return}
- const q=v=>{v=String(v||'');if(/^[=+\-@	
-]/.test(v))v="'"+v;return`"${v.replace(/"/g,'""')}"`};
+ const q=v=>{v=String(v||'');if(/^[=+\-@\t\r]/.test(v))v="'"+v;return`"${v.replace(/"/g,'""')}"`};
  const rows=S.saved.map(w=>[w.word,w.lemma||w.word,w.lang.toUpperCase(),w.ipa,w.nature_orig||w.pos_ar,w.fonction_orig||'',vocalizeArabic(w.translation_ar)].map(q).join(','));
- const u=URL.createObjectURL(new Blob(['﻿'+['Word,Lemma,Language,IPA,Nature,Fonction,ArabicTranslation',...rows].join('
-')],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');
+ const u=URL.createObjectURL(new Blob(['\uFEFF'+['Word,Lemma,Language,IPA,Nature,Fonction,ArabicTranslation',...rows].join('\n')],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');
  a.href=u;a.download='readdy-vocabulary.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('تم تصدير ملف المفردات بنجاح')}
 function saveKey(){S.gem=$('gemKey').value.trim();S.gem?store.set(K.gem,S.gem):store.del(K.gem);show('apiModal',0);toast(S.gem?'تم تفعيل مفتاح Gemini AI':'تم اعتماد المحركات المدمجة')}
 function clearCache(){S.cache.clear();S.conjCache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
 /* ---------- init ---------- */
-setThemeIcon();Speech.init();updBadge();openWelcome(false);
-Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
-$('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
-$('docTitleInput').addEventListener('input',e=>S.title=e.target.value);
-let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
-addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
-addEventListener('dragover',e=>e.preventDefault());
-addEventListener('drop',e=>{e.preventDefault();dc=0;document.body.classList.remove('drag');const f=e.dataTransfer?.files?.[0];if(f)ingest(f)});
-addEventListener('keydown',e=>{
-  if(!$('fcModal').hidden){
-    if(e.key===' '||e.key==='Enter'){e.preventDefault();fcFlip();return}
-    if(e.key==='ArrowLeft'){fcNav(1);return}
-    if(e.key==='ArrowRight'){fcNav(-1);return}
-  }
-  if(e.key!=='Escape')return;let c=false;['welcomeModal','pasteModal','apiModal','fcModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
-  if(!$('conjDrawer').inert){closeConjDrawer();c=true}
-  if($('drawer').classList.contains('open')){drawer(0);c=true}if(!c&&!$('panel').hidden)closePanel()});
-document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
+function boot(){
+  setThemeIcon();
+  Speech.init();
+  updBadge();
+  openWelcome(false);
+  Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
+  $('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
+  $('docTitleInput').addEventListener('input',e=>S.title=e.target.value);
+  let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
+  addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
+  addEventListener('dragover',e=>e.preventDefault());
+  addEventListener('drop',e=>{e.preventDefault();dc=0;document.body.classList.remove('drag');const f=e.dataTransfer?.files?.[0];if(f)ingest(f)});
+  addEventListener('keydown',e=>{
+    if(!$('fcModal').hidden){
+      if(e.key===' '||e.key==='Enter'){e.preventDefault();fcFlip();return}
+      if(e.key==='ArrowLeft'){fcNav(1);return}
+      if(e.key==='ArrowRight'){fcNav(-1);return}
+    }
+    if(e.key!=='Escape')return;let c=false;['welcomeModal','pasteModal','apiModal','fcModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
+    if(!$('conjDrawer').inert){closeConjDrawer();c=true}
+    if($('drawer').classList.contains('open')){drawer(0);c=true}if(!c&&!$('panel').hidden)closePanel()});
+  document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot)}else{boot()}
 </script>
 </body>
 </html>
