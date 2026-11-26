@@ -16,7 +16,7 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 <style>
-:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
+:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--tabh:38px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
 html.dark{--bg:#131314;--cv:#131314;--sheet:#1e1f20;--s1:#1e1f20;--s2:#282a2c;--bd:#333537;--tx:#e3e3e3;--sub:#c4c7c5;--ac:#8ab4f8;--ach:#aecbfa;--acs:#004a77;--onac:#041e49;--onact:#d3e3fd;--ok:#81c995;--hl:#282a2c}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -36,7 +36,8 @@ html:not(.icons) .ms{visibility:hidden}
 .pill select,.pill input{background:none;border:0;outline:0;font-weight:500;cursor:pointer;max-width:130px}.pill input{width:42px;text-align:center;cursor:text}
 .k{color:var(--sub)}.tag{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--s2);border:1px solid var(--bd);color:var(--sub);text-transform:uppercase}
 .tag.ac{background:var(--acs);color:var(--onact);border-color:transparent}
-.hdr{position:sticky;top:0;z-index:30;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);background:var(--bg);border-bottom:1px solid var(--bd)}
+
+.hdr{position:sticky;top:0;z-index:32;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);background:var(--bg);border-bottom:1px solid var(--bd)}
 .brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;flex:none;color:inherit}
 .brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
 .play{transform-origin:43px 32px;animation:pulse 2.6s ease-in-out infinite}
@@ -46,23 +47,22 @@ html:not(.icons) .ms{visibility:hidden}
 @media(min-width:768px){body.has-doc #docTitleInput{display:block}}
 .badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
 
-/* Sessions Switcher in Header */
-.sess-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;flex:none}
-.sess-btn{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;max-width:190px;transition:.15s}
-.sess-btn:hover{border-color:var(--ac)}
-.sess-btn .stitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
-.sess-btn .scnt{background:var(--acs);color:var(--onact);font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px}
-.sess-pop{position:absolute;top:calc(100% + 8px);right:0;width:min(340px,92vw);background:var(--s1);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);padding:10px;z-index:50;display:grid;gap:6px;animation:modal .18s ease-out}
-.sess-pop-hd{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 8px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600;color:var(--sub)}
-.sess-list{display:grid;gap:4px;max-height:260px;overflow-y:auto}
-.sitem{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid transparent;background:var(--bg);transition:.12s}
-.sitem:hover{border-color:var(--bd);background:var(--s2)}
-.sitem.cur{border-color:var(--ac);background:var(--hl)}
-.sitem-main{flex:1;min-width:0;cursor:pointer;text-align:right}
-.sitem-main b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}
-.sitem-main small{display:block;font-size:10px;color:var(--sub)}
-.sess-actions{display:flex;gap:6px;padding-top:6px;border-top:1px solid var(--bd)}
-.sess-actions .btn{flex:1;justify-content:center;padding:6px 10px}
+/* Clean Browser-Style Session Tab Strip */
+.tabstrip{position:sticky;top:var(--hh);z-index:31;height:var(--tabh);background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:flex-end;gap:4px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
+.tabstrip::-webkit-scrollbar{display:none}
+.stab{display:inline-flex;align-items:center;gap:8px;height:32px;max-width:210px;padding:0 10px 0 12px;border-radius:10px 10px 0 0;border:1px solid transparent;border-bottom:0;background:transparent;color:var(--sub);font-size:12px;font-weight:500;cursor:pointer;transition:.14s;flex:none;position:relative;user-select:none}
+.stab:hover{background:rgba(128,128,128,.08);color:var(--tx)}
+.stab.active{background:var(--bg);color:var(--tx);font-weight:600;border-color:var(--bd);box-shadow:0 1px 0 var(--bg)}
+.stab-dot{width:6px;height:6px;border-radius:50%;background:var(--sub);opacity:.45;flex:none}
+.stab.active .stab-dot{background:var(--ac);opacity:1}
+.stab-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+.stab-close{width:18px;height:18px;border-radius:50%;border:0;background:transparent;color:var(--sub);display:inline-grid;place-items:center;padding:0;flex:none;opacity:.7;transition:.12s}
+.stab-close:hover{background:rgba(217,48,37,.14);color:#d93025;opacity:1}
+.stab-add{width:28px;height:28px;margin-bottom:3px;border-radius:50%;border:0;background:transparent;color:var(--sub);display:inline-grid;place-items:center;flex:none;transition:.12s}
+.stab-add:hover{background:var(--bg);color:var(--ac)}
+.tabstrip-end{margin-right:auto;display:flex;align-items:center;gap:6px;height:100%;padding-right:8px}
+.end-cur-link{background:none;border:0;font-size:11px;font-weight:600;color:#d93025;display:inline-flex;align-items:center;gap:3px;padding:4px 8px;border-radius:99px;opacity:.85}
+.end-cur-link:hover{background:rgba(217,48,37,.1);opacity:1}
 
 #empty{flex:1;display:grid;place-items:center;padding:24px 16px}
 .hero{position:relative;width:100%;max-width:680px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,5vw,44px);text-align:center;overflow:hidden}
@@ -82,8 +82,10 @@ html:not(.icons) .ms{visibility:hidden}
 .rdoc:hover{border-color:var(--ac);background:var(--s2)}
 .rdoc-main{display:flex;align-items:center;gap:8px;min-width:0;flex:1;cursor:pointer}
 .rdoc-info{min-width:0;flex:1}.rdoc-info b{display:block;font-size:12px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}.rdoc-info small{font-size:10px;color:var(--sub)}
+
 #work{flex:1;flex-direction:column;display:flex}
-.tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
+.tb{position:sticky;top:calc(var(--hh) + var(--tabh));z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
+body:not(.has-tabs) .tb{top:var(--hh)}
 .tb::-webkit-scrollbar{display:none}.tb>*{flex:none}.tb .sp{flex:1 0 0}
 .seg{display:inline-flex;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:2px}.seg button{border:0;background:none;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500;color:var(--sub)}.seg button.on{background:var(--bg);color:var(--tx)}
 .seg .v{font-size:11px;color:var(--sub);align-self:center;padding:0 4px;min-width:34px;text-align:center}
@@ -91,7 +93,7 @@ html:not(.icons) .ms{visibility:hidden}
 .split{flex:1;display:flex;align-items:flex-start}
 .canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(8px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
 #pages{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
-.sheet{width:100%;max-width:860px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow-x:auto}
+.sheet{width:100%;max-width:860px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--tabh) + var(--th) + 12px);overflow-x:auto}
 .sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:700px}}
 .body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.75;white-space:pre-wrap;word-break:normal;overflow-wrap:break-word}
 .body .raw-line{margin:0;min-height:1.2em}
@@ -103,9 +105,14 @@ html:not(.icons) .ms{visibility:hidden}
 @media(hover:hover){.wt:hover{background:var(--hl);color:var(--ac)}}
 .wt.sh{background:var(--s2)}.wt.bm{border-bottom:1.5px solid var(--ok)}
 .wt.act{background:var(--acs);color:var(--onact);font-weight:600;outline:1px solid var(--ac);animation:pop .25s}
+
 #panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:60dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
 body.panel-open .canvas{padding-bottom:64dvh}
-@media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
+@media(min-width:1024px){
+ #panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--tabh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--tabh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}
+ body:not(.has-tabs) #panel{top:calc(var(--hh) + var(--th));height:calc(100dvh - var(--hh) - var(--th))}
+ body.panel-open .canvas{padding-bottom:48px}
+}
 .ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
 .pc{padding:16px;display:grid;gap:12px;animation:rise .25s both}
 .card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px}.card h3{margin:0 0 6px;font-size:12px}.card p{margin:0}
@@ -118,10 +125,14 @@ body.panel-open .canvas{padding-bottom:64dvh}
 .alt-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .alt-chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);cursor:pointer;transition:.12s}
 .alt-chip:hover{border-color:var(--ac);color:var(--ac)}
-.lex-chips{display:flex;flex-wrap:wrap;gap:6px;direction:ltr}
-.lex-chip{font:500 12px Literata,serif;padding:3px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--ac);cursor:pointer;transition:.12s}
+
+/* Arabic Synonyms & Antonyms Chips */
+.lex-chips{display:flex;flex-wrap:wrap;gap:6px;direction:rtl}
+.lex-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--ac);cursor:pointer;transition:.12s;display:inline-flex;align-items:center;gap:5px}
 .lex-chip:hover{background:var(--hl);border-color:var(--ac)}
+.lex-chip small{font:400 11px Literata,serif;color:var(--sub);direction:ltr}
 .lex-chip.ant{color:#c5221f}html.dark .lex-chip.ant{color:#f28b82}
+
 .sent-tok{cursor:pointer;border-radius:3px;padding:0 1px;transition:.12s}
 .sent-tok:hover{background:var(--hl);color:var(--ac)}
 .sent-tok.cur{background:var(--acs);color:var(--onact);font-weight:600}
@@ -150,18 +161,13 @@ body.panel-open .canvas{padding-bottom:64dvh}
 .mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
 .mbox textarea,.mbox input[type=password]{width:100%;border-radius:14px;background:var(--s2);border:1px solid var(--bd);padding:12px;font-size:14px;outline:0}.mbox textarea{font-family:Literata,serif;resize:vertical}
 .feat{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:var(--s2);border:1px solid var(--bd);text-align:right}.feat .ms{color:var(--ac);background:var(--acs);border-radius:10px;padding:5px;box-sizing:content-box}.feat b{display:block;color:var(--tx);font-size:12px}.feat small{font-size:11px}
-.radio-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:var(--s2);border:1px solid var(--bd);cursor:pointer;transition:.15s}
-.radio-card:hover{border-color:var(--ac)}
-.radio-card input{margin-top:3px;accent-color:var(--ac)}
-.radio-card b{display:block;color:var(--tx);font-size:12px}
-.radio-card small{font-size:11px;color:var(--sub)}
 .toast{position:fixed;top:calc(var(--hh) + 10px);left:50%;transform:translate(-50%,-16px);opacity:0;pointer-events:none;transition:.25s;background:#1f1f1f;color:#fff;font-size:12px;font-weight:500;padding:9px 18px;border-radius:99px;box-shadow:var(--sh);z-index:80;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}html.dark .toast{background:#e3e3e3;color:#131314}
 body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;border:2px dashed var(--ac);border-radius:24px;background:rgba(26,115,232,.08);display:grid;place-items:center;z-index:90;pointer-events:none;font-weight:700;color:var(--ac)}
 @keyframes pulse{50%{transform:scale(1.14)}}@keyframes float{50%{transform:translateY(-6px)}}@keyframes drift{to{transform:translate(6%,4%) rotate(8deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes pop{50%{transform:scale(1.06)}}
 @keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}}@keyframes sheet{from{transform:translateY(100%)}}@keyframes slide{from{opacity:0;transform:translateX(-24px)}}
 @keyframes sp{50%{height:14px}}@keyframes shim{to{background-position:600px 0}}
-@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}.sess-btn{max-width:120px}}
+@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}}
 @media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -170,44 +176,16 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <input id="fileInput" type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp" hidden>
 
 <header class="hdr">
-  <button class="brand" onclick="goHome()" aria-label="Readdy — الرئيسية">
+  <button class="brand" onclick="goHome(true)" aria-label="Readdy — الرئيسية">
     <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg>
     <span dir="ltr">Readdy</span>
   </button>
   <input id="docTitleInput" dir="ltr" type="text" aria-label="عنوان المستند">
-
-  <!-- Independent Reading Sessions Switcher + '+' New Session Button -->
-  <div id="sessWrap" class="sess-wrap">
-    <button id="newSessBtn" class="ibtn sm" onclick="openNewSessionModal()" title="إضافة جلسة مستقلة جديدة (+)" aria-label="إضافة جلسة مستقلة جديدة">
-      <i class="ms">add</i>
-    </button>
-    <button id="sessMenuBtn" class="sess-btn" onclick="toggleSessionPopover()" hidden aria-label="الجلسات المفتوحة">
-      <i class="ms" style="font-size:16px;color:var(--ac)">tab</i>
-      <span id="activeSessTitle" class="stitle">جلسة 1</span>
-      <span id="openSessCount" class="scnt">1</span>
-      <i class="ms" style="font-size:16px">expand_more</i>
-    </button>
-    <button id="endCurSessBtn" class="ibtn sm" onclick="endCurrentSession()" hidden title="إنهاء الجلسة الحالية" aria-label="إنهاء الجلسة الحالية" style="color:#d93025">
-      <i class="ms" style="font-size:17px">close</i>
-    </button>
-
-    <div id="sessPop" class="sess-pop" hidden>
-      <div class="sess-pop-hd">
-        <span>الجلسات المستقلة المفتوحة</span>
-        <span id="sessPopBadge" class="tag ac">1</span>
-      </div>
-      <div id="sessList" class="sess-list"></div>
-      <div class="sess-actions">
-        <button class="btn pri" onclick="closeSessionPopover();openNewSessionModal()"><i class="ms" style="font-size:16px">add</i>جلسة جديدة</button>
-        <button id="popEndCurBtn" class="btn" style="color:#d93025" onclick="closeSessionPopover();endCurrentSession()"><i class="ms" style="font-size:16px">close</i>إنهاء الحالية</button>
-      </div>
-    </div>
-  </div>
-
+  <button class="ibtn sm" onclick="startBlankSessionTab()" title="جلسة قراءة مستقلة جديدة (+)" aria-label="جلسة قراءة مستقلة جديدة"><i class="ms">add</i></button>
   <div class="sp"></div>
   <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
     <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
-  <button class="btn pri" onclick="triggerDirectUpload()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
+  <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
   <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
   <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
   <button class="ibtn" onclick="show('apiModal',1)" aria-label="إعدادات الترجمة"><i class="ms">tune</i></button>
@@ -215,17 +193,26 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة" title="حقيبة المفردات الدائمة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
 </header>
 
+<!-- Clean Browser-Style Session Tab Strip -->
+<nav id="tabStrip" class="tabstrip" hidden aria-label="تبويبات الجلسات المستقلة">
+  <div id="tabList" style="display:flex;align-items:flex-end;gap:4px"></div>
+  <button class="stab-add" onclick="startBlankSessionTab()" title="جلسة جديدة (+)" aria-label="جلسة جديدة"><i class="ms" style="font-size:18px">add</i></button>
+  <div class="tabstrip-end">
+    <button id="endCurSessBtn" class="end-cur-link" onclick="endCurrentSession()" hidden title="إنهاء وإغلاق الجلسة الحالية نهائياً"><i class="ms" style="font-size:14px">close</i><span>إنهاء الجلسة الحالية</span></button>
+  </div>
+</nav>
+
 <main id="empty">
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ في جلسة مستقلة مع تذكّر آخر موضع توقفت عنده، وترجمة سياقية متكاملة مشكولة.</p></div>
+    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.</p></div>
     <div class="row">
-      <button class="btn pri lg" onclick="triggerDirectUpload()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
-      <button class="btn lg" onclick="openPasteForNewSession(false)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
+      <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
+      <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
     <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">يمكنك فتح عدة جلسات مستقلة في آنٍ واحد عبر زر (+) في الأعلى. الحد الأقصى للملف 25 MB.</p>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">اضغط (+) في الأعلى لفتح جلسة مستقلة جديدة مع بقاء جلساتك السابقة في شريط التبويبات.</p>
       <div id="prog" class="prog" role="status" aria-live="polite" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
     </div>
     <div id="recentWrap" class="recent-box" hidden>
@@ -247,7 +234,6 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" class="on" onclick="setFont('sans')">Inter</button></div>
     <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
     <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
-    <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">folder_special</i>المستندات</button>
   </div>
   <div class="split">
     <div class="canvas"><div id="pages"></div></div>
@@ -266,7 +252,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
         </div>
         <div class="card"><div class="lbl2"><span>الترجمة السياقية المشكولة</span><button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></div><p id="pTr"></p><div id="pAlts" class="alt-row" hidden></div><p id="pLemma" class="sm2"></p></div>
         <div class="card"><h3>التحليل السياقي والمعنى</h3><p id="pExp" style="font-size:13px;line-height:1.85;white-space:pre-line"></p></div>
-        <div id="relBox" class="card" hidden><div class="lbl2 g"><span>مرادفات ومتلازمات في اللغة</span></div><div id="pRels" class="lex-chips"></div></div>
+        <div id="relBox" class="card" hidden><div class="lbl2 g"><span>مرادفات وأضداد بالعربية</span></div><div id="pRels" class="lex-chips"></div></div>
         <div id="exBox" class="card"><div class="lbl2 g"><span>مثال تطبيقي</span><span><button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button><button class="mini g" onclick="sayEx(.65)">0.65x</button></span></div><p id="pExO" class="ex"></p><p id="pExA" class="exa"></p></div>
         <div style="border-top:1px solid var(--bd);padding-top:12px;display:grid;gap:8px">
           <div class="lbl2 g"><span>الجملة الكاملة في النص (انقر أي كلمة)</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button></span></div>
@@ -313,34 +299,11 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div id="fclist"></div>
 </aside>
 
-<!-- New Independent Session Modal (+) -->
-<div id="newSessionModal" class="modal" hidden><div class="mbox">
-  <div class="mh"><span>إضافة جلسة قراءة مستقلة جديدة</span><button class="ibtn sm" onclick="show('newSessionModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
-  <div class="mb">
-    <div id="curSessChoiceBox" style="display:grid;gap:8px">
-      <b style="color:var(--tx)">ماذا تريد أن تفعل بالجلسة الحالية؟</b>
-      <label class="radio-card">
-        <input type="radio" name="curSessAction" value="keep" checked>
-        <div><b>إبقاء الجلسة الحالية مفتوحة</b><small id="keepSessSub">تبقى محفوظة في قائمة الجلسات ويمكنك العودة إليها في أي لحظة بنفس موضع القراءة.</small></div>
-      </label>
-      <label class="radio-card">
-        <input type="radio" name="curSessAction" value="end">
-        <div><b>إنهاء الجلسة الحالية وإغلاقها</b><small>تُغلق الجلسة الحالية نهائياً وتُفتح الجلسة الجديدة مكانها.</small></div>
-      </label>
-    </div>
-    <b style="color:var(--tx);margin-top:4px">اختر محتوى الجلسة المستقلة الجديدة:</b>
-    <div class="row" style="justify-content:stretch">
-      <button class="btn pri lg" style="flex:1;justify-content:center" onclick="startNewSessionWithFile()"><i class="ms">upload_file</i>رفع ملف جديد</button>
-      <button class="btn lg" style="flex:1;justify-content:center" onclick="startNewSessionWithPaste()"><i class="ms">content_paste</i>لصق نص جديد</button>
-    </div>
-  </div>
-</div></div>
-
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">add_circle</i><div><b>جلسات قراءة مستقلة متعددة (+)</b><small>اضغط زر (+) في الشريط العلوي لفتح مستند جديد في جلسة مستقلة مع إبقاء الجلسة الحالية أو إنهائها.</small></div></div>
-    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية متكاملة ومشكولة</b><small>تحليل الجملة الكاملة، والمطابقة العكسية للمعنى الدقيق، مع المرادفات والأضداد والمستوى اللغوي (CEFR).</small></div></div>
+    <div class="feat"><i class="ms">tab</i><div><b>تبويبات جلسات مستقلة (+)</b><small>افتح عدة مستندات في تبويبات منفصلة، وتنقّل بينها بضغطة واحدة أو أنهِ أي جلسة من زر (×).</small></div></div>
+    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية ومرادفات بالعربية</b><small>ترجمة مشكولة للكلمة في سياقها، مع عرض المرادفات والأضداد مترجمة إلى العربية مباشرة.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
@@ -363,11 +326,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const K={
  vocab:'readdy_saved_vocabulary_prod_v5',
- cache:'readdy_ai_cache_prod_v9',
+ cache:'readdy_ai_cache_prod_v10',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
- openSessions:'readdy_open_sessions_registry_v2',
+ openSessions:'readdy_open_sessions_registry_v3',
  gem:'readdy_user_gemini_api_key',
  wel:'readdy_hide_welcome_modal_saj_v1',
  theme:'readdy_theme_mode_v1'
@@ -392,8 +355,7 @@ const CURRENT_SESSION=initSessionNumber();
 
 const S={
  sessionId:'',
- sessions:[], // Independent open reading sessions: [{sessionId, docId, title, lang, page, totalPages, scrollY, sentId, wordIdx, panelOpen, size, font, override, updatedAt}]
- pendingCloseSessionId:'',
+ sessions:[], // [{sessionId, docId, title, lang, page, totalPages, scrollY, sentId, wordIdx, panelOpen, size, font, override, isBlank, updatedAt}]
  docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,activeSentId:-1,activeWordIdx:-1,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null
 };
 
@@ -409,75 +371,125 @@ try{
  if(Array.isArray(reg))S.sessions=reg;
 }catch{}
 
-/* ---------- Independent Sessions Registry Management ---------- */
+/* ---------- Clean Browser-Style Session Tab Strip ---------- */
 function persistSessionsRegistry(){
  store.set(K.openSessions,JSON.stringify(S.sessions));
- updateSessionHeaderUI();
+ renderTabStrip();
 }
 
-function updateSessionHeaderUI(){
- const count=S.sessions.length;
- const hasAny=count>0;
- const inWork=!$('work').hidden && !!S.sessionId;
- $('sessMenuBtn').hidden=!hasAny;
- $('endCurSessBtn').hidden=!inWork;
- $('openSessCount').textContent=count;
- $('sessPopBadge').textContent=count;
- const cur=S.sessions.find(x=>x.sessionId===S.sessionId)||S.sessions[0];
- $('activeSessTitle').textContent=cur?cur.title:'الجلسات';
- if(!$('sessPop').hidden)renderSessionsPopover();
-}
+function renderTabStrip(){
+ const strip=$('tabStrip');
+ const list=$('tabList');
+ const hasTabs=S.sessions.length>0;
+ strip.hidden=!hasTabs;
+ document.body.classList.toggle('has-tabs',hasTabs);
+ $('endCurSessBtn').hidden=!hasTabs || !S.sessionId;
 
-function toggleSessionPopover(){
- const pop=$('sessPop');
- const next=pop.hidden;
- pop.hidden=!next;
- if(next)renderSessionsPopover();
-}
-function closeSessionPopover(){
- $('sessPop').hidden=true;
-}
-
-function renderSessionsPopover(){
- const list=$('sessList');
- $('popEndCurBtn').hidden=!S.sessionId || $('work').hidden;
- if(!S.sessions.length){
-  list.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:var(--sub)">لا توجد جلسات مفتوحة حالياً</div>';
+ if(!hasTabs){
+  list.replaceChildren();
   return;
  }
- list.innerHTML=S.sessions.map((s,idx)=>{
-  const isCur=s.sessionId===S.sessionId && !$('work').hidden;
-  return `<div class="sitem${isCur?' cur':''}">
-   <div class="sitem-main" data-switch-sess="${esc(s.sessionId)}">
-    <b>${esc(s.title||'جلسة '+(idx+1))}</b>
-    <small>صفحة ${s.page||1} من ${s.totalPages||1} • ${esc((s.lang||'en').toUpperCase())}${isCur?' • نشطة الآن':''}</small>
-   </div>
-   <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-close-sess="${esc(s.sessionId)}" title="إنهاء هذه الجلسة" aria-label="إنهاء الجلسة"><i class="ms" style="font-size:17px">close</i></button>
+
+ list.innerHTML=S.sessions.map((s,i)=>{
+  const isAct=s.sessionId===S.sessionId;
+  const label=s.title||`جلسة ${i+1}`;
+  return `<div class="stab${isAct?' active':''}" data-tab-id="${esc(s.sessionId)}" title="${esc(label)}">
+   <span class="stab-dot"></span>
+   <span class="stab-lbl">${esc(label)}</span>
+   <button type="button" class="stab-close" data-tab-close="${esc(s.sessionId)}" title="إنهاء الجلسة" aria-label="إنهاء الجلسة"><i class="ms" style="font-size:13px">close</i></button>
   </div>`;
  }).join('');
 }
 
-$('sessList').addEventListener('click',async e=>{
- const sw=e.target.closest('[data-switch-sess]');
- if(sw){
-  const sid=sw.dataset.switchSess;
-  closeSessionPopover();
-  await switchToSession(sid);
+$('tabList').addEventListener('click',async e=>{
+ const closeBtn=e.target.closest('[data-tab-close]');
+ if(closeBtn){
+  e.stopPropagation();
+  await closeSpecificSession(closeBtn.dataset.tabClose);
   return;
  }
- const cl=e.target.closest('[data-close-sess]');
- if(cl){
-  const sid=cl.dataset.closeSess;
-  await closeSpecificSession(sid);
+ const tabEl=e.target.closest('[data-tab-id]');
+ if(tabEl){
+  await switchToSession(tabEl.dataset.tabId);
  }
 });
 
+/* '+' Button: opens a clean independent session tab immediately without popups */
+function startBlankSessionTab(){
+ if(S.sessionId && !$('work').hidden)saveReadingState();
+ Speech.stop();
+ S.io?.disconnect();
+
+ const newId='sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+ const num=S.sessions.length+1;
+ S.sessions.push({
+  sessionId:newId,
+  docId:'',
+  title:`جلسة جديدة ${num}`,
+  lang:'en',
+  override:'auto',
+  page:1,
+  totalPages:1,
+  scrollY:0,
+  sentId:-1,
+  wordIdx:-1,
+  panelOpen:false,
+  size:S.size,
+  font:$('fSerif').classList.contains('on')?'serif':'sans',
+  isBlank:true,
+  updatedAt:Date.now()
+ });
+
+ S.sessionId=newId;
+ S.docId='';
+ S.title='';
+ S.pages=[];
+ S.recs=[];
+ S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+
+ $('pages').replaceChildren();
+ $('work').hidden=true;
+ $('empty').hidden=false;
+ document.body.classList.remove('has-doc');
+ $('heroTitle').textContent='جلسة قراءة مستقلة جديدة';
+ $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في شريط التبويبات بالأعلى.';
+ closePanel();
+ persistSessionsRegistry();
+ store.set(K.state,JSON.stringify({sessionId:newId}));
+ renderRecentDocs();
+ scrollTo(0,0);
+}
+
 async function switchToSession(targetSessionId){
  if(!targetSessionId)return;
- if(S.sessionId===targetSessionId && !$('work').hidden)return;
- saveReadingState();
  const target=S.sessions.find(x=>x.sessionId===targetSessionId);
- if(!target){toast('الجلسة غير موجودة');return}
+ if(!target)return;
+
+ if(S.sessionId && S.sessionId!==targetSessionId && !$('work').hidden){
+  saveReadingState();
+ }
+
+ if(target.isBlank || !target.docId){
+  Speech.stop();
+  S.io?.disconnect();
+  S.sessionId=target.sessionId;
+  S.docId='';
+  S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+  $('pages').replaceChildren();
+  $('work').hidden=true;
+  $('empty').hidden=false;
+  document.body.classList.remove('has-doc');
+  $('heroTitle').textContent='جلسة قراءة مستقلة جديدة';
+  $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في شريط التبويبات بالأعلى.';
+  closePanel();
+  persistSessionsRegistry();
+  store.set(K.state,JSON.stringify({sessionId:target.sessionId}));
+  renderRecentDocs();
+  return;
+ }
+
+ if(S.sessionId===targetSessionId && !$('work').hidden)return;
+
  const doc=await DocDB.get(target.docId);
  if(!doc){
   S.sessions=S.sessions.filter(x=>x.sessionId!==targetSessionId);
@@ -492,13 +504,12 @@ async function switchToSession(targetSessionId){
   skipSave:true,
   restore:target
  });
- toast(`تم الانتقال إلى جلسة: ${target.title}`);
 }
 
 async function closeSpecificSession(targetSessionId){
  const idx=S.sessions.findIndex(x=>x.sessionId===targetSessionId);
  if(idx<0)return;
- const wasCurrent=(S.sessionId===targetSessionId && !$('work').hidden);
+ const wasCurrent=(S.sessionId===targetSessionId);
  S.sessions.splice(idx,1);
  persistSessionsRegistry();
 
@@ -507,74 +518,38 @@ async function closeSpecificSession(targetSessionId){
   if(S.sessions.length){
    const nextSess=S.sessions[Math.max(0,idx-1)];
    await switchToSession(nextSess.sessionId);
-   toast('تم إنهاء الجلسة السابقة والانتقال للجلسة التالية');
   }else{
    S.sessionId='';
-   goHome(true);
-   toast('تم إنهاء الجلسة الحالية');
+   resetToDefaultHome();
   }
- }else{
-  toast('تم إنهاء الجلسة');
  }
 }
 
 async function endCurrentSession(){
- if(!S.sessionId){
-  goHome(true);
-  return;
- }
- closeSessionPopover();
+ if(!S.sessionId)return;
  await closeSpecificSession(S.sessionId);
+ toast('تم إنهاء الجلسة الحالية');
 }
 
-/* ---------- '+' New Independent Session Flow ---------- */
-function openNewSessionModal(){
- closeSessionPopover();
- const hasActive=!!S.sessionId && !$('work').hidden;
- $('curSessChoiceBox').hidden=!hasActive;
- if(hasActive){
-  $('keepSessSub').textContent=`تبقى جلسة «${S.title}» محفوظة في قائمة الجلسات ويمكنك العودة إليها في أي لحظة.`;
- }
- show('newSessionModal',1);
-}
-
-function getNewSessionMode(){
- if(!S.sessionId || $('work').hidden)return'keep';
- const checked=document.querySelector('input[name="curSessAction"]:checked');
- return checked?checked.value:'keep';
-}
-
-function startNewSessionWithFile(){
- const mode=getNewSessionMode();
- S.pendingCloseSessionId=(mode==='end'&&S.sessionId)?S.sessionId:'';
- show('newSessionModal',0);
- saveReadingState();
- $('fileInput').click();
-}
-
-function startNewSessionWithPaste(){
- const mode=getNewSessionMode();
- S.pendingCloseSessionId=(mode==='end'&&S.sessionId)?S.sessionId:'';
- show('newSessionModal',0);
- saveReadingState();
- show('pasteModal',1);
-}
-
-function triggerDirectUpload(){
- S.pendingCloseSessionId='';
- $('fileInput').click();
-}
-
-function openPasteForNewSession(closeCur=false){
- S.pendingCloseSessionId=closeCur&&S.sessionId?S.sessionId:'';
- show('pasteModal',1);
+function resetToDefaultHome(){
+ S.io?.disconnect();
+ S.docId='';S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+ $('pages').replaceChildren();
+ $('work').hidden=true;
+ $('empty').hidden=false;
+ document.body.classList.remove('has-doc');
+ $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
+ closePanel();
+ clearReadingState();
+ renderTabStrip();
+ renderRecentDocs();
+ scrollTo(0,0);
 }
 
 /* ---------- Reading state persistence per independent session ---------- */
 function saveReadingState(extra={}){
- if(!S.docId||!S.sessionId||$('work').hidden){
-  return;
- }
+ if(!S.docId||!S.sessionId||$('work').hidden)return;
  const prev=S.sessions.find(x=>x.sessionId===S.sessionId)||{};
  const snap={
   sessionId:S.sessionId,
@@ -590,12 +565,13 @@ function saveReadingState(extra={}){
   panelOpen:!$('panel').hidden,
   size:S.size,
   font:$('fSerif').classList.contains('on')?'serif':'sans',
+  isBlank:false,
   updatedAt:Date.now(),
   ...extra
  };
  const idx=S.sessions.findIndex(x=>x.sessionId===S.sessionId);
  if(idx>=0)S.sessions[idx]=snap;
- else S.sessions.unshift(snap);
+ else S.sessions.push(snap);
  persistSessionsRegistry();
  store.set(K.state,JSON.stringify(snap));
 }
@@ -723,7 +699,7 @@ async function clearSavedDocs(){
  toast('تم مسح جميع المستندات والجلسات المحفوظة');
 }
 
-/* ---------- built-in lexicon: vocalized translation ONLY; plain Arabic POS ---------- */
+/* ---------- built-in lexicon ---------- */
 const LEX={fr:{},en:{}};
 const load=(l,t)=>t.trim().split('\n').forEach(r=>{const[w,tr,pos,lem]=r.split('|');LEX[l][w]={tr,pos,lemma:lem||w}});
 load('fr',`mon|ـي / خَاصَّتِي (مُذَكَّر مُفْرَد)|صفة ملكية|mon
@@ -997,15 +973,19 @@ function splitSentences(text){
 function openDoc(title,pages,opts={}){progress(false);
  if(!pages.some(p=>p.blocks.some(b=>b.text.trim().length>0))){toast('لا يوجد نص قابل للقراءة في هذا الملف.');return}
 
- // If user chose to end the previous session when starting this new session
- if(S.pendingCloseSessionId){
-  const toClose=S.pendingCloseSessionId;
-  S.pendingCloseSessionId='';
-  S.sessions=S.sessions.filter(x=>x.sessionId!==toClose);
+ // If current session is a newly created blank tab, fill it; otherwise create a new independent session tab
+ const curBlank=S.sessions.find(x=>x.sessionId===S.sessionId && x.isBlank);
+ if(opts.sessionId){
+  S.sessionId=opts.sessionId;
+ }else if(opts.restore?.sessionId){
+  S.sessionId=opts.restore.sessionId;
+ }else if(curBlank){
+  S.sessionId=curBlank.sessionId;
+ }else{
+  S.sessionId='sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
  }
 
  S.docId=opts.id||('doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,7));
- S.sessionId=opts.sessionId||opts.restore?.sessionId||('sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,6));
  S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
  if(opts.restore?.override)S.override=opts.restore.override;
  S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
@@ -1086,8 +1066,10 @@ function goHome(preserveRegistry=true){
  $('empty').hidden=false;
  $('work').hidden=true;
  document.body.classList.remove('has-doc');
+ $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
  closePanel();
- updateSessionHeaderUI();
+ renderTabStrip();
  renderRecentDocs();
  scrollTo(0,0);
 }
@@ -1133,7 +1115,7 @@ function navigateByArrows(key){
   return false;
  }
  if($('work').hidden||!S.recs.length)return false;
- if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||!$('newSessionModal').hidden||$('drawer').classList.contains('open'))return false;
+ if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||$('drawer').classList.contains('open'))return false;
 
  if(key==='ArrowRight'||key==='ArrowLeft'){
   const dir=key==='ArrowRight'?1:-1;
@@ -1267,16 +1249,34 @@ function detectMorphology(w,lang){
  return'';
 }
 
-/* Deep lexical metadata: IPA, POS, CEFR level, synonyms, antonyms, collocations, examples */
+/* Translate list of foreign synonyms/antonyms into Arabic pairs: [{ar, orig}] */
+async function translateLexListToArabic(words,srcLang){
+ const clean=[...new Set((words||[]).map(x=>String(x||'').trim()).filter(Boolean))].slice(0,5);
+ if(!clean.length)return[];
+ const pairs=await Promise.all(clean.map(async orig=>{
+  const ar=await trText(orig,srcLang,'ar');
+  const plainAr=stripTashkeel(ar||'').trim();
+  if(!plainAr || plainAr.toLowerCase()===orig.toLowerCase() || !/[\u0600-\u06FF]/.test(plainAr))return null;
+  return{ar:plainAr,orig};
+ }));
+ const seenAr=new Set();
+ return pairs.filter(p=>{
+  if(!p||seenAr.has(p.ar))return false;
+  seenAr.add(p.ar);
+  return true;
+ });
+}
+
+/* Deep lexical metadata: IPA, POS, CEFR level, Arabic-translated synonyms & antonyms, examples */
 async function lexMeta(w,lang){
- const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms:[],antonyms:[],collocations:[],cefr:''};
+ const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms_ar:[],antonyms_ar:[],cefr:''};
  const low=w.toLowerCase();
+ let rawSyns=[],rawAnts=[];
  try{
   if(lang==='en'){
-   const [dictRes,dmSynRes,dmColRes,dmFreqRes]=await Promise.allSettled([
+   const [dictRes,dmSynRes,dmFreqRes]=await Promise.allSettled([
     jfetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(low)}`,3200),
     jfetch(`https://api.datamuse.com/words?rel_syn=${encodeURIComponent(low)}&max=6`,2600),
-    jfetch(`https://api.datamuse.com/words?rel_trg=${encodeURIComponent(low)}&max=5`,2600),
     jfetch(`https://api.datamuse.com/words?sp=${encodeURIComponent(low)}&md=f&max=1`,2600)
    ]);
    if(dictRes.status==='fulfilled' && Array.isArray(dictRes.value)){
@@ -1286,17 +1286,12 @@ async function lexMeta(w,lang){
     o.lemma=e.word||o.lemma;
     o.def=d?.definition||'';
     o.ex=d?.example||(e.meanings||[]).flatMap(x=>x.definitions||[]).find(x=>x.example)?.example||'';
-    const syns=new Set([...(m?.synonyms||[]),...(d?.synonyms||[])]);
-    const ants=new Set([...(m?.antonyms||[]),...(d?.antonyms||[])]);
-    o.synonyms=[...syns].slice(0,5);
-    o.antonyms=[...ants].slice(0,4);
+    rawSyns=[...new Set([...(m?.synonyms||[]),...(d?.synonyms||[])])];
+    rawAnts=[...new Set([...(m?.antonyms||[]),...(d?.antonyms||[])])];
    }
    if(dmSynRes.status==='fulfilled' && Array.isArray(dmSynRes.value)){
     const extra=dmSynRes.value.map(x=>x.word).filter(Boolean);
-    o.synonyms=[...new Set([...o.synonyms,...extra])].slice(0,6);
-   }
-   if(dmColRes.status==='fulfilled' && Array.isArray(dmColRes.value)){
-    o.collocations=dmColRes.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low).slice(0,4);
+    rawSyns=[...new Set([...rawSyns,...extra])];
    }
    if(dmFreqRes.status==='fulfilled' && Array.isArray(dmFreqRes.value) && dmFreqRes.value[0]?.tags){
     const fTag=dmFreqRes.value[0].tags.find(t=>t.startsWith('f:'));
@@ -1318,9 +1313,15 @@ async function lexMeta(w,lang){
     o.ex=st(i?.examples?.[0]);
    }
    if(dmFr.status==='fulfilled' && Array.isArray(dmFr.value)){
-    o.synonyms=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low).slice(0,5);
+    rawSyns=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low);
    }
   }
+  const[synsAr,antsAr]=await Promise.all([
+   translateLexListToArabic(rawSyns,lang),
+   translateLexListToArabic(rawAnts,lang)
+  ]);
+  o.synonyms_ar=synsAr;
+  o.antonyms_ar=antsAr;
  }catch{}
  return o;
 }
@@ -1360,6 +1361,12 @@ async function hybrid(word,sent,lang){
 
  const allAlts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x && x!==stripTashkeel(bestContextual)).slice(0,5);
 
+ // Fallback Arabic synonyms from alternative Arabic translations if dictionary list was empty
+ let finalSynsAr=m.synonyms_ar;
+ if(!finalSynsAr.length && allAlts.length){
+  finalSynsAr=allAlts.slice(0,4).map(ar=>({ar,orig:''}));
+ }
+
  const[vocalizedWord,exA,defA]=await Promise.all([
   vocalizeWordOnly(bestContextual),
   m.ex?trText(m.ex,lang):Promise.resolve(''),
@@ -1393,9 +1400,8 @@ async function hybrid(word,sent,lang){
   pos_ar:stripTashkeel(posAr),
   morph_ar:morph,
   lemma:m.lemma,
-  synonyms:m.synonyms,
-  antonyms:m.antonyms,
-  collocations:m.collocations,
+  synonyms_ar:finalSynsAr,
+  antonyms_ar:m.antonyms_ar,
   example_original:m.ex,
   example_ar:stripTashkeel(exA),
   sentence_ar:stripTashkeel(st)
@@ -1404,15 +1410,15 @@ async function hybrid(word,sent,lang){
 
 async function gemini(word,sent,lang,key){
  const sl=lang==='fr'?'French':'English',str={type:'STRING'},arr={type:'ARRAY',items:str};
- const keys=['translation_ar','alternatives_ar','explanation_ar','ipa','cefr','pos_ar','morph_ar','lemma','synonyms','antonyms','example_original','example_ar','sentence_ar'];
- const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide a comprehensive bilingual contextual analysis:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. alternatives_ar: Array of 2-4 other common Arabic meanings of "${word}" in PLAIN unvocalized Arabic (NO Tashkeel).\n3. explanation_ar: Clear Arabic explanation of why it means this in this context and its nuance, written in PLAIN unvocalized Arabic (NO Tashkeel).\n4. ipa: IPA pronunciation.\n5. cefr: CEFR proficiency level (A1, A2, B1, B2, C1, or C2).\n6. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n7. morph_ar: Grammatical form in PLAIN unvocalized Arabic (e.g., جمع، ماضٍ، اسم مفعول، مصدر).\n8. lemma: Dictionary base/root form in ${sl}.\n9. synonyms: Array of 3-5 ${sl} synonyms matching this contextual sense.\n10. antonyms: Array of 1-3 ${sl} antonyms if applicable.\n11. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n12. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n13. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
+ const keys=['translation_ar','alternatives_ar','explanation_ar','ipa','cefr','pos_ar','morph_ar','lemma','synonyms_ar','antonyms_ar','example_original','example_ar','sentence_ar'];
+ const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide a comprehensive bilingual contextual analysis:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. alternatives_ar: Array of 2-4 other common Arabic meanings of "${word}" in PLAIN unvocalized Arabic (NO Tashkeel).\n3. explanation_ar: Clear Arabic explanation of why it means this in this context and its nuance, written in PLAIN unvocalized Arabic (NO Tashkeel).\n4. ipa: IPA pronunciation.\n5. cefr: CEFR proficiency level (A1, A2, B1, B2, C1, or C2).\n6. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n7. morph_ar: Grammatical form in PLAIN unvocalized Arabic (e.g., جمع، ماضٍ، اسم مفعول، مصدر).\n8. lemma: Dictionary base/root form in ${sl}.\n9. synonyms_ar: Array of 3-5 synonyms IN ARABIC (PLAIN unvocalized Arabic) matching this contextual sense.\n10. antonyms_ar: Array of 1-3 antonyms IN ARABIC (PLAIN unvocalized Arabic) if applicable.\n11. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n12. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n13. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
  const d=await jfetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',12000,{
   method:'POST',
   headers:{'Content-Type':'application/json','x-goog-api-key':key},
   body:JSON.stringify({
    contents:[{parts:[{text:prompt}]}],
    systemInstruction:{parts:[{text:`You are an expert bilingual contextual lexicographer and literary translator from ${sl} into natural Modern Standard Arabic. Include full Arabic Tashkeel (diacritical marks) ONLY on translation_ar, and keep all other Arabic fields completely unvocalized (plain Arabic without diacritics). Return valid JSON only.`}]},
-   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,['alternatives_ar','synonyms','antonyms'].includes(k)?arr:str])),required:keys}}
+   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,['alternatives_ar','synonyms_ar','antonyms_ar'].includes(k)?arr:str])),required:keys}}
   })
  });
  const parsed=JSON.parse(d.candidates[0].content.parts[0].text);
@@ -1423,9 +1429,10 @@ async function gemini(word,sent,lang,key){
  parsed.explanation_ar=stripTashkeel(parsed.explanation_ar);
  parsed.pos_ar=stripTashkeel(parsed.pos_ar);
  parsed.morph_ar=stripTashkeel(parsed.morph_ar);
+ parsed.synonyms_ar=(parsed.synonyms_ar||[]).map(s=>({ar:stripTashkeel(s),orig:''}));
+ parsed.antonyms_ar=(parsed.antonyms_ar||[]).map(a=>({ar:stripTashkeel(a),orig:''}));
  parsed.example_ar=stripTashkeel(parsed.example_ar);
  parsed.sentence_ar=stripTashkeel(parsed.sentence_ar);
- parsed.collocations=[];
  return parsed;
 }
 
@@ -1564,7 +1571,7 @@ $('fclist').addEventListener('click',e=>{
  }
 });
 
-/* ---------- Interactive Lookup (Document Words, Synonyms, or Sentence Tokens) ---------- */
+/* ---------- Interactive Lookup ---------- */
 async function lookupCustomWord(customWord,sent,lang){
  const req=++S.req;
  openPanel();
@@ -1572,7 +1579,7 @@ async function lookupCustomWord(customWord,sent,lang){
  const low=customWord.toLowerCase().replace(/^['’-]+|['’-]+$/g,'');
  const hit=LEX[lang]?.[low];
  if(hit){
-  const rec={word:customWord,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:S.sel?.sentence_ar||''};
+  const rec={word:customWord,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:S.sel?.sentence_ar||''};
   renderPanel(rec);
   addToFlashcards(rec);
   return;
@@ -1596,7 +1603,7 @@ async function lookupCustomWord(customWord,sent,lang){
   addToFlashcards(rec);
  }catch{
   if(req!==S.req)return;
-  renderPanel({word:customWord,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم حاول مجدداً.',ipa:'',cefr:'',pos_ar:'',morph_ar:'',lemma:low,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''});
+  renderPanel({word:customWord,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم حاول مجدداً.',ipa:'',cefr:'',pos_ar:'',morph_ar:'',lemma:low,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''});
  }
 }
 
@@ -1614,7 +1621,7 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
  if(!opts.silentScroll && innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
  const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
  if(hit){
-  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
   renderPanel(rec);
   addToFlashcards(rec);
   trText(sent,lang).then(t=>{if(req===S.req&&t){const plain=stripTashkeel(t);rec.sentence_ar=plain;$('pSA').textContent=plain}});
@@ -1636,7 +1643,7 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
   renderPanel(rec);
   addToFlashcards(rec);
  }
- catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
+ catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
 
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
@@ -1686,11 +1693,19 @@ function renderPanel(d){
  $('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';
  $('pExp').textContent=d.explanation_ar;
 
+ // Arabic-translated Synonyms & Antonyms
  const relBox=$('relBox'),relEl=$('pRels');
- const syns=(d.synonyms||[]).map(s=>`<button type="button" class="lex-chip" data-lex-word="${esc(s)}" title="انقر لترجمة المرادف">${esc(s)}</button>`);
- const ants=(d.antonyms||[]).map(a=>`<button type="button" class="lex-chip ant" data-lex-word="${esc(a)}" title="ضد الكلمة">≠ ${esc(a)}</button>`);
- const cols=(d.collocations||[]).map(col=>`<button type="button" class="lex-chip" data-lex-word="${esc(col)}" title="كلمة مرتبطة سياقياً">+ ${esc(col)}</button>`);
- const chips=[...syns,...ants,...cols];
+ const syns=(d.synonyms_ar||[]).map(item=>{
+  const ar=typeof item==='string'?item:item.ar;
+  const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
+  return `<button type="button" class="lex-chip" data-lex-ar="${esc(ar)}" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="انقر لاعتماد هذا المرادف">${esc(ar)}${orig}</button>`;
+ });
+ const ants=(d.antonyms_ar||[]).map(item=>{
+  const ar=typeof item==='string'?item:item.ar;
+  const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
+  return `<button type="button" class="lex-chip ant" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="ضد الكلمة">ضد: ${esc(ar)}${orig}</button>`;
+ });
+ const chips=[...syns,...ants];
  if(chips.length){
   relBox.hidden=false;
   relEl.innerHTML=chips.join('');
@@ -1721,10 +1736,21 @@ $('pAlts').addEventListener('click',async e=>{
  toast('تم اعتماد المعنى المختار وتحديث البطاقة');
 });
 
-$('pRels').addEventListener('click',e=>{
- const btn=e.target.closest('[data-lex-word]');
+$('pRels').addEventListener('click',async e=>{
+ const btn=e.target.closest('.lex-chip');
  if(!btn||!S.sel)return;
- lookupCustomWord(btn.dataset.lexWord,S.sel.sentence_original,S.sel.lang);
+ const orig=btn.dataset.lexOrig;
+ const ar=btn.dataset.lexAr;
+ if(ar){
+  const voc=await vocalizeWordOnly(ar);
+  S.sel.translation_ar=voc||ar;
+  $('pTr').textContent=S.sel.translation_ar;
+  addToFlashcards(S.sel);
+  if(orig)Speech.speak(orig,S.sel.lang);
+  toast(`تم اعتماد المرادف «${ar}»`);
+ }else if(orig){
+  Speech.speak(orig,S.sel.lang);
+ }
 });
 
 $('pSO').addEventListener('click',e=>{
@@ -1767,13 +1793,13 @@ function saveKey(){S.gem=$('gemKey').value.trim();S.gem?session.set(K.gem,S.gem)
 function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
 /* ---------- init & auto-restore last session on page reload ---------- */
-setThemeIcon();Speech.init();updBadge();updFcBadge();updateSessionHeaderUI();
+setThemeIcon();Speech.init();updBadge();updFcBadge();renderTabStrip();
 Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
 
 (async function bootstrap(){
  await renderRecentDocs();
  const last=getReadingState();
- const targetSess=(last&&S.sessions.find(x=>x.sessionId===last.sessionId))||S.sessions[0]||last;
+ const targetSess=(last&&S.sessions.find(x=>x.sessionId===last.sessionId))||S.sessions.find(x=>!x.isBlank&&x.docId)||last;
  if(targetSess && targetSess.docId){
   const savedDoc=await DocDB.get(targetSess.docId);
   if(savedDoc){
@@ -1790,11 +1816,6 @@ $('docTitleInput').addEventListener('input',e=>{
  if(S.docId)DocDB.get(S.docId).then(d=>{if(d){d.title=S.title;d.updatedAt=Date.now();DocDB.save(d)}});
  saveReadingState();
 });
-document.addEventListener('click',e=>{
- if(!$('sessPop').hidden && !e.target.closest('#sessWrap')){
-  closeSessionPopover();
- }
-});
 let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
 addEventListener('dragover',e=>e.preventDefault());
@@ -1804,8 +1825,7 @@ addEventListener('keydown',e=>{
  const isTyping=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||e.target?.isContentEditable;
  if(e.key==='Escape'){
   let c=false;
-  if(!$('sessPop').hidden){closeSessionPopover();c=true}
-  ['welcomeModal','pasteModal','apiModal','newSessionModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
+  ['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
   if($('drawer').classList.contains('open')||$('fcDrawer').classList.contains('open')){closeAllDrawers();c=true}
   if(!c&&!$('panel').hidden)closePanel();
   return;
