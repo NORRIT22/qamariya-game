@@ -861,7 +861,7 @@ async function ingest(f){
  try{if(isPDF)await readPDF(f);else if(isDOCX)await readDOCX(f);else if(isImage)await readImage(f);else openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(await f.text())}])}
  catch(e){console.error('File import failed:',e);progress(false);toast(e.message==='lib'?'تعذر تحميل مكتبة القراءة، تحقق من الاتصال.':e.name==='PasswordException'?'ملف PDF محمي بكلمة مرور.':'تعذر استخراج محتوى الملف؛ جرّب ملفاً آخر أو نسخة غير محمية.')}}
 
-/* Reconstruct authentic book paragraphs and indented lines from PDF layout */
+/* Reconstruct authentic book paragraphs and indented lines from PDF layout without splitting mid-sentence */
 function pdfBlocks(items){
  const sz=items.map(i=>i.fs).sort((a,b)=>a-b),med=sz[sz.length>>1]||12;
  items.sort((a,b)=>b.y-a.y||a.x-b.x);
@@ -893,9 +893,8 @@ function pdfBlocks(items){
 
  if(!lineObjs.length)return[];
 
- // Determine left margin (25th percentile of x to ignore indented first lines)
  const sortedX=[...lineObjs.map(l=>l.x)].sort((a,b)=>a-b);
- const baseMarginX=sortedX[Math.floor(sortedX.length*0.25)]||sortedX[0];
+ const baseMarginX=sortedX[Math.floor(sortedX.length*0.2)]||sortedX[0];
 
  const blocks=[];
  let paraText='';
@@ -922,16 +921,15 @@ function pdfBlocks(items){
   }
 
   const indentPx=line.x-baseMarginX;
-  const hasFirstLineIndent=indentPx>Math.max(8,line.fs*0.65);
+  const hasFirstLineIndent=indentPx>Math.max(10,line.fs*0.75);
   const yGap=prevLine?(prevLine.y-line.y):0;
-  const hasLargeVerticalGap=prevLine && yGap>Math.max(line.fs,prevLine.fs)*1.75;
-  const prevEndedSentence=prevLine && /[.!?…»”"']\s*$/.test(prevLine.text);
+  const hasLargeVerticalGap=prevLine && yGap>Math.max(line.fs,prevLine.fs)*1.85;
+  const prevEndedSentence=prevLine && /[.!?…»”"]\s*$/.test(prevLine.text);
 
-  // Strict literary rule: an indented line starts a new paragraph ONLY when the previous line completed its sentence
+  // Never split a paragraph mid-sentence regardless of justification spacing
   const startsNewPara=!prevLine
    || (hasFirstLineIndent && prevEndedSentence)
-   || hasLargeVerticalGap
-   || (prevEndedSentence && line.text.length<55 && prevLine.text.length<55);
+   || hasLargeVerticalGap;
 
   if(startsNewPara){
    flushPara();
@@ -939,7 +937,6 @@ function pdfBlocks(items){
    paraText=line.text;
    paraIndented=hasFirstLineIndent;
   }else{
-   // Join wrapped line seamlessly into continuous paragraph
    if(paraText.endsWith('-') && !paraText.endsWith(' -') && /^[a-zàâäéèêëîïôöùûüçœæ]/i.test(line.text)){
     paraText=paraText.slice(0,-1)+line.text;
    }else{
