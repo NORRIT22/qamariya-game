@@ -84,13 +84,18 @@ html:not(.icons) .ms{visibility:hidden}
 .split{flex:1;display:flex;align-items:flex-start}
 .canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(8px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
 #pages{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
-.sheet{width:100%;max-width:860px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow-x:auto}
-.sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:700px}}
-.body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.75;white-space:pre-wrap;word-break:normal;overflow-wrap:break-word}
-.body .raw-line{margin:0;min-height:1.2em}
-.body .raw-gap{height:.85em}
-.body h1{font-size:1.45em;line-height:1.35;margin:0}
-.body h2{font-size:1.2em;line-height:1.35;margin:0}
+.sheet{width:100%;max-width:820px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(22px,6vw,64px) clamp(20px,6.5vw,72px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow-x:auto}
+.sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:740px}}
+
+/* Authentic Book Typography: natural flowing paragraphs with first-line indent */
+.body{direction:ltr;text-align:justify;hyphens:auto;font-family:var(--df);font-size:var(--fs);line-height:1.72;word-break:normal;overflow-wrap:break-word}
+.body p.book-para{margin:0;text-indent:0}
+.body p.book-para.indented{text-indent:1.85em}
+.body .raw-line{margin:0;white-space:pre-wrap;text-align:left}
+.body .raw-gap{height:.95em}
+.body h1{font-size:1.45em;line-height:1.35;margin:0 0 .55em;text-align:left}
+.body h2{font-size:1.2em;line-height:1.35;margin:0 0 .45em;text-align:left}
+
 .sf{margin-top:36px;padding-top:10px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-size:11px;color:var(--sub);direction:ltr;user-select:none}.sf b{font-family:Outfit,sans-serif}
 .wt{border-radius:3px;padding:0;margin:0;cursor:pointer;transition:background .12s,color .12s}
 @media(hover:hover){.wt:hover{background:var(--hl);color:var(--ac)}}
@@ -170,7 +175,6 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <span dir="ltr">Readdy</span>
   </button>
 
-  <!-- Unified Inline Session Pills + Single '+' Button -->
   <div class="sess-bar" id="sessBar">
     <div id="tabList" style="display:flex;align-items:center;gap:6px"></div>
     <button class="sadd-btn" onclick="startBlankSessionTab()" title="جلسة قراءة مستقلة جديدة (+)" aria-label="جلسة قراءة مستقلة جديدة">
@@ -192,7 +196,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.</p></div>
+    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
@@ -288,8 +292,8 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">add_circle</i><div><b>جلسات قراءة مستقلة (+)</b><small>افتح عدة مستندات في جلسات مستقلة في الشريط العلوي، وتنقّل بينها أو أغلق أي جلسة من زر (×).</small></div></div>
-    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية ومرادفات بالعربية</b><small>ترجمة مشكولة للكلمة في سياقها مع منع الخلط بين اللغات، وعرض المرادفات والأضداد بالعربية.</small></div></div>
+    <div class="feat"><i class="ms">auto_stories</i><div><b>عرض مطابق لتخطيط الكتاب الأصلي</b><small>استخراج الفقرات المتصلة والمسافات البادئة (Indentation) كما في المؤلف الأصلي تماماً.</small></div></div>
+    <div class="feat"><i class="ms">psychology</i><div><b>تحليل سياقي كامل للجملة والكلمة</b><small>تحديد الجملة الكاملة من بدايتها حتى نقطتها لضمان ترجمة الكلمة حسب سياقها الحقيقي دون تحريف.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
@@ -312,11 +316,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const K={
  vocab:'readdy_saved_vocabulary_prod_v5',
- cache:'readdy_ai_cache_prod_v11',
+ cache:'readdy_ai_cache_prod_v12',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
- openSessions:'readdy_open_sessions_registry_v4',
+ openSessions:'readdy_open_sessions_registry_v5',
  gem:'readdy_user_gemini_api_key',
  wel:'readdy_hide_welcome_modal_saj_v1',
  theme:'readdy_theme_mode_v1'
@@ -392,7 +396,6 @@ $('tabList').addEventListener('click',async e=>{
  }
 });
 
-/* '+' Button: opens a clean independent session immediately */
 function startBlankSessionTab(){
  if(S.sessionId && !$('work').hidden)saveReadingState();
  Speech.stop();
@@ -517,7 +520,7 @@ function resetToDefaultHome(){
  $('empty').hidden=false;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.';
  closePanel();
  clearReadingState();
  renderTabStrip();
@@ -838,12 +841,14 @@ function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,30
  const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
 function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);saveReadingState();toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
 
-/* ---------- exact verbatim ingestion ---------- */
+/* ---------- Authentic Book-Layout Ingestion (Paragraph Reconstruction + Indentation) ---------- */
 const stripInvisible=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'');
+
 function verbatimLines(t){
  const rawLines=stripInvisible(t).replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
  return rawLines.map(line=>line.trim().length===0?{type:'gap',text:''}:{type:'line',text:line,indent:0});
 }
+
 function progress(v,t='',p=0){$('prog').hidden=!v;if(!v)return;$('pgText').textContent=t;$('pgPct').textContent=Math.round(p)+'%';$('pgBar').style.width=Math.round(p)+'%'}
 const need=x=>{if(!x)throw new Error('lib')};
 const MAX_FILE_BYTES=25*1024*1024;
@@ -856,49 +861,91 @@ async function ingest(f){
  try{if(isPDF)await readPDF(f);else if(isDOCX)await readDOCX(f);else if(isImage)await readImage(f);else openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(await f.text())}])}
  catch(e){console.error('File import failed:',e);progress(false);toast(e.message==='lib'?'تعذر تحميل مكتبة القراءة، تحقق من الاتصال.':e.name==='PasswordException'?'ملف PDF محمي بكلمة مرور.':'تعذر استخراج محتوى الملف؛ جرّب ملفاً آخر أو نسخة غير محمية.')}}
 
+/* Reconstruct authentic book paragraphs and indented lines from PDF layout */
 function pdfBlocks(items){
  const sz=items.map(i=>i.fs).sort((a,b)=>a-b),med=sz[sz.length>>1]||12;
  items.sort((a,b)=>b.y-a.y||a.x-b.x);
- const lines=[];let cur=[items[0]];
+ const rawLines=[];let cur=[items[0]];
  for(let i=1;i<items.length;i++){
   const it=items[i];
   if(Math.abs(it.y-cur[0].y)<=Math.max(3,cur[0].fs*.35))cur.push(it);
-  else{lines.push(cur);cur=[it]}
+  else{rawLines.push(cur);cur=[it]}
  }
- lines.push(cur);
- const minX=items.reduce((m,i)=>Math.min(m,i.x),Infinity);
- const blocks=[];
- let prevY=null,prevFs=med;
- lines.forEach(l=>{
+ rawLines.push(cur);
+
+ const lineObjs=rawLines.map(l=>{
   l.sort((a,b)=>a.x-b.x);
-  const lineFs=l.reduce((a,i)=>a+i.fs,0)/l.length;
-  const lineY=l[0].y;
-  if(prevY!==null && (prevY-lineY)>Math.max(lineFs,prevFs)*1.55){
-   blocks.push({type:'gap',text:''});
-  }
+  const fs=l.reduce((a,i)=>a+i.fs,0)/l.length;
+  const y=l[0].y;
+  const x=l[0].x;
   let t='';
   l.forEach((it,j)=>{
    if(j){
     const p=l[j-1];
     const gap=it.x-(p.x+p.w);
-    const spaceW=Math.max(2.5,lineFs*.26);
-    if(gap>spaceW && !t.endsWith(' ') && !it.s.startsWith(' ')){
-     const extraSpaces=Math.min(12,Math.max(1,Math.round(gap/(spaceW*1.6))));
-     t+=' '.repeat(extraSpaces);
-    }
+    const spaceW=Math.max(2.2,fs*.24);
+    if(gap>spaceW && !t.endsWith(' ') && !it.s.startsWith(' '))t+=' ';
    }
    t+=stripInvisible(it.s);
   });
-  const ind=Math.max(0,Math.round(l[0].x-minX));
-  const isH1=lineFs>=med*1.45 && t.trim().length<120;
-  const isH2=!isH1 && lineFs>=med*1.22 && t.trim().length<140;
-  blocks.push({
-   type:isH1?'h1':isH2?'h2':'line',
-   text:t,
-   indent:ind>6?Math.min(ind,320):0
-  });
-  prevY=lineY;prevFs=lineFs;
+  return{text:t.trim(),x,y,fs};
+ }).filter(l=>l.text.length>0);
+
+ if(!lineObjs.length)return[];
+
+ // Determine left margin (25th percentile of x to ignore indented first lines)
+ const sortedX=[...lineObjs.map(l=>l.x)].sort((a,b)=>a-b);
+ const baseMarginX=sortedX[Math.floor(sortedX.length*0.25)]||sortedX[0];
+
+ const blocks=[];
+ let paraText='';
+ let paraIndented=false;
+ let prevLine=null;
+
+ const flushPara=()=>{
+  if(paraText.trim()){
+   blocks.push({type:'para',text:paraText.trim(),indented:paraIndented});
+  }
+  paraText='';
+  paraIndented=false;
+ };
+
+ lineObjs.forEach(line=>{
+  const isH1=line.fs>=med*1.45 && line.text.length<120;
+  const isH2=!isH1 && line.fs>=med*1.22 && line.text.length<140;
+
+  if(isH1||isH2){
+   flushPara();
+   blocks.push({type:isH1?'h1':'h2',text:line.text,indented:false});
+   prevLine=line;
+   return;
+  }
+
+  const indentPx=line.x-baseMarginX;
+  const hasFirstLineIndent=indentPx>Math.max(8,line.fs*0.65);
+  const yGap=prevLine?(prevLine.y-line.y):0;
+  const hasLargeVerticalGap=prevLine && yGap>Math.max(line.fs,prevLine.fs)*1.75;
+  const prevEndedSentence=prevLine && /[.!?…»”"']\s*$/.test(prevLine.text);
+
+  const startsNewPara=!prevLine || hasFirstLineIndent || hasLargeVerticalGap || (prevEndedSentence && line.text.length<55 && prevLine.text.length<55);
+
+  if(startsNewPara){
+   flushPara();
+   if(hasLargeVerticalGap)blocks.push({type:'gap',text:''});
+   paraText=line.text;
+   paraIndented=hasFirstLineIndent;
+  }else{
+   // Join wrapped line seamlessly into continuous paragraph
+   if(paraText.endsWith('-') && !paraText.endsWith(' -') && /^[a-zàâäéèêëîïôöùûüçœæ]/i.test(line.text)){
+    paraText=paraText.slice(0,-1)+line.text;
+   }else{
+    paraText+=' '+line.text;
+   }
+  }
+  prevLine=line;
  });
+
+ flushPara();
  return blocks;
 }
 
@@ -974,7 +1021,7 @@ function openDoc(title,pages,opts={}){progress(false);
   b.sents=splitSentences(b.text).map(raw=>{const text=raw.trim();if(!text)return null;S.recs.push({text,tokens:[],page:pi});return{raw,id:S.recs.length-1}}).filter(Boolean)
  }));
  if(!opts.skipSave){
-  const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indent:b.indent||0}))}));
+  const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indented:!!b.indented,indent:b.indent||0}))}));
   DocDB.save({id:S.docId,title:S.title,lang:S.lang,pages:cleanPages,updatedAt:Date.now()});
  }
  $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('jump').max=pages.length;$('jump').value=opts.restore?.page||1;$('pgCount').textContent=`/ ${pages.length}`;
@@ -1018,12 +1065,15 @@ function buildSheets(){const c=$('pages');S.io?.disconnect();c.replaceChildren()
  c.append(fr);[...c.children].forEach(a=>S.io?S.io.observe(a):renderPage(+a.dataset.p))}
 const WORD=/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
 function renderPage(pi){const a=$('pages').children[pi];if(!a||a.dataset.done)return;a.dataset.done=1;a.classList.remove('pending');
- const saved=new Set(S.saved.map(w=>w.word.toLowerCase())),body=a.firstChild,tag={h1:'h1',h2:'h2'};
+ const saved=new Set(S.saved.map(w=>w.word.toLowerCase())),body=a.firstChild,tag={h1:'h1',h2:'h2',para:'p'};
  S.pages[pi].blocks.forEach(b=>{
   if(b.type==='gap'){const g=document.createElement('div');g.className='raw-gap';body.append(g);return}
   const el=document.createElement(tag[b.type]||'div');
-  if(!tag[b.type])el.className='raw-line';
-  if(b.indent)el.style.paddingLeft=b.indent+'px';
+  if(b.type==='para'){
+   el.className='book-para'+(b.indented?' indented':'');
+  }else if(!tag[b.type]){
+   el.className='raw-line';
+  }
   if(!b.sents||!b.sents.length){el.textContent=b.text;body.append(el);return}
   b.sents.forEach(({raw,id})=>{const rec=S.recs[id];rec.tokens=[];let last=0;
    for(const m of raw.matchAll(WORD)){const w=m[0];if(m.index>last)el.append(raw.slice(last,m.index));
@@ -1035,7 +1085,7 @@ $('pages').addEventListener('click',e=>{const t=e.target.closest('.wt');if(!t)re
 function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||1));$('jump').value=n;renderPage(n-1);$('doc-page-'+n)?.scrollIntoView({behavior:'smooth',block:'start'});saveReadingState({page:n})}
 function setFont(m,skipSave=false){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif');if(!skipSave)saveReadingState()}
 function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px');saveReadingState()}
-function hl(t){S.toks.forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
+function hl(t){document.querySelectorAll('.wt.sh').forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
 
 function goHome(preserveRegistry=true){
  if(preserveRegistry && S.sessionId && !$('work').hidden)saveReadingState();
@@ -1047,7 +1097,7 @@ function goHome(preserveRegistry=true){
  $('work').hidden=true;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.';
  closePanel();
  renderTabStrip();
  renderRecentDocs();
@@ -1187,7 +1237,7 @@ async function vocalizeWordOnly(text){
 /* ---------- Integrated Multi-Layer Contextual Translation Engine ---------- */
 async function jfetch(url,ms=4500,opt={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}}
 
-async function translate(q,sl,tl='ar',max=700){
+async function translate(q,sl,tl='ar',max=900){
  const e=encodeURIComponent(q.slice(0,max));
  const tries=[
   async()=>{
@@ -1229,7 +1279,6 @@ function detectMorphology(w,lang){
  return'';
 }
 
-/* Translate list of foreign synonyms/antonyms into Arabic pairs: [{ar, orig}] */
 async function translateLexListToArabic(words,srcLang){
  const clean=[...new Set((words||[]).map(x=>String(x||'').trim()).filter(Boolean))].slice(0,5);
  if(!clean.length)return[];
@@ -1247,7 +1296,6 @@ async function translateLexListToArabic(words,srcLang){
  });
 }
 
-/* Deep lexical metadata: IPA, POS, CEFR level, Arabic-translated synonyms & antonyms, examples */
 async function lexMeta(w,lang){
  const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms_ar:[],antonyms_ar:[],cefr:''};
  const low=w.toLowerCase();
@@ -1587,7 +1635,8 @@ async function lookupCustomWord(customWord,sent,lang){
 }
 
 async function onWord(el,word,sent,toks,sIdx,opts={}){
- S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;
+ document.querySelectorAll('.wt.act').forEach(x=>x.classList.remove('act'));
+ hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;
  S.activeSentId=sIdx;
  S.activeWordIdx=toks.indexOf(el);
  const pageNum=(S.recs[sIdx]?.page??0)+1;
@@ -1626,7 +1675,7 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
 
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
-function closePanel(){S.req++;$('panel').hidden=true;document.body.classList.remove('panel-open');S.activeEl?.classList.remove('act');S.activeEl=null;hl([]);S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;saveReadingState({panelOpen:false,sentId:-1,wordIdx:-1})}
+function closePanel(){S.req++;$('panel').hidden=true;document.body.classList.remove('panel-open');document.querySelectorAll('.wt.act').forEach(x=>x.classList.remove('act'));S.activeEl=null;hl([]);S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;saveReadingState({panelOpen:false,sentId:-1,wordIdx:-1})}
 
 function renderInteractiveSentence(container,sent,activeWord){
  container.replaceChildren();
