@@ -41,10 +41,29 @@ html:not(.icons) .ms{visibility:hidden}
 .brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
 .play{transform-origin:43px 32px;animation:pulse 2.6s ease-in-out infinite}
 .sp{flex:1;min-width:0}
-#docTitleInput{display:none;width:clamp(120px,22vw,240px);background:none;border:1px solid transparent;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:500;outline:0;text-overflow:ellipsis}
+#docTitleInput{display:none;width:clamp(110px,18vw,210px);background:none;border:1px solid transparent;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:500;outline:0;text-overflow:ellipsis}
 #docTitleInput:hover{background:var(--s2)}#docTitleInput:focus{border-color:var(--ac)}
 @media(min-width:768px){body.has-doc #docTitleInput{display:block}}
 .badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
+
+/* Sessions Switcher in Header */
+.sess-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;flex:none}
+.sess-btn{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;max-width:190px;transition:.15s}
+.sess-btn:hover{border-color:var(--ac)}
+.sess-btn .stitle{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+.sess-btn .scnt{background:var(--acs);color:var(--onact);font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px}
+.sess-pop{position:absolute;top:calc(100% + 8px);right:0;width:min(340px,92vw);background:var(--s1);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);padding:10px;z-index:50;display:grid;gap:6px;animation:modal .18s ease-out}
+.sess-pop-hd{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 8px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600;color:var(--sub)}
+.sess-list{display:grid;gap:4px;max-height:260px;overflow-y:auto}
+.sitem{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid transparent;background:var(--bg);transition:.12s}
+.sitem:hover{border-color:var(--bd);background:var(--s2)}
+.sitem.cur{border-color:var(--ac);background:var(--hl)}
+.sitem-main{flex:1;min-width:0;cursor:pointer;text-align:right}
+.sitem-main b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}
+.sitem-main small{display:block;font-size:10px;color:var(--sub)}
+.sess-actions{display:flex;gap:6px;padding-top:6px;border-top:1px solid var(--bd)}
+.sess-actions .btn{flex:1;justify-content:center;padding:6px 10px}
+
 #empty{flex:1;display:grid;place-items:center;padding:24px 16px}
 .hero{position:relative;width:100%;max-width:680px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,5vw,44px);text-align:center;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:-40%;background:radial-gradient(closest-side at 30% 30%,rgba(26,115,232,.13),transparent 60%),radial-gradient(closest-side at 70% 70%,rgba(138,180,248,.15),transparent 60%);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
@@ -131,13 +150,18 @@ body.panel-open .canvas{padding-bottom:64dvh}
 .mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
 .mbox textarea,.mbox input[type=password]{width:100%;border-radius:14px;background:var(--s2);border:1px solid var(--bd);padding:12px;font-size:14px;outline:0}.mbox textarea{font-family:Literata,serif;resize:vertical}
 .feat{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:var(--s2);border:1px solid var(--bd);text-align:right}.feat .ms{color:var(--ac);background:var(--acs);border-radius:10px;padding:5px;box-sizing:content-box}.feat b{display:block;color:var(--tx);font-size:12px}.feat small{font-size:11px}
+.radio-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:var(--s2);border:1px solid var(--bd);cursor:pointer;transition:.15s}
+.radio-card:hover{border-color:var(--ac)}
+.radio-card input{margin-top:3px;accent-color:var(--ac)}
+.radio-card b{display:block;color:var(--tx);font-size:12px}
+.radio-card small{font-size:11px;color:var(--sub)}
 .toast{position:fixed;top:calc(var(--hh) + 10px);left:50%;transform:translate(-50%,-16px);opacity:0;pointer-events:none;transition:.25s;background:#1f1f1f;color:#fff;font-size:12px;font-weight:500;padding:9px 18px;border-radius:99px;box-shadow:var(--sh);z-index:80;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}html.dark .toast{background:#e3e3e3;color:#131314}
 body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;border:2px dashed var(--ac);border-radius:24px;background:rgba(26,115,232,.08);display:grid;place-items:center;z-index:90;pointer-events:none;font-weight:700;color:var(--ac)}
 @keyframes pulse{50%{transform:scale(1.14)}}@keyframes float{50%{transform:translateY(-6px)}}@keyframes drift{to{transform:translate(6%,4%) rotate(8deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes pop{50%{transform:scale(1.06)}}
 @keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}}@keyframes sheet{from{transform:translateY(100%)}}@keyframes slide{from{opacity:0;transform:translateX(-24px)}}
 @keyframes sp{50%{height:14px}}@keyframes shim{to{background-position:600px 0}}
-@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}}
+@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}.sess-btn{max-width:120px}}
 @media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -151,10 +175,39 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <span dir="ltr">Readdy</span>
   </button>
   <input id="docTitleInput" dir="ltr" type="text" aria-label="عنوان المستند">
+
+  <!-- Independent Reading Sessions Switcher + '+' New Session Button -->
+  <div id="sessWrap" class="sess-wrap">
+    <button id="newSessBtn" class="ibtn sm" onclick="openNewSessionModal()" title="إضافة جلسة مستقلة جديدة (+)" aria-label="إضافة جلسة مستقلة جديدة">
+      <i class="ms">add</i>
+    </button>
+    <button id="sessMenuBtn" class="sess-btn" onclick="toggleSessionPopover()" hidden aria-label="الجلسات المفتوحة">
+      <i class="ms" style="font-size:16px;color:var(--ac)">tab</i>
+      <span id="activeSessTitle" class="stitle">جلسة 1</span>
+      <span id="openSessCount" class="scnt">1</span>
+      <i class="ms" style="font-size:16px">expand_more</i>
+    </button>
+    <button id="endCurSessBtn" class="ibtn sm" onclick="endCurrentSession()" hidden title="إنهاء الجلسة الحالية" aria-label="إنهاء الجلسة الحالية" style="color:#d93025">
+      <i class="ms" style="font-size:17px">close</i>
+    </button>
+
+    <div id="sessPop" class="sess-pop" hidden>
+      <div class="sess-pop-hd">
+        <span>الجلسات المستقلة المفتوحة</span>
+        <span id="sessPopBadge" class="tag ac">1</span>
+      </div>
+      <div id="sessList" class="sess-list"></div>
+      <div class="sess-actions">
+        <button class="btn pri" onclick="closeSessionPopover();openNewSessionModal()"><i class="ms" style="font-size:16px">add</i>جلسة جديدة</button>
+        <button id="popEndCurBtn" class="btn" style="color:#d93025" onclick="closeSessionPopover();endCurrentSession()"><i class="ms" style="font-size:16px">close</i>إنهاء الحالية</button>
+      </div>
+    </div>
+  </div>
+
   <div class="sp"></div>
   <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
     <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
-  <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
+  <button class="btn pri" onclick="triggerDirectUpload()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
   <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
   <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
   <button class="ibtn" onclick="show('apiModal',1)" aria-label="إعدادات الترجمة"><i class="ms">tune</i></button>
@@ -166,13 +219,13 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ تلقائياً في ذاكرة المتصفح مع تذكّر آخر موضع توقفت عنده، وترجمة سياقية متكاملة مشكولة.</p></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ في جلسة مستقلة مع تذكّر آخر موضع توقفت عنده، وترجمة سياقية متكاملة مشكولة.</p></div>
     <div class="row">
-      <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
-      <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
+      <button class="btn pri lg" onclick="triggerDirectUpload()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
+      <button class="btn lg" onclick="openPasteForNewSession(false)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
     <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">تُحفظ المستندات وموضع القراءة والبطاقات محلياً داخل متصفحك. الحد الأقصى للملف 25 MB.</p>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">يمكنك فتح عدة جلسات مستقلة في آنٍ واحد عبر زر (+) في الأعلى. الحد الأقصى للملف 25 MB.</p>
       <div id="prog" class="prog" role="status" aria-live="polite" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
     </div>
     <div id="recentWrap" class="recent-box" hidden>
@@ -260,11 +313,34 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div id="fclist"></div>
 </aside>
 
+<!-- New Independent Session Modal (+) -->
+<div id="newSessionModal" class="modal" hidden><div class="mbox">
+  <div class="mh"><span>إضافة جلسة قراءة مستقلة جديدة</span><button class="ibtn sm" onclick="show('newSessionModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mb">
+    <div id="curSessChoiceBox" style="display:grid;gap:8px">
+      <b style="color:var(--tx)">ماذا تريد أن تفعل بالجلسة الحالية؟</b>
+      <label class="radio-card">
+        <input type="radio" name="curSessAction" value="keep" checked>
+        <div><b>إبقاء الجلسة الحالية مفتوحة</b><small id="keepSessSub">تبقى محفوظة في قائمة الجلسات ويمكنك العودة إليها في أي لحظة بنفس موضع القراءة.</small></div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="curSessAction" value="end">
+        <div><b>إنهاء الجلسة الحالية وإغلاقها</b><small>تُغلق الجلسة الحالية نهائياً وتُفتح الجلسة الجديدة مكانها.</small></div>
+      </label>
+    </div>
+    <b style="color:var(--tx);margin-top:4px">اختر محتوى الجلسة المستقلة الجديدة:</b>
+    <div class="row" style="justify-content:stretch">
+      <button class="btn pri lg" style="flex:1;justify-content:center" onclick="startNewSessionWithFile()"><i class="ms">upload_file</i>رفع ملف جديد</button>
+      <button class="btn lg" style="flex:1;justify-content:center" onclick="startNewSessionWithPaste()"><i class="ms">content_paste</i>لصق نص جديد</button>
+    </div>
+  </div>
+</div></div>
+
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
+    <div class="feat"><i class="ms">add_circle</i><div><b>جلسات قراءة مستقلة متعددة (+)</b><small>اضغط زر (+) في الشريط العلوي لفتح مستند جديد في جلسة مستقلة مع إبقاء الجلسة الحالية أو إنهائها.</small></div></div>
     <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية متكاملة ومشكولة</b><small>تحليل الجملة الكاملة، والمطابقة العكسية للمعنى الدقيق، مع المرادفات والأضداد والمستوى اللغوي (CEFR).</small></div></div>
-    <div class="feat"><i class="ms">keyboard</i><div><b>تنقّل بأسهم لوحة المفاتيح واستكمال القراءة</b><small>استعمل الأسهم للتنقل بين الكلمات والسطور، وعند تحديث الصفحة ستعود تلقائياً إلى نفس الملف وموضع توقفك.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
@@ -291,6 +367,7 @@ const K={
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
+ openSessions:'readdy_open_sessions_registry_v2',
  gem:'readdy_user_gemini_api_key',
  wel:'readdy_hide_welcome_modal_saj_v1',
  theme:'readdy_theme_mode_v1'
@@ -299,7 +376,7 @@ const store={get(k,d=null){try{const v=localStorage.getItem(k);return v===null?d
 const session={get(k,d=''){try{const v=sessionStorage.getItem(k);return v===null?d:v}catch{return d}},set(k,v){try{sessionStorage.setItem(k,v)}catch{}},del(k){try{sessionStorage.removeItem(k)}catch{}}};
 function loadSessionGemKey(){const active=session.get(K.gem,'');const legacy=store.get(K.gem,'');if(!active&&legacy)session.set(K.gem,legacy);if(legacy)store.del(K.gem);return active||legacy||''}
 
-/* ---------- 10-session counter initialization ---------- */
+/* ---------- 10-session flashcard counter initialization ---------- */
 const MAX_FC_SESSIONS=10;
 function initSessionNumber(){
  const alreadyCounted=session.get('readdy_session_counted','');
@@ -313,7 +390,13 @@ function initSessionNumber(){
 }
 const CURRENT_SESSION=initSessionNumber();
 
-const S={docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,activeSentId:-1,activeWordIdx:-1,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null};
+const S={
+ sessionId:'',
+ sessions:[], // Independent open reading sessions: [{sessionId, docId, title, lang, page, totalPages, scrollY, sentId, wordIdx, panelOpen, size, font, override, updatedAt}]
+ pendingCloseSessionId:'',
+ docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,activeSentId:-1,activeWordIdx:-1,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null
+};
+
 try{
  const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;
  Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v));
@@ -322,17 +405,184 @@ try{
   S.flashcards=fcRaw.filter(c=>c && typeof c.expiresAt==='number' && c.expiresAt>=CURRENT_SESSION);
   store.set(K.fc,JSON.stringify(S.flashcards));
  }
+ const reg=JSON.parse(store.get(K.openSessions,'[]'));
+ if(Array.isArray(reg))S.sessions=reg;
 }catch{}
 
-/* ---------- Reading state persistence (resume exact doc, page, scroll & word on refresh) ---------- */
-function saveReadingState(extra={}){
- if(!S.docId||$('work').hidden){
-  store.del(K.state);
+/* ---------- Independent Sessions Registry Management ---------- */
+function persistSessionsRegistry(){
+ store.set(K.openSessions,JSON.stringify(S.sessions));
+ updateSessionHeaderUI();
+}
+
+function updateSessionHeaderUI(){
+ const count=S.sessions.length;
+ const hasAny=count>0;
+ const inWork=!$('work').hidden && !!S.sessionId;
+ $('sessMenuBtn').hidden=!hasAny;
+ $('endCurSessBtn').hidden=!inWork;
+ $('openSessCount').textContent=count;
+ $('sessPopBadge').textContent=count;
+ const cur=S.sessions.find(x=>x.sessionId===S.sessionId)||S.sessions[0];
+ $('activeSessTitle').textContent=cur?cur.title:'الجلسات';
+ if(!$('sessPop').hidden)renderSessionsPopover();
+}
+
+function toggleSessionPopover(){
+ const pop=$('sessPop');
+ const next=pop.hidden;
+ pop.hidden=!next;
+ if(next)renderSessionsPopover();
+}
+function closeSessionPopover(){
+ $('sessPop').hidden=true;
+}
+
+function renderSessionsPopover(){
+ const list=$('sessList');
+ $('popEndCurBtn').hidden=!S.sessionId || $('work').hidden;
+ if(!S.sessions.length){
+  list.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:var(--sub)">لا توجد جلسات مفتوحة حالياً</div>';
   return;
  }
- const prev=getReadingState()||{};
- const next={
+ list.innerHTML=S.sessions.map((s,idx)=>{
+  const isCur=s.sessionId===S.sessionId && !$('work').hidden;
+  return `<div class="sitem${isCur?' cur':''}">
+   <div class="sitem-main" data-switch-sess="${esc(s.sessionId)}">
+    <b>${esc(s.title||'جلسة '+(idx+1))}</b>
+    <small>صفحة ${s.page||1} من ${s.totalPages||1} • ${esc((s.lang||'en').toUpperCase())}${isCur?' • نشطة الآن':''}</small>
+   </div>
+   <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-close-sess="${esc(s.sessionId)}" title="إنهاء هذه الجلسة" aria-label="إنهاء الجلسة"><i class="ms" style="font-size:17px">close</i></button>
+  </div>`;
+ }).join('');
+}
+
+$('sessList').addEventListener('click',async e=>{
+ const sw=e.target.closest('[data-switch-sess]');
+ if(sw){
+  const sid=sw.dataset.switchSess;
+  closeSessionPopover();
+  await switchToSession(sid);
+  return;
+ }
+ const cl=e.target.closest('[data-close-sess]');
+ if(cl){
+  const sid=cl.dataset.closeSess;
+  await closeSpecificSession(sid);
+ }
+});
+
+async function switchToSession(targetSessionId){
+ if(!targetSessionId)return;
+ if(S.sessionId===targetSessionId && !$('work').hidden)return;
+ saveReadingState();
+ const target=S.sessions.find(x=>x.sessionId===targetSessionId);
+ if(!target){toast('الجلسة غير موجودة');return}
+ const doc=await DocDB.get(target.docId);
+ if(!doc){
+  S.sessions=S.sessions.filter(x=>x.sessionId!==targetSessionId);
+  persistSessionsRegistry();
+  toast('تعذر العثور على مستند هذه الجلسة');
+  return;
+ }
+ Speech.stop();
+ openDoc(doc.title,doc.pages,{
+  id:doc.id,
+  sessionId:target.sessionId,
+  skipSave:true,
+  restore:target
+ });
+ toast(`تم الانتقال إلى جلسة: ${target.title}`);
+}
+
+async function closeSpecificSession(targetSessionId){
+ const idx=S.sessions.findIndex(x=>x.sessionId===targetSessionId);
+ if(idx<0)return;
+ const wasCurrent=(S.sessionId===targetSessionId && !$('work').hidden);
+ S.sessions.splice(idx,1);
+ persistSessionsRegistry();
+
+ if(wasCurrent){
+  Speech.stop();
+  if(S.sessions.length){
+   const nextSess=S.sessions[Math.max(0,idx-1)];
+   await switchToSession(nextSess.sessionId);
+   toast('تم إنهاء الجلسة السابقة والانتقال للجلسة التالية');
+  }else{
+   S.sessionId='';
+   goHome(true);
+   toast('تم إنهاء الجلسة الحالية');
+  }
+ }else{
+  toast('تم إنهاء الجلسة');
+ }
+}
+
+async function endCurrentSession(){
+ if(!S.sessionId){
+  goHome(true);
+  return;
+ }
+ closeSessionPopover();
+ await closeSpecificSession(S.sessionId);
+}
+
+/* ---------- '+' New Independent Session Flow ---------- */
+function openNewSessionModal(){
+ closeSessionPopover();
+ const hasActive=!!S.sessionId && !$('work').hidden;
+ $('curSessChoiceBox').hidden=!hasActive;
+ if(hasActive){
+  $('keepSessSub').textContent=`تبقى جلسة «${S.title}» محفوظة في قائمة الجلسات ويمكنك العودة إليها في أي لحظة.`;
+ }
+ show('newSessionModal',1);
+}
+
+function getNewSessionMode(){
+ if(!S.sessionId || $('work').hidden)return'keep';
+ const checked=document.querySelector('input[name="curSessAction"]:checked');
+ return checked?checked.value:'keep';
+}
+
+function startNewSessionWithFile(){
+ const mode=getNewSessionMode();
+ S.pendingCloseSessionId=(mode==='end'&&S.sessionId)?S.sessionId:'';
+ show('newSessionModal',0);
+ saveReadingState();
+ $('fileInput').click();
+}
+
+function startNewSessionWithPaste(){
+ const mode=getNewSessionMode();
+ S.pendingCloseSessionId=(mode==='end'&&S.sessionId)?S.sessionId:'';
+ show('newSessionModal',0);
+ saveReadingState();
+ show('pasteModal',1);
+}
+
+function triggerDirectUpload(){
+ S.pendingCloseSessionId='';
+ $('fileInput').click();
+}
+
+function openPasteForNewSession(closeCur=false){
+ S.pendingCloseSessionId=closeCur&&S.sessionId?S.sessionId:'';
+ show('pasteModal',1);
+}
+
+/* ---------- Reading state persistence per independent session ---------- */
+function saveReadingState(extra={}){
+ if(!S.docId||!S.sessionId||$('work').hidden){
+  return;
+ }
+ const prev=S.sessions.find(x=>x.sessionId===S.sessionId)||{};
+ const snap={
+  sessionId:S.sessionId,
   docId:S.docId,
+  title:S.title,
+  lang:S.lang,
+  override:S.override,
+  totalPages:S.pages.length||prev.totalPages||1,
   scrollY:Math.max(0,Math.round(window.scrollY||0)),
   page:parseInt($('jump')?.value||'1',10)||1,
   sentId:S.activeSentId>=0?S.activeSentId:(extra.sentId??prev.sentId??-1),
@@ -343,7 +593,11 @@ function saveReadingState(extra={}){
   updatedAt:Date.now(),
   ...extra
  };
- store.set(K.state,JSON.stringify(next));
+ const idx=S.sessions.findIndex(x=>x.sessionId===S.sessionId);
+ if(idx>=0)S.sessions[idx]=snap;
+ else S.sessions.unshift(snap);
+ persistSessionsRegistry();
+ store.set(K.state,JSON.stringify(snap));
 }
 function getReadingState(){
  try{
@@ -441,13 +695,19 @@ $('recentList').addEventListener('click',async e=>{
  const openEl=e.target.closest('[data-open-doc]');
  if(openEl){
   const doc=await DocDB.get(openEl.dataset.openDoc);
-  if(doc)openDoc(doc.title,doc.pages,{id:doc.id,skipSave:false});
+  if(doc){
+   const existingSess=S.sessions.find(x=>x.docId===doc.id);
+   if(existingSess)await switchToSession(existingSess.sessionId);
+   else openDoc(doc.title,doc.pages,{id:doc.id,skipSave:false});
+  }
   return;
  }
  const delEl=e.target.closest('[data-del-doc]');
  if(delEl){
   const targetId=delEl.dataset.delDoc;
   await DocDB.remove(targetId);
+  S.sessions=S.sessions.filter(x=>x.docId!==targetId);
+  persistSessionsRegistry();
   if(getReadingState()?.docId===targetId)clearReadingState();
   renderRecentDocs();
   toast('تم حذف المستند من الذاكرة');
@@ -455,9 +715,12 @@ $('recentList').addEventListener('click',async e=>{
 });
 async function clearSavedDocs(){
  await DocDB.clear();
+ S.sessions=[];
+ S.sessionId='';
+ persistSessionsRegistry();
  clearReadingState();
  renderRecentDocs();
- toast('تم مسح جميع المستندات المحفوظة');
+ toast('تم مسح جميع المستندات والجلسات المحفوظة');
 }
 
 /* ---------- built-in lexicon: vocalized translation ONLY; plain Arabic POS ---------- */
@@ -616,7 +879,7 @@ function toggleDocAudio(){Speech.playing?(Speech.paused?Speech.resume():Speech.p
 function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,3000).toLowerCase();
  const fr=(s.match(/[éèêëàâîïôùûüçœæ]|\b(le|la|les|des|une|dans|pour|avec|sur|est|sont|qui|que|pas|plus|cette|nous|vous|mais|ou|donc|aux|ces|mon|ma|mes)\b/g)||[]).length;
  const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
-function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
+function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);saveReadingState();toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
 
 /* ---------- exact verbatim ingestion ---------- */
 const stripInvisible=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'');
@@ -722,9 +985,9 @@ async function readDOCX(f){need(window.mammoth);progress(true,'جاري تحلي
 async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
  const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
  try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text||'')}])}finally{await w.terminate()}}
-function readPasted(){const t=$('pasteInput').value;if(!t.trim())return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي',[{pageNumber:1,blocks:verbatimLines(t)}])}
+function readPasted(){const t=$('pasteInput').value;if(!t.trim())return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),[{pageNumber:1,blocks:verbatimLines(t)}])}
 
-/* ---------- document model, lazy rendering & state restoration ---------- */
+/* ---------- document model, lazy rendering & independent session restoration ---------- */
 function splitSentences(text){
  const N='\u0000',p=text.replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|Mme|Mlle|etc|vs|fig|vol|M)\./g,'$1'+N).replace(/\b([ei])\.([ge])\./g,'$1'+N+'$2'+N).replace(/(\d)\.(\d)/g,'$1'+N+'$2');
  const out=[],re=/[.!?…]+["'»”)\]]*\s*/g;let last=0,m;
@@ -733,8 +996,18 @@ function splitSentences(text){
 
 function openDoc(title,pages,opts={}){progress(false);
  if(!pages.some(p=>p.blocks.some(b=>b.text.trim().length>0))){toast('لا يوجد نص قابل للقراءة في هذا الملف.');return}
+
+ // If user chose to end the previous session when starting this new session
+ if(S.pendingCloseSessionId){
+  const toClose=S.pendingCloseSessionId;
+  S.pendingCloseSessionId='';
+  S.sessions=S.sessions.filter(x=>x.sessionId!==toClose);
+ }
+
  S.docId=opts.id||('doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,7));
+ S.sessionId=opts.sessionId||opts.restore?.sessionId||('sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,6));
  S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+ if(opts.restore?.override)S.override=opts.restore.override;
  S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
  pages.forEach((pg,pi)=>pg.blocks.forEach(b=>{
   if(b.type==='gap'||!b.text.trim()){b.sents=[];return}
@@ -803,7 +1076,21 @@ function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||
 function setFont(m,skipSave=false){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif');if(!skipSave)saveReadingState()}
 function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px');saveReadingState()}
 function hl(t){S.toks.forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
-function goHome(){Speech.stop();S.io?.disconnect();S.docId='';S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();clearReadingState();renderRecentDocs();scrollTo(0,0)}
+
+function goHome(preserveRegistry=true){
+ if(preserveRegistry && S.sessionId && !$('work').hidden)saveReadingState();
+ Speech.stop();
+ S.io?.disconnect();
+ S.docId='';S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+ $('pages').replaceChildren();
+ $('empty').hidden=false;
+ $('work').hidden=true;
+ document.body.classList.remove('has-doc');
+ closePanel();
+ updateSessionHeaderUI();
+ renderRecentDocs();
+ scrollTo(0,0);
+}
 
 /* ---------- Track visible page & scroll position continuously ---------- */
 let scrollSaveTimer=null;
@@ -846,7 +1133,7 @@ function navigateByArrows(key){
   return false;
  }
  if($('work').hidden||!S.recs.length)return false;
- if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||$('drawer').classList.contains('open'))return false;
+ if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||!$('newSessionModal').hidden||$('drawer').classList.contains('open'))return false;
 
  if(key==='ArrowRight'||key==='ArrowLeft'){
   const dir=key==='ArrowRight'?1:-1;
@@ -1050,7 +1337,6 @@ function buildFocusedSentence(sent,w){
  return re.test(sent)?sent.replace(re,'[$1]'):sent;
 }
 
-/* Integrated contextual synthesis with back-translation sense disambiguation */
 async function hybrid(word,sent,lang){
  const w=word.replace(/^['’-]+|['’-]+$/g,''),ph=localPhrase(sent,w);
  const focusedSent=buildFocusedSentence(sent,w);
@@ -1062,13 +1348,11 @@ async function hybrid(word,sent,lang){
   lexMeta(w,lang)
  ]);
 
- // Extract bracketed contextual translation if preserved by engine
  let bestContextual=wt.primary;
  const bracketMatch=focusedTr.match(/\[([^\]]+)\]/);
  if(bracketMatch && bracketMatch[1].trim() && /[\u0600-\u06FF]/.test(bracketMatch[1])){
   bestContextual=bracketMatch[1].trim();
  }else if(st && wt.alternatives.length){
-  // Match which alternative appears directly inside the translated full sentence
   const plainSent=stripTashkeel(st);
   const matchedAlt=wt.alternatives.find(alt=>plainSent.includes(stripTashkeel(alt)));
   if(matchedAlt)bestContextual=matchedAlt;
@@ -1389,7 +1673,6 @@ function renderPanel(d){
  $('pForm').textContent=d.morph_ar?`• ${d.morph_ar}`:'';
  $('pTr').textContent=d.translation_ar;
 
- // Alternative vocalized/contextual meanings (clicking promotes it as active translation)
  const altsBox=$('pAlts');
  const alts=Array.isArray(d.alternatives_ar)?d.alternatives_ar:[];
  if(alts.length){
@@ -1403,7 +1686,6 @@ function renderPanel(d){
  $('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';
  $('pExp').textContent=d.explanation_ar;
 
- // Synonyms, Antonyms & Collocations
  const relBox=$('relBox'),relEl=$('pRels');
  const syns=(d.synonyms||[]).map(s=>`<button type="button" class="lex-chip" data-lex-word="${esc(s)}" title="انقر لترجمة المرادف">${esc(s)}</button>`);
  const ants=(d.antonyms||[]).map(a=>`<button type="button" class="lex-chip ant" data-lex-word="${esc(a)}" title="ضد الكلمة">≠ ${esc(a)}</button>`);
@@ -1485,16 +1767,17 @@ function saveKey(){S.gem=$('gemKey').value.trim();S.gem?session.set(K.gem,S.gem)
 function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
 /* ---------- init & auto-restore last session on page reload ---------- */
-setThemeIcon();Speech.init();updBadge();updFcBadge();
+setThemeIcon();Speech.init();updBadge();updFcBadge();updateSessionHeaderUI();
 Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
 
 (async function bootstrap(){
  await renderRecentDocs();
  const last=getReadingState();
- if(last && last.docId){
-  const savedDoc=await DocDB.get(last.docId);
+ const targetSess=(last&&S.sessions.find(x=>x.sessionId===last.sessionId))||S.sessions[0]||last;
+ if(targetSess && targetSess.docId){
+  const savedDoc=await DocDB.get(targetSess.docId);
   if(savedDoc){
-   openDoc(savedDoc.title,savedDoc.pages,{id:savedDoc.id,skipSave:true,restore:last});
+   openDoc(savedDoc.title,savedDoc.pages,{id:savedDoc.id,sessionId:targetSess.sessionId,skipSave:true,restore:targetSess});
    return;
   }
  }
@@ -1505,6 +1788,12 @@ $('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){i
 $('docTitleInput').addEventListener('input',e=>{
  S.title=e.target.value;
  if(S.docId)DocDB.get(S.docId).then(d=>{if(d){d.title=S.title;d.updatedAt=Date.now();DocDB.save(d)}});
+ saveReadingState();
+});
+document.addEventListener('click',e=>{
+ if(!$('sessPop').hidden && !e.target.closest('#sessWrap')){
+  closeSessionPopover();
+ }
 });
 let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
@@ -1515,7 +1804,8 @@ addEventListener('keydown',e=>{
  const isTyping=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||e.target?.isContentEditable;
  if(e.key==='Escape'){
   let c=false;
-  ['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
+  if(!$('sessPop').hidden){closeSessionPopover();c=true}
+  ['welcomeModal','pasteModal','apiModal','newSessionModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
   if($('drawer').classList.contains('open')||$('fcDrawer').classList.contains('open')){closeAllDrawers();c=true}
   if(!c&&!$('panel').hidden)closePanel();
   return;
