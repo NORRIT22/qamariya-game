@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Readdy — منصة القراءة والترجمة السياقية</title>
-<meta name="description" content="منصة لقراءة مستندات الإنجليزية والفرنسية، والترجمة السياقية، والنطق، وحفظ المفردات.">
+<meta name="description" content="منصة لقراءة مستندات الإنجليزية والفرنسية، والترجمة السياقية المتكاملة، والنطق، وحفظ المفردات.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>try{var t=localStorage.getItem('readdy_theme_mode_v1')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.classList.toggle('dark',t==='dark')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +35,7 @@ html:not(.icons) .ms{visibility:hidden}
 .pill{display:inline-flex;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:4px 10px;font-size:12px;white-space:nowrap;flex:none}
 .pill select,.pill input{background:none;border:0;outline:0;font-weight:500;cursor:pointer;max-width:130px}.pill input{width:42px;text-align:center;cursor:text}
 .k{color:var(--sub)}.tag{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--s2);border:1px solid var(--bd);color:var(--sub);text-transform:uppercase}
+.tag.ac{background:var(--acs);color:var(--onact);border-color:transparent}
 .hdr{position:sticky;top:0;z-index:30;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);background:var(--bg);border-bottom:1px solid var(--bd)}
 .brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;flex:none;color:inherit}
 .brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
@@ -83,18 +84,28 @@ html:not(.icons) .ms{visibility:hidden}
 @media(hover:hover){.wt:hover{background:var(--hl);color:var(--ac)}}
 .wt.sh{background:var(--s2)}.wt.bm{border-bottom:1.5px solid var(--ok)}
 .wt.act{background:var(--acs);color:var(--onact);font-weight:600;outline:1px solid var(--ac);animation:pop .25s}
-#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:58dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
-body.panel-open .canvas{padding-bottom:62dvh}
-@media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:390px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
+#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:60dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
+body.panel-open .canvas{padding-bottom:64dvh}
+@media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
 .ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
 .pc{padding:16px;display:grid;gap:12px;animation:rise .25s both}
 .card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px}.card h3{margin:0 0 6px;font-size:12px}.card p{margin:0}
 .wh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding-bottom:12px;border-bottom:1px solid var(--bd)}
 .wr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.wr h2{margin:0;font:600 24px Literata,serif;overflow-wrap:anywhere}
-.wm{display:flex;gap:8px;font-size:12px;color:var(--sub);margin-top:4px;flex-wrap:wrap}.wm span:first-child{font-family:monospace;color:var(--tx)}#pPos{color:var(--ok);font-weight:500}
+.wm{display:flex;gap:8px;font-size:12px;color:var(--sub);margin-top:4px;flex-wrap:wrap;align-items:center}.wm span:first-child{font-family:monospace;color:var(--tx)}#pPos{color:var(--ok);font-weight:500}
 .lbl2{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:var(--ac);margin-bottom:4px}.lbl2.g{color:var(--sub)}
 .lbl2 button,.mini{background:none;border:0;font-size:11px;color:var(--ac);display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:99px}.mini.g{color:var(--sub)}.mini.on{background:var(--acs)}
-#pTr{font-size:21px;font-weight:700;line-height:1.85!important;padding-top:2px}.sm2{font-size:11px;color:var(--sub);margin-top:4px!important}
+#pTr{font-size:22px;font-weight:700;line-height:1.9!important;padding-top:2px}.sm2{font-size:11px;color:var(--sub);margin-top:4px!important}
+.alt-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.alt-chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);cursor:pointer;transition:.12s}
+.alt-chip:hover{border-color:var(--ac);color:var(--ac)}
+.lex-chips{display:flex;flex-wrap:wrap;gap:6px;direction:ltr}
+.lex-chip{font:500 12px Literata,serif;padding:3px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--ac);cursor:pointer;transition:.12s}
+.lex-chip:hover{background:var(--hl);border-color:var(--ac)}
+.lex-chip.ant{color:#c5221f}html.dark .lex-chip.ant{color:#f28b82}
+.sent-tok{cursor:pointer;border-radius:3px;padding:0 1px;transition:.12s}
+.sent-tok:hover{background:var(--hl);color:var(--ac)}
+.sent-tok.cur{background:var(--acs);color:var(--onact);font-weight:600}
 .ex{direction:ltr;font:12px/1.7 Literata,serif}.exa{font-size:12px;color:var(--sub);line-height:1.7}
 .sk{border-radius:12px;background:linear-gradient(90deg,var(--s2) 25%,var(--bd) 50%,var(--s2) 75%);background-size:600px 100%;animation:shim 1.2s linear infinite}
 .drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,410px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
@@ -155,7 +166,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ تلقائياً في ذاكرة المتصفح مع تذكّر آخر موضع توقفت عنده، والتنقل الكامل عبر أسهم لوحة المفاتيح.</p></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ تلقائياً في ذاكرة المتصفح مع تذكّر آخر موضع توقفت عنده، وترجمة سياقية متكاملة مشكولة.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
@@ -180,7 +191,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
     <span class="kbd-hint hide-sm" title="استخدم الأسهم للتنقل بين الكلمات والسطور"><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> تنقّل</span>
     <div class="sp"></div>
-    <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
+    <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" class="on" onclick="setFont('sans')">Inter</button></div>
     <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
     <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
     <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">folder_special</i>المستندات</button>
@@ -189,10 +200,10 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div class="canvas"><div id="pages"></div></div>
     <aside id="panel" hidden aria-live="polite">
       <div class="ph"><b><i class="ms">translate</i>الترجمة والشرح السياقي</b><span id="engineTag" class="tag"></span><button class="ibtn sm" onclick="closePanel()" aria-label="إغلاق"><i class="ms">close</i></button></div>
-      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:48px"></div><div class="sk" style="height:80px"></div><div class="sk" style="height:96px"></div></div>
+      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:64px"></div><div class="sk" style="height:88px"></div><div class="sk" style="height:96px"></div></div>
       <div id="pContent" class="pc" hidden>
         <div class="wh">
-          <div dir="ltr"><div class="wr"><h2 id="pTitle"></h2><span id="pLang" class="tag"></span></div><div class="wm"><span id="pIpa"></span><span id="pDot">•</span><span id="pPos"></span></div></div>
+          <div dir="ltr"><div class="wr"><h2 id="pTitle"></h2><span id="pLang" class="tag"></span><span id="pLevel" class="tag ac" hidden></span></div><div class="wm"><span id="pIpa"></span><span id="pDot">•</span><span id="pPos"></span><span id="pForm" style="color:var(--sub)"></span></div></div>
           <button id="bmBtn" class="ibtn" onclick="toggleBookmark()" aria-label="حفظ الكلمة"><i id="bmIcon" class="ms">bookmark_add</i></button>
         </div>
         <div class="card row" style="flex-wrap:nowrap;gap:6px;padding:8px">
@@ -200,11 +211,12 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
           <button class="btn" style="flex:1;justify-content:center" onclick="sayWord(.65)"><i class="ms" style="font-size:17px">slow_motion_video</i>بطيء</button>
           <button id="wRepeat" class="ibtn" style="border-radius:12px" onclick="loopWord()" aria-label="تكرار"><i class="ms" style="font-size:18px">repeat</i></button>
         </div>
-        <div class="card"><div class="lbl2"><span>الترجمة السياقية المشكولة</span><button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></div><p id="pTr"></p><p id="pLemma" class="sm2"></p></div>
-        <div class="card"><h3>المعنى والشرح</h3><p id="pExp" style="font-size:13px;line-height:1.8;white-space:pre-line"></p></div>
+        <div class="card"><div class="lbl2"><span>الترجمة السياقية المشكولة</span><button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></div><p id="pTr"></p><div id="pAlts" class="alt-row" hidden></div><p id="pLemma" class="sm2"></p></div>
+        <div class="card"><h3>التحليل السياقي والمعنى</h3><p id="pExp" style="font-size:13px;line-height:1.85;white-space:pre-line"></p></div>
+        <div id="relBox" class="card" hidden><div class="lbl2 g"><span>مرادفات ومتلازمات في اللغة</span></div><div id="pRels" class="lex-chips"></div></div>
         <div id="exBox" class="card"><div class="lbl2 g"><span>مثال تطبيقي</span><span><button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button><button class="mini g" onclick="sayEx(.65)">0.65x</button></span></div><p id="pExO" class="ex"></p><p id="pExA" class="exa"></p></div>
         <div style="border-top:1px solid var(--bd);padding-top:12px;display:grid;gap:8px">
-          <div class="lbl2 g"><span>الجملة الكاملة في النص</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button></span></div>
+          <div class="lbl2 g"><span>الجملة الكاملة في النص (انقر أي كلمة)</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button></span></div>
           <p id="pSO" class="card ex" style="padding:10px 12px"></p><p id="pSA" style="font-size:12px;font-weight:500;line-height:1.8;margin:0"></p>
         </div>
       </div>
@@ -251,7 +263,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية مشكولة بدقة</b><small>تحليل معنى الكلمة داخل الجملة والعبارة المحيطة وتشكيلها بالحركات لتسهيل القراءة والنطق الصحيح.</small></div></div>
+    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية متكاملة ومشكولة</b><small>تحليل الجملة الكاملة، والمطابقة العكسية للمعنى الدقيق، مع المرادفات والأضداد والمستوى اللغوي (CEFR).</small></div></div>
     <div class="feat"><i class="ms">keyboard</i><div><b>تنقّل بأسهم لوحة المفاتيح واستكمال القراءة</b><small>استعمل الأسهم للتنقل بين الكلمات والسطور، وعند تحديث الصفحة ستعود تلقائياً إلى نفس الملف وموضع توقفك.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
@@ -265,7 +277,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 
 <div id="apiModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>إعدادات محرك الترجمة</span><button class="ibtn sm" onclick="show('apiModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
-  <div class="mb"><b style="color:var(--tx)">يستخدم التطبيق عدة خدمات ترجمة خارجية مع دمج السياق التلقائي، وقد تتغير حدودها أو درجة توافرها.</b><span>اختياري: أدخل مفتاحك الشخصي لتفعيل التحليل العميق عبر <b>Gemini AI</b>. يُحتفظ به في ذاكرة جلسة هذا المتصفح فقط، ولا يُضمَّن في ملفات الموقع.</span><input id="gemKey" type="password" dir="ltr" placeholder="مفتاح Gemini الشخصي" autocomplete="off"><small style="color:var(--sub)">تنبيه أمني: يُحفظ المفتاح مؤقتاً في جلسة المتصفح الحالية فقط ويُحذف فور إغلاق الصفحة. لا تستخدم مفتاحاً مشتركاً.</small></div>
+  <div class="mb"><b style="color:var(--tx)">يستخدم التطبيق محرك دمج سياقي متعدد المصادر مع التحقق العكسي للمعنى.</b><span>اختياري: أدخل مفتاحك الشخصي لتفعيل التحليل العميق عبر <b>Gemini AI</b>. يُحتفظ به في ذاكرة جلسة هذا المتصفح فقط، ولا يُضمَّن في ملفات الموقع.</span><input id="gemKey" type="password" dir="ltr" placeholder="مفتاح Gemini الشخصي" autocomplete="off"><small style="color:var(--sub)">تنبيه أمني: يُحفظ المفتاح مؤقتاً في جلسة المتصفح الحالية فقط ويُحذف فور إغلاق الصفحة. لا تستخدم مفتاحاً مشتركاً.</small></div>
   <div class="mf" style="justify-content:space-between"><button class="btn" style="color:#d93025" onclick="clearCache()">مسح ذاكرة الترجمة</button><span style="display:flex;gap:8px"><button class="btn" onclick="show('apiModal',0)">إغلاق</button><button class="btn pri" onclick="saveKey()">حفظ</button></span></div></div></div>
 
 <div id="toast" class="toast" role="status"></div>
@@ -275,7 +287,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const K={
  vocab:'readdy_saved_vocabulary_prod_v5',
- cache:'readdy_ai_cache_prod_v8',
+ cache:'readdy_ai_cache_prod_v9',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
@@ -606,7 +618,7 @@ function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,30
  const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
 function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
 
-/* ---------- exact verbatim ingestion (zero text/punctuation/layout mutation) ---------- */
+/* ---------- exact verbatim ingestion ---------- */
 const stripInvisible=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'');
 function verbatimLines(t){
  const rawLines=stripInvisible(t).replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
@@ -816,7 +828,7 @@ window.addEventListener('scroll',()=>{
 },{passive:true});
 window.addEventListener('beforeunload',()=>{if(S.docId&&!$('work').hidden)saveReadingState()});
 
-/* ---------- Keyboard Arrow Navigation (Words, Lines/Sentences & Flashcards) ---------- */
+/* ---------- Keyboard Arrow Navigation ---------- */
 function findNextNonEmptySentence(startSentId,dir){
  let s=startSentId+dir;
  while(s>=0 && s<S.recs.length){
@@ -827,25 +839,21 @@ function findNextNonEmptySentence(startSentId,dir){
  return -1;
 }
 function navigateByArrows(key){
- // 1. If Flashcards drawer is open, arrows flip & browse flashcards
  if($('fcDrawer').classList.contains('open')){
   if(key==='ArrowLeft'){stepFlashcard(1);return true}
   if(key==='ArrowRight'){stepFlashcard(-1);return true}
   if(key==='ArrowUp'||key==='ArrowDown'){flipFlashcard();return true}
   return false;
  }
- // 2. Only operate on document reader when active and no modals/drawers are open
  if($('work').hidden||!S.recs.length)return false;
  if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||$('drawer').classList.contains('open'))return false;
 
- // Left / Right: move word-by-word (LTR text: ArrowRight = next word, ArrowLeft = previous word)
  if(key==='ArrowRight'||key==='ArrowLeft'){
   const dir=key==='ArrowRight'?1:-1;
   let sId=S.activeSentId;
   let wIdx=S.activeWordIdx;
 
   if(sId<0||!S.recs[sId]){
-   // Start at the first visible sentence in viewport
    const curPg=(parseInt($('jump').value||'1',10)||1)-1;
    renderPage(curPg);
    sId=S.recs.findIndex(r=>r.page>=curPg && r.tokens.length>0);
@@ -877,7 +885,6 @@ function navigateByArrows(key){
   return true;
  }
 
- // Up / Down: move sentence-by-sentence when a word is active, or smooth scroll page otherwise
  if(key==='ArrowDown'||key==='ArrowUp'){
   const dir=key==='ArrowDown'?1:-1;
   if(S.activeSentId>=0 && S.recs[S.activeSentId]){
@@ -928,9 +935,11 @@ async function vocalizeWordOnly(text){
  return cleanAr;
 }
 
-/* ---------- enhanced contextual translation engine ---------- */
-async function jfetch(url,ms=4200,opt={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}}
-async function translate(q,sl,tl='ar',max=600){const e=encodeURIComponent(q.slice(0,max));
+/* ---------- Integrated Multi-Layer Contextual Translation Engine ---------- */
+async function jfetch(url,ms=4500,opt={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}}
+
+async function translate(q,sl,tl='ar',max=700){
+ const e=encodeURIComponent(q.slice(0,max));
  const tries=[
   async()=>{
    const d=await jfetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&dt=bd&dt=rm&q=${e}`);
@@ -938,23 +947,96 @@ async function translate(q,sl,tl='ar',max=600){const e=encodeURIComponent(q.slic
    const alt=[],posList=[];
    (d[1]||[]).forEach(g=>{
     if(g[0])posList.push(g[0]);
-    (g[1]||[]).slice(0,4).forEach(a=>{if(a&&a!==p&&!alt.includes(a))alt.push(a)});
+    (g[1]||[]).slice(0,5).forEach(a=>{if(a&&a!==p&&!alt.includes(a))alt.push(a)});
    });
-   return{primary:p,alternatives:alt.slice(0,5),posHint:posList[0]||'',provider:'تلقائي'}
+   return{primary:p,alternatives:alt.slice(0,6),posHint:posList[0]||'',provider:'دمج سياقي'}
   },
   async()=>{const d=await jfetch(`https://lingva.ml/api/v1/${sl}/${tl}/${e}`);if(!d.translation)throw 0;return{primary:d.translation.trim(),alternatives:[],posHint:'',provider:'Lingva'}},
   async()=>{const d=await jfetch(`https://api.mymemory.translated.net/get?q=${e}&langpair=${sl}|${tl}`,4500),t=d?.responseData?.translatedText?.trim();if(!t||t.includes('MYMEMORY WARNING'))throw 0;return{primary:t,alternatives:[],posHint:'',provider:'MyMemory'}}
  ];
- for(const f of tries){try{return await f()}catch{}}throw new Error('fail')}
-const trText=(t,l)=>t&&t.trim()?translate(t,l).then(r=>r.primary).catch(()=>''):Promise.resolve('');
+ for(const f of tries){try{return await f()}catch{}}throw new Error('fail')
+}
+const trText=(t,l,tl='ar')=>t&&t.trim()?translate(t,l,tl).then(r=>r.primary).catch(()=>''):Promise.resolve('');
 
 const POS_MAP={noun:'اسم',verb:'فعل',adjective:'صفة',adverb:'ظرف / حال',pronoun:'ضمير',preposition:'حرف جر',conjunction:'أداة ربط',interjection:'تعجب',nom:'اسم',verbe:'فعل',adjectif:'صفة',adverbe:'ظرف','préposition':'حرف جر',pronom:'ضمير'};
 
-async function lexMeta(w,lang){const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:''};
- try{if(lang==='en'){const e=(await jfetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w.toLowerCase())}`,3200))[0],m=e.meanings?.[0],d=m?.definitions?.[0],pr=(m?.partOfSpeech||'').toLowerCase();
-   Object.assign(o,{ipa:e.phonetic||(e.phonetics||[]).find(p=>p.text)?.text||'',pos_ar:POS_MAP[pr]||pr,lemma:e.word||o.lemma,def:d?.definition||'',ex:d?.example||''})}
-  else{const d=(await jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(w.toLowerCase())}`,3200)).fr?.[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase(),st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,180);
-   Object.assign(o,{pos_ar:POS_MAP[pr]||pr,def:st(i?.definition),ex:st(i?.examples?.[0])})}}catch{}return o}
+function detectMorphology(w,lang){
+ const low=w.toLowerCase();
+ if(lang==='en'){
+  if(low.endsWith('ing')&&low.length>4)return'صيغة الاستمرار / اسم فاعل (-ing)';
+  if(low.endsWith('ed')&&low.length>3)return'الماضي أو اسم المفعول (-ed)';
+  if(low.endsWith('ly')&&low.length>4)return'ظرف / حال (-ly)';
+  if(low.endsWith('tion')||low.endsWith('sion')||low.endsWith('ment')||low.endsWith('ness'))return'اسم مشتق';
+  if(low.endsWith('able')||low.endsWith('ible')||low.endsWith('ous')||low.endsWith('ful'))return'صفة مشتقة';
+  if(low.endsWith('s')&&!low.endsWith('ss')&&low.length>3)return'جمع أو تصريف المفرد الغائب';
+ }else{
+  if(low.endsWith('ment')&&low.length>5)return'ظرف / حال (-ment)';
+  if(low.endsWith('tion')||low.endsWith('sion')||low.endsWith('té'))return'اسم مؤنث';
+  if(low.endsWith('é')||low.endsWith('ée')||low.endsWith('és')||low.endsWith('ées'))return'اسم مفعول / صفة';
+  if(low.endsWith('ant')&&low.length>4)return'اسم فاعل / صفة (-ant)';
+  if(low.endsWith('er')||low.endsWith('ir')||low.endsWith('re'))return'صيغة المصدر (Infinitif)';
+  if(low.endsWith('s')||low.endsWith('x'))return'صيغة الجمع أو تصريف الفعل';
+ }
+ return'';
+}
+
+/* Deep lexical metadata: IPA, POS, CEFR level, synonyms, antonyms, collocations, examples */
+async function lexMeta(w,lang){
+ const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms:[],antonyms:[],collocations:[],cefr:''};
+ const low=w.toLowerCase();
+ try{
+  if(lang==='en'){
+   const [dictRes,dmSynRes,dmColRes,dmFreqRes]=await Promise.allSettled([
+    jfetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(low)}`,3200),
+    jfetch(`https://api.datamuse.com/words?rel_syn=${encodeURIComponent(low)}&max=6`,2600),
+    jfetch(`https://api.datamuse.com/words?rel_trg=${encodeURIComponent(low)}&max=5`,2600),
+    jfetch(`https://api.datamuse.com/words?sp=${encodeURIComponent(low)}&md=f&max=1`,2600)
+   ]);
+   if(dictRes.status==='fulfilled' && Array.isArray(dictRes.value)){
+    const e=dictRes.value[0],m=e.meanings?.[0],d=m?.definitions?.[0],pr=(m?.partOfSpeech||'').toLowerCase();
+    o.ipa=e.phonetic||(e.phonetics||[]).find(p=>p.text)?.text||'';
+    o.pos_ar=POS_MAP[pr]||pr;
+    o.lemma=e.word||o.lemma;
+    o.def=d?.definition||'';
+    o.ex=d?.example||(e.meanings||[]).flatMap(x=>x.definitions||[]).find(x=>x.example)?.example||'';
+    const syns=new Set([...(m?.synonyms||[]),...(d?.synonyms||[])]);
+    const ants=new Set([...(m?.antonyms||[]),...(d?.antonyms||[])]);
+    o.synonyms=[...syns].slice(0,5);
+    o.antonyms=[...ants].slice(0,4);
+   }
+   if(dmSynRes.status==='fulfilled' && Array.isArray(dmSynRes.value)){
+    const extra=dmSynRes.value.map(x=>x.word).filter(Boolean);
+    o.synonyms=[...new Set([...o.synonyms,...extra])].slice(0,6);
+   }
+   if(dmColRes.status==='fulfilled' && Array.isArray(dmColRes.value)){
+    o.collocations=dmColRes.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low).slice(0,4);
+   }
+   if(dmFreqRes.status==='fulfilled' && Array.isArray(dmFreqRes.value) && dmFreqRes.value[0]?.tags){
+    const fTag=dmFreqRes.value[0].tags.find(t=>t.startsWith('f:'));
+    if(fTag){
+     const freq=parseFloat(fTag.slice(2));
+     o.cefr=freq>150?'A1':freq>50?'A2':freq>15?'B1':freq>4?'B2':freq>0.8?'C1':'C2';
+    }
+   }
+  }else{
+   const [frWiki,dmFr]=await Promise.allSettled([
+    jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,3200),
+    jfetch(`https://api.datamuse.com/words?v=fr&ml=${encodeURIComponent(low)}&max=6`,2600)
+   ]);
+   if(frWiki.status==='fulfilled' && frWiki.value?.fr?.[0]){
+    const d=frWiki.value.fr[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase();
+    const st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,220);
+    o.pos_ar=POS_MAP[pr]||pr;
+    o.def=st(i?.definition);
+    o.ex=st(i?.examples?.[0]);
+   }
+   if(dmFr.status==='fulfilled' && Array.isArray(dmFr.value)){
+    o.synonyms=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low).slice(0,5);
+   }
+  }
+ }catch{}
+ return o;
+}
 
 function localPhrase(sent,w){
  const ws=sent.trim().split(/\s+/),t=w.toLowerCase();
@@ -963,41 +1045,73 @@ function localPhrase(sent,w){
  return ws.slice(Math.max(0,i-2),Math.min(ws.length,i+3)).join(' ');
 }
 
+function buildFocusedSentence(sent,w){
+ const re=new RegExp(`\\b(${w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})\\b`,'i');
+ return re.test(sent)?sent.replace(re,'[$1]'):sent;
+}
+
+/* Integrated contextual synthesis with back-translation sense disambiguation */
 async function hybrid(word,sent,lang){
  const w=word.replace(/^['’-]+|['’-]+$/g,''),ph=localPhrase(sent,w);
- const[wt,pt,st,m]=await Promise.all([
+ const focusedSent=buildFocusedSentence(sent,w);
+ const[wt,pt,st,focusedTr,m]=await Promise.all([
   translate(w,lang,'ar',100),
   ph.toLowerCase()!==w.toLowerCase()?trText(ph,lang):Promise.resolve(''),
   trText(sent,lang),
+  focusedSent!==sent?trText(focusedSent,lang):Promise.resolve(''),
   lexMeta(w,lang)
  ]);
+
+ // Extract bracketed contextual translation if preserved by engine
+ let bestContextual=wt.primary;
+ const bracketMatch=focusedTr.match(/\[([^\]]+)\]/);
+ if(bracketMatch && bracketMatch[1].trim() && /[\u0600-\u06FF]/.test(bracketMatch[1])){
+  bestContextual=bracketMatch[1].trim();
+ }else if(st && wt.alternatives.length){
+  // Match which alternative appears directly inside the translated full sentence
+  const plainSent=stripTashkeel(st);
+  const matchedAlt=wt.alternatives.find(alt=>plainSent.includes(stripTashkeel(alt)));
+  if(matchedAlt)bestContextual=matchedAlt;
+ }
+
+ const allAlts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x && x!==stripTashkeel(bestContextual)).slice(0,5);
+
  const[vocalizedWord,exA,defA]=await Promise.all([
-  vocalizeWordOnly(wt.primary),
+  vocalizeWordOnly(bestContextual),
   m.ex?trText(m.ex,lang):Promise.resolve(''),
   m.def?trText(m.def,lang):Promise.resolve('')
  ]);
+
  const posAr=m.pos_ar||(wt.posHint?POS_MAP[wt.posHint.toLowerCase()]||wt.posHint:'')||(lang==='fr'?'مفردة فرنسية':'مفردة إنجليزية');
- const plainPrimary=stripTashkeel(wt.primary);
+ const morph=detectMorphology(w,lang);
+ const plainBest=stripTashkeel(bestContextual);
+
  const parts=[];
  if(pt && ph.toLowerCase()!==w.toLowerCase()){
-  parts.push(`• في العبارة السياقية («${ph}»): تُترجم إلى «${stripTashkeel(pt)}».`);
+  parts.push(`• المعنى داخل العبارة («${ph}»): «${stripTashkeel(pt)}».`);
+ }else{
+  parts.push(`• المعنى المعتمد في هذه الجملة: «${plainBest}».`);
  }
  if(defA){
-  parts.push(`• التعريف اللغوي: ${stripTashkeel(defA)}`);
+  parts.push(`• الشرح المعجمي: ${stripTashkeel(defA)}`);
  }
- if(wt.alternatives.length){
-  parts.push(`• معانٍ ومرادفات أخرى: ${wt.alternatives.map(stripTashkeel).join('، ')}.`);
+ if(morph){
+  parts.push(`• البنية الصرفية: ${morph}.`);
  }
- if(!parts.length){
-  parts.push(`تُترجم «${w}» في هذا السياق إلى «${plainPrimary}».`);
- }
+
  return{
   source_label:wt.provider,
-  translation_ar:vocalizedWord||wt.primary||'—',
+  translation_ar:vocalizedWord||bestContextual||'—',
+  alternatives_ar:allAlts,
   explanation_ar:parts.join('\n'),
   ipa:m.ipa,
+  cefr:m.cefr,
   pos_ar:stripTashkeel(posAr),
+  morph_ar:morph,
   lemma:m.lemma,
+  synonyms:m.synonyms,
+  antonyms:m.antonyms,
+  collocations:m.collocations,
   example_original:m.ex,
   example_ar:stripTashkeel(exA),
   sentence_ar:stripTashkeel(st)
@@ -1005,26 +1119,29 @@ async function hybrid(word,sent,lang){
 }
 
 async function gemini(word,sent,lang,key){
- const sl=lang==='fr'?'French':'English',str={type:'STRING'};
- const keys=['translation_ar','explanation_ar','ipa','pos_ar','lemma','example_original','example_ar','sentence_ar'];
- const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. explanation_ar: Clear Arabic explanation of why it means this in this context, written in PLAIN unvocalized Arabic (NO Tashkeel/diacritics).\n3. ipa: IPA pronunciation.\n4. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n5. lemma: Dictionary base/root form in ${sl}.\n6. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n7. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n8. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
+ const sl=lang==='fr'?'French':'English',str={type:'STRING'},arr={type:'ARRAY',items:str};
+ const keys=['translation_ar','alternatives_ar','explanation_ar','ipa','cefr','pos_ar','morph_ar','lemma','synonyms','antonyms','example_original','example_ar','sentence_ar'];
+ const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide a comprehensive bilingual contextual analysis:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. alternatives_ar: Array of 2-4 other common Arabic meanings of "${word}" in PLAIN unvocalized Arabic (NO Tashkeel).\n3. explanation_ar: Clear Arabic explanation of why it means this in this context and its nuance, written in PLAIN unvocalized Arabic (NO Tashkeel).\n4. ipa: IPA pronunciation.\n5. cefr: CEFR proficiency level (A1, A2, B1, B2, C1, or C2).\n6. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n7. morph_ar: Grammatical form in PLAIN unvocalized Arabic (e.g., جمع، ماضٍ، اسم مفعول، مصدر).\n8. lemma: Dictionary base/root form in ${sl}.\n9. synonyms: Array of 3-5 ${sl} synonyms matching this contextual sense.\n10. antonyms: Array of 1-3 ${sl} antonyms if applicable.\n11. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n12. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n13. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
  const d=await jfetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',12000,{
   method:'POST',
   headers:{'Content-Type':'application/json','x-goog-api-key':key},
   body:JSON.stringify({
    contents:[{parts:[{text:prompt}]}],
-   systemInstruction:{parts:[{text:`You are an expert bilingual contextual lexicographer and literary translator from ${sl} into natural Modern Standard Arabic. Include full Arabic Tashkeel (diacritical marks) ONLY on translation_ar, and keep explanation_ar, pos_ar, example_ar, and sentence_ar completely unvocalized (plain Arabic without diacritics). Return valid JSON only.`}]},
-   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,str])),required:keys}}
+   systemInstruction:{parts:[{text:`You are an expert bilingual contextual lexicographer and literary translator from ${sl} into natural Modern Standard Arabic. Include full Arabic Tashkeel (diacritical marks) ONLY on translation_ar, and keep all other Arabic fields completely unvocalized (plain Arabic without diacritics). Return valid JSON only.`}]},
+   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,['alternatives_ar','synonyms','antonyms'].includes(k)?arr:str])),required:keys}}
   })
  });
  const parsed=JSON.parse(d.candidates[0].content.parts[0].text);
  if(parsed.translation_ar && !hasTashkeel(parsed.translation_ar)){
   parsed.translation_ar=await vocalizeWordOnly(parsed.translation_ar);
  }
+ parsed.alternatives_ar=(parsed.alternatives_ar||[]).map(stripTashkeel);
  parsed.explanation_ar=stripTashkeel(parsed.explanation_ar);
  parsed.pos_ar=stripTashkeel(parsed.pos_ar);
+ parsed.morph_ar=stripTashkeel(parsed.morph_ar);
  parsed.example_ar=stripTashkeel(parsed.example_ar);
  parsed.sentence_ar=stripTashkeel(parsed.sentence_ar);
+ parsed.collocations=[];
  return parsed;
 }
 
@@ -1163,6 +1280,42 @@ $('fclist').addEventListener('click',e=>{
  }
 });
 
+/* ---------- Interactive Lookup (Document Words, Synonyms, or Sentence Tokens) ---------- */
+async function lookupCustomWord(customWord,sent,lang){
+ const req=++S.req;
+ openPanel();
+ showSkel(true);
+ const low=customWord.toLowerCase().replace(/^['’-]+|['’-]+$/g,'');
+ const hit=LEX[lang]?.[low];
+ if(hit){
+  const rec={word:customWord,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:S.sel?.sentence_ar||''};
+  renderPanel(rec);
+  addToFlashcards(rec);
+  return;
+ }
+ const key=`${lang}::${low}::${sent}`;
+ if(S.cache.has(key)){
+  const cached=S.cache.get(key);
+  renderPanel(cached);
+  addToFlashcards(cached);
+  return;
+ }
+ try{
+  let a;
+  if(S.gem.trim().length>10){try{a=await gemini(customWord,sent,lang,S.gem.trim());a.source_label='Gemini AI'}catch{a=await hybrid(customWord,sent,lang)}}
+  else a=await hybrid(customWord,sent,lang);
+  if(req!==S.req)return;
+  const rec={word:customWord,lang,sentence_original:sent,...a};
+  S.cache.set(key,rec);
+  try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-180))))}catch{}
+  renderPanel(rec);
+  addToFlashcards(rec);
+ }catch{
+  if(req!==S.req)return;
+  renderPanel({word:customWord,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم حاول مجدداً.',ipa:'',cefr:'',pos_ar:'',morph_ar:'',lemma:low,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''});
+ }
+}
+
 async function onWord(el,word,sent,toks,sIdx,opts={}){
  S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;
  S.activeSentId=sIdx;
@@ -1177,7 +1330,7 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
  if(!opts.silentScroll && innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
  const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
  if(hit){
-  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',pos_ar:hit.pos,lemma:hit.lemma,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
   renderPanel(rec);
   addToFlashcards(rec);
   trText(sent,lang).then(t=>{if(req===S.req&&t){const plain=stripTashkeel(t);rec.sentence_ar=plain;$('pSA').textContent=plain}});
@@ -1195,19 +1348,109 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
   if(req!==S.req)return;
   const rec={word,lang,sentence_original:sent,...a};
   S.cache.set(key,rec);
-  try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}
+  try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-180))))}catch{}
   renderPanel(rec);
   addToFlashcards(rec);
  }
- catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
+ catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,synonyms:[],antonyms:[],collocations:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
+
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
 function closePanel(){S.req++;$('panel').hidden=true;document.body.classList.remove('panel-open');S.activeEl?.classList.remove('act');S.activeEl=null;hl([]);S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;saveReadingState({panelOpen:false,sentId:-1,wordIdx:-1})}
-function renderPanel(d){S.sel=d;showSkel(false);const c=$('pContent');c.style.animation='none';c.offsetWidth;c.style.animation='';
- $('engineTag').textContent=d.source_label||'Readdy';$('pTitle').textContent=d.word;$('pLang').textContent=d.lang.toUpperCase();$('pIpa').textContent=d.ipa||'';$('pIpa').hidden=$('pDot').hidden=!d.ipa;
- $('pPos').textContent=d.pos_ar||'';$('pTr').textContent=d.translation_ar;$('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';$('pExp').textContent=d.explanation_ar;
- $('exBox').hidden=!d.example_original;$('pExO').textContent=d.example_original||'';$('pExA').textContent=d.example_ar||'';$('pSO').textContent=d.sentence_original;$('pSA').textContent=d.sentence_ar||'';
- $('panel').scrollTop=0;updBm();repeatUI()}
+
+function renderInteractiveSentence(container,sent,activeWord){
+ container.replaceChildren();
+ let last=0;
+ const lowTarget=(activeWord||'').toLowerCase();
+ for(const m of sent.matchAll(WORD)){
+  const w=m[0];
+  if(m.index>last)container.append(sent.slice(last,m.index));
+  const sp=document.createElement('span');
+  sp.className='sent-tok'+(w.toLowerCase()===lowTarget?' cur':'');
+  sp.textContent=w;
+  sp.dataset.stok=w;
+  container.append(sp);
+  last=m.index+w.length;
+ }
+ if(last<sent.length)container.append(sent.slice(last));
+}
+
+function renderPanel(d){
+ S.sel=d;showSkel(false);
+ const c=$('pContent');c.style.animation='none';c.offsetWidth;c.style.animation='';
+ $('engineTag').textContent=d.source_label||'Readdy';
+ $('pTitle').textContent=d.word;
+ $('pLang').textContent=d.lang.toUpperCase();
+ $('pLevel').textContent=d.cefr||'';
+ $('pLevel').hidden=!d.cefr;
+ $('pIpa').textContent=d.ipa||'';
+ $('pIpa').hidden=$('pDot').hidden=!d.ipa;
+ $('pPos').textContent=d.pos_ar||'';
+ $('pForm').textContent=d.morph_ar?`• ${d.morph_ar}`:'';
+ $('pTr').textContent=d.translation_ar;
+
+ // Alternative vocalized/contextual meanings (clicking promotes it as active translation)
+ const altsBox=$('pAlts');
+ const alts=Array.isArray(d.alternatives_ar)?d.alternatives_ar:[];
+ if(alts.length){
+  altsBox.hidden=false;
+  altsBox.innerHTML=alts.map(a=>`<button type="button" class="alt-chip" data-pick-alt="${esc(a)}">${esc(a)}</button>`).join('');
+ }else{
+  altsBox.hidden=true;
+  altsBox.replaceChildren();
+ }
+
+ $('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';
+ $('pExp').textContent=d.explanation_ar;
+
+ // Synonyms, Antonyms & Collocations
+ const relBox=$('relBox'),relEl=$('pRels');
+ const syns=(d.synonyms||[]).map(s=>`<button type="button" class="lex-chip" data-lex-word="${esc(s)}" title="انقر لترجمة المرادف">${esc(s)}</button>`);
+ const ants=(d.antonyms||[]).map(a=>`<button type="button" class="lex-chip ant" data-lex-word="${esc(a)}" title="ضد الكلمة">≠ ${esc(a)}</button>`);
+ const cols=(d.collocations||[]).map(col=>`<button type="button" class="lex-chip" data-lex-word="${esc(col)}" title="كلمة مرتبطة سياقياً">+ ${esc(col)}</button>`);
+ const chips=[...syns,...ants,...cols];
+ if(chips.length){
+  relBox.hidden=false;
+  relEl.innerHTML=chips.join('');
+ }else{
+  relBox.hidden=true;
+  relEl.replaceChildren();
+ }
+
+ $('exBox').hidden=!d.example_original;
+ $('pExO').textContent=d.example_original||'';
+ $('pExA').textContent=d.example_ar||'';
+
+ renderInteractiveSentence($('pSO'),d.sentence_original||'',d.word);
+ $('pSA').textContent=d.sentence_ar||'';
+ $('panel').scrollTop=0;
+ updBm();
+ repeatUI();
+}
+
+$('pAlts').addEventListener('click',async e=>{
+ const btn=e.target.closest('[data-pick-alt]');
+ if(!btn||!S.sel)return;
+ const chosen=btn.dataset.pickAlt;
+ const voc=await vocalizeWordOnly(chosen);
+ S.sel.translation_ar=voc||chosen;
+ $('pTr').textContent=S.sel.translation_ar;
+ addToFlashcards(S.sel);
+ toast('تم اعتماد المعنى المختار وتحديث البطاقة');
+});
+
+$('pRels').addEventListener('click',e=>{
+ const btn=e.target.closest('[data-lex-word]');
+ if(!btn||!S.sel)return;
+ lookupCustomWord(btn.dataset.lexWord,S.sel.sentence_original,S.sel.lang);
+});
+
+$('pSO').addEventListener('click',e=>{
+ const tok=e.target.closest('[data-stok]');
+ if(!tok||!S.sel)return;
+ lookupCustomWord(tok.dataset.stok,S.sel.sentence_original,S.sel.lang);
+});
+
 function copyTr(){if(!S.sel)return;navigator.clipboard?.writeText(`${S.sel.word} — ${S.sel.translation_ar}`).catch(()=>{});toast('تم نسخ الترجمة')}
 function sayWord(r){S.sel&&(Speech.speak(S.sel.word,S.sel.lang,r,Speech.loop==='word'?'word':null),repeatUI())}
 function loopWord(){if(!S.sel)return;Speech.loop==='word'?Speech.stop():(Speech.speak(S.sel.word,S.sel.lang,.85,'word'),repeatUI())}
