@@ -113,6 +113,8 @@ body.panel-open .canvas{padding-bottom:62dvh}
 .fc-back{text-align:center;padding:8px 0;display:grid;gap:8px}.fc-back .tr{font-size:22px;font-weight:700;color:var(--ac);line-height:1.85}.fc-back .ex{font-size:12px;color:var(--sub);direction:ltr;line-height:1.6}
 .fc-nav{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .sess-pill{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--acs);color:var(--onact);font-weight:600}
+.kbd-hint{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--sub);padding:2px 8px;border-radius:99px;background:var(--s2);border:1px solid var(--bd)}
+.kbd-hint kbd{font-family:monospace;font-size:10px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:0 4px}
 .modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:16px;animation:fade .2s}
 .mbox{background:var(--s1);border:1px solid var(--bd);border-radius:24px;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:var(--sh);animation:modal .22s ease-out}.mbox.w{max-width:560px}
 .mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
@@ -153,13 +155,13 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ في ذاكرة المتصفح، وانقر على أي كلمة لترجمتها مشكولةً ومراجعتها في بطاقات الفلاش كاردز لـ 10 جلسات.</p></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ تلقائياً في ذاكرة المتصفح مع تذكّر آخر موضع توقفت عنده، والتنقل الكامل عبر أسهم لوحة المفاتيح.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
     <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">تُحفظ المستندات والبطاقات محلياً داخل متصفحك لسهولة الرجوع إليها. الحد الأقصى للملف 25 MB.</p>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">تُحفظ المستندات وموضع القراءة والبطاقات محلياً داخل متصفحك. الحد الأقصى للملف 25 MB.</p>
       <div id="prog" class="prog" role="status" aria-live="polite" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
     </div>
     <div id="recentWrap" class="recent-box" hidden>
@@ -176,6 +178,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <label class="pill"><span class="k">السرعة:</span><select onchange="Speech.setRate(parseFloat(this.value))"><option>0.7</option><option>0.85</option><option selected>1</option><option>1.25</option><option>1.5</option></select></label>
     <label class="pill hide-sm"><i class="ms k" style="font-size:15px">record_voice_over</i><select id="voiceSel" dir="ltr" onchange="Speech.uri=this.value"></select></label>
     <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
+    <span class="kbd-hint hide-sm" title="استخدم الأسهم للتنقل بين الكلمات والسطور"><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> تنقّل</span>
     <div class="sp"></div>
     <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
     <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
@@ -226,7 +229,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div id="fcStage" class="fc-stage" hidden>
     <div id="fcCard" class="fc-card" onclick="flipFlashcard()">
       <div class="fc-top"><span id="fcPos" class="tag"></span><span id="fcRem">متبقي 10 جلسات</span></div>
-      <div id="fcFront" class="fc-front"><h3 id="fcWord"></h3><small id="fcIpa"></small><span style="display:inline-block;margin-top:10px;font-size:11px;color:var(--ac)">انقر لقلب البطاقة وإظهار الترجمة</span></div>
+      <div id="fcFront" class="fc-front"><h3 id="fcWord"></h3><small id="fcIpa"></small><span style="display:inline-block;margin-top:10px;font-size:11px;color:var(--ac)">انقر أو اضغط Space لقلب البطاقة</span></div>
       <div id="fcBack" class="fc-back" hidden><div id="fcTr" class="tr"></div><div id="fcEx" class="ex"></div></div>
     </div>
     <div class="fc-nav">
@@ -249,8 +252,8 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
     <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية مشكولة بدقة</b><small>تحليل معنى الكلمة داخل الجملة والعبارة المحيطة وتشكيلها بالحركات لتسهيل القراءة والنطق الصحيح.</small></div></div>
+    <div class="feat"><i class="ms">keyboard</i><div><b>تنقّل بأسهم لوحة المفاتيح واستكمال القراءة</b><small>استعمل الأسهم للتنقل بين الكلمات والسطور، وعند تحديث الصفحة ستعود تلقائياً إلى نفس الملف وموضع توقفك.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
-    <div class="feat"><i class="ms">folder_special</i><div><b>ذاكرة المستندات ومطابقة الأصل</b><small>حفظ الملفات المرفقة تلقائياً في المتصفح مع استخراج النص مطابقاً للأصل تماماً.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
   </div></div></div>
@@ -275,6 +278,7 @@ const K={
  cache:'readdy_ai_cache_prod_v8',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
+ state:'readdy_reading_state_v1',
  gem:'readdy_user_gemini_api_key',
  wel:'readdy_hide_welcome_modal_saj_v1',
  theme:'readdy_theme_mode_v1'
@@ -297,17 +301,47 @@ function initSessionNumber(){
 }
 const CURRENT_SESSION=initSessionNumber();
 
-const S={docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null};
+const S={docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,activeSentId:-1,activeWordIdx:-1,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null};
 try{
  const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;
  Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v));
  const fcRaw=JSON.parse(store.get(K.fc,'[]'));
  if(Array.isArray(fcRaw)){
-  // Retain only flashcards whose expiration session >= CURRENT_SESSION
   S.flashcards=fcRaw.filter(c=>c && typeof c.expiresAt==='number' && c.expiresAt>=CURRENT_SESSION);
   store.set(K.fc,JSON.stringify(S.flashcards));
  }
 }catch{}
+
+/* ---------- Reading state persistence (resume exact doc, page, scroll & word on refresh) ---------- */
+function saveReadingState(extra={}){
+ if(!S.docId||$('work').hidden){
+  store.del(K.state);
+  return;
+ }
+ const prev=getReadingState()||{};
+ const next={
+  docId:S.docId,
+  scrollY:Math.max(0,Math.round(window.scrollY||0)),
+  page:parseInt($('jump')?.value||'1',10)||1,
+  sentId:S.activeSentId>=0?S.activeSentId:(extra.sentId??prev.sentId??-1),
+  wordIdx:S.activeWordIdx>=0?S.activeWordIdx:(extra.wordIdx??prev.wordIdx??-1),
+  panelOpen:!$('panel').hidden,
+  size:S.size,
+  font:$('fSerif').classList.contains('on')?'serif':'sans',
+  updatedAt:Date.now(),
+  ...extra
+ };
+ store.set(K.state,JSON.stringify(next));
+}
+function getReadingState(){
+ try{
+  const raw=store.get(K.state,'');
+  return raw?JSON.parse(raw):null;
+ }catch{return null}
+}
+function clearReadingState(){
+ store.del(K.state);
+}
 
 /* ---------- IndexedDB persistent memory for attached files & documents ---------- */
 const DocDB={
@@ -400,13 +434,16 @@ $('recentList').addEventListener('click',async e=>{
  }
  const delEl=e.target.closest('[data-del-doc]');
  if(delEl){
-  await DocDB.remove(delEl.dataset.delDoc);
+  const targetId=delEl.dataset.delDoc;
+  await DocDB.remove(targetId);
+  if(getReadingState()?.docId===targetId)clearReadingState();
   renderRecentDocs();
   toast('تم حذف المستند من الذاكرة');
  }
 });
 async function clearSavedDocs(){
  await DocDB.clear();
+ clearReadingState();
  renderRecentDocs();
  toast('تم مسح جميع المستندات المحفوظة');
 }
@@ -675,16 +712,18 @@ async function readImage(f){need(window.Tesseract);progress(true,'تهيئة م�
  try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text||'')}])}finally{await w.terminate()}}
 function readPasted(){const t=$('pasteInput').value;if(!t.trim())return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي',[{pageNumber:1,blocks:verbatimLines(t)}])}
 
-/* ---------- document model & lazy rendering ---------- */
+/* ---------- document model, lazy rendering & state restoration ---------- */
 function splitSentences(text){
  const N='\u0000',p=text.replace(/\b(Mr|Mrs|Ms|Dr|Prof|St|Sr|Jr|Mme|Mlle|etc|vs|fig|vol|M)\./g,'$1'+N).replace(/\b([ei])\.([ge])\./g,'$1'+N+'$2'+N).replace(/(\d)\.(\d)/g,'$1'+N+'$2');
  const out=[],re=/[.!?…]+["'»”)\]]*\s*/g;let last=0,m;
  while((m=re.exec(p))){const end=m.index+m[0].length;if(!/\s$/.test(m[0])&&end<p.length)continue;out.push(p.slice(last,end));last=end}
  if(last<p.length)out.push(p.slice(last));return out.map(s=>s.split(N).join('.'))}
+
 function openDoc(title,pages,opts={}){progress(false);
  if(!pages.some(p=>p.blocks.some(b=>b.text.trim().length>0))){toast('لا يوجد نص قابل للقراءة في هذا الملف.');return}
  S.docId=opts.id||('doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,7));
- S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
+ S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
+ S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
  pages.forEach((pg,pi)=>pg.blocks.forEach(b=>{
   if(b.type==='gap'||!b.text.trim()){b.sents=[];return}
   b.sents=splitSentences(b.text).map(raw=>{const text=raw.trim();if(!text)return null;S.recs.push({text,tokens:[],page:pi});return{raw,id:S.recs.length-1}}).filter(Boolean)
@@ -693,8 +732,39 @@ function openDoc(title,pages,opts={}){progress(false);
   const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indent:b.indent||0}))}));
   DocDB.save({id:S.docId,title:S.title,lang:S.lang,pages:cleanPages,updatedAt:Date.now()});
  }
- $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('docTitleInput').value=title;$('jump').max=pages.length;$('jump').value=1;$('pgCount').textContent=`/ ${pages.length}`;
- closePanel();scrollTo(0,0);buildSheets()}
+ $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('docTitleInput').value=title;$('jump').max=pages.length;$('jump').value=opts.restore?.page||1;$('pgCount').textContent=`/ ${pages.length}`;
+ closePanel();
+ buildSheets();
+
+ if(opts.restore){
+  const r=opts.restore;
+  if(r.font)setFont(r.font,true);
+  if(typeof r.size==='number'){S.size=Math.min(24,Math.max(14,r.size));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px')}
+  const targetPageIdx=Math.max(0,Math.min(S.pages.length-1,(r.page||1)-1));
+  for(let i=0;i<=Math.min(S.pages.length-1,targetPageIdx+1);i++)renderPage(i);
+  requestAnimationFrame(()=>{
+   if(typeof r.sentId==='number'&&r.sentId>=0&&S.recs[r.sentId]){
+    const rec=S.recs[r.sentId];
+    renderPage(rec.page);
+    const wIdx=Math.max(0,Math.min(rec.tokens.length-1,r.wordIdx||0));
+    const tok=rec.tokens[wIdx];
+    if(tok){
+     onWord(tok,tok.textContent,rec.text,rec.tokens,r.sentId,{silentScroll:true,openSidePanel:!!r.panelOpen});
+    }
+   }
+   if(typeof r.scrollY==='number'&&r.scrollY>0){
+    window.scrollTo(0,r.scrollY);
+   }else if(r.page>1){
+    $('doc-page-'+r.page)?.scrollIntoView({block:'start'});
+   }
+   saveReadingState();
+  });
+ }else{
+  scrollTo(0,0);
+  saveReadingState({scrollY:0,page:1,sentId:-1,wordIdx:-1,panelOpen:false});
+ }
+}
+
 function buildSheets(){const c=$('pages');S.io?.disconnect();c.replaceChildren();
  S.io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){renderPage(+e.target.dataset.p);S.io.unobserve(e.target)}}),{rootMargin:'1500px 0px'}):null;
  const fr=document.createDocumentFragment();
@@ -712,16 +782,122 @@ function renderPage(pi){const a=$('pages').children[pi];if(!a||a.dataset.done)re
   if(!b.sents||!b.sents.length){el.textContent=b.text;body.append(el);return}
   b.sents.forEach(({raw,id})=>{const rec=S.recs[id];rec.tokens=[];let last=0;
    for(const m of raw.matchAll(WORD)){const w=m[0];if(m.index>last)el.append(raw.slice(last,m.index));
-    const s=document.createElement('span');s.className='wt'+(saved.has(w.toLowerCase())?' bm':'');s.textContent=w;s.dataset.s=id;s.dataset.w=w.toLowerCase();rec.tokens.push(s);el.append(s);last=m.index+w.length}
+    const s=document.createElement('span');s.className='wt'+(saved.has(w.toLowerCase())?' bm':'');s.textContent=w;s.dataset.s=id;s.dataset.wi=rec.tokens.length;s.dataset.w=w.toLowerCase();rec.tokens.push(s);el.append(s);last=m.index+w.length}
    if(last<raw.length)el.append(raw.slice(last))});
   body.append(el);
  })}
 $('pages').addEventListener('click',e=>{const t=e.target.closest('.wt');if(!t)return;const id=+t.dataset.s;onWord(t,t.textContent,S.recs[id].text,S.recs[id].tokens,id)});
-function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||1));$('jump').value=n;$('doc-page-'+n)?.scrollIntoView({behavior:'smooth',block:'start'})}
-function setFont(m){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif')}
-function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px')}
+function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||1));$('jump').value=n;renderPage(n-1);$('doc-page-'+n)?.scrollIntoView({behavior:'smooth',block:'start'});saveReadingState({page:n})}
+function setFont(m,skipSave=false){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif');if(!skipSave)saveReadingState()}
+function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px');saveReadingState()}
 function hl(t){S.toks.forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
-function goHome(){Speech.stop();S.io?.disconnect();S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();renderRecentDocs();scrollTo(0,0)}
+function goHome(){Speech.stop();S.io?.disconnect();S.docId='';S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();clearReadingState();renderRecentDocs();scrollTo(0,0)}
+
+/* ---------- Track visible page & scroll position continuously ---------- */
+let scrollSaveTimer=null;
+function updateCurrentPageFromViewport(){
+ if($('work').hidden||!S.pages.length)return;
+ const sheets=$('pages').children;
+ const anchor=window.innerHeight*0.32;
+ let currentPg=1;
+ for(let i=0;i<sheets.length;i++){
+  const rect=sheets[i].getBoundingClientRect();
+  if(rect.top<=anchor)currentPg=i+1;
+  else break;
+ }
+ if(document.activeElement!==$('jump'))$('jump').value=currentPg;
+ return currentPg;
+}
+window.addEventListener('scroll',()=>{
+ if($('work').hidden||!S.docId)return;
+ const pg=updateCurrentPageFromViewport();
+ clearTimeout(scrollSaveTimer);
+ scrollSaveTimer=setTimeout(()=>saveReadingState({page:pg}),180);
+},{passive:true});
+window.addEventListener('beforeunload',()=>{if(S.docId&&!$('work').hidden)saveReadingState()});
+
+/* ---------- Keyboard Arrow Navigation (Words, Lines/Sentences & Flashcards) ---------- */
+function findNextNonEmptySentence(startSentId,dir){
+ let s=startSentId+dir;
+ while(s>=0 && s<S.recs.length){
+  renderPage(S.recs[s].page);
+  if(S.recs[s].tokens && S.recs[s].tokens.length)return s;
+  s+=dir;
+ }
+ return -1;
+}
+function navigateByArrows(key){
+ // 1. If Flashcards drawer is open, arrows flip & browse flashcards
+ if($('fcDrawer').classList.contains('open')){
+  if(key==='ArrowLeft'){stepFlashcard(1);return true}
+  if(key==='ArrowRight'){stepFlashcard(-1);return true}
+  if(key==='ArrowUp'||key==='ArrowDown'){flipFlashcard();return true}
+  return false;
+ }
+ // 2. Only operate on document reader when active and no modals/drawers are open
+ if($('work').hidden||!S.recs.length)return false;
+ if(!$('welcomeModal').hidden||!$('pasteModal').hidden||!$('apiModal').hidden||$('drawer').classList.contains('open'))return false;
+
+ // Left / Right: move word-by-word (LTR text: ArrowRight = next word, ArrowLeft = previous word)
+ if(key==='ArrowRight'||key==='ArrowLeft'){
+  const dir=key==='ArrowRight'?1:-1;
+  let sId=S.activeSentId;
+  let wIdx=S.activeWordIdx;
+
+  if(sId<0||!S.recs[sId]){
+   // Start at the first visible sentence in viewport
+   const curPg=(parseInt($('jump').value||'1',10)||1)-1;
+   renderPage(curPg);
+   sId=S.recs.findIndex(r=>r.page>=curPg && r.tokens.length>0);
+   if(sId<0)sId=findNextNonEmptySentence(-1,1);
+   if(sId<0)return false;
+   wIdx=0;
+  }else{
+   renderPage(S.recs[sId].page);
+   const len=S.recs[sId].tokens.length;
+   wIdx+=dir;
+   if(wIdx>=len){
+    const nextS=findNextNonEmptySentence(sId,1);
+    if(nextS<0)return true;
+    sId=nextS;
+    wIdx=0;
+   }else if(wIdx<0){
+    const prevS=findNextNonEmptySentence(sId,-1);
+    if(prevS<0)return true;
+    sId=prevS;
+    wIdx=S.recs[sId].tokens.length-1;
+   }
+  }
+  const rec=S.recs[sId];
+  const tok=rec.tokens[wIdx];
+  if(tok){
+   onWord(tok,tok.textContent,rec.text,rec.tokens,sId);
+   tok.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  return true;
+ }
+
+ // Up / Down: move sentence-by-sentence when a word is active, or smooth scroll page otherwise
+ if(key==='ArrowDown'||key==='ArrowUp'){
+  const dir=key==='ArrowDown'?1:-1;
+  if(S.activeSentId>=0 && S.recs[S.activeSentId]){
+   const targetS=findNextNonEmptySentence(S.activeSentId,dir);
+   if(targetS>=0){
+    const rec=S.recs[targetS];
+    const wIdx=Math.min(Math.max(0,S.activeWordIdx),rec.tokens.length-1);
+    const tok=rec.tokens[wIdx];
+    if(tok){
+     onWord(tok,tok.textContent,rec.text,rec.tokens,targetS);
+     tok.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+   }
+   return true;
+  }
+  window.scrollBy({top:dir*140,behavior:'smooth'});
+  return true;
+ }
+ return false;
+}
 
 /* ---------- Arabic diacritization ONLY for the translated word ---------- */
 const hasTashkeel=s=>/[\u064B-\u065F\u0670]/.test(String(s||''));
@@ -987,9 +1163,18 @@ $('fclist').addEventListener('click',e=>{
  }
 });
 
-async function onWord(el,word,sent,toks,sIdx){
- S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;if(Speech.loop)Speech.stop();openPanel();
- if(innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
+async function onWord(el,word,sent,toks,sIdx,opts={}){
+ S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;
+ S.activeSentId=sIdx;
+ S.activeWordIdx=toks.indexOf(el);
+ const pageNum=(S.recs[sIdx]?.page??0)+1;
+ if(document.activeElement!==$('jump'))$('jump').value=pageNum;
+ if(Speech.loop)Speech.stop();
+ const shouldOpenPanel=opts.openSidePanel!==undefined?opts.openSidePanel:true;
+ if(shouldOpenPanel)openPanel();
+ saveReadingState({page:pageNum,sentId:sIdx,wordIdx:S.activeWordIdx,panelOpen:shouldOpenPanel});
+
+ if(!opts.silentScroll && innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
  const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
  if(hit){
   const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',pos_ar:hit.pos,lemma:hit.lemma,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
@@ -1017,7 +1202,7 @@ async function onWord(el,word,sent,toks,sIdx){
  catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
-function closePanel(){S.req++;$('panel').hidden=true;document.body.classList.remove('panel-open');S.activeEl?.classList.remove('act');S.activeEl=null;hl([]);S.selIdx=-1}
+function closePanel(){S.req++;$('panel').hidden=true;document.body.classList.remove('panel-open');S.activeEl?.classList.remove('act');S.activeEl=null;hl([]);S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;saveReadingState({panelOpen:false,sentId:-1,wordIdx:-1})}
 function renderPanel(d){S.sel=d;showSkel(false);const c=$('pContent');c.style.animation='none';c.offsetWidth;c.style.animation='';
  $('engineTag').textContent=d.source_label||'Readdy';$('pTitle').textContent=d.word;$('pLang').textContent=d.lang.toUpperCase();$('pIpa').textContent=d.ipa||'';$('pIpa').hidden=$('pDot').hidden=!d.ipa;
  $('pPos').textContent=d.pos_ar||'';$('pTr').textContent=d.translation_ar;$('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';$('pExp').textContent=d.explanation_ar;
@@ -1056,9 +1241,23 @@ function exportCSV(){if(!S.saved.length){toast('لا توجد كلمات محف�
 function saveKey(){S.gem=$('gemKey').value.trim();S.gem?session.set(K.gem,S.gem):session.del(K.gem);show('apiModal',0);toast(S.gem?'تم تفعيل Gemini لهذه الجلسة':'تم اعتماد المحركات المدمجة')}
 function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
-/* ---------- init ---------- */
-setThemeIcon();Speech.init();updBadge();updFcBadge();renderRecentDocs();openWelcome(false);
+/* ---------- init & auto-restore last session on page reload ---------- */
+setThemeIcon();Speech.init();updBadge();updFcBadge();
 Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
+
+(async function bootstrap(){
+ await renderRecentDocs();
+ const last=getReadingState();
+ if(last && last.docId){
+  const savedDoc=await DocDB.get(last.docId);
+  if(savedDoc){
+   openDoc(savedDoc.title,savedDoc.pages,{id:savedDoc.id,skipSave:true,restore:last});
+   return;
+  }
+ }
+ openWelcome(false);
+})();
+
 $('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
 $('docTitleInput').addEventListener('input',e=>{
  S.title=e.target.value;
@@ -1068,8 +1267,31 @@ let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Fi
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
 addEventListener('dragover',e=>e.preventDefault());
 addEventListener('drop',e=>{e.preventDefault();dc=0;document.body.classList.remove('drag');const f=e.dataTransfer?.files?.[0];if(f)ingest(f)});
-addEventListener('keydown',e=>{if(e.key!=='Escape')return;let c=false;['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
- if($('drawer').classList.contains('open')||$('fcDrawer').classList.contains('open')){closeAllDrawers();c=true}if(!c&&!$('panel').hidden)closePanel()});
+addEventListener('keydown',e=>{
+ const tag=(e.target?.tagName||'').toUpperCase();
+ const isTyping=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||e.target?.isContentEditable;
+ if(e.key==='Escape'){
+  let c=false;
+  ['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
+  if($('drawer').classList.contains('open')||$('fcDrawer').classList.contains('open')){closeAllDrawers();c=true}
+  if(!c&&!$('panel').hidden)closePanel();
+  return;
+ }
+ if(isTyping)return;
+ if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
+  if(navigateByArrows(e.key))e.preventDefault();
+  return;
+ }
+ if(e.key===' '&&$('fcDrawer').classList.contains('open')){
+  e.preventDefault();
+  flipFlashcard();
+  return;
+ }
+ if(e.key==='Enter'&&!$('work').hidden&&S.sel){
+  e.preventDefault();
+  sayWord(1);
+ }
+});
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
 </script>
 </body>
