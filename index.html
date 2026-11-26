@@ -16,7 +16,7 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 <style>
-:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--tabh:38px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
+:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
 html.dark{--bg:#131314;--cv:#131314;--sheet:#1e1f20;--s1:#1e1f20;--s2:#282a2c;--bd:#333537;--tx:#e3e3e3;--sub:#c4c7c5;--ac:#8ab4f8;--ach:#aecbfa;--acs:#004a77;--onac:#041e49;--onact:#d3e3fd;--ok:#81c995;--hl:#282a2c}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -42,27 +42,19 @@ html:not(.icons) .ms{visibility:hidden}
 .brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
 .play{transform-origin:43px 32px;animation:pulse 2.6s ease-in-out infinite}
 .sp{flex:1;min-width:0}
-#docTitleInput{display:none;width:clamp(110px,18vw,210px);background:none;border:1px solid transparent;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:500;outline:0;text-overflow:ellipsis}
-#docTitleInput:hover{background:var(--s2)}#docTitleInput:focus{border-color:var(--ac)}
-@media(min-width:768px){body.has-doc #docTitleInput{display:block}}
 .badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
 
-/* Clean Browser-Style Session Tab Strip */
-.tabstrip{position:sticky;top:var(--hh);z-index:31;height:var(--tabh);background:var(--s2);border-bottom:1px solid var(--bd);display:flex;align-items:flex-end;gap:4px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
-.tabstrip::-webkit-scrollbar{display:none}
-.stab{display:inline-flex;align-items:center;gap:8px;height:32px;max-width:210px;padding:0 10px 0 12px;border-radius:10px 10px 0 0;border:1px solid transparent;border-bottom:0;background:transparent;color:var(--sub);font-size:12px;font-weight:500;cursor:pointer;transition:.14s;flex:none;position:relative;user-select:none}
-.stab:hover{background:rgba(128,128,128,.08);color:var(--tx)}
-.stab.active{background:var(--bg);color:var(--tx);font-weight:600;border-color:var(--bd);box-shadow:0 1px 0 var(--bg)}
-.stab-dot{width:6px;height:6px;border-radius:50%;background:var(--sub);opacity:.45;flex:none}
-.stab.active .stab-dot{background:var(--ac);opacity:1}
-.stab-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
-.stab-close{width:18px;height:18px;border-radius:50%;border:0;background:transparent;color:var(--sub);display:inline-grid;place-items:center;padding:0;flex:none;opacity:.7;transition:.12s}
-.stab-close:hover{background:rgba(217,48,37,.14);color:#d93025;opacity:1}
-.stab-add{width:28px;height:28px;margin-bottom:3px;border-radius:50%;border:0;background:transparent;color:var(--sub);display:inline-grid;place-items:center;flex:none;transition:.12s}
-.stab-add:hover{background:var(--bg);color:var(--ac)}
-.tabstrip-end{margin-right:auto;display:flex;align-items:center;gap:6px;height:100%;padding-right:8px}
-.end-cur-link{background:none;border:0;font-size:11px;font-weight:600;color:#d93025;display:inline-flex;align-items:center;gap:3px;padding:4px 8px;border-radius:99px;opacity:.85}
-.end-cur-link:hover{background:rgba(217,48,37,.1);opacity:1}
+/* Unified Compact Session Pills inside Top Header */
+.sess-bar{display:flex;align-items:center;gap:6px;min-width:0;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.sess-bar::-webkit-scrollbar{display:none}
+.spill{display:inline-flex;align-items:center;gap:6px;height:30px;max-width:190px;padding:0 8px 0 11px;border-radius:999px;border:1px solid var(--bd);background:var(--s2);color:var(--sub);font-size:12px;font-weight:500;cursor:pointer;transition:.14s;flex:none;user-select:none}
+.spill:hover{border-color:var(--ac);color:var(--tx)}
+.spill.active{background:var(--acs);color:var(--onact);border-color:var(--ac);font-weight:600}
+.spill-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+.spill-x{width:18px;height:18px;border-radius:50%;border:0;background:transparent;color:inherit;display:inline-grid;place-items:center;padding:0;opacity:.65;transition:.12s;flex:none}
+.spill-x:hover{background:rgba(217,48,37,.18);color:#d93025;opacity:1}
+.sadd-btn{width:30px;height:30px;border-radius:50%;border:1px dashed var(--bd);background:var(--s1);color:var(--ac);display:inline-grid;place-items:center;flex:none;transition:.15s;padding:0}
+.sadd-btn:hover{border-style:solid;border-color:var(--ac);background:var(--hl)}
 
 #empty{flex:1;display:grid;place-items:center;padding:24px 16px}
 .hero{position:relative;width:100%;max-width:680px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,5vw,44px);text-align:center;overflow:hidden}
@@ -84,8 +76,7 @@ html:not(.icons) .ms{visibility:hidden}
 .rdoc-info{min-width:0;flex:1}.rdoc-info b{display:block;font-size:12px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}.rdoc-info small{font-size:10px;color:var(--sub)}
 
 #work{flex:1;flex-direction:column;display:flex}
-.tb{position:sticky;top:calc(var(--hh) + var(--tabh));z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
-body:not(.has-tabs) .tb{top:var(--hh)}
+.tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
 .tb::-webkit-scrollbar{display:none}.tb>*{flex:none}.tb .sp{flex:1 0 0}
 .seg{display:inline-flex;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:2px}.seg button{border:0;background:none;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500;color:var(--sub)}.seg button.on{background:var(--bg);color:var(--tx)}
 .seg .v{font-size:11px;color:var(--sub);align-self:center;padding:0 4px;min-width:34px;text-align:center}
@@ -93,7 +84,7 @@ body:not(.has-tabs) .tb{top:var(--hh)}
 .split{flex:1;display:flex;align-items:flex-start}
 .canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(8px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
 #pages{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
-.sheet{width:100%;max-width:860px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--tabh) + var(--th) + 12px);overflow-x:auto}
+.sheet{width:100%;max-width:860px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow-x:auto}
 .sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:700px}}
 .body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.75;white-space:pre-wrap;word-break:normal;overflow-wrap:break-word}
 .body .raw-line{margin:0;min-height:1.2em}
@@ -109,8 +100,7 @@ body:not(.has-tabs) .tb{top:var(--hh)}
 #panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:60dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
 body.panel-open .canvas{padding-bottom:64dvh}
 @media(min-width:1024px){
- #panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--tabh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--tabh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}
- body:not(.has-tabs) #panel{top:calc(var(--hh) + var(--th));height:calc(100dvh - var(--hh) - var(--th))}
+ #panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}
  body.panel-open .canvas{padding-bottom:48px}
 }
 .ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
@@ -126,7 +116,6 @@ body.panel-open .canvas{padding-bottom:64dvh}
 .alt-chip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--tx);cursor:pointer;transition:.12s}
 .alt-chip:hover{border-color:var(--ac);color:var(--ac)}
 
-/* Arabic Synonyms & Antonyms Chips */
 .lex-chips{display:flex;flex-wrap:wrap;gap:6px;direction:rtl}
 .lex-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);color:var(--ac);cursor:pointer;transition:.12s;display:inline-flex;align-items:center;gap:5px}
 .lex-chip:hover{background:var(--hl);border-color:var(--ac)}
@@ -167,7 +156,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 @keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes pop{50%{transform:scale(1.06)}}
 @keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}}@keyframes sheet{from{transform:translateY(100%)}}@keyframes slide{from{opacity:0;transform:translateX(-24px)}}
 @keyframes sp{50%{height:14px}}@keyframes shim{to{background-position:600px 0}}
-@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}}
+@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}.spill{max-width:110px}}
 @media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -180,9 +169,15 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg>
     <span dir="ltr">Readdy</span>
   </button>
-  <input id="docTitleInput" dir="ltr" type="text" aria-label="عنوان المستند">
-  <button class="ibtn sm" onclick="startBlankSessionTab()" title="جلسة قراءة مستقلة جديدة (+)" aria-label="جلسة قراءة مستقلة جديدة"><i class="ms">add</i></button>
-  <div class="sp"></div>
+
+  <!-- Unified Inline Session Pills + Single '+' Button -->
+  <div class="sess-bar" id="sessBar">
+    <div id="tabList" style="display:flex;align-items:center;gap:6px"></div>
+    <button class="sadd-btn" onclick="startBlankSessionTab()" title="جلسة قراءة مستقلة جديدة (+)" aria-label="جلسة قراءة مستقلة جديدة">
+      <i class="ms" style="font-size:18px">add</i>
+    </button>
+  </div>
+
   <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
     <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
   <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
@@ -193,26 +188,17 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة" title="حقيبة المفردات الدائمة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
 </header>
 
-<!-- Clean Browser-Style Session Tab Strip -->
-<nav id="tabStrip" class="tabstrip" hidden aria-label="تبويبات الجلسات المستقلة">
-  <div id="tabList" style="display:flex;align-items:flex-end;gap:4px"></div>
-  <button class="stab-add" onclick="startBlankSessionTab()" title="جلسة جديدة (+)" aria-label="جلسة جديدة"><i class="ms" style="font-size:18px">add</i></button>
-  <div class="tabstrip-end">
-    <button id="endCurSessBtn" class="end-cur-link" onclick="endCurrentSession()" hidden title="إنهاء وإغلاق الجلسة الحالية نهائياً"><i class="ms" style="font-size:14px">close</i><span>إنهاء الجلسة الحالية</span></button>
-  </div>
-</nav>
-
 <main id="empty">
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.</p></div>
+    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
     <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">اضغط (+) في الأعلى لفتح جلسة مستقلة جديدة مع بقاء جلساتك السابقة في شريط التبويبات.</p>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">اضغط (+) في الأعلى لفتح جلسة مستقلة جديدة مع بقاء جلساتك السابقة في الشريط العلوي.</p>
       <div id="prog" class="prog" role="status" aria-live="polite" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
     </div>
     <div id="recentWrap" class="recent-box" hidden>
@@ -302,8 +288,8 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">tab</i><div><b>تبويبات جلسات مستقلة (+)</b><small>افتح عدة مستندات في تبويبات منفصلة، وتنقّل بينها بضغطة واحدة أو أنهِ أي جلسة من زر (×).</small></div></div>
-    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية ومرادفات بالعربية</b><small>ترجمة مشكولة للكلمة في سياقها، مع عرض المرادفات والأضداد مترجمة إلى العربية مباشرة.</small></div></div>
+    <div class="feat"><i class="ms">add_circle</i><div><b>جلسات قراءة مستقلة (+)</b><small>افتح عدة مستندات في جلسات مستقلة في الشريط العلوي، وتنقّل بينها أو أغلق أي جلسة من زر (×).</small></div></div>
+    <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية ومرادفات بالعربية</b><small>ترجمة مشكولة للكلمة في سياقها مع منع الخلط بين اللغات، وعرض المرادفات والأضداد بالعربية.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
@@ -326,11 +312,11 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const K={
  vocab:'readdy_saved_vocabulary_prod_v5',
- cache:'readdy_ai_cache_prod_v10',
+ cache:'readdy_ai_cache_prod_v11',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
- openSessions:'readdy_open_sessions_registry_v3',
+ openSessions:'readdy_open_sessions_registry_v4',
  gem:'readdy_user_gemini_api_key',
  wel:'readdy_hide_welcome_modal_saj_v1',
  theme:'readdy_theme_mode_v1'
@@ -355,7 +341,7 @@ const CURRENT_SESSION=initSessionNumber();
 
 const S={
  sessionId:'',
- sessions:[], // [{sessionId, docId, title, lang, page, totalPages, scrollY, sentId, wordIdx, panelOpen, size, font, override, isBlank, updatedAt}]
+ sessions:[],
  docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,activeSentId:-1,activeWordIdx:-1,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null
 };
 
@@ -371,32 +357,24 @@ try{
  if(Array.isArray(reg))S.sessions=reg;
 }catch{}
 
-/* ---------- Clean Browser-Style Session Tab Strip ---------- */
+/* ---------- Unified Inline Session Pills ---------- */
 function persistSessionsRegistry(){
  store.set(K.openSessions,JSON.stringify(S.sessions));
  renderTabStrip();
 }
 
 function renderTabStrip(){
- const strip=$('tabStrip');
  const list=$('tabList');
- const hasTabs=S.sessions.length>0;
- strip.hidden=!hasTabs;
- document.body.classList.toggle('has-tabs',hasTabs);
- $('endCurSessBtn').hidden=!hasTabs || !S.sessionId;
-
- if(!hasTabs){
+ if(!S.sessions.length){
   list.replaceChildren();
   return;
  }
-
  list.innerHTML=S.sessions.map((s,i)=>{
   const isAct=s.sessionId===S.sessionId;
   const label=s.title||`جلسة ${i+1}`;
-  return `<div class="stab${isAct?' active':''}" data-tab-id="${esc(s.sessionId)}" title="${esc(label)}">
-   <span class="stab-dot"></span>
-   <span class="stab-lbl">${esc(label)}</span>
-   <button type="button" class="stab-close" data-tab-close="${esc(s.sessionId)}" title="إنهاء الجلسة" aria-label="إنهاء الجلسة"><i class="ms" style="font-size:13px">close</i></button>
+  return `<div class="spill${isAct?' active':''}" data-tab-id="${esc(s.sessionId)}" title="${esc(label)}">
+   <span class="spill-lbl">${esc(label)}</span>
+   <button type="button" class="spill-x" data-tab-close="${esc(s.sessionId)}" title="إنهاء الجلسة" aria-label="إنهاء الجلسة"><i class="ms" style="font-size:13px">close</i></button>
   </div>`;
  }).join('');
 }
@@ -414,11 +392,17 @@ $('tabList').addEventListener('click',async e=>{
  }
 });
 
-/* '+' Button: opens a clean independent session tab immediately without popups */
+/* '+' Button: opens a clean independent session immediately */
 function startBlankSessionTab(){
  if(S.sessionId && !$('work').hidden)saveReadingState();
  Speech.stop();
  S.io?.disconnect();
+
+ const existingBlank=S.sessions.find(x=>x.isBlank);
+ if(existingBlank){
+  switchToSession(existingBlank.sessionId);
+  return;
+ }
 
  const newId='sess_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
  const num=S.sessions.length+1;
@@ -452,7 +436,7 @@ function startBlankSessionTab(){
  $('empty').hidden=false;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='جلسة قراءة مستقلة جديدة';
- $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في شريط التبويبات بالأعلى.';
+ $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في الشريط العلوي.';
  closePanel();
  persistSessionsRegistry();
  store.set(K.state,JSON.stringify({sessionId:newId}));
@@ -480,7 +464,7 @@ async function switchToSession(targetSessionId){
   $('empty').hidden=false;
   document.body.classList.remove('has-doc');
   $('heroTitle').textContent='جلسة قراءة مستقلة جديدة';
-  $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في شريط التبويبات بالأعلى.';
+  $('heroSub').textContent='اختر ملفاً أو الصق نصاً لبدء هذه الجلسة، بينما تبقى جلساتك الأخرى محفوظة في الشريط العلوي.';
   closePanel();
   persistSessionsRegistry();
   store.set(K.state,JSON.stringify({sessionId:target.sessionId}));
@@ -525,12 +509,6 @@ async function closeSpecificSession(targetSessionId){
  }
 }
 
-async function endCurrentSession(){
- if(!S.sessionId)return;
- await closeSpecificSession(S.sessionId);
- toast('تم إنهاء الجلسة الحالية');
-}
-
 function resetToDefaultHome(){
  S.io?.disconnect();
  S.docId='';S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;S.activeSentId=-1;S.activeWordIdx=-1;
@@ -539,7 +517,7 @@ function resetToDefaultHome(){
  $('empty').hidden=false;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
  closePanel();
  clearReadingState();
  renderTabStrip();
@@ -699,9 +677,9 @@ async function clearSavedDocs(){
  toast('تم مسح جميع المستندات والجلسات المحفوظة');
 }
 
-/* ---------- built-in lexicon ---------- */
+/* ---------- built-in lexicon (Grammar + Literary/Historical Terms) ---------- */
 const LEX={fr:{},en:{}};
-const load=(l,t)=>t.trim().split('\n').forEach(r=>{const[w,tr,pos,lem]=r.split('|');LEX[l][w]={tr,pos,lemma:lem||w}});
+const load=(l,t)=>t.trim().split('\n').forEach(r=>{const[w,tr,pos,lem,syns]=r.split('|');LEX[l][w]={tr,pos,lemma:lem||w,syns:syns?syns.split(','):[]}});
 load('fr',`mon|ـي / خَاصَّتِي (مُذَكَّر مُفْرَد)|صفة ملكية|mon
 ma|ـي (مُؤَنَّث مُفْرَد)|صفة ملكية|mon
 mes|ـي (جَمْع)|صفة ملكية|mon
@@ -778,7 +756,10 @@ suis|أَكُونُ|فعل (être) – المتكلم|être
 était|كَانَ|فعل (être) – الماضي الناقص|être
 a|لَدَيْهِ / يَمْلِكُ|فعل (avoir) – الغائب المفرد|avoir
 ont|لَدَيْهِمْ / يَمْلِكُونَ|فعل (avoir) – الغائب الجمع|avoir
-avait|كَانَ لَدَيْهِ|فعل (avoir) – الماضي الناقص|avoir`);
+avait|كَانَ لَدَيْهِ|فعل (avoir) – الماضي الناقص|avoir
+galée|سَفِينَةٌ / قَادِسٌ (سَفِينَةٌ شِرَاعِيَّةٌ قَدِيمَةٌ)|اسم مؤنث|galée|سفينة,مركب,قادس,سفينة شراعية
+galées|سُفُنٌ / قَوَادِسُ|اسم مؤنث جمع|galée|سفن,مراكب,قوادس
+galère|قَادِسٌ / سَفِينَةٌ حَرْبِيَّةٌ|اسم مؤنث|galère|سفينة,قادس,مركب`);
 load('en',`the|الْـ|أداة تعريف
 a|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أداة تنكير
 an|أَدَاةُ تَنْكِيرٍ (مُفْرَد)|أداة تنكير
@@ -973,7 +954,6 @@ function splitSentences(text){
 function openDoc(title,pages,opts={}){progress(false);
  if(!pages.some(p=>p.blocks.some(b=>b.text.trim().length>0))){toast('لا يوجد نص قابل للقراءة في هذا الملف.');return}
 
- // If current session is a newly created blank tab, fill it; otherwise create a new independent session tab
  const curBlank=S.sessions.find(x=>x.sessionId===S.sessionId && x.isBlank);
  if(opts.sessionId){
   S.sessionId=opts.sessionId;
@@ -997,7 +977,7 @@ function openDoc(title,pages,opts={}){progress(false);
   const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indent:b.indent||0}))}));
   DocDB.save({id:S.docId,title:S.title,lang:S.lang,pages:cleanPages,updatedAt:Date.now()});
  }
- $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('docTitleInput').value=title;$('jump').max=pages.length;$('jump').value=opts.restore?.page||1;$('pgCount').textContent=`/ ${pages.length}`;
+ $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('jump').max=pages.length;$('jump').value=opts.restore?.page||1;$('pgCount').textContent=`/ ${pages.length}`;
  closePanel();
  buildSheets();
 
@@ -1067,7 +1047,7 @@ function goHome(preserveRegistry=true){
  $('work').hidden=true;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في تبويب جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً في جلسة مستقلة مع تذكّر موضع التوقف، وترجمة سياقية مشكولة.';
  closePanel();
  renderTabStrip();
  renderRecentDocs();
@@ -1335,7 +1315,7 @@ function localPhrase(sent,w){
 
 function buildFocusedSentence(sent,w){
  const re=new RegExp(`\\b(${w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})\\b`,'i');
- return re.test(sent)?sent.replace(re,'[$1]'):sent;
+ return re.test(sent)?sent.replace(re,'«$1»'):sent;
 }
 
 async function hybrid(word,sent,lang){
@@ -1350,9 +1330,9 @@ async function hybrid(word,sent,lang){
  ]);
 
  let bestContextual=wt.primary;
- const bracketMatch=focusedTr.match(/\[([^\]]+)\]/);
- if(bracketMatch && bracketMatch[1].trim() && /[\u0600-\u06FF]/.test(bracketMatch[1])){
-  bestContextual=bracketMatch[1].trim();
+ const quoteMatch=focusedTr.match(/[«"]([^»"]+)[»"]/);
+ if(quoteMatch && quoteMatch[1].trim() && /[\u0600-\u06FF]/.test(quoteMatch[1])){
+  bestContextual=quoteMatch[1].trim();
  }else if(st && wt.alternatives.length){
   const plainSent=stripTashkeel(st);
   const matchedAlt=wt.alternatives.find(alt=>plainSent.includes(stripTashkeel(alt)));
@@ -1361,7 +1341,6 @@ async function hybrid(word,sent,lang){
 
  const allAlts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x && x!==stripTashkeel(bestContextual)).slice(0,5);
 
- // Fallback Arabic synonyms from alternative Arabic translations if dictionary list was empty
  let finalSynsAr=m.synonyms_ar;
  if(!finalSynsAr.length && allAlts.length){
   finalSynsAr=allAlts.slice(0,4).map(ar=>({ar,orig:''}));
@@ -1579,7 +1558,7 @@ async function lookupCustomWord(customWord,sent,lang){
  const low=customWord.toLowerCase().replace(/^['’-]+|['’-]+$/g,'');
  const hit=LEX[lang]?.[low];
  if(hit){
-  const rec={word:customWord,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:S.sel?.sentence_ar||''};
+  const rec={word:customWord,lang,source_label:'قاموس سياقي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A2',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:(hit.syns||[]).map(ar=>({ar,orig:''})),antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:S.sel?.sentence_ar||''};
   renderPanel(rec);
   addToFlashcards(rec);
   return;
@@ -1621,7 +1600,7 @@ async function onWord(el,word,sent,toks,sIdx,opts={}){
  if(!opts.silentScroll && innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
  const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
  if(hit){
-  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A1',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  const rec={word,lang,source_label:'قاموس سياقي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',cefr:'A2',pos_ar:hit.pos,morph_ar:'',lemma:hit.lemma,synonyms_ar:(hit.syns||[]).map(ar=>({ar,orig:''})),antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
   renderPanel(rec);
   addToFlashcards(rec);
   trText(sent,lang).then(t=>{if(req===S.req&&t){const plain=stripTashkeel(t);rec.sentence_ar=plain;$('pSA').textContent=plain}});
@@ -1693,7 +1672,6 @@ function renderPanel(d){
  $('pLemma').textContent=d.lemma?`الأصل اللغوي: ${d.lemma}`:'';
  $('pExp').textContent=d.explanation_ar;
 
- // Arabic-translated Synonyms & Antonyms
  const relBox=$('relBox'),relEl=$('pRels');
  const syns=(d.synonyms_ar||[]).map(item=>{
   const ar=typeof item==='string'?item:item.ar;
@@ -1811,11 +1789,6 @@ Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),n
 })();
 
 $('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
-$('docTitleInput').addEventListener('input',e=>{
- S.title=e.target.value;
- if(S.docId)DocDB.get(S.docId).then(d=>{if(d){d.title=S.title;d.updatedAt=Date.now();DocDB.save(d)}});
- saveReadingState();
-});
 let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
 addEventListener('dragover',e=>e.preventDefault());
