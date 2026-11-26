@@ -45,16 +45,23 @@ html:not(.icons) .ms{visibility:hidden}
 @media(min-width:768px){body.has-doc #docTitleInput{display:block}}
 .badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
 #empty{flex:1;display:grid;place-items:center;padding:24px 16px}
-.hero{position:relative;width:100%;max-width:640px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,6vw,48px);text-align:center;overflow:hidden}
+.hero{position:relative;width:100%;max-width:680px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,5vw,44px);text-align:center;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:-40%;background:radial-gradient(closest-side at 30% 30%,rgba(26,115,232,.13),transparent 60%),radial-gradient(closest-side at 70% 70%,rgba(138,180,248,.15),transparent 60%);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
 .hero>*{position:relative;animation:rise .6s both}.hero>:nth-child(2){animation-delay:.08s}.hero>:nth-child(3){animation-delay:.16s}.hero>:nth-child(4){animation-delay:.24s}.hero>:nth-child(5){animation-delay:.32s}
-.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:430px;margin:0 auto 24px}
+.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:460px;margin:0 auto 24px}
 .hero .big{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:14px}.hero .big svg{width:56px;height:56px}.hero .big span{font:700 clamp(28px,8vw,34px)/1 Outfit,sans-serif}
 .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;direction:ltr}
 .chips span{padding:3px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);font:500 13px Literata,serif;color:var(--ac);animation:float 4s ease-in-out infinite;animation-delay:var(--d)}
 .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.fmts{margin-top:22px;gap:8px}.fmts span{font-size:11px;padding:3px 12px;border-radius:99px;background:var(--s2);border:1px solid var(--bd);color:var(--sub)}
 .prog{margin:22px auto 0;max-width:420px;text-align:right}.prog div:first-child{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--ac);margin-bottom:6px}
 .bar{height:6px;border-radius:9px;background:var(--s2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+.recent-box{margin-top:24px;padding-top:18px;border-top:1px solid var(--bd);text-align:right}
+.recent-hd{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--tx);margin-bottom:10px}
+.recent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.rdoc{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:10px 12px;text-align:right;transition:.15s}
+.rdoc:hover{border-color:var(--ac);background:var(--s2)}
+.rdoc-main{display:flex;align-items:center;gap:8px;min-width:0;flex:1;cursor:pointer}
+.rdoc-info{min-width:0;flex:1}.rdoc-info b{display:block;font-size:12px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:right}.rdoc-info small{font-size:10px;color:var(--sub)}
 #work{flex:1;flex-direction:column;display:flex}
 .tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
 .tb::-webkit-scrollbar{display:none}.tb>*{flex:none}.tb .sp{flex:1 0 0}
@@ -90,14 +97,22 @@ body.panel-open .canvas{padding-bottom:62dvh}
 #pTr{font-size:21px;font-weight:700;line-height:1.85!important;padding-top:2px}.sm2{font-size:11px;color:var(--sub);margin-top:4px!important}
 .ex{direction:ltr;font:12px/1.7 Literata,serif}.exa{font-size:12px;color:var(--sub);line-height:1.7}
 .sk{border-radius:12px;background:linear-gradient(90deg,var(--s2) 25%,var(--bd) 50%,var(--s2) 75%);background-size:600px 100%;animation:shim 1.2s linear infinite}
-.drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,380px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
+.drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,410px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
 .bdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:55}.bdrop.open{opacity:1;pointer-events:auto}
 .dh{height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid var(--bd);font-weight:600;font-size:14px}.dh .sp{flex:1}
 .dsr{padding:10px 12px;border-bottom:1px solid var(--bd)}.dsr input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:7px 14px;font-size:13px;outline:0}.dsr input:focus{border-color:var(--ac)}
-#vlist{flex:1;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start}
+#vlist,#fclist{flex:1;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start}
 .vitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--bd);border-radius:16px;background:var(--s2);animation:rise .25s both}
 .vitem>div:first-child{min-width:0}.vw{display:flex;gap:6px;align-items:center;justify-content:flex-end}.vw b{font:600 14px Literata,serif;overflow:hidden;text-overflow:ellipsis}.vitem p{margin:2px 0 0;font-size:13px;line-height:1.7;color:var(--ac);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .none{padding:48px 0;text-align:center;font-size:12px;color:var(--sub)}
+.fc-stage{padding:12px;border-bottom:1px solid var(--bd);background:var(--bg);display:grid;gap:10px}
+.fc-card{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:18px 16px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:border-color .15s,transform .15s;user-select:none}
+.fc-card:hover{border-color:var(--ac)}
+.fc-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--sub)}
+.fc-front{text-align:center;padding:14px 0}.fc-front h3{margin:0;font:700 26px Literata,serif;color:var(--tx);direction:ltr}.fc-front small{display:block;margin-top:6px;font-family:monospace;color:var(--sub);font-size:12px;direction:ltr}
+.fc-back{text-align:center;padding:8px 0;display:grid;gap:8px}.fc-back .tr{font-size:22px;font-weight:700;color:var(--ac);line-height:1.85}.fc-back .ex{font-size:12px;color:var(--sub);direction:ltr;line-height:1.6}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.sess-pill{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--acs);color:var(--onact);font-weight:600}
 .modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:16px;animation:fade .2s}
 .mbox{background:var(--s1);border:1px solid var(--bd);border-radius:24px;width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:var(--sh);animation:modal .22s ease-out}.mbox.w{max-width:560px}
 .mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
@@ -130,21 +145,26 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
   <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
   <button class="ibtn" onclick="show('apiModal',1)" aria-label="إعدادات الترجمة"><i class="ms">tune</i></button>
-  <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
+  <button class="ibtn" onclick="fcDrawer(1)" aria-label="بطاقات المراجعة" title="فلاش كاردز الكلمات المترجمة (10 جلسات)"><i class="ms">style</i><b id="fcBadge" class="badge" hidden>0</b></button>
+  <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة" title="حقيبة المفردات الدائمة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
 </header>
 
 <main id="empty">
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً، وانقر على أي كلمة للحصول على ترجمتها مشكولةً بالحركات وشرحها داخل السياق مع النطق الصوتي.</p></div>
+    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص مطابقاً للأصل تماماً ويُحفظ في ذاكرة المتصفح، وانقر على أي كلمة لترجمتها مشكولةً ومراجعتها في بطاقات الفلاش كاردز لـ 10 جلسات.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
     </div>
     <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">تُقرأ الملفات داخل متصفحك ولا تُرفع كملفات؛ لكن الكلمة والجملة تُرسلان إلى خدمة الترجمة عند طلب الترجمة. الحد الأقصى 25 MB.</p>
+      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور وPDF الممسوح</span></div><p style="font-size:11px;color:var(--sub);text-align:center;margin:8px 0 0">تُحفظ المستندات والبطاقات محلياً داخل متصفحك لسهولة الرجوع إليها. الحد الأقصى للملف 25 MB.</p>
       <div id="prog" class="prog" role="status" aria-live="polite" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
+    </div>
+    <div id="recentWrap" class="recent-box" hidden>
+      <div class="recent-hd"><span><i class="ms" style="font-size:16px;color:var(--ac)">history</i> المستندات المحفوظة في الذاكرة</span><button class="mini g" onclick="clearSavedDocs()">مسح الكل</button></div>
+      <div id="recentList" class="recent-grid"></div>
     </div>
   </div>
 </main>
@@ -160,7 +180,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
     <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
     <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
-    <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">add</i>جديد</button>
+    <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">folder_special</i>المستندات</button>
   </div>
   <div class="split">
     <div class="canvas"><div id="pages"></div></div>
@@ -189,7 +209,9 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   </div>
 </section>
 
-<div id="bdrop" class="bdrop" onclick="drawer(0)"></div>
+<div id="bdrop" class="bdrop" onclick="closeAllDrawers()"></div>
+
+<!-- Saved Vocabulary Drawer -->
 <aside id="drawer" class="drawer" inert aria-label="الكلمات المحفوظة">
   <div class="dh"><i class="ms" style="color:var(--ac)">bookmarks</i><span>الكلمات المحفوظة</span><span id="vCount" class="tag">0</span><span class="sp"></span>
     <button class="btn" style="color:var(--ac)" onclick="exportCSV()"><i class="ms" style="font-size:16px">download</i>CSV</button><button class="ibtn sm" onclick="drawer(0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
@@ -197,12 +219,38 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div id="vlist"></div>
 </aside>
 
+<!-- Flashcards Side Drawer (10 Sessions Retention) -->
+<aside id="fcDrawer" class="drawer" inert aria-label="فلاش كاردز المراجعة">
+  <div class="dh"><i class="ms" style="color:var(--ac)">style</i><span>فلاش كاردز</span><span id="fcCount" class="tag">0</span><span id="sessTag" class="sess-pill">جلسة 1</span><span class="sp"></span>
+    <button class="ibtn sm" onclick="fcDrawer(0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div id="fcStage" class="fc-stage" hidden>
+    <div id="fcCard" class="fc-card" onclick="flipFlashcard()">
+      <div class="fc-top"><span id="fcPos" class="tag"></span><span id="fcRem">متبقي 10 جلسات</span></div>
+      <div id="fcFront" class="fc-front"><h3 id="fcWord"></h3><small id="fcIpa"></small><span style="display:inline-block;margin-top:10px;font-size:11px;color:var(--ac)">انقر لقلب البطاقة وإظهار الترجمة</span></div>
+      <div id="fcBack" class="fc-back" hidden><div id="fcTr" class="tr"></div><div id="fcEx" class="ex"></div></div>
+    </div>
+    <div class="fc-nav">
+      <button class="ibtn sm" onclick="stepFlashcard(-1)" aria-label="السابق"><i class="ms">chevron_right</i></button>
+      <span id="fcIdx" style="font-size:12px;color:var(--sub);font-weight:600">1 / 1</span>
+      <button class="ibtn sm" onclick="stepFlashcard(1)" aria-label="التالي"><i class="ms">chevron_left</i></button>
+      <button class="btn" style="padding:5px 10px" onclick="sayFlashcard()" title="نطق الكلمة"><i class="ms fill" style="font-size:15px;color:var(--ac)">volume_up</i>نطق</button>
+      <button class="btn" style="padding:5px 10px" onclick="renewFlashcard()" title="تجديد الاحتفاظ لـ 10 جلسات"><i class="ms" style="font-size:15px;color:var(--ok)">update</i>+10 جلسات</button>
+      <button class="ibtn sm" onclick="saveFlashcardToVocab()" title="حفظ دائم في الحقيبة"><i class="ms" style="font-size:16px">bookmark_add</i></button>
+    </div>
+  </div>
+  <div class="dsr" style="display:flex;gap:6px;align-items:center">
+    <input id="fcSearch" type="search" placeholder="بحث في بطاقات الجلسات..." oninput="renderFlashcards()">
+    <button class="btn" style="color:#d93025;padding:6px 10px" onclick="clearFlashcards()">مسح</button>
+  </div>
+  <div id="fclist"></div>
+</aside>
+
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
     <div class="feat"><i class="ms">psychology</i><div><b>ترجمة سياقية مشكولة بدقة</b><small>تحليل معنى الكلمة داخل الجملة والعبارة المحيطة وتشكيلها بالحركات لتسهيل القراءة والنطق الصحيح.</small></div></div>
-    <div class="feat"><i class="ms">description</i><div><b>مطابقة تامة للنص الأصلي</b><small>استخراج نصوص PDF وDOCX وTXT والصور بنفس التموضع والأسطر وعلامات الترقيم دون أي تعديل.</small></div></div>
-    <div class="feat"><i class="ms">record_voice_over</i><div><b>نطق صوتي وحقيبة مفردات</b><small>استماع بسرعات متعددة وتصدير كلماتك المحفوظة.</small></div></div>
+    <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
+    <div class="feat"><i class="ms">folder_special</i><div><b>ذاكرة المستندات ومطابقة الأصل</b><small>حفظ الملفات المرفقة تلقائياً في المتصفح مع استخراج النص مطابقاً للأصل تماماً.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
   </div></div></div>
@@ -222,12 +270,146 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const K={vocab:'readdy_saved_vocabulary_prod_v5',cache:'readdy_ai_cache_prod_v8',gem:'readdy_user_gemini_api_key',wel:'readdy_hide_welcome_modal_saj_v1',theme:'readdy_theme_mode_v1'};
+const K={
+ vocab:'readdy_saved_vocabulary_prod_v5',
+ cache:'readdy_ai_cache_prod_v8',
+ fc:'readdy_flashcards_10sessions_v1',
+ sess:'readdy_session_counter_v1',
+ gem:'readdy_user_gemini_api_key',
+ wel:'readdy_hide_welcome_modal_saj_v1',
+ theme:'readdy_theme_mode_v1'
+};
 const store={get(k,d=null){try{const v=localStorage.getItem(k);return v===null?d:v}catch{return d}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
 const session={get(k,d=''){try{const v=sessionStorage.getItem(k);return v===null?d:v}catch{return d}},set(k,v){try{sessionStorage.setItem(k,v)}catch{}},del(k){try{sessionStorage.removeItem(k)}catch{}}};
 function loadSessionGemKey(){const active=session.get(K.gem,'');const legacy=store.get(K.gem,'');if(!active&&legacy)session.set(K.gem,legacy);if(legacy)store.del(K.gem);return active||legacy||''}
-const S={title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],gem:loadSessionGemKey(),io:null};
-try{const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v))}catch{}
+
+/* ---------- 10-session counter initialization ---------- */
+const MAX_FC_SESSIONS=10;
+function initSessionNumber(){
+ const alreadyCounted=session.get('readdy_session_counted','');
+ let num=parseInt(store.get(K.sess,'0'),10)||0;
+ if(!alreadyCounted){
+  num+=1;
+  store.set(K.sess,String(num));
+  session.set('readdy_session_counted','1');
+ }
+ return Math.max(1,num);
+}
+const CURRENT_SESSION=initSessionNumber();
+
+const S={docId:'',title:'',pages:[],recs:[],override:'auto',lang:'en',size:18,activeEl:null,toks:[],selIdx:-1,sel:null,req:0,cache:new Map(),saved:[],flashcards:[],fcIdx:0,fcFlipped:false,gem:loadSessionGemKey(),io:null};
+try{
+ const v=JSON.parse(store.get(K.vocab,'[]'));if(Array.isArray(v))S.saved=v;
+ Object.entries(JSON.parse(store.get(K.cache,'{}'))).forEach(([k,v])=>S.cache.set(k,v));
+ const fcRaw=JSON.parse(store.get(K.fc,'[]'));
+ if(Array.isArray(fcRaw)){
+  // Retain only flashcards whose expiration session >= CURRENT_SESSION
+  S.flashcards=fcRaw.filter(c=>c && typeof c.expiresAt==='number' && c.expiresAt>=CURRENT_SESSION);
+  store.set(K.fc,JSON.stringify(S.flashcards));
+ }
+}catch{}
+
+/* ---------- IndexedDB persistent memory for attached files & documents ---------- */
+const DocDB={
+ db:null,
+ open(){
+  if(this.db)return Promise.resolve(this.db);
+  if(!('indexedDB' in window))return Promise.resolve(null);
+  return new Promise(res=>{
+   const req=indexedDB.open('ReaddyDocsDB',1);
+   req.onupgradeneeded=e=>{
+    const db=e.target.result;
+    if(!db.objectStoreNames.contains('docs'))db.createObjectStore('docs',{keyPath:'id'});
+   };
+   req.onsuccess=e=>{this.db=e.target.result;res(this.db)};
+   req.onerror=()=>res(null);
+  });
+ },
+ async save(doc){
+  const db=await this.open();if(!db)return;
+  return new Promise(res=>{
+   const tx=db.transaction('docs','readwrite');
+   tx.objectStore('docs').put(doc);
+   tx.oncomplete=()=>res(true);
+   tx.onerror=()=>res(false);
+  });
+ },
+ async list(){
+  const db=await this.open();if(!db)return[];
+  return new Promise(res=>{
+   const tx=db.transaction('docs','readonly');
+   const req=tx.objectStore('docs').getAll();
+   req.onsuccess=()=>{
+    const arr=(req.result||[]).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+    res(arr);
+   };
+   req.onerror=()=>res([]);
+  });
+ },
+ async get(id){
+  const db=await this.open();if(!db)return null;
+  return new Promise(res=>{
+   const tx=db.transaction('docs','readonly');
+   const req=tx.objectStore('docs').get(id);
+   req.onsuccess=()=>res(req.result||null);
+   req.onerror=()=>res(null);
+  });
+ },
+ async remove(id){
+  const db=await this.open();if(!db)return;
+  return new Promise(res=>{
+   const tx=db.transaction('docs','readwrite');
+   tx.objectStore('docs').delete(id);
+   tx.oncomplete=()=>res(true);
+   tx.onerror=()=>res(false);
+  });
+ },
+ async clear(){
+  const db=await this.open();if(!db)return;
+  return new Promise(res=>{
+   const tx=db.transaction('docs','readwrite');
+   tx.objectStore('docs').clear();
+   tx.oncomplete=()=>res(true);
+   tx.onerror=()=>res(false);
+  });
+ }
+};
+
+async function renderRecentDocs(){
+ const list=await DocDB.list();
+ const wrap=$('recentWrap'),grid=$('recentList');
+ if(!list.length){wrap.hidden=true;return}
+ wrap.hidden=false;
+ grid.innerHTML=list.slice(0,8).map(d=>{
+  const dt=new Date(d.updatedAt||Date.now()).toLocaleDateString('ar-EG',{month:'short',day:'numeric'});
+  return `<div class="rdoc">
+   <div class="rdoc-main" data-open-doc="${esc(d.id)}">
+    <i class="ms" style="color:var(--ac)">description</i>
+    <div class="rdoc-info"><b>${esc(d.title)}</b><small>${d.pages.length} صفحة • ${esc((d.lang||'en').toUpperCase())} • ${dt}</small></div>
+   </div>
+   <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-del-doc="${esc(d.id)}" aria-label="حذف المستند"><i class="ms" style="font-size:17px">delete</i></button>
+  </div>`;
+ }).join('');
+}
+$('recentList').addEventListener('click',async e=>{
+ const openEl=e.target.closest('[data-open-doc]');
+ if(openEl){
+  const doc=await DocDB.get(openEl.dataset.openDoc);
+  if(doc)openDoc(doc.title,doc.pages,{id:doc.id,skipSave:false});
+  return;
+ }
+ const delEl=e.target.closest('[data-del-doc]');
+ if(delEl){
+  await DocDB.remove(delEl.dataset.delDoc);
+  renderRecentDocs();
+  toast('تم حذف المستند من الذاكرة');
+ }
+});
+async function clearSavedDocs(){
+ await DocDB.clear();
+ renderRecentDocs();
+ toast('تم مسح جميع المستندات المحفوظة');
+}
 
 /* ---------- built-in lexicon: vocalized translation ONLY; plain Arabic POS ---------- */
 const LEX={fr:{},en:{}};
@@ -405,7 +587,6 @@ async function ingest(f){
  try{if(isPDF)await readPDF(f);else if(isDOCX)await readDOCX(f);else if(isImage)await readImage(f);else openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(await f.text())}])}
  catch(e){console.error('File import failed:',e);progress(false);toast(e.message==='lib'?'تعذر تحميل مكتبة القراءة، تحقق من الاتصال.':e.name==='PasswordException'?'ملف PDF محمي بكلمة مرور.':'تعذر استخراج محتوى الملف؛ جرّب ملفاً آخر أو نسخة غير محمية.')}}
 
-/* Preserves exact line breaks, punctuation, horizontal spacing, and left indentation like an OCR scan */
 function pdfBlocks(items){
  const sz=items.map(i=>i.fs).sort((a,b)=>a-b),med=sz[sz.length>>1]||12;
  items.sort((a,b)=>b.y-a.y||a.x-b.x);
@@ -500,13 +681,18 @@ function splitSentences(text){
  const out=[],re=/[.!?…]+["'»”)\]]*\s*/g;let last=0,m;
  while((m=re.exec(p))){const end=m.index+m[0].length;if(!/\s$/.test(m[0])&&end<p.length)continue;out.push(p.slice(last,end));last=end}
  if(last<p.length)out.push(p.slice(last));return out.map(s=>s.split(N).join('.'))}
-function openDoc(title,pages){progress(false);
+function openDoc(title,pages,opts={}){progress(false);
  if(!pages.some(p=>p.blocks.some(b=>b.text.trim().length>0))){toast('لا يوجد نص قابل للقراءة في هذا الملف.');return}
+ S.docId=opts.id||('doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,7));
  S.title=title;S.pages=pages;S.recs=[];S.sel=null;S.selIdx=-1;S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
  pages.forEach((pg,pi)=>pg.blocks.forEach(b=>{
   if(b.type==='gap'||!b.text.trim()){b.sents=[];return}
   b.sents=splitSentences(b.text).map(raw=>{const text=raw.trim();if(!text)return null;S.recs.push({text,tokens:[],page:pi});return{raw,id:S.recs.length-1}}).filter(Boolean)
  }));
+ if(!opts.skipSave){
+  const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indent:b.indent||0}))}));
+  DocDB.save({id:S.docId,title:S.title,lang:S.lang,pages:cleanPages,updatedAt:Date.now()});
+ }
  $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('docTitleInput').value=title;$('jump').max=pages.length;$('jump').value=1;$('pgCount').textContent=`/ ${pages.length}`;
  closePanel();scrollTo(0,0);buildSheets()}
 function buildSheets(){const c=$('pages');S.io?.disconnect();c.replaceChildren();
@@ -535,7 +721,7 @@ function jumpPage(v){const n=Math.max(1,Math.min(S.pages.length,parseInt(v,10)||
 function setFont(m){document.documentElement.style.setProperty('--df',m==='serif'?"'Literata',Georgia,serif":"'Inter',system-ui,sans-serif");$('fSerif').classList.toggle('on',m==='serif');$('fSans').classList.toggle('on',m!=='serif')}
 function setSize(d){S.size=Math.min(24,Math.max(14,S.size+d));$('fSize').textContent=S.size+'px';document.documentElement.style.setProperty('--fs',S.size+'px')}
 function hl(t){S.toks.forEach(x=>x.classList.remove('sh'));t.forEach(x=>x.classList.add('sh'));S.toks=t}
-function goHome(){Speech.stop();S.io?.disconnect();S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();scrollTo(0,0)}
+function goHome(){Speech.stop();S.io?.disconnect();S.pages=[];S.recs=[];S.sel=null;S.selIdx=-1;$('pages').replaceChildren();$('empty').hidden=false;$('work').hidden=true;document.body.classList.remove('has-doc');closePanel();renderRecentDocs();scrollTo(0,0)}
 
 /* ---------- Arabic diacritization ONLY for the translated word ---------- */
 const hasTashkeel=s=>/[\u064B-\u065F\u0670]/.test(String(s||''));
@@ -666,17 +852,168 @@ async function gemini(word,sent,lang,key){
  return parsed;
 }
 
+/* ---------- Flashcards (10-session memory) ---------- */
+function saveFlashcards(){
+ store.set(K.fc,JSON.stringify(S.flashcards));
+ updFcBadge();
+}
+function updFcBadge(){
+ const n=S.flashcards.length;
+ $('fcCount').textContent=n;
+ $('fcBadge').textContent=n;
+ $('fcBadge').hidden=!n;
+}
+function addToFlashcards(rec){
+ if(!rec||!rec.word||!rec.translation_ar||rec.translation_ar.includes('تعذر الاتصال'))return;
+ const low=rec.word.toLowerCase();
+ const entry={
+  word:rec.word,
+  lang:rec.lang,
+  ipa:rec.ipa||'',
+  pos_ar:rec.pos_ar||'',
+  translation_ar:rec.translation_ar,
+  sentence_original:rec.sentence_original||'',
+  createdSession:CURRENT_SESSION,
+  expiresAt:CURRENT_SESSION+MAX_FC_SESSIONS
+ };
+ const idx=S.flashcards.findIndex(x=>x.word.toLowerCase()===low&&x.lang===rec.lang);
+ if(idx>=0)S.flashcards.splice(idx,1);
+ S.flashcards.unshift(entry);
+ S.fcIdx=0;
+ S.fcFlipped=false;
+ saveFlashcards();
+ if($('fcDrawer').classList.contains('open'))renderFlashcards();
+}
+function fcDrawer(o){
+ if(o)drawer(0);
+ $('fcDrawer').classList.toggle('open',!!o);
+ $('fcDrawer').inert=!o;
+ $('bdrop').classList.toggle('open',!!o);
+ $('sessTag').textContent=`جلسة ${CURRENT_SESSION}`;
+ if(o){S.fcFlipped=false;renderFlashcards()}
+}
+function closeAllDrawers(){drawer(0);fcDrawer(0)}
+function flipFlashcard(){
+ S.fcFlipped=!S.fcFlipped;
+ $('fcFront').hidden=S.fcFlipped;
+ $('fcBack').hidden=!S.fcFlipped;
+}
+function stepFlashcard(dir){
+ if(!S.flashcards.length)return;
+ S.fcIdx=(S.fcIdx+dir+S.flashcards.length)%S.flashcards.length;
+ S.fcFlipped=false;
+ renderFlashcardStage();
+}
+function renderFlashcardStage(){
+ const stage=$('fcStage');
+ if(!S.flashcards.length){stage.hidden=true;return}
+ stage.hidden=false;
+ S.fcIdx=Math.max(0,Math.min(S.fcIdx,S.flashcards.length-1));
+ const c=S.flashcards[S.fcIdx];
+ const rem=Math.max(1,c.expiresAt-CURRENT_SESSION);
+ $('fcPos').textContent=`${c.lang.toUpperCase()}${c.pos_ar?' • '+c.pos_ar:''}`;
+ $('fcRem').textContent=`متبقي ${rem} من ${MAX_FC_SESSIONS} جلسات`;
+ $('fcWord').textContent=c.word;
+ $('fcIpa').textContent=c.ipa||'';
+ $('fcIpa').hidden=!c.ipa;
+ $('fcTr').textContent=c.translation_ar;
+ $('fcEx').textContent=c.sentence_original||'';
+ $('fcFront').hidden=S.fcFlipped;
+ $('fcBack').hidden=!S.fcFlipped;
+ $('fcIdx').textContent=`${S.fcIdx+1} / ${S.flashcards.length}`;
+}
+function sayFlashcard(){
+ const c=S.flashcards[S.fcIdx];
+ if(c)Speech.speak(c.word,c.lang);
+}
+function renewFlashcard(){
+ const c=S.flashcards[S.fcIdx];
+ if(!c)return;
+ c.expiresAt=CURRENT_SESSION+MAX_FC_SESSIONS;
+ saveFlashcards();
+ renderFlashcards();
+ toast(`تم تمديد «${c.word}» لـ 10 جلسات قادمة`);
+}
+function saveFlashcardToVocab(){
+ const c=S.flashcards[S.fcIdx];
+ if(!c)return;
+ if(!isBm(c.word)){
+  S.saved.unshift({word:c.word,lang:c.lang,ipa:c.ipa||'',translation_ar:c.translation_ar,pos_ar:c.pos_ar||''});
+  afterVocab();
+  toast('تم حفظ البطاقة في حقيبة المفردات الدائمة');
+ }else toast('الكلمة محفوظة مسبقاً في الحقيبة');
+}
+function clearFlashcards(){
+ S.flashcards=[];S.fcIdx=0;S.fcFlipped=false;
+ saveFlashcards();
+ renderFlashcards();
+ toast('تم مسح بطاقات الفلاش كاردز');
+}
+function renderFlashcards(){
+ renderFlashcardStage();
+ const q=$('fcSearch').value.trim().toLowerCase(),l=$('fclist');
+ const items=S.flashcards.filter(x=>x.word.toLowerCase().includes(q)||x.translation_ar.includes(q)||stripTashkeel(x.translation_ar).includes(q));
+ if(!items.length){
+  l.innerHTML=`<div class="none"><i class="ms" style="font-size:30px;opacity:.5">style</i><p>${S.flashcards.length?'لا توجد بطاقات مطابقة':'انقر على أي كلمة في النص لترجمتها وإضافتها تلقائياً هنا لـ 10 جلسات'}</p></div>`;
+  return;
+ }
+ l.innerHTML=items.map(x=>{
+  const rem=Math.max(1,x.expiresAt-CURRENT_SESSION);
+  return `<div class="vitem">
+   <div style="cursor:pointer;flex:1" data-fc-pick="${esc(x.word)}">
+    <div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div>
+    <p>${esc(x.translation_ar)}</p>
+    <small style="font-size:10px;color:var(--sub)">متبقي ${rem} جلسات</small>
+   </div>
+   <div style="display:flex;flex:none">
+    <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-fc-say="${esc(x.word)}" data-fc-lang="${esc(x.lang)}" aria-label="نطق"><i class="ms">volume_up</i></button>
+    <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-fc-del="${esc(x.word)}" aria-label="حذف"><i class="ms">delete</i></button>
+   </div>
+  </div>`;
+ }).join('');
+}
+$('fclist').addEventListener('click',e=>{
+ const say=e.target.closest('[data-fc-say]');
+ if(say){Speech.speak(say.dataset.fcSay,say.dataset.fcLang);return}
+ const del=e.target.closest('[data-fc-del]');
+ if(del){
+  S.flashcards=S.flashcards.filter(w=>w.word.toLowerCase()!==del.dataset.fcDel.toLowerCase());
+  saveFlashcards();renderFlashcards();return;
+ }
+ const pick=e.target.closest('[data-fc-pick]');
+ if(pick){
+  const idx=S.flashcards.findIndex(w=>w.word.toLowerCase()===pick.dataset.fcPick.toLowerCase());
+  if(idx>=0){S.fcIdx=idx;S.fcFlipped=false;renderFlashcardStage()}
+ }
+});
+
 async function onWord(el,word,sent,toks,sIdx){
  S.activeEl?.classList.remove('act');hl(toks);el.classList.add('act');S.activeEl=el;S.selIdx=sIdx;if(Speech.loop)Speech.stop();openPanel();
  if(innerWidth<1024){const r=el.getBoundingClientRect();if(r.bottom>innerHeight*.36||r.top<110)scrollBy({top:r.top-innerHeight*.2,behavior:'smooth'})}
  const lang=S.lang,low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),req=++S.req,hit=LEX[lang][low];
- if(hit){const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',pos_ar:hit.pos,lemma:hit.lemma,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
-  renderPanel(rec);trText(sent,lang).then(t=>{if(req===S.req&&t){const plain=stripTashkeel(t);rec.sentence_ar=plain;$('pSA').textContent=plain}});return}
+ if(hit){
+  const rec={word,lang,source_label:'قاموس نحوي',translation_ar:hit.tr,explanation_ar:`${hit.pos}${hit.lemma!==low?` — من الأصل «${hit.lemma}»`:''}.`,ipa:'',pos_ar:hit.pos,lemma:hit.lemma,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  renderPanel(rec);
+  addToFlashcards(rec);
+  trText(sent,lang).then(t=>{if(req===S.req&&t){const plain=stripTashkeel(t);rec.sentence_ar=plain;$('pSA').textContent=plain}});
+  return;
+ }
  const key=`${lang}::${low}::${sent}`;
- if(S.cache.has(key)){renderPanel(S.cache.get(key));return}
+ if(S.cache.has(key)){
+  const cached=S.cache.get(key);
+  renderPanel(cached);
+  addToFlashcards(cached);
+  return;
+ }
  showSkel(true);
  try{let a;if(S.gem.trim().length>10){try{a=await gemini(word,sent,lang,S.gem.trim());a.source_label='Gemini AI'}catch{a=await hybrid(word,sent,lang)}}else a=await hybrid(word,sent,lang);
-  if(req!==S.req)return;const rec={word,lang,sentence_original:sent,...a};S.cache.set(key,rec);try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}renderPanel(rec)}
+  if(req!==S.req)return;
+  const rec={word,lang,sentence_original:sent,...a};
+  S.cache.set(key,rec);
+  try{store.set(K.cache,JSON.stringify(Object.fromEntries([...S.cache].slice(-150))))}catch{}
+  renderPanel(rec);
+  addToFlashcards(rec);
+ }
  catch{if(req!==S.req)return;renderPanel({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',lemma:low,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''})}}
 function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
@@ -703,7 +1040,7 @@ function updBadge(){const n=S.saved.length;$('vCount').textContent=n;$('badge').
 function afterVocab(){saveVocab();updBm();updBadge();renderVocab();syncBm()}
 function toggleBookmark(){if(!S.sel)return;const i=S.saved.findIndex(w=>w.word.toLowerCase()===S.sel.word.toLowerCase());
  if(i>=0){S.saved.splice(i,1);toast('تمت إزالة الكلمة من المحفوظات')}else{const d=S.sel;S.saved.unshift({word:d.word,lang:d.lang,ipa:d.ipa||'',translation_ar:d.translation_ar,pos_ar:d.pos_ar||''});toast('تم حفظ الكلمة في المفردات')}afterVocab()}
-function drawer(o){$('drawer').classList.toggle('open',!!o);$('drawer').inert=!o;$('bdrop').classList.toggle('open',!!o);if(o)renderVocab()}
+function drawer(o){if(o)fcDrawer(0);$('drawer').classList.toggle('open',!!o);$('drawer').inert=!o;$('bdrop').classList.toggle('open',!!o);if(o)renderVocab()}
 function renderVocab(){const q=$('vsearch').value.trim().toLowerCase(),l=$('vlist'),it=S.saved.filter(x=>String(x.word||'').toLowerCase().includes(q)||String(x.translation_ar||'').includes(q)||stripTashkeel(x.translation_ar||'').includes(q));
  if(!it.length){l.innerHTML=`<div class="none"><i class="ms" style="font-size:30px;opacity:.5">bookmark_border</i><p>${S.saved.length?'لا توجد نتائج مطابقة':'لا توجد كلمات محفوظة'}</p></div>`;return}
  l.innerHTML=it.map(x=>`<div class="vitem"><div><div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div><p>${esc(x.translation_ar)}</p></div>
@@ -720,16 +1057,19 @@ function saveKey(){S.gem=$('gemKey').value.trim();S.gem?session.set(K.gem,S.gem)
 function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
 /* ---------- init ---------- */
-setThemeIcon();Speech.init();updBadge();openWelcome(false);
+setThemeIcon();Speech.init();updBadge();updFcBadge();renderRecentDocs();openWelcome(false);
 Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
 $('fileInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(f){ingest(f);e.target.value=''}});
-$('docTitleInput').addEventListener('input',e=>S.title=e.target.value);
+$('docTitleInput').addEventListener('input',e=>{
+ S.title=e.target.value;
+ if(S.docId)DocDB.get(S.docId).then(d=>{if(d){d.title=S.title;d.updatedAt=Date.now();DocDB.save(d)}});
+});
 let dc=0;addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){dc++;document.body.classList.add('drag')}});
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)document.body.classList.remove('drag')});
 addEventListener('dragover',e=>e.preventDefault());
 addEventListener('drop',e=>{e.preventDefault();dc=0;document.body.classList.remove('drag');const f=e.dataTransfer?.files?.[0];if(f)ingest(f)});
 addEventListener('keydown',e=>{if(e.key!=='Escape')return;let c=false;['welcomeModal','pasteModal','apiModal'].forEach(i=>{if(!$(i).hidden){$(i).hidden=true;c=true}});
- if($('drawer').classList.contains('open')){drawer(0);c=true}if(!c&&!$('panel').hidden)closePanel()});
+ if($('drawer').classList.contains('open')||$('fcDrawer').classList.contains('open')){closeAllDrawers();c=true}if(!c&&!$('panel').hidden)closePanel()});
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
 </script>
 </body>
