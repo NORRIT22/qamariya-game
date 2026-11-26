@@ -4,76 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Readdy — منصة القراءة والتحليل النحوي السياقي</title>
+<title>Google AI Studio — Readdy</title>
 <script>try{var t=localStorage.getItem('readdy_theme_mode_v1')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.classList.toggle('dark',t==='dark')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..500,0..1,0&display=block" rel="stylesheet">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--bg:#fff;--cv:#f3f6fa;--sheet:#fff;--s1:#f8fafd;--s2:#f0f4f9;--bd:#dde3ea;--tx:#1f1f1f;--sub:#444746;--ac:#1a73e8;--ach:#1557b0;--acs:#d3e3fd;--onac:#fff;--onact:#041e49;--ok:#1e8e3e;--hl:#e8f0fe;--sh:0 12px 32px rgba(0,0,0,.18);--hh:56px;--th:46px;--df:'Literata',Georgia,serif;--fs:18px}
-html.dark{--bg:#131314;--cv:#131314;--sheet:#1e1f20;--s1:#1e1f20;--s2:#282a2c;--bd:#333537;--tx:#e3e3e3;--sub:#c4c7c5;--ac:#8ab4f8;--ach:#aecbfa;--acs:#004a77;--onac:#041e49;--onact:#d3e3fd;--ok:#81c995;--hl:#282a2c}
+:root{
+  --bg:#ffffff;
+  --cv:#f8fafd;
+  --sheet:#ffffff;
+  --s1:#f8fafd;
+  --s2:#f1f3f4;
+  --s3:#e8eaed;
+  --bd:#dadce0;
+  --tx:#202124;
+  --sub:#5f6368;
+  --ac:#1a73e8;
+  --ach:#1765cc;
+  --acs:#e8f0fe;
+  --onac:#ffffff;
+  --onact:#1967d2;
+  --ok:#188038;
+  --hl:#e8f0fe;
+  --sh:0 4px 16px rgba(60,64,67,.15);
+  --hh:52px;
+  --th:44px;
+  --rail:56px;
+  --df:'Literata',Georgia,serif;
+  --fs:18px;
+}
+html.dark{
+  --bg:#131314;
+  --cv:#131314;
+  --sheet:#18191b;
+  --s1:#18191b;
+  --s2:#202124;
+  --s3:#282a2d;
+  --bd:#2c2e33;
+  --tx:#e3e3e3;
+  --sub:#9aa0a6;
+  --ac:#8ab4f8;
+  --ach:#aecbfa;
+  --acs:rgba(138,180,248,.16);
+  --onac:#041e49;
+  --onact:#d2e3fc;
+  --ok:#81c995;
+  --hl:rgba(138,180,248,.12);
+  --sh:0 8px 24px rgba(0,0,0,.45);
+}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column;transition:background .2s,color .2s}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column;transition:background .15s,color .15s}
 button,select,input,textarea{font:inherit;color:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 select option{background:var(--s1);color:var(--tx)}
-.ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;font-size:20px;line-height:1;display:inline-block;width:1em;height:1em;overflow:hidden;white-space:nowrap;direction:ltr;vertical-align:middle;user-select:none;font-feature-settings:'liga';-webkit-font-feature-settings:'liga';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20}
-.ms.fill{font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 20}
+
+/* Material Symbols */
+.ms{font-family:'Material Symbols Outlined';font-weight:400;font-style:normal;font-size:19px;line-height:1;display:inline-block;width:1em;height:1em;overflow:hidden;white-space:nowrap;direction:ltr;vertical-align:middle;user-select:none;font-feature-settings:'liga';-webkit-font-feature-settings:'liga';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20}
+.ms.fill{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20}
 html:not(.icons) .ms{visibility:hidden}
-.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);background:var(--s2);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:500;transition:.15s;white-space:nowrap;flex:none}
-.btn:hover{border-color:var(--ac)}.btn:active{transform:scale(.96)}
+
+/* Google AI Studio Controls */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd);background:transparent;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:500;transition:background .15s,border-color .15s;white-space:nowrap;flex:none}
+.btn:hover{background:var(--s2);border-color:var(--sub)}.btn:active{transform:scale(.98)}
 .btn.pri{background:var(--ac);color:var(--onac);border-color:transparent;font-weight:600}.btn.pri:hover{background:var(--ach)}
-.btn.lg{padding:12px 22px;font-size:14px}
-.ibtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--s2);display:inline-grid;place-items:center;flex:none;transition:.15s;position:relative;padding:0}
-.ibtn:hover{border-color:var(--ac)}.ibtn:active{transform:scale(.92)}.ibtn.sm{width:30px;height:30px}.ibtn.on{background:var(--acs);color:var(--ac);border-color:var(--ac)}
-.pill{display:inline-flex;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--bd);border-radius:999px;padding:4px 10px;font-size:12px;white-space:nowrap;flex:none}
-.pill select,.pill input{background:none;border:0;outline:0;font-weight:500;cursor:pointer;max-width:130px}.pill input{width:42px;text-align:center;cursor:text}
-.k{color:var(--sub)}.tag{font-size:10px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--s2);border:1px solid var(--bd);color:var(--sub);text-transform:uppercase}
-.hdr{position:sticky;top:0;z-index:30;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);background:var(--bg);border-bottom:1px solid var(--bd)}
-.brand{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;flex:none;color:inherit}
-.brand svg{width:30px;height:30px}.brand span{font:700 20px/1 Outfit,sans-serif;letter-spacing:-.3px}
-.play{transform-origin:43px 32px;animation:pulse 2.6s ease-in-out infinite}
+.btn.lg{padding:10px 18px;font-size:13px;border-radius:10px}
+.ibtn{width:34px;height:34px;border-radius:8px;border:1px solid transparent;background:transparent;display:inline-grid;place-items:center;flex:none;transition:background .15s;position:relative;padding:0;color:var(--sub)}
+.ibtn:hover{background:var(--s2);color:var(--tx)}.ibtn:active{transform:scale(.94)}.ibtn.sm{width:28px;height:28px;border-radius:6px}.ibtn.on{background:var(--acs);color:var(--ac)}
+.pill{display:inline-flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:4px 9px;font-size:12px;white-space:nowrap;flex:none;color:var(--tx)}
+.pill select,.pill input{background:none;border:0;outline:0;font-weight:500;cursor:pointer;max-width:130px;font-size:12px}.pill input{width:38px;text-align:center;cursor:text}
+.k{color:var(--sub);font-size:11.5px}
+.tag{font-family:'Roboto Mono',monospace;font-size:10.5px;font-weight:500;padding:2px 7px;border-radius:6px;background:var(--s2);border:1px solid var(--bd);color:var(--sub)}
+
+/* AI Studio Top App Bar */
+.hdr{position:sticky;top:0;z-index:35;height:var(--hh);display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--s1);border-bottom:1px solid var(--bd)}
+.brand{display:flex;align-items:center;gap:9px;background:none;border:0;padding:4px 6px;border-radius:8px;flex:none;color:inherit;transition:background .15s}
+.brand:hover{background:var(--s2)}
+.brand-txt{display:flex;align-items:center;gap:6px;direction:ltr}
+.brand-txt strong{font:500 15px/1 'Inter',sans-serif;letter-spacing:-.2px;color:var(--tx)}
+.brand-txt span{font:500 13px/1 'Inter',sans-serif;color:var(--sub);padding-left:6px;border-left:1px solid var(--bd)}
 .sp{flex:1;min-width:0}
-#docTitleInput{display:none;width:clamp(120px,22vw,240px);background:none;border:1px solid transparent;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:500;outline:0;text-overflow:ellipsis}
-#docTitleInput:hover{background:var(--s2)}#docTitleInput:focus{border-color:var(--ac)}
-@media(min-width:768px){body.has-doc #docTitleInput{display:block}}
-.badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 10px/16px sans-serif;text-align:center}
-#empty{flex:1;display:grid;place-items:center;padding:24px 16px}
-.hero{position:relative;width:100%;max-width:640px;background:var(--s1);border:1px solid var(--bd);border-radius:28px;padding:clamp(24px,6vw,48px);text-align:center;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:-40%;background:radial-gradient(closest-side at 30% 30%,rgba(26,115,232,.13),transparent 60%),radial-gradient(closest-side at 70% 70%,rgba(138,180,248,.15),transparent 60%);animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
-.hero>*{position:relative;animation:rise .6s both}.hero>:nth-child(2){animation-delay:.08s}.hero>:nth-child(3){animation-delay:.16s}.hero>:nth-child(4){animation-delay:.24s}.hero>:nth-child(5){animation-delay:.32s}
-.hero h1{font-size:clamp(19px,5vw,25px);margin:0 0 8px}.hero p{font-size:14px;color:var(--sub);line-height:1.8;max-width:450px;margin:0 auto 24px}
-.hero .big{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:14px}.hero .big svg{width:56px;height:56px}.hero .big span{font:700 clamp(28px,8vw,34px)/1 Outfit,sans-serif}
-.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;direction:ltr}
-.chips span{padding:3px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--bd);font:500 13px Literata,serif;color:var(--ac);animation:float 4s ease-in-out infinite;animation-delay:var(--d)}
-.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.fmts{margin-top:22px;gap:8px}.fmts span{font-size:11px;padding:3px 12px;border-radius:99px;background:var(--s2);border:1px solid var(--bd);color:var(--sub)}
-.prog{margin:22px auto 0;max-width:420px;text-align:right}.prog div:first-child{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--ac);margin-bottom:6px}
-.bar{height:6px;border-radius:9px;background:var(--s2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+
+/* Prompt / Document Title Input */
+.prompt-bar{display:none;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:3px 10px;max-width:260px}
+.prompt-bar:focus-within{border-color:var(--ac)}
+#docTitleInput{width:100%;background:none;border:0;font-size:12.5px;font-weight:500;outline:0;text-overflow:ellipsis;color:var(--tx)}
+@media(min-width:768px){body.has-doc .prompt-bar{display:flex}}
+
+/* Model Selector Chip */
+.model-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:4px 10px;font-family:'Roboto Mono',monospace;font-size:11.5px;color:var(--tx);cursor:pointer;transition:border-color .15s}
+.model-chip:hover{border-color:var(--ac)}
+.model-dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.badge{position:absolute;top:2px;right:2px;min-width:15px;height:15px;padding:0 4px;border-radius:99px;background:var(--ac);color:var(--onac);font:700 9.5px/15px 'Inter',sans-serif;text-align:center}
+
+/* App Shell & Navigation Rail */
+.shell{flex:1;display:flex;min-height:0}
+.rail{width:var(--rail);flex:none;background:var(--s1);border-left:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:6px;z-index:25}
+.rail-btn{width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:var(--sub);display:grid;place-items:center;position:relative;transition:background .15s,color .15s}
+.rail-btn:hover{background:var(--s2);color:var(--tx)}
+.rail-btn.active{background:var(--acs);color:var(--ac)}
+.rail-sep{width:24px;height:1px;background:var(--bd);margin:4px 0}
+.main-area{flex:1;min-width:0;display:flex;flex-direction:column}
+@media(max-width:640px){.rail{display:none}}
+
+/* AI Studio Prompt Starter / Empty State */
+#empty{flex:1;display:grid;place-items:center;padding:24px 16px;background:var(--bg)}
+.hero{width:100%;max-width:680px;background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:clamp(24px,5vw,40px);text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;background:var(--acs);color:var(--ac);font-size:11.5px;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(20px,4vw,24px);font-weight:600;margin:0 0 8px;letter-spacing:-.3px}
+.hero p{font-size:13.5px;color:var(--sub);line-height:1.75;max-width:490px;margin:0 auto 24px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:18px;direction:ltr}
+.chips span{padding:3px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--bd);font:500 12px 'Roboto Mono',monospace;color:var(--sub)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.fmts{margin-top:20px;gap:6px}.fmts span{font-family:'Roboto Mono',monospace;font-size:11px;padding:3px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--bd);color:var(--sub)}
+.prog{margin:20px auto 0;max-width:420px;text-align:right}.prog div:first-child{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--ac);margin-bottom:6px}
+.bar{height:4px;border-radius:9px;background:var(--s2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+
+/* Workspace & Sub-Toolbar */
 #work{flex:1;flex-direction:column;display:flex}
-.tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 clamp(10px,3vw,24px);overflow-x:auto;scrollbar-width:none}
+.tb{position:sticky;top:var(--hh);z-index:20;height:var(--th);background:var(--bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
 .tb::-webkit-scrollbar{display:none}.tb>*{flex:none}.tb .sp{flex:1 0 0}
-.seg{display:inline-flex;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:2px}.seg button{border:0;background:none;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:500;color:var(--sub);display:inline-flex;align-items:center;gap:4px}.seg button.on{background:var(--bg);color:var(--tx)}
-.seg .v{font-size:11px;color:var(--sub);align-self:center;padding:0 4px;min-width:34px;text-align:center}
-.wave{display:none;gap:2px;align-items:center;height:18px}.wave.on{display:flex}.wave i{width:3px;height:4px;border-radius:2px;background:var(--ac);animation:sp .8s ease-in-out infinite}.wave i:nth-child(2){animation-delay:.2s}.wave i:nth-child(3){animation-delay:.4s}
+.seg{display:inline-flex;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:2px}
+.seg button{border:0;background:none;border-radius:6px;padding:3px 9px;font-size:11.5px;font-weight:500;color:var(--sub);display:inline-flex;align-items:center;gap:4px}
+.seg button.on{background:var(--bg);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg .v{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--sub);align-self:center;padding:0 5px;min-width:36px;text-align:center}
+.wave{display:none;gap:2px;align-items:center;height:16px}.wave.on{display:flex}.wave i{width:2.5px;height:4px;border-radius:2px;background:var(--ac);animation:sp .8s ease-in-out infinite}.wave i:nth-child(2){animation-delay:.2s}.wave i:nth-child(3){animation-delay:.4s}
+
+/* Document Canvas & AI Studio Run Settings Inspector */
 .split{flex:1;display:flex;align-items:flex-start}
-.canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(8px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
-#pages{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
-.sheet{width:100%;max-width:820px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(18px,5vw,56px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow:hidden}
+.canvas{flex:1;min-width:0;background:var(--cv);padding:20px clamp(10px,3vw,24px) 48px;align-self:stretch;transition:padding .2s}
+#pages{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
+.sheet{width:100%;max-width:820px;background:var(--sheet);border:1px solid var(--bd);border-radius:12px;padding:clamp(20px,4.5vw,48px);scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow:hidden}
 .sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:700px}}
 .body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.9;overflow-wrap:break-word}
 .body>*{margin:0 0 .9em}.body h1{font-size:1.5em;line-height:1.35}.body h2{font-size:1.22em;line-height:1.35}
 .body .li{padding-left:1.3em;position:relative}.body .li::before{content:'•';position:absolute;left:.3em;opacity:.6}
-.sf{margin-top:36px;padding-top:10px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-size:11px;color:var(--sub);direction:ltr;user-select:none}.sf b{font-family:Outfit,sans-serif}
-.wt{border-radius:4px;padding:0 2px;margin:0 -1px;cursor:pointer;transition:background .12s,color .12s}
+.sf{margin-top:32px;padding-top:10px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-family:'Roboto Mono',monospace;font-size:11px;color:var(--sub);direction:ltr;user-select:none}
+.wt{border-radius:4px;padding:0 2px;margin:0 -1px;cursor:pointer;transition:background .1s,color .1s}
 @media(hover:hover){.wt:hover{background:var(--hl);color:var(--ac)}}
 .wt.sh{background:var(--s2)}.wt.bm{border-bottom:1.5px solid var(--ok)}
-.wt.act{background:var(--acs);color:var(--onact);font-weight:600;outline:1px solid var(--ac);animation:pop .25s}
+.wt.act{background:var(--acs);color:var(--onact);font-weight:600;outline:1px solid var(--ac)}
 body.sent-mode .wt:hover{background:transparent;color:inherit}
-.sent-span{border-radius:6px;transition:background .15s}
+.sent-span{border-radius:6px;transition:background .12s}
 body.sent-mode .sent-span{cursor:pointer;padding:1px 3px}
 @media(hover:hover){body.sent-mode .sent-span:hover{background:var(--hl)}}
 .sent-span.sent-act{background:var(--acs);color:var(--onact);outline:1px solid var(--ac)}
@@ -81,251 +157,358 @@ body.sent-mode .sent-span{cursor:pointer;padding:1px 3px}
 /* Vocalized Arabic typography */
 .ar-vow{font-family:'Amiri','IBM Plex Sans Arabic',serif;letter-spacing:0;line-height:1.85!important}
 
-#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:62dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .28s cubic-bezier(.2,.8,.2,1)}
-body.panel-open .canvas{padding-bottom:64dvh}
-@media(min-width:1024px){#panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:410px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:slide .28s cubic-bezier(.2,.8,.2,1)}body.panel-open .canvas{padding-bottom:48px}}
-.ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac)}
-.pc{padding:16px;display:grid;gap:12px;animation:rise .25s both}
-.card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px}.card h3{margin:0 0 6px;font-size:12px}.card p{margin:0}
-.wh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding-bottom:12px;border-bottom:1px solid var(--bd)}
-.wr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.wr h2{margin:0;font:600 24px Literata,serif;overflow-wrap:anywhere}
-.wm{display:flex;gap:8px;font-size:12px;color:var(--sub);margin-top:4px;flex-wrap:wrap}.wm span:first-child{font-family:monospace;color:var(--tx)}#pPos{color:var(--ok);font-weight:500}
+/* Right/Left Inspector Panel (AI Studio Run Settings Style) */
+#panel{background:var(--s1);display:flex;flex-direction:column;z-index:40;position:fixed;inset:auto 0 0 0;max-height:64dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:16px 16px 0 0;border-top:1px solid var(--bd);box-shadow:var(--sh);padding-bottom:env(safe-area-inset-bottom);animation:sheet .22s ease-out}
+body.panel-open .canvas{padding-bottom:66dvh}
+@media(min-width:1024px){
+  #panel{position:sticky;inset:auto;top:calc(var(--hh) + var(--th));width:390px;flex:none;height:calc(100dvh - var(--hh) - var(--th));max-height:none;border-radius:0;border-top:0;border-right:1px solid var(--bd);box-shadow:none;animation:none}
+  body.panel-open .canvas{padding-bottom:48px}
+}
+.ph{position:sticky;top:0;z-index:2;background:var(--s1);display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bd);font-size:12.5px;font-weight:600}.ph b{display:flex;align-items:center;gap:6px;flex:1}.ph .ms{color:var(--ac);font-size:18px}
+.pc{padding:14px;display:grid;gap:10px}
+.card{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:11px 13px}.card h3{margin:0 0 5px;font-size:11.5px;color:var(--sub)}.card p{margin:0}
+.wh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.wr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.wr h2{margin:0;font:600 22px Literata,serif;overflow-wrap:anywhere}
+.wm{display:flex;gap:8px;font-size:11.5px;color:var(--sub);margin-top:3px;flex-wrap:wrap}.wm span:first-child{font-family:'Roboto Mono',monospace;color:var(--tx)}#pPos{color:var(--ok);font-weight:600}
 .lbl2{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:var(--ac);margin-bottom:4px}.lbl2.g{color:var(--sub)}
-.lbl2 button,.mini{background:none;border:0;font-size:11px;color:var(--ac);display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:99px}.mini.g{color:var(--sub)}.mini.on{background:var(--acs)}
-#pTr{font-size:21px;font-weight:700}.sm2{font-size:11px;color:var(--sub);margin-top:4px!important}
-.ex{direction:ltr;font:12px/1.7 Literata,serif}.exa{font-size:13px;color:var(--sub);line-height:1.8}
-.lemma-box{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd);font-size:12px;flex-wrap:wrap}
-.lemma-word{font-family:Literata,serif;font-weight:600;color:var(--ac);direction:ltr;font-size:14px}
+.lbl2 button,.mini{background:none;border:0;font-size:11px;color:var(--ac);display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:6px}.lbl2 button:hover,.mini:hover{background:var(--s2)}.mini.g{color:var(--sub)}.mini.on{background:var(--acs);color:var(--ac)}
+#pTr{font-size:20px;font-weight:700}
+.ex{direction:ltr;font:12px/1.65 Literata,serif}.exa{font-size:13px;color:var(--sub);line-height:1.8}
+.lemma-box{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);font-size:12px;flex-wrap:wrap}
+.lemma-word{font-family:'Roboto Mono',monospace;font-weight:500;color:var(--ac);direction:ltr;font-size:13px}
 .lemma-tr{color:var(--tx);font-weight:700;font-size:14px}
-.conj-trigger{width:100%;justify-content:center;border-color:var(--ac);color:var(--ac);background:var(--bg);font-weight:600;padding:9px 14px}
-.conj-trigger:hover{background:var(--acs)}
+.conj-trigger{width:100%;justify-content:center;border-color:var(--bd);color:var(--ac);background:var(--bg);font-weight:600;padding:8px 12px}
+.conj-trigger:hover{background:var(--acs);border-color:var(--ac)}
 
 /* Nature & Fonction Grammaticale Card */
-.gram-box{background:linear-gradient(135deg,var(--s2),var(--bg));border:1px solid var(--ac);border-radius:16px;padding:12px 14px;display:grid;gap:10px}
-.gram-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;color:var(--ac);border-bottom:1px solid var(--bd);padding-bottom:6px}
-.gram-grid{display:grid;grid-template-columns:1fr;gap:8px}
-.gram-item{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:8px 11px}
-.gram-lbl{font-size:10px;font-weight:700;color:var(--sub);display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
-.gram-lbl span:last-child{font-family:Literata,serif;direction:ltr;color:var(--ac);font-size:11px}
-.gram-val-orig{direction:ltr;text-align:left;font:600 13px Literata,serif;color:var(--tx)}
+.gram-box{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;display:grid;gap:8px}
+.gram-head{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;color:var(--ac);border-bottom:1px solid var(--bd);padding-bottom:6px}
+.gram-grid{display:grid;grid-template-columns:1fr;gap:7px}
+.gram-item{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:8px 10px}
+.gram-lbl{font-size:10.5px;font-weight:600;color:var(--sub);display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.gram-lbl span:last-child{font-family:'Roboto Mono',monospace;direction:ltr;color:var(--ac);font-size:10.5px}
+.gram-val-orig{direction:ltr;text-align:left;font:500 12.5px 'Inter',sans-serif;color:var(--tx)}
 .gram-val-ar{font-size:14px;font-weight:700;color:var(--ok);margin-top:2px}
 
 /* Side Drawer (Vocabulary & Conjugation) */
-.drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,420px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .25s;z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
-.bdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:55}.bdrop.open{opacity:1;pointer-events:auto}
-.dh{height:var(--hh);display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--bd);font-weight:600;font-size:14px}.dh .sp{flex:1}
-.dsr{padding:10px 12px;border-bottom:1px solid var(--bd)}.dsr input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:99px;padding:7px 14px;font-size:13px;outline:0}.dsr input:focus{border-color:var(--ac)}
-#vlist,#conjBody{flex:1;overflow-y:auto;padding:12px;display:grid;gap:10px;align-content:start}
-.vitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--bd);border-radius:16px;background:var(--s2);animation:rise .25s both}
+.drawer{position:fixed;top:0;left:0;height:100dvh;width:min(100%,410px);background:var(--s1);border-right:1px solid var(--bd);transform:translateX(-102%);transition:transform .22s cubic-bezier(.2,0,0,1);z-index:60;display:flex;flex-direction:column;box-shadow:var(--sh)}.drawer.open{transform:none}
+.bdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s;z-index:55}.bdrop.open{opacity:1;pointer-events:auto}
+.dh{height:var(--hh);display:flex;align-items:center;gap:6px;padding:0 12px;border-bottom:1px solid var(--bd);font-weight:600;font-size:13.5px}.dh .sp{flex:1}
+.dsr{padding:10px 12px;border-bottom:1px solid var(--bd)}.dsr input{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:7px 12px;font-size:12.5px;outline:0}.dsr input:focus{border-color:var(--ac)}
+#vlist,#conjBody{flex:1;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start}
+.vitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
 .vitem>div:first-child{min-width:0}.vw{display:flex;gap:6px;align-items:center;justify-content:flex-end}.vw b{font:600 14px Literata,serif;overflow:hidden;text-overflow:ellipsis}.vitem p{margin:2px 0 0;font-size:14px;color:var(--ac);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .none{padding:48px 0;text-align:center;font-size:12px;color:var(--sub)}
 
 /* Conjugation Table Styles */
-.conj-head-card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.conj-tense{background:var(--s2);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
-.conj-tense-title{padding:9px 14px;background:var(--bg);border-bottom:1px solid var(--bd);font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.conj-head-card{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center}
+.conj-tense{background:var(--bg);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.conj-tense-title{padding:8px 12px;background:var(--s2);border-bottom:1px solid var(--bd);font-size:11.5px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
 .conj-tense-title span:first-child{color:var(--ac)}
-.conj-tense-title span:last-child{font-family:Literata,serif;color:var(--sub);direction:ltr}
-.conj-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--bd);font-size:13px}
+.conj-tense-title span:last-child{font-family:'Roboto Mono',monospace;color:var(--sub);direction:ltr;font-size:11px}
+.conj-row{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--bd);font-size:12.5px}
 .conj-row:last-child{border-bottom:0}
-.conj-form{direction:ltr;font-family:Literata,serif;font-weight:600;color:var(--tx)}
+.conj-form{direction:ltr;font-family:'Roboto Mono',monospace;font-size:12px;color:var(--tx)}
 
 /* Flashcards Modal */
-.fc-wrap{display:grid;gap:14px}
+.fc-wrap{display:grid;gap:12px}
 .fc-top{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--sub)}
-.fc-prog{height:5px;border-radius:99px;background:var(--s2);overflow:hidden}.fc-prog i{display:block;height:100%;background:var(--ac);transition:width .25s}
-.fc-scene{perspective:1000px;height:250px;cursor:pointer;user-select:none}
-.fc-card{width:100%;height:100%;position:relative;transition:transform .5s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.fc-prog{height:4px;border-radius:99px;background:var(--s2);overflow:hidden}.fc-prog i{display:block;height:100%;background:var(--ac);transition:width .25s}
+.fc-scene{perspective:1000px;height:240px;cursor:pointer;user-select:none}
+.fc-card{width:100%;height:100%;position:relative;transition:transform .45s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
 .fc-card.flipped{transform:rotateY(180deg)}
-.fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--s2);border:1px solid var(--bd);border-radius:22px;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
-.fc-back{transform:rotateY(180deg);background:var(--bg);border-color:var(--ac)}
-.fc-word{font:700 30px Literata,serif;color:var(--tx);direction:ltr}
-.fc-ipa{font-family:monospace;font-size:13px;color:var(--sub);direction:ltr}
-.fc-tr{font-size:24px;font-weight:700;color:var(--ac)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+.fc-back{transform:rotateY(180deg);border-color:var(--ac)}
+.fc-word{font:600 28px Literata,serif;color:var(--tx);direction:ltr}
+.fc-ipa{font-family:'Roboto Mono',monospace;font-size:12px;color:var(--sub);direction:ltr}
+.fc-tr{font-size:23px;font-weight:700;color:var(--ac)}
 .fc-ex{font-size:12px;color:var(--sub);max-width:92%;line-height:1.7}
-.fc-hint{position:absolute;bottom:12px;font-size:11px;color:var(--sub);display:flex;align-items:center;gap:4px}
+.fc-hint{position:absolute;bottom:10px;font-size:11px;color:var(--sub);display:flex;align-items:center;gap:4px}
 .fc-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 
-.sk{border-radius:12px;background:linear-gradient(90deg,var(--s2) 25%,var(--bd) 50%,var(--s2) 75%);background-size:600px 100%;animation:shim 1.2s linear infinite}
-.modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;animation:fade .2s}
-.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:24px;width:100%;max-width:460px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:var(--sh);animation:modal .22s ease-out}.mbox.w{max-width:560px}
-.mh{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}.mb{padding:18px;font-size:12px;color:var(--sub);line-height:1.8;display:grid;gap:10px}.mf{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
-.mbox textarea,.mbox input[type=password]{width:100%;border-radius:14px;background:var(--s2);border:1px solid var(--bd);padding:12px;font-size:14px;outline:0}.mbox textarea{font-family:Literata,serif;resize:vertical}
-.feat{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:var(--s2);border:1px solid var(--bd);text-align:right}.feat .ms{color:var(--ac);background:var(--acs);border-radius:10px;padding:5px;box-sizing:content-box}.feat b{display:block;color:var(--tx);font-size:12px}.feat small{font-size:11px}
-.toast{position:fixed;top:calc(var(--hh) + 10px);left:50%;transform:translate(-50%,-16px);opacity:0;pointer-events:none;transition:.25s;background:#1f1f1f;color:#fff;font-size:12px;font-weight:500;padding:9px 18px;border-radius:99px;box-shadow:var(--sh);z-index:80;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}html.dark .toast{background:#e3e3e3;color:#131314}
-body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;border:2px dashed var(--ac);border-radius:24px;background:rgba(26,115,232,.08);display:grid;place-items:center;z-index:90;pointer-events:none;font-weight:700;color:var(--ac)}
-@keyframes pulse{50%{transform:scale(1.14)}}@keyframes float{50%{transform:translateY(-6px)}}@keyframes drift{to{transform:translate(6%,4%) rotate(8deg)}}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes pop{50%{transform:scale(1.06)}}
-@keyframes modal{from{opacity:0;transform:translateY(10px) scale(.98)}}@keyframes sheet{from{transform:translateY(100%)}}@keyframes slide{from{opacity:0;transform:translateX(-24px)}}
-@keyframes sp{50%{height:14px}}@keyframes shim{to{background-position:600px 0}}
-@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}}
-@media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
+.sk{border-radius:8px;background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:600px 100%;animation:shim 1.2s linear infinite}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:16px;animation:fade .15s}
+.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:14px;width:100%;max-width:460px;max-height:calc(100dvh - 32px);overflow:auto;box-shadow:var(--sh)}.mbox.w{max-width:560px}
+.mh{padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:13.5px}.mb{padding:16px;font-size:12px;color:var(--sub);line-height:1.75;display:grid;gap:10px}.mf{padding:10px 16px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.mbox textarea,.mbox input[type=password]{width:100%;border-radius:8px;background:var(--bg);border:1px solid var(--bd);padding:10px 12px;font-size:13px;outline:0}.mbox textarea:focus,.mbox input[type=password]:focus{border-color:var(--ac)}.mbox textarea{font-family:Literata,serif;resize:vertical}
+.feat{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--bd);text-align:right}.feat .ms{color:var(--ac);background:var(--acs);border-radius:8px;padding:5px;box-sizing:content-box}.feat b{display:block;color:var(--tx);font-size:12px}.feat small{font-size:11px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:.2s;background:#202124;color:#fff;font-size:12px;font-weight:500;padding:8px 16px;border-radius:8px;border:1px solid #3c4043;box-shadow:var(--sh);z-index:80;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}html.dark .toast{background:#e3e3e3;color:#131314;border-color:transparent}
+body.drag::after{content:'أفلت الملف هنا للاستيراد إلى مساحة العمل';position:fixed;inset:10px;border:2px dashed var(--ac);border-radius:14px;background:rgba(26,115,232,.08);display:grid;place-items:center;z-index:90;pointer-events:none;font-weight:600;color:var(--ac)}
+@keyframes fade{from{opacity:0}}@keyframes sheet{from{transform:translateY(100%)}}
+@keyframes sp{50%{height:13px}}@keyframes shim{to{background-position:600px 0}}
+@media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:6px 10px}input,textarea{font-size:16px!important}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <input id="fileInput" type="file" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp" hidden>
 
+<!-- Google AI Studio Top Bar -->
 <header class="hdr">
-  <button class="brand" onclick="goHome()" aria-label="Readdy — الرئيسية">
-    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg>
-    <span dir="ltr">Readdy</span>
+  <button class="brand" onclick="goHome()" aria-label="Google AI Studio — Readdy">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="gemGrad" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#4285F4"/>
+          <stop offset="50%" stop-color="#9B72CB"/>
+          <stop offset="100%" stop-color="#D96570"/>
+        </linearGradient>
+      </defs>
+      <path d="M14 2C14.6 8.8 19.2 13.4 26 14C19.2 14.6 14.6 19.2 14 26C13.4 19.2 8.8 14.6 2 14C8.8 13.4 13.4 8.8 14 2Z" fill="url(#gemGrad)"/>
+    </svg>
+    <div class="brand-txt">
+      <strong>Google AI Studio</strong>
+      <span>Readdy</span>
+    </div>
   </button>
-  <input id="docTitleInput" dir="ltr" type="text" aria-label="عنوان المستند">
+
+  <div class="prompt-bar">
+    <i class="ms" style="font-size:15px;color:var(--sub)">description</i>
+    <input id="docTitleInput" dir="ltr" type="text" aria-label="اسم الجلسة أو المستند">
+  </div>
+
   <div class="sp"></div>
-  <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
-    <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
-  <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
-  <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
-  <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
-  <button class="ibtn" onclick="show('apiModal',1)" aria-label="إعدادات الترجمة"><i class="ms">tune</i></button>
-  <button class="ibtn" onclick="drawer(1)" aria-label="الكلمات المحفوظة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
+
+  <!-- Active Model Chip -->
+  <button class="model-chip hide-sm" onclick="show('apiModal',1)" title="إعدادات النموذج والمحرك">
+    <span class="model-dot"></span>
+    <span id="activeModelChip">gemini-2.5-flash</span>
+    <i class="ms" style="font-size:14px;color:var(--sub)">expand_more</i>
+  </button>
+
+  <label class="pill" title="لغة التحليل">
+    <i class="ms hide-sm" style="font-size:15px;color:var(--sub)">translate</i>
+    <select id="langSel" onchange="setLang(this.value)">
+      <option value="auto">Auto</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+    </select>
+  </label>
+
+  <button class="btn pri" onclick="$('fileInput').click()" aria-label="استيراد ملف">
+    <i class="ms" style="font-size:16px">upload_file</i>
+    <span class="lbl">استيراد ملف</span>
+  </button>
+
+  <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل المظهر"><i id="themeIcon" class="ms">dark_mode</i></button>
+  <button class="ibtn" onclick="drawer(1)" aria-label="المفردات المحفوظة"><i class="ms">bookmarks</i><b id="badge" class="badge" hidden>0</b></button>
 </header>
 
-<main id="empty">
-  <div class="hero">
-    <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
-    <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1>اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p>ارفع ملف PDF أو مستند Word أو صورة نصية، وانقر على أي كلمة أو جملة كاملة للحصول على ترجمتها المشكولة بالعربية وتحليل طبيعتها ووظيفتها النحوية (Nature &amp; Fonction) ونطقها الصوتي.</p></div>
-    <div class="row">
-      <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
-      <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
-    </div>
-    <div>
-      <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR صور</span></div>
-      <div id="prog" class="prog" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
-    </div>
-  </div>
-</main>
+<div class="shell">
+  <!-- AI Studio Navigation Rail -->
+  <nav class="rail" aria-label="قائمة التنقل">
+    <button class="rail-btn active" onclick="goHome()" title="مساحة القراءة (Prompt)"><i class="ms">chat_bubble_outline</i></button>
+    <button class="rail-btn" onclick="show('pasteModal',1)" title="لصق نص جديد"><i class="ms">edit_note</i></button>
+    <button class="rail-btn" onclick="drawer(1)" title="المفردات المحفوظة"><i class="ms">bookmarks</i></button>
+    <button class="rail-btn" onclick="openFlashcards()" title="بطاقات المراجعة"><i class="ms">style</i></button>
+    <div class="rail-sep"></div>
+    <button class="rail-btn" onclick="show('apiModal',1)" title="إعدادات النموذج (Run Settings)"><i class="ms">tune</i></button>
+    <button class="rail-btn" onclick="openWelcome(true)" title="حول الأداة"><i class="ms">help_outline</i></button>
+  </nav>
 
-<section id="work" hidden>
-  <div class="tb">
-    <button id="playBtn" class="btn pri" onclick="toggleDocAudio()"><i id="playIcon" class="ms fill">play_arrow</i><span id="playLbl">استماع للمستند</span></button>
-    <button id="stopBtn" class="ibtn sm" onclick="Speech.stop()" aria-label="إيقاف" hidden><i class="ms">stop</i></button>
-    <div class="seg" title="وضع التحديد في النص">
-      <button id="modeWord" class="on" onclick="setSelectMode('word')"><i class="ms" style="font-size:15px">ads_click</i>كلمة</button>
-      <button id="modeSent" onclick="setSelectMode('sentence')"><i class="ms" style="font-size:15px">segment</i>جملة كاملة</button>
-    </div>
-    <label class="pill"><span class="k">السرعة:</span><select onchange="Speech.setRate(parseFloat(this.value))"><option>0.7</option><option>0.85</option><option selected>1</option><option>1.25</option><option>1.5</option></select></label>
-    <label class="pill hide-sm"><i class="ms k" style="font-size:15px">record_voice_over</i><select id="voiceSel" dir="ltr" onchange="Speech.uri=this.value"></select></label>
-    <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
-    <div class="sp"></div>
-    <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
-    <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
-    <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
-    <button class="btn" onclick="goHome()"><i class="ms" style="font-size:16px">add</i>جديد</button>
-  </div>
-  <div class="split">
-    <div class="canvas"><div id="pages"></div></div>
-    <aside id="panel" hidden aria-live="polite">
-      <div class="ph"><b><i class="ms">translate</i><span id="panelHeadTitle">الترجمة والتحليل النحوي</span></b><span id="engineTag" class="tag"></span><button class="ibtn sm" onclick="closePanel()" aria-label="إغلاق"><i class="ms">close</i></button></div>
-      <div id="skel" class="pc" hidden><div class="sk" style="height:46px"></div><div class="sk" style="height:96px"></div><div class="sk" style="height:80px"></div><div class="sk" style="height:96px"></div></div>
-      <div id="pContent" class="pc" hidden>
-        <!-- Word Header -->
-        <div id="wordHeaderBox" class="wh">
-          <div dir="ltr"><div class="wr"><h2 id="pTitle"></h2><span id="pLang" class="tag"></span></div><div class="wm"><span id="pIpa"></span><span id="pDot">•</span><span id="pPos"></span></div></div>
-          <button id="bmBtn" class="ibtn" onclick="toggleBookmark()" aria-label="حفظ الكلمة"><i id="bmIcon" class="ms">bookmark_add</i></button>
+  <div class="main-area">
+    <!-- Empty / Prompt Starter View -->
+    <main id="empty">
+      <div class="hero">
+        <div class="hero-badge"><i class="ms" style="font-size:15px">auto_awesome</i>مساحة القراءة والتحليل النحوي السياقي</div>
+        <div class="chips" aria-hidden="true"><span>Nature &amp; Fonction</span><span>Tashkeel-AR</span><span>Morphology</span><span>TTS</span></div>
+        <h1>ابدأ جلسة قراءة وتحليل لغوي</h1>
+        <p>قم باستيراد مستند PDF أو Word أو صورة نصية، أو الصق نصاً مباشراً. انقر على أي كلمة أو جملة للحصول على التحليل النحوي الكامل والترجمة العربية المشكولة.</p>
+        <div class="row">
+          <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms" style="font-size:17px">upload_file</i>استيراد مستند من الجهاز</button>
+          <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms" style="font-size:17px">content_paste</i>إدخال نص مباشرة</button>
         </div>
-        <!-- Word Audio Controls -->
-        <div id="wordAudioBox" class="card row" style="flex-wrap:nowrap;gap:6px;padding:8px">
-          <button class="btn" style="flex:1;justify-content:center;color:var(--ac)" onclick="sayWord(1)"><i class="ms fill" style="font-size:17px">volume_up</i>نطق</button>
-          <button class="btn" style="flex:1;justify-content:center" onclick="sayWord(.65)"><i class="ms" style="font-size:17px">slow_motion_video</i>بطيء</button>
-          <button id="wRepeat" class="ibtn" style="border-radius:12px" onclick="loopWord()" aria-label="تكرار"><i class="ms" style="font-size:18px">repeat</i></button>
-        </div>
-
-        <!-- Always-Visible Nature & Fonction Grammaticale Card -->
-        <div id="gramAnalysisBox" class="gram-box">
-          <div class="gram-head">
-            <span>التَّحْلِيلُ النَّحْوِيُّ (Nature &amp; Fonction)</span>
-            <span id="gramLangBadge" dir="ltr">FR / EN</span>
-          </div>
-          <div class="gram-grid">
-            <div class="gram-item">
-              <div class="gram-lbl">
-                <span>طَبِيعَةُ الكَلِمَةِ (الأَقْسَامُ النَّحْوِيَّةُ)</span>
-                <span id="natureLblOrig">Nature grammaticale</span>
-              </div>
-              <div id="pNatureOrig" class="gram-val-orig"></div>
-              <div id="pNatureAr" class="gram-val-ar ar-vow"></div>
-            </div>
-            <div class="gram-item">
-              <div class="gram-lbl">
-                <span>الوَظِيفَةُ النَّحْوِيَّةُ فِي الجُمْلَةِ</span>
-                <span id="fonctionLblOrig">Fonction grammaticale</span>
-              </div>
-              <div id="pFonctionOrig" class="gram-val-orig"></div>
-              <div id="pFonctionAr" class="gram-val-ar ar-vow"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contextual Translation (Vocalized Arabic + Arabic Speech + Lemma) -->
-        <div id="wordTrBox" class="card">
-          <div class="lbl2">
-            <span>التَّرْجَمَةُ السِّيَاقِيَّةُ المَشْكُولَةُ</span>
-            <span>
-              <button onclick="sayArabicTr()" title="نطق الترجمة العربية"><i class="ms fill" style="font-size:15px">record_voice_over</i>نطق</button>
-              <button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button>
-            </span>
-          </div>
-          <p id="pTr" class="ar-vow"></p>
-          <div id="lemmaSection" class="lemma-box">
-            <div><span style="color:var(--sub)">مَصْدَرُ الكَلِمَةِ: </span><span id="pLemmaWord" class="lemma-word"></span></div>
-            <div style="text-align:left;display:flex;align-items:center;gap:4px">
-              <span style="color:var(--sub)">القِيَاسِيَّةُ: </span>
-              <span id="pLemmaTr" class="lemma-tr ar-vow"></span>
-              <button class="ibtn sm" style="width:24px;height:24px;border:0;background:none;color:var(--ac)" onclick="sayArabicLemma()" aria-label="نطق الترجمة القياسية"><i class="ms" style="font-size:15px">volume_up</i></button>
-            </div>
-          </div>
-        </div>
-        <!-- Conjugation Drawer Trigger -->
-        <div id="conjBtnWrap">
-          <button class="btn conj-trigger" onclick="openConjugationDrawer()"><i class="ms">table_chart</i>تصريف الفعل في جميع الأزمنة (قائمة جانبية)</button>
-        </div>
-        <!-- Explanation -->
-        <div id="wordExpBox" class="card"><h3>المَعْنَى وَالشَّرْحُ</h3><p id="pExp" class="ar-vow" style="font-size:14px"></p></div>
-        <!-- Example -->
-        <div id="exBox" class="card"><div class="lbl2 g"><span>مِثَالٌ تَطْبِيقِيٌّ</span><span><button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button><button class="mini g" onclick="sayEx(.65)">0.65x</button><button class="mini" onclick="sayArabicEx()" title="نطق المثال بالعربية"><i class="ms" style="font-size:14px">record_voice_over</i>عربي</button></span></div><p id="pExO" class="ex"></p><p id="pExA" class="exa ar-vow"></p></div>
-        <!-- Full Sentence Card -->
-        <div id="sentSectionBox" style="border-top:1px solid var(--bd);padding-top:12px;display:grid;gap:8px">
-          <div class="lbl2 g"><span id="sentBoxLabel">الجُمْلَةُ الكَامِلَةُ فِي النَّصِّ</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button><button class="mini" onclick="sayArabicSent()" title="نطق الترجمة العربية"><i class="ms fill" style="font-size:15px">record_voice_over</i>عربي</button><button class="mini" onclick="copySent()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></span></div>
-          <p id="pSO" class="card ex" style="padding:12px 14px;font-size:14px"></p>
-          <p id="pSA" class="card ar-vow" style="padding:12px 14px;font-size:16px;font-weight:700;color:var(--tx)"></p>
+        <div>
+          <div class="row fmts"><span>PDF</span><span>DOCX</span><span>TXT</span><span>OCR (ENG/FRA)</span></div>
+          <div id="prog" class="prog" hidden><div><span id="pgText"></span><span id="pgPct">0%</span></div><div class="bar"><i id="pgBar"></i></div></div>
         </div>
       </div>
-    </aside>
+    </main>
+
+    <!-- Active Workspace -->
+    <section id="work" hidden>
+      <div class="tb">
+        <button id="playBtn" class="btn pri" onclick="toggleDocAudio()"><i id="playIcon" class="ms fill" style="font-size:16px">play_arrow</i><span id="playLbl">تشغيل القراءة</span></button>
+        <button id="stopBtn" class="ibtn sm" onclick="Speech.stop()" aria-label="إيقاف" hidden><i class="ms">stop</i></button>
+
+        <div class="seg" title="وضع التحديد">
+          <button id="modeWord" class="on" onclick="setSelectMode('word')"><i class="ms" style="font-size:14px">ads_click</i>كلمة</button>
+          <button id="modeSent" onclick="setSelectMode('sentence')"><i class="ms" style="font-size:14px">segment</i>جملة كاملة</button>
+        </div>
+
+        <label class="pill"><span class="k">السرعة</span><select onchange="Speech.setRate(parseFloat(this.value))"><option>0.7</option><option>0.85</option><option selected>1</option><option>1.25</option><option>1.5</option></select></label>
+        <label class="pill hide-sm"><i class="ms k" style="font-size:14px">record_voice_over</i><select id="voiceSel" dir="ltr" onchange="Speech.uri=this.value"></select></label>
+        <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
+
+        <div class="sp"></div>
+
+        <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
+        <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
+        <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
+        <button class="btn" onclick="goHome()"><i class="ms" style="font-size:15px">add</i>جلسة جديدة</button>
+      </div>
+
+      <div class="split">
+        <div class="canvas"><div id="pages"></div></div>
+
+        <!-- Run Settings / Grammatical Inspector Panel -->
+        <aside id="panel" hidden aria-live="polite">
+          <div class="ph">
+            <b><i class="ms">analytics</i><span id="panelHeadTitle">المحلل النحوي والسياقي</span></b>
+            <span id="engineTag" class="tag"></span>
+            <button class="ibtn sm" onclick="closePanel()" aria-label="إغلاق"><i class="ms">close</i></button>
+          </div>
+
+          <div id="skel" class="pc" hidden>
+            <div class="sk" style="height:44px"></div>
+            <div class="sk" style="height:105px"></div>
+            <div class="sk" style="height:82px"></div>
+            <div class="sk" style="height:90px"></div>
+          </div>
+
+          <div id="pContent" class="pc" hidden>
+            <!-- Word Header -->
+            <div id="wordHeaderBox" class="wh">
+              <div dir="ltr"><div class="wr"><h2 id="pTitle"></h2><span id="pLang" class="tag"></span></div><div class="wm"><span id="pIpa"></span><span id="pDot">•</span><span id="pPos"></span></div></div>
+              <button id="bmBtn" class="ibtn" onclick="toggleBookmark()" aria-label="حفظ الكلمة"><i id="bmIcon" class="ms">bookmark_add</i></button>
+            </div>
+
+            <!-- Word Audio Controls -->
+            <div id="wordAudioBox" class="card row" style="flex-wrap:nowrap;gap:6px;padding:7px">
+              <button class="btn" style="flex:1;justify-content:center;color:var(--ac)" onclick="sayWord(1)"><i class="ms fill" style="font-size:16px">volume_up</i>نطق</button>
+              <button class="btn" style="flex:1;justify-content:center" onclick="sayWord(.65)"><i class="ms" style="font-size:16px">slow_motion_video</i>بطيء</button>
+              <button id="wRepeat" class="ibtn" onclick="loopWord()" aria-label="تكرار"><i class="ms" style="font-size:17px">repeat</i></button>
+            </div>
+
+            <!-- Always-Visible Nature & Fonction Grammaticale Card -->
+            <div id="gramAnalysisBox" class="gram-box">
+              <div class="gram-head">
+                <span>التَّحْلِيلُ النَّحْوِيُّ (Nature &amp; Fonction)</span>
+                <span id="gramLangBadge" dir="ltr" class="tag">FR / EN</span>
+              </div>
+              <div class="gram-grid">
+                <div class="gram-item">
+                  <div class="gram-lbl">
+                    <span>طَبِيعَةُ الكَلِمَةِ (الأَقْسَامُ النَّحْوِيَّةُ)</span>
+                    <span id="natureLblOrig">Nature grammaticale</span>
+                  </div>
+                  <div id="pNatureOrig" class="gram-val-orig"></div>
+                  <div id="pNatureAr" class="gram-val-ar ar-vow"></div>
+                </div>
+                <div class="gram-item">
+                  <div class="gram-lbl">
+                    <span>الوَظِيفَةُ النَّحْوِيَّةُ فِي الجُمْلَةِ</span>
+                    <span id="fonctionLblOrig">Fonction grammaticale</span>
+                  </div>
+                  <div id="pFonctionOrig" class="gram-val-orig"></div>
+                  <div id="pFonctionAr" class="gram-val-ar ar-vow"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contextual Translation -->
+            <div id="wordTrBox" class="card">
+              <div class="lbl2">
+                <span>التَّرْجَمَةُ السِّيَاقِيَّةُ المَشْكُولَةُ</span>
+                <span>
+                  <button onclick="sayArabicTr()" title="نطق الترجمة العربية"><i class="ms fill" style="font-size:14px">record_voice_over</i>نطق</button>
+                  <button onclick="copyTr()"><i class="ms" style="font-size:13px">content_copy</i>نسخ</button>
+                </span>
+              </div>
+              <p id="pTr" class="ar-vow"></p>
+              <div id="lemmaSection" class="lemma-box">
+                <div><span style="color:var(--sub)">مَصْدَرُ الكَلِمَةِ: </span><span id="pLemmaWord" class="lemma-word"></span></div>
+                <div style="text-align:left;display:flex;align-items:center;gap:4px">
+                  <span style="color:var(--sub)">القِيَاسِيَّةُ: </span>
+                  <span id="pLemmaTr" class="lemma-tr ar-vow"></span>
+                  <button class="ibtn sm" style="width:24px;height:24px;color:var(--ac)" onclick="sayArabicLemma()" aria-label="نطق الترجمة القياسية"><i class="ms" style="font-size:14px">volume_up</i></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Conjugation Drawer Trigger -->
+            <div id="conjBtnWrap">
+              <button class="btn conj-trigger" onclick="openConjugationDrawer()"><i class="ms">table_chart</i>تصريف الفعل في جميع الأزمنة</button>
+            </div>
+
+            <!-- Explanation -->
+            <div id="wordExpBox" class="card"><h3>المَعْنَى وَالشَّرْحُ</h3><p id="pExp" class="ar-vow" style="font-size:13.5px"></p></div>
+
+            <!-- Example -->
+            <div id="exBox" class="card">
+              <div class="lbl2 g">
+                <span>مِثَالٌ تَطْبِيقِيٌّ</span>
+                <span>
+                  <button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:13px">volume_up</i>1x</button>
+                  <button class="mini g" onclick="sayEx(.65)">0.65x</button>
+                  <button class="mini" onclick="sayArabicEx()" title="نطق المثال بالعربية"><i class="ms" style="font-size:13px">record_voice_over</i>عربي</button>
+                </span>
+              </div>
+              <p id="pExO" class="ex"></p>
+              <p id="pExA" class="exa ar-vow"></p>
+            </div>
+
+            <!-- Full Sentence Card -->
+            <div id="sentSectionBox" style="border-top:1px solid var(--bd);padding-top:10px;display:grid;gap:7px">
+              <div class="lbl2 g">
+                <span id="sentBoxLabel">الجُمْلَةُ الكَامِلَةُ فِي النَّصِّ</span>
+                <span>
+                  <button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button>
+                  <button class="mini g" onclick="saySent(.65)">0.65x</button>
+                  <button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:14px">repeat</i></button>
+                  <button class="mini" onclick="sayArabicSent()" title="نطق الترجمة العربية"><i class="ms fill" style="font-size:14px">record_voice_over</i>عربي</button>
+                  <button class="mini" onclick="copySent()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button>
+                </span>
+              </div>
+              <p id="pSO" class="card ex" style="padding:10px 12px;font-size:13.5px"></p>
+              <p id="pSA" class="card ar-vow" style="padding:10px 12px;font-size:15.5px;font-weight:700;color:var(--tx)"></p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
   </div>
-</section>
+</div>
 
 <div id="bdrop" class="bdrop" onclick="closeAllDrawers()"></div>
 
 <!-- Saved Vocabulary Side Drawer -->
 <aside id="drawer" class="drawer" inert aria-label="الكلمات المحفوظة">
-  <div class="dh"><i class="ms" style="color:var(--ac)">bookmarks</i><span>الكلمات المحفوظة</span><span id="vCount" class="tag">0</span><span class="sp"></span>
-    <button class="btn pri" style="padding:5px 11px" onclick="openFlashcards()"><i class="ms" style="font-size:16px">style</i>فلاش كاردز</button>
-    <button class="btn" style="color:var(--ac);padding:5px 10px" onclick="exportCSV()"><i class="ms" style="font-size:16px">download</i>CSV</button>
-    <button class="ibtn sm" onclick="drawer(0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
-  <div class="dsr"><input id="vsearch" type="search" placeholder="بحث في المفردات..." oninput="renderVocab()"></div>
+  <div class="dh">
+    <i class="ms" style="color:var(--ac)">bookmarks</i>
+    <span>المفردات المحفوظة</span>
+    <span id="vCount" class="tag">0</span>
+    <span class="sp"></span>
+    <button class="btn pri" style="padding:4px 10px" onclick="openFlashcards()"><i class="ms" style="font-size:15px">style</i>مراجعة</button>
+    <button class="btn" style="color:var(--ac);padding:4px 9px" onclick="exportCSV()"><i class="ms" style="font-size:15px">download</i>CSV</button>
+    <button class="ibtn sm" onclick="drawer(0)" aria-label="إغلاق"><i class="ms">close</i></button>
+  </div>
+  <div class="dsr"><input id="vsearch" type="search" placeholder="بحث في المفردات المحفوظة..." oninput="renderVocab()"></div>
   <div id="vlist"></div>
 </aside>
 
 <!-- Conjugation Side Drawer -->
 <aside id="conjDrawer" class="drawer" inert aria-label="تصريف الفعل في جميع الأزمنة">
-  <div class="dh"><i class="ms" style="color:var(--ac)">table_chart</i><span>تصريف الفعل في جميع الأزمنة</span><span id="conjLangTag" class="tag"></span><span class="sp"></span>
-    <button class="ibtn sm" onclick="closeConjDrawer()" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="dh">
+    <i class="ms" style="color:var(--ac)">table_chart</i>
+    <span>تصريف الفعل</span>
+    <span id="conjLangTag" class="tag"></span>
+    <span class="sp"></span>
+    <button class="ibtn sm" onclick="closeConjDrawer()" aria-label="إغلاق"><i class="ms">close</i></button>
+  </div>
   <div id="conjBody"></div>
 </aside>
 
 <!-- Flashcards Modal -->
 <div id="fcModal" class="modal" hidden><div class="mbox w">
-  <div class="mh"><span style="display:flex;align-items:center;gap:6px"><i class="ms" style="color:var(--ac)">style</i>بطاقات المراجعة الذكية (Flashcards)</span><button class="ibtn sm" onclick="show('fcModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mh"><span style="display:flex;align-items:center;gap:6px"><i class="ms" style="color:var(--ac)">style</i>بطاقات المراجعة (Flashcards)</span><button class="ibtn sm" onclick="show('fcModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
     <div class="fc-wrap">
       <div class="fc-top">
         <span id="fcCounter">بطاقة 1 من 1</span>
         <div style="display:flex;gap:6px">
-          <button class="mini" onclick="fcShuffle()"><i class="ms" style="font-size:15px">shuffle</i>خلط</button>
-          <button id="fcDirBtn" class="mini" onclick="fcToggleDir()"><i class="ms" style="font-size:15px">swap_horiz</i>عكس الوجه</button>
+          <button class="mini" onclick="fcShuffle()"><i class="ms" style="font-size:14px">shuffle</i>خلط</button>
+          <button id="fcDirBtn" class="mini" onclick="fcToggleDir()"><i class="ms" style="font-size:14px">swap_horiz</i>عكس الوجه</button>
         </div>
       </div>
       <div class="fc-prog"><i id="fcBar" style="width:0%"></i></div>
@@ -335,45 +518,56 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
             <span id="fcFrontTag" class="tag">EN</span>
             <div id="fcFrontMain" class="fc-word"></div>
             <div id="fcFrontSub" class="fc-ipa"></div>
-            <button class="btn" style="margin-top:4px;color:var(--ac)" onclick="event.stopPropagation();fcSpeakFront()"><i class="ms fill" style="font-size:17px">volume_up</i>استماع</button>
+            <button class="btn" style="margin-top:4px;color:var(--ac)" onclick="event.stopPropagation();fcSpeakFront()"><i class="ms fill" style="font-size:16px">volume_up</i>استماع</button>
             <div class="fc-hint"><i class="ms" style="font-size:14px">touch_app</i>انقر لقلب البطاقة</div>
           </div>
           <div class="fc-face fc-back">
             <span id="fcBackTag" class="tag">المعنى المشكول</span>
             <div id="fcBackMain" class="fc-tr ar-vow"></div>
             <div id="fcBackSub" class="fc-ex ar-vow"></div>
-            <button class="btn" style="margin-top:4px;color:var(--ac)" onclick="event.stopPropagation();fcSpeakBack()"><i class="ms fill" style="font-size:17px">record_voice_over</i>نطق المعنى</button>
+            <button class="btn" style="margin-top:4px;color:var(--ac)" onclick="event.stopPropagation();fcSpeakBack()"><i class="ms fill" style="font-size:16px">record_voice_over</i>نطق المعنى</button>
             <div class="fc-hint"><i class="ms" style="font-size:14px">touch_app</i>انقر للعودة</div>
           </div>
         </div>
       </div>
       <div class="fc-actions">
-        <button class="btn" onclick="fcNav(-1)"><i class="ms" style="font-size:16px">arrow_forward</i>السابق</button>
-        <button class="btn" style="color:var(--ok);border-color:var(--ok)" onclick="fcMarkKnown()"><i class="ms" style="font-size:16px">check_circle</i>أتقنتها</button>
-        <button class="btn pri" onclick="fcNav(1)">التالي<i class="ms" style="font-size:16px">arrow_back</i></button>
+        <button class="btn" onclick="fcNav(-1)"><i class="ms" style="font-size:15px">arrow_forward</i>السابق</button>
+        <button class="btn" style="color:var(--ok);border-color:var(--ok)" onclick="fcMarkKnown()"><i class="ms" style="font-size:15px">check_circle</i>أتقنتها</button>
+        <button class="btn pri" onclick="fcNav(1)">التالي<i class="ms" style="font-size:15px">arrow_back</i></button>
       </div>
     </div>
   </div></div></div>
 
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
-  <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mh"><span>Google AI Studio • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">account_tree</i><div><b>التحليل النحوي الدائم (Nature &amp; Fonction)</b><small>تحديد طبيعة كل كلمة ووظيفتها الإعرابية داخل الجملة بالفرنسية والإنجليزية والعربية.</small></div></div>
+    <div class="feat"><i class="ms">account_tree</i><div><b>التحليل النحوي (Nature &amp; Fonction)</b><small>تحديد طبيعة كل كلمة ووظيفتها الإعرابية داخل الجملة بالفرنسية والإنجليزية والعربية.</small></div></div>
     <div class="feat"><i class="ms">spellcheck</i><div><b>ترجمة عربية مشكولة وقابلة للنطق</b><small>تشكيل تلقائي للنصوص العربية مع إمكانية الاستماع للنطق العربي والأجنبي.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>بطاقات مراجعة وتصريف الأفعال</b><small>راجع كلماتك المحفوظة بنظام البطاقات التفاعلية مع جدول تصريف الأفعال.</small></div></div>
-    <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
+    <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">بدء الاستخدام</button>
     <label style="display:flex;gap:8px;justify-content:center;align-items:center;cursor:pointer"><input id="noWelcome" type="checkbox">عدم إظهار هذه البطاقة مجدداً</label>
   </div></div></div>
 
 <div id="pasteModal" class="modal" hidden><div class="mbox w">
-  <div class="mh"><span>لصق نص للقراءة</span><button class="ibtn sm" onclick="show('pasteModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mh"><span>إدخال نص جديد للقراءة</span><button class="ibtn sm" onclick="show('pasteModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb"><textarea id="pasteInput" dir="auto" rows="8" placeholder="الصق النص الإنجليزي أو الفرنسي هنا..."></textarea></div>
-  <div class="mf"><button class="btn" onclick="show('pasteModal',0)">إلغاء</button><button class="btn pri" onclick="readPasted()">فتح للقراءة</button></div></div></div>
+  <div class="mf"><button class="btn" onclick="show('pasteModal',0)">إلغاء</button><button class="btn pri" onclick="readPasted()">تشغيل في مساحة القراءة</button></div></div></div>
 
 <div id="apiModal" class="modal" hidden><div class="mbox">
-  <div class="mh"><span>إعدادات محرك الترجمة</span><button class="ibtn sm" onclick="show('apiModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
-  <div class="mb"><b style="color:var(--tx)">يعمل التطبيق بالتحليل النحوي (Nature &amp; Fonction) + التشكيل العربي + 3 محركات ترجمة مجانية.</b><span>اختياري: لتفعيل التحليل النحوي العميق عبر <b>Gemini AI</b> أدخل مفتاح API:</span><input id="gemKey" type="password" dir="ltr" placeholder="AIzaSy..." autocomplete="off"></div>
-  <div class="mf" style="justify-content:space-between"><button class="btn" style="color:#d93025" onclick="clearCache()">مسح ذاكرة الترجمة</button><span style="display:flex;gap:8px"><button class="btn" onclick="show('apiModal',0)">إغلاق</button><button class="btn pri" onclick="saveKey()">حفظ</button></span></div></div></div>
+  <div class="mh"><span>إعدادات النموذج (Run Settings)</span><button class="ibtn sm" onclick="show('apiModal',0)" aria-label="إغلاق"><i class="ms">close</i></button></div>
+  <div class="mb">
+    <b style="color:var(--tx)">النموذج النشط: التحليل النحوي السياقي + التشكيل العربي</b>
+    <span>اختياري: لتفعيل التحليل النحوي العميق عبر <b>Gemini 2.5 Flash API</b> أدخل مفتاح API الخاص بك:</span>
+    <input id="gemKey" type="password" dir="ltr" placeholder="AIzaSy..." autocomplete="off">
+  </div>
+  <div class="mf" style="justify-content:space-between">
+    <button class="btn" style="color:#d93025" onclick="clearCache()">مسح ذاكرة التخزين</button>
+    <span style="display:flex;gap:8px">
+      <button class="btn" onclick="show('apiModal',0)">إلغاء</button>
+      <button class="btn pri" onclick="saveKey()">حفظ الإعدادات</button>
+    </span>
+  </div>
+</div></div>
 
 <div id="toast" class="toast" role="status"></div>
 
@@ -555,7 +749,7 @@ were|كَانُوا|فِعْلٌ (be)|be|Verb « be » (past plural/subjunctive)
 has|يَمْلِكُ (هُوَ/هِيَ)|فِعْلٌ (have)|have|Verb « have » (3rd pers. sg. present)|فِعْلُ المِلْكِيَّةِ أَوْ فِعْلٌ مُسَاعِدٌ|Main transitive verb or perfect auxiliary|فِعْلٌ مُتَعَدٍّ أَوْ مُسَاعِدٌ لِلزَّمَنِ التَّامِّ
 had|مَلَكَ|فِعْلٌ (have)|have|Verb « have » (past tense)|فِعْلُ المِلْكِيَّةِ (مَاضٍ)|Main verb or past perfect auxiliary|فِعْلٌ أَسَاسِيٌّ أَوْ مُسَاعِدٌ لِلْمَاضِي التَّامِّ`);
 
-/* ---------- Contextual Nature & Fonction Analyzer (Heuristic + Grammar Rules) ---------- */
+/* ---------- Contextual Nature & Fonction Analyzer ---------- */
 function analyzeNatureAndFonction(word,sent,lang,posAr){
   const wClean=word.replace(/^['’-]+|['’-]+$/g,'');
   const low=wClean.toLowerCase();
@@ -569,17 +763,14 @@ function analyzeNatureAndFonction(word,sent,lang,posAr){
     };
   }
 
-  // Tokenize sentence to inspect neighboring words for syntactic role (Fonction)
   const tokens=(sent.match(/[\p{L}\p{N}'’-]+/gu)||[]);
   const idx=tokens.findIndex(t=>t.toLowerCase()===low);
   const prev=idx>0?tokens[idx-1].toLowerCase():'';
-  const next=idx>=0&&idx<tokens.length-1?tokens[idx+1].toLowerCase():'';
 
   const isCap=/^[A-ZÀ-Ý]/.test(wClean)&&idx>0;
   const isVerbHint=/فِعْل/.test(posAr);
   const isAdjHint=/صِفَة/.test(posAr);
   const isAdvHint=/ظَرْف|حَال/.test(posAr);
-  const isNounHint=/اسْم/.test(posAr);
 
   if(lang==='fr'){
     const frDets=new Set(['le','la','les','un','une','des','du','au','aux','ce','cet','cette','ces','mon','ma','mes','ton','ta','tes','son','sa','ses','notre','nos','votre','vos','leur','leurs']);
@@ -607,7 +798,6 @@ function analyzeNatureAndFonction(word,sent,lang,posAr){
       return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
     }
 
-    // Determine syntactic function (Fonction) for nouns
     if(idx===0||(idx===1&&frDets.has(prev))){
       fnOrig='Sujet du verbe (en tête de phrase)';fnAr='فَاعِلٌ أَوْ مُبْتَدَأٌ فِي صَدْرِ الجُمْلَةِ (Sujet)';
     }else if(prev==='de'||prev==='du'||prev==='des'){
@@ -621,7 +811,6 @@ function analyzeNatureAndFonction(word,sent,lang,posAr){
     }
     return{nature_orig:natOrig,nature_ar:natAr,fonction_orig:fnOrig,fonction_ar:fnAr};
   } else {
-    // English Nature & Fonction
     const enDets=new Set(['the','a','an','this','that','these','those','my','your','his','her','its','our','their','some','any','each','every']);
     const enPreps=new Set(['in','on','at','to','from','with','by','for','of','about','into','through','during','before','after','under','over','between']);
     const enSubjProns=new Set(['i','you','he','she','it','we','they','who','which','that']);
@@ -667,6 +856,7 @@ function show(id,o){$(id).hidden=!o;if(o){const f=$(id).querySelector('textarea,
 function openWelcome(f){if(!f&&store.get(K.wel)==='true')return;$('noWelcome').checked=store.get(K.wel)==='true';$('welcomeModal').hidden=false}
 function closeWelcome(){$('noWelcome').checked?store.set(K.wel,'true'):store.del(K.wel);$('welcomeModal').hidden=true}
 let tt;function toast(m){const e=$('toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2600)}
+function updateModelChip(){$('activeModelChip').textContent=S.gem.trim().length>10?'gemini-2.5-flash (API)':'gemini-hybrid-local'}
 
 /* ---------- selection mode (word vs sentence) ---------- */
 function setSelectMode(m){
@@ -682,7 +872,7 @@ const Speech={voices:[],uri:'',rate:1,playing:false,paused:false,idx:0,loop:null
 init(){if(!('speechSynthesis' in window))return;const l=()=>{const v=speechSynthesis.getVoices()||[];if(v.length){this.voices=v;this.fill(S.lang)}};l();speechSynthesis.onvoiceschanged=l;setTimeout(l,600)},
 rank(v,p){const n=v.name.toLowerCase();if(!v.lang.toLowerCase().replace('_','-').startsWith(p))return -1;let s=10;if(n.includes('google'))s+=45;if(/natural|neural|online/.test(n))s+=35;if(/premium|enhanced/.test(n))s+=30;if(/aria|denise|henri|samantha|thomas|am[ée]lie|hamed|salma|tarik|zira|maged|laila/.test(n))s+=25;return s},
 ranked(l){const p=l==='ar'?'ar':l==='fr'?'fr':'en';return this.voices.map(v=>[v,this.rank(v,p)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).map(x=>x[0])},
-fill(l){const s=$('voiceSel');if(!s)return;const r=this.ranked(l);s.replaceChildren();if(!r.length){s.add(new Option(`الصوت الافتراضي (${l.toUpperCase()})`,''));this.uri='';return}
+fill(l){const s=$('voiceSel');if(!s)return;const r=this.ranked(l);s.replaceChildren();if(!r.length){s.add(new Option(`Default (${l.toUpperCase()})`,''));this.uri='';return}
  r.forEach(v=>s.add(new Option(`${v.name.replace(/Microsoft |Google |Apple /g,'')} (${v.lang})`,v.voiceURI)));if(!r.some(v=>v.voiceURI===this.uri))this.uri=r[0].voiceURI;s.value=this.uri},
 best(l){const r=this.ranked(l);if(l==='ar')return r[0]||null;return r.find(v=>v.voiceURI===this.uri)||r[0]||null},
 utter(t,l,rate){const u=new SpeechSynthesisUtterance(t);u.lang=l==='ar'?'ar-SA':l==='fr'?'fr-FR':'en-US';u.rate=rate;const v=this.best(l);if(v)u.voice=v;return u},
@@ -713,7 +903,7 @@ playFrom(i=0){if(!('speechSynthesis' in window)||!S.recs.length)return;this.stop
 pause(){if(!this.playing)return;this.paused=true;speechSynthesis.cancel();this.wave(false);this.ui()},
 resume(){if(this.playing&&this.paused)this.playFrom(this.idx)},
 stop(ui=true){this.sid++;clearTimeout(this.timer);this.loop=null;this.playing=false;this.paused=false;if('speechSynthesis' in window)speechSynthesis.cancel();this.wave(false);if(ui){this.ui();repeatUI()}},
-ui(){const on=this.playing&&!this.paused;$('playIcon').textContent=on?'pause':'play_arrow';$('playLbl').textContent=on?'إيقاف مؤقت':this.playing?'متابعة الاستماع':'استماع للمستند';$('stopBtn').hidden=!this.playing}};
+ui(){const on=this.playing&&!this.paused;$('playIcon').textContent=on?'pause':'play_arrow';$('playLbl').textContent=on?'إيقاف مؤقت':this.playing?'متابعة':'تشغيل القراءة';$('stopBtn').hidden=!this.playing}};
 function toggleDocAudio(){Speech.playing?(Speech.paused?Speech.resume():Speech.pause()):Speech.playFrom(Math.max(0,S.selIdx))}
 
 /* ---------- language ---------- */
@@ -757,7 +947,7 @@ async function readDOCX(f){need(window.mammoth);progress(true,'جاري تحلي
 async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
  const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
  try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:paras(text)}])}finally{await w.terminate()}}
-function readPasted(){const t=$('pasteInput').value.trim();if(!t)return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي',[{pageNumber:1,blocks:paras(t)}])}
+function readPasted(){const t=$('pasteInput').value.trim();if(!t)return;$('pasteInput').value='';show('pasteModal',0);openDoc('Prompt_Document.txt',[{pageNumber:1,blocks:paras(t)}])}
 
 /* ---------- document model & lazy rendering ---------- */
 function splitSentences(text){
@@ -775,7 +965,7 @@ function buildSheets(){const c=$('pages');S.io?.disconnect();c.replaceChildren()
  S.io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){renderPage(+e.target.dataset.p);S.io.unobserve(e.target)}}),{rootMargin:'1500px 0px'}):null;
  const fr=document.createDocumentFragment();
  S.pages.forEach((pg,i)=>{const a=document.createElement('article');a.className='sheet pending';a.id='doc-page-'+pg.pageNumber;a.dataset.p=i;
-  a.innerHTML=`<div class="body"></div><div class="sf"><b>Readdy</b><span>${pg.pageNumber} / ${S.pages.length}</span></div>`;fr.append(a)});
+  a.innerHTML=`<div class="body"></div><div class="sf"><span>Google AI Studio • Readdy</span><span>Page ${pg.pageNumber} / ${S.pages.length}</span></div>`;fr.append(a)});
  c.append(fr);[...c.children].forEach(a=>S.io?S.io.observe(a):renderPage(+a.dataset.p))}
 const WORD=/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
 function renderPage(pi){const a=$('pages').children[pi];if(!a||a.dataset.done)return;a.dataset.done=1;a.classList.remove('pending');
@@ -904,7 +1094,7 @@ async function onSentenceSelect(sentEl,sent,toks,sIdx){
   openPanel();
   const lang=S.lang,req=++S.req;
   const key=`SENT::${lang}::${sent.length}::${sent.slice(0,80)}`;
-  S.sel={isSentence:true,word:sent.slice(0,40),lang,sentence_original:sent,sentence_ar:'',translation_ar:'',source_label:'تَرْجَمَةُ الجُمْلَةِ'};
+  S.sel={isSentence:true,word:sent.slice(0,40),lang,sentence_original:sent,sentence_ar:'',translation_ar:'',source_label:'Sentence'};
   renderSentencePanel(S.sel,true);
   if(S.cache.has(key)){
     const cached=S.cache.get(key);
@@ -955,7 +1145,7 @@ async function onWord(el,word,sent,toks,sIdx){
   const lem=hit.lemma||low;
   const lemTr=lem!==low?(LEX[lang][lem]?.tr||hit.tr):hit.tr;
   const gram=analyzeNatureAndFonction(word,sent,lang,hit.pos);
-  const rec={word,lang,source_label:'قَامُوسٌ نَحْوِيٌّ',translation_ar:hit.tr,explanation_ar:`${hit.pos}${lem!==low?` — مِنَ المَصْدَرِ «${lem}»`:''}.`,ipa:'',pos_ar:hit.pos,nature_orig:gram.nature_orig,nature_ar:gram.nature_ar,fonction_orig:gram.fonction_orig,fonction_ar:gram.fonction_ar,lemma:lem,lemma_translation_ar:lemTr,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+  const rec={word,lang,source_label:'LEXICON',translation_ar:hit.tr,explanation_ar:`${hit.pos}${lem!==low?` — مِنَ المَصْدَرِ «${lem}»`:''}.`,ipa:'',pos_ar:hit.pos,nature_orig:gram.nature_orig,nature_ar:gram.nature_ar,fonction_orig:gram.fonction_orig,fonction_ar:gram.fonction_ar,lemma:lem,lemma_translation_ar:lemTr,example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
   renderPanel(rec);trText(sent,lang).then(async t=>{if(req===S.req&&t){const vt=await fetchVocalizedArabic(t);if(req===S.req){rec.sentence_ar=vt;$('pSA').textContent=vt}}});return}
  const key=`${lang}::${low}::${sent.length}::${sent.slice(0,60)}`;
  if(S.cache.has(key)){
@@ -967,7 +1157,7 @@ async function onWord(el,word,sent,toks,sIdx){
    renderPanel(cached);return
  }
  showSkel(true);
- try{let a;if(S.gem.trim().length>10){try{a=await gemini(word,sent,lang,S.gem.trim());a.source_label='Gemini AI'}catch{a=await hybrid(word,sent,lang)}}else a=await hybrid(word,sent,lang);
+ try{let a;if(S.gem.trim().length>10){try{a=await gemini(word,sent,lang,S.gem.trim());a.source_label='Gemini 2.5'}catch{a=await hybrid(word,sent,lang)}}else a=await hybrid(word,sent,lang);
   if(req!==S.req)return;
   if(!a.nature_orig||!a.fonction_orig){
     const g=analyzeNatureAndFonction(word,sent,lang,a.pos_ar||'');
@@ -983,8 +1173,8 @@ function showSkel(v){$('skel').hidden=!v;$('pContent').hidden=v}
 function openPanel(){$('panel').hidden=false;document.body.classList.add('panel-open')}
 function closePanel(){$('panel').hidden=true;document.body.classList.remove('panel-open');clearHighlights();S.selIdx=-1}
 function renderPanel(d){
- S.sel=d;showSkel(false);const c=$('pContent');c.style.animation='none';c.offsetWidth;c.style.animation='';
- $('panelHeadTitle').textContent='التَّرْجَمَةُ وَالتَّحْلِيلُ النَّحْوِيُّ';
+ S.sel=d;showSkel(false);
+ $('panelHeadTitle').textContent='المحلل النحوي والسياقي';
  $('wordHeaderBox').hidden=false;
  $('wordAudioBox').hidden=false;
  $('gramAnalysisBox').hidden=false;
@@ -992,15 +1182,14 @@ function renderPanel(d){
  $('conjBtnWrap').hidden=false;
  $('wordExpBox').hidden=false;
  $('sentSectionBox').style.borderTop='1px solid var(--bd)';
- $('sentSectionBox').style.paddingTop='12px';
+ $('sentSectionBox').style.paddingTop='10px';
  $('sentBoxLabel').textContent='الجُمْلَةُ الكَامِلَةُ فِي النَّصِّ';
 
  $('engineTag').textContent=d.source_label||'Readdy';$('pTitle').textContent=d.word;$('pLang').textContent=d.lang.toUpperCase();$('pIpa').textContent=d.ipa||'';$('pIpa').hidden=$('pDot').hidden=!d.ipa;
  $('pPos').textContent=d.pos_ar||'';
 
- // Populate Nature & Fonction card
  $('gramLangBadge').textContent=d.lang==='fr'?'Nature & Fonction (FR)':'Nature & Function (EN)';
- $('natureLblOrig').textContent=d.lang==='fr'?'Nature grammaticale':'Part of Speech (Nature)';
+ $('natureLblOrig').textContent=d.lang==='fr'?'Nature grammaticale':'Part of Speech';
  $('fonctionLblOrig').textContent=d.lang==='fr'?'Fonction dans la phrase':'Syntactic Function';
  $('pNatureOrig').textContent=d.nature_orig||'—';
  $('pNatureAr').textContent=vocalizeArabic(d.nature_ar||d.pos_ar||'—');
@@ -1156,12 +1345,12 @@ function renderConjugationData(inf,trAr,lang,tables){
   body.innerHTML=`
     <div class="conj-head-card">
       <div>
-        <div style="font-size:11px;color:var(--sub)">المَصْدَرُ الأَسَاسِيُّ لِلْفِعْلِ</div>
-        <div dir="ltr" style="font:700 20px Literata,serif;color:var(--ac)">${esc(inf)}</div>
+        <div style="font-size:10.5px;color:var(--sub)">المَصْدَرُ الأَسَاسِيُّ لِلْفِعْلِ</div>
+        <div dir="ltr" style="font:700 18px Literata,serif;color:var(--ac)">${esc(inf)}</div>
       </div>
       <div style="text-align:left">
-        <div style="font-size:11px;color:var(--sub)">المَعْنَى القِيَاسِيُّ</div>
-        <div class="ar-vow" style="font-size:16px;font-weight:700">${esc(trAr||'—')}</div>
+        <div style="font-size:10.5px;color:var(--sub)">المَعْنَى القِيَاسِيُّ</div>
+        <div class="ar-vow" style="font-size:15px;font-weight:700">${esc(trAr||'—')}</div>
       </div>
     </div>
     ${tables.map(tb=>`
@@ -1170,7 +1359,7 @@ function renderConjugationData(inf,trAr,lang,tables){
         ${tb.rows.map(r=>`
           <div class="conj-row">
             <span class="conj-form">${esc(r)}</span>
-            <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-say="${esc(r)}" data-lang="${lang}" aria-label="نطق"><i class="ms" style="font-size:17px">volume_up</i></button>
+            <button class="ibtn sm" style="color:var(--ac)" data-say="${esc(r)}" data-lang="${lang}" aria-label="نطق"><i class="ms" style="font-size:16px">volume_up</i></button>
           </div>
         `).join('')}
       </div>
@@ -1269,12 +1458,12 @@ function toggleBookmark(){if(!S.sel||S.sel.isSentence)return;const i=S.saved.fin
  if(i>=0){S.saved.splice(i,1);toast('تمت إزالة الكلمة من المحفوظات')}else{const d=S.sel;S.saved.unshift({word:d.word,lang:d.lang,ipa:d.ipa||'',translation_ar:d.translation_ar,pos_ar:d.pos_ar||'',nature_orig:d.nature_orig||'',nature_ar:d.nature_ar||'',fonction_orig:d.fonction_orig||'',fonction_ar:d.fonction_ar||'',lemma:d.lemma||'',sentence_original:d.sentence_original||'',sentence_ar:d.sentence_ar||''});toast('تم حفظ الكلمة في المفردات والبطاقات')}afterVocab()}
 function drawer(o){if(o)closeConjDrawer();$('drawer').classList.toggle('open',!!o);$('drawer').inert=!o;$('bdrop').classList.toggle('open',!!o||!$('conjDrawer').inert);if(o)renderVocab()}
 function renderVocab(){const q=$('vsearch').value.trim().toLowerCase(),l=$('vlist'),it=S.saved.filter(x=>x.word.toLowerCase().includes(q)||x.translation_ar.includes(q));
- if(!it.length){l.innerHTML=`<div class="none"><i class="ms" style="font-size:30px;opacity:.5">bookmark_border</i><p>${S.saved.length?'لا توجد نتائج مطابقة':'لا توجد كلمات محفوظة'}</p></div>`;return}
+ if(!it.length){l.innerHTML=`<div class="none"><i class="ms" style="font-size:28px;opacity:.5">bookmark_border</i><p>${S.saved.length?'لا توجد نتائج مطابقة':'لا توجد كلمات محفوظة'}</p></div>`;return}
  l.innerHTML=it.map(x=>`<div class="vitem"><div><div dir="ltr" class="vw"><span class="tag">${esc(x.lang)}</span><b>${esc(x.word)}</b></div><p class="ar-vow">${esc(vocalizeArabic(x.translation_ar))}</p><div style="font-size:10px;color:var(--sub);margin-top:2px" dir="ltr">${esc(x.nature_orig||'')} ${x.fonction_orig?'• '+esc(x.fonction_orig):''}</div></div>
-  <div style="display:flex;flex:none">
-    <button class="ibtn sm" style="border:0;background:none;color:var(--ac)" data-a="say" data-w="${esc(x.word)}" data-l="${esc(x.lang)}" aria-label="نطق أجنبي"><i class="ms">volume_up</i></button>
-    <button class="ibtn sm" style="border:0;background:none;color:var(--ok)" data-a="sayar" data-ar="${esc(vocalizeArabic(x.translation_ar))}" aria-label="نطق عربي"><i class="ms">record_voice_over</i></button>
-    <button class="ibtn sm" style="border:0;background:none;color:#d93025" data-a="del" data-w="${esc(x.word)}" aria-label="حذف"><i class="ms">delete</i></button>
+  <div style="display:flex;flex:none;gap:2px">
+    <button class="ibtn sm" style="color:var(--ac)" data-a="say" data-w="${esc(x.word)}" data-l="${esc(x.lang)}" aria-label="نطق أجنبي"><i class="ms" style="font-size:16px">volume_up</i></button>
+    <button class="ibtn sm" style="color:var(--ok)" data-a="sayar" data-ar="${esc(vocalizeArabic(x.translation_ar))}" aria-label="نطق عربي"><i class="ms" style="font-size:16px">record_voice_over</i></button>
+    <button class="ibtn sm" style="color:#d93025" data-a="del" data-w="${esc(x.word)}" aria-label="حذف"><i class="ms" style="font-size:16px">delete</i></button>
   </div></div>`).join('')}
 $('vlist').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;
  if(b.dataset.a==='say')Speech.speak(b.dataset.w,b.dataset.l);
@@ -1284,13 +1473,14 @@ function exportCSV(){if(!S.saved.length){toast('لا توجد كلمات محف�
  const q=v=>{v=String(v||'');if(/^[=+\-@\t\r]/.test(v))v="'"+v;return`"${v.replace(/"/g,'""')}"`};
  const rows=S.saved.map(w=>[w.word,w.lemma||w.word,w.lang.toUpperCase(),w.ipa,w.nature_orig||w.pos_ar,w.fonction_orig||'',vocalizeArabic(w.translation_ar)].map(q).join(','));
  const u=URL.createObjectURL(new Blob(['\uFEFF'+['Word,Lemma,Language,IPA,Nature,Fonction,ArabicTranslation',...rows].join('\n')],{type:'text/csv;charset=utf-8;'})),a=document.createElement('a');
- a.href=u;a.download='readdy-vocabulary.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('تم تصدير ملف المفردات بنجاح')}
-function saveKey(){S.gem=$('gemKey').value.trim();S.gem?store.set(K.gem,S.gem):store.del(K.gem);show('apiModal',0);toast(S.gem?'تم تفعيل مفتاح Gemini AI':'تم اعتماد المحركات المدمجة')}
+ a.href=u;a.download='readdy-ai-studio-vocabulary.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('تم تصدير ملف المفردات بنجاح')}
+function saveKey(){S.gem=$('gemKey').value.trim();S.gem?store.set(K.gem,S.gem):store.del(K.gem);updateModelChip();show('apiModal',0);toast(S.gem?'تم تفعيل Gemini 2.5 Flash API':'تم اعتماد المحركات المدمجة')}
 function clearCache(){S.cache.clear();S.conjCache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
 /* ---------- init ---------- */
 function boot(){
   setThemeIcon();
+  updateModelChip();
   Speech.init();
   updBadge();
   openWelcome(false);
