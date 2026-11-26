@@ -927,7 +927,11 @@ function pdfBlocks(items){
   const hasLargeVerticalGap=prevLine && yGap>Math.max(line.fs,prevLine.fs)*1.75;
   const prevEndedSentence=prevLine && /[.!?…»”"']\s*$/.test(prevLine.text);
 
-  const startsNewPara=!prevLine || hasFirstLineIndent || hasLargeVerticalGap || (prevEndedSentence && line.text.length<55 && prevLine.text.length<55);
+  // Strict literary rule: an indented line starts a new paragraph ONLY when the previous line completed its sentence
+  const startsNewPara=!prevLine
+   || (hasFirstLineIndent && prevEndedSentence)
+   || hasLargeVerticalGap
+   || (prevEndedSentence && line.text.length<55 && prevLine.text.length<55);
 
   if(startsNewPara){
    flushPara();
