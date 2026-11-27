@@ -2026,12 +2026,11 @@ function renderPanel(d){
   return `<button type="button" class="lex-chip ant" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="استمع إلى الضد باللغة الأصلية">ضد: ${esc(ar)}${orig}</button>`;
  });
  const chips=[...syns,...ants];
+ relBox.hidden=false;
  if(chips.length){
-  relBox.hidden=false;
   relEl.innerHTML=chips.join('');
  }else{
-  relBox.hidden=true;
-  relEl.replaceChildren();
+  relEl.innerHTML='<span class="sm2" style="display:block;padding:6px 2px">لم تتوفر مرادفات أو أضداد لهذه الكلمة من المصدر الحالي.</span>';
  }
 
  $('exBox').hidden=!d.example_original;
