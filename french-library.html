@@ -75,6 +75,7 @@ th{background:var(--s2);color:var(--ac)}td,th{border-color:var(--bd)}
 <section class="section" id="saved"><div class="section-head"><h2>محفوظاتي</h2><p>الكلمات والقواعد والتعبيرات التي حفظتها، متاحة دون اتصال بعد فتح المكتبة مرة واحدة.</p></div><div class="grid" id="savedGrid"></div></section>
 </main></div><div class="foot">Readdy French Library • محتوى تعليمي أصلي ومنظّم • يتم حفظ التقدم على جهازك</div></div>
 <script>
+try{const t=localStorage.getItem('readdy_theme_mode_v1');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch{}
 const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const jsq=v=>"'"+String(v).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r/g,'\\r').replace(/\n/g,'\\n')+"'";
 const themeToggle=$('themeToggle'); if(themeToggle)themeToggle.addEventListener('click',()=>{document.documentElement.classList.toggle('dark');try{localStorage.setItem('readdy_theme_mode_v1',document.documentElement.classList.contains('dark')?'dark':'light')}catch{}});\nconst words=[
