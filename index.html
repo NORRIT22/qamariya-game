@@ -105,13 +105,20 @@ html.dark .badge{color:#041e49}
 .sheet{width:100%;max-width:820px;background:var(--sheet);border:1px solid var(--bd);border-radius:16px;padding:clamp(22px,6vw,64px) clamp(20px,6.5vw,72px);box-shadow:0 1px 3px rgba(0,0,0,.06);animation:rise .45s both;scroll-margin-top:calc(var(--hh) + var(--th) + 12px);overflow-x:auto}
 .sheet.pending{min-height:420px}@media(min-width:900px){.sheet{min-height:740px}}
 
-.body{direction:ltr;text-align:justify;hyphens:auto;font-family:var(--df);font-size:var(--fs);line-height:1.72;word-break:normal;overflow-wrap:break-word}
-.body p.book-para{margin:0 0 .35em;text-indent:0}
-.body p.book-para.indented{text-indent:1.85em}
-.body .raw-line{margin:0;white-space:pre-wrap;text-align:left}
+/* Authentic Book & Document Layout Preservation */
+.body{direction:ltr;text-align:left;font-family:var(--df);font-size:var(--fs);line-height:1.72;word-break:normal;overflow-wrap:break-word}
+.body p.book-para{margin:0 0 .48em;text-align:justify;hyphens:auto}
+.body p.book-para.indented{text-indent:2em}
+.body p.book-para.align-center{text-align:center;text-indent:0}
+.body p.book-para.align-right{text-align:right;text-indent:0}
+.body p.book-para.align-left{text-align:left}
+.body .raw-line{margin:0 0 .22em;white-space:pre-wrap;text-align:left}
 .body .raw-gap{height:.95em}
-.body h1{font-size:1.45em;line-height:1.35;margin:0 0 .55em;text-align:left}
-.body h2{font-size:1.2em;line-height:1.35;margin:0 0 .45em;text-align:left}
+.body h1{font-size:1.48em;line-height:1.35;margin:.2em 0 .6em;font-weight:700}
+.body h2{font-size:1.22em;line-height:1.35;margin:.2em 0 .5em;font-weight:700}
+.body .align-center{text-align:center}
+.body .align-right{text-align:right}
+.body .col-sep{border:0;border-top:1px dashed var(--bd);margin:1.2em 0}
 
 .sf{margin-top:36px;padding-top:10px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;font-size:11px;color:var(--sub);direction:ltr;user-select:none}.sf b{font-family:Outfit,sans-serif}
 .wt{border-radius:3px;padding:0;margin:0;cursor:pointer;transition:background .12s,color .12s}
@@ -213,7 +220,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
   <div class="hero">
     <div class="chips" aria-hidden="true"><span style="--d:0s">Bonjour</span><span style="--d:.5s">Hello</span><span style="--d:1s">Lecture</span><span style="--d:1.5s">Words</span></div>
     <div class="big"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path class="play" d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span dir="ltr">Readdy</span></div>
-    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.</p></div>
+    <div><h1 id="heroTitle">اقرأ المستندات الإنجليزية والفرنسية بذكاء</h1><p id="heroSub">ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص كاملاً دون اجتزاء وبتخطيط الفقرات والمسافات البادئة كما في المستند الأصلي، مع ترجمة سياقية مشكولة.</p></div>
     <div class="row">
       <button class="btn pri lg" onclick="$('fileInput').click()"><i class="ms">folder_open</i>اختيار ملف من الجهاز</button>
       <button class="btn lg" onclick="show('pasteModal',1)"><i class="ms">content_paste</i>لصق نص مباشرة</button>
@@ -238,7 +245,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
     <div id="wave" class="wave" aria-hidden="true"><i></i><i></i><i></i></div>
     <span class="kbd-hint hide-sm" title="استخدم الأسهم للتنقل بين الكلمات والسطور"><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> تنقّل</span>
     <div class="sp"></div>
-    <button class="ibtn sm" id="reflowBtn" title="إعادة تحليل المستند (إصلاح الجمل المقطوعة)" aria-label="إعادة تحليل المستند" onclick="reanalyze(false)"><i class="ms">autorenew</i></button>
+    <button class="ibtn sm" id="reflowBtn" title="إعادة ضبط تخطيط المستند" aria-label="إعادة ضبط تخطيط المستند" onclick="reanalyze(false)"><i class="ms">autorenew</i></button>
     <div class="seg"><button id="fSerif" class="on" onclick="setFont('serif')">Literata</button><button id="fSans" onclick="setFont('sans')">Inter</button></div>
     <div class="seg"><button onclick="setSize(-1)" aria-label="تصغير">A-</button><span id="fSize" class="v">18px</span><button onclick="setSize(1)" aria-label="تكبير">A+</button></div>
     <label class="pill hide-sm"><span class="k">صفحة</span><input id="jump" type="number" min="1" value="1" onchange="jumpPage(this.value)"><span id="pgCount" class="k">/ 1</span></label>
@@ -308,7 +315,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 <div id="welcomeModal" class="modal" hidden><div class="mbox">
   <div class="mh"><span>منصة القراءة الذكية • Readdy</span><button class="ibtn sm" onclick="closeWelcome()" aria-label="إغلاق"><i class="ms">close</i></button></div>
   <div class="mb">
-    <div class="feat"><i class="ms">auto_stories</i><div><b>عرض مطابق لتخطيط الكتاب الأصلي</b><small>استخراج الفقرات المتصلة والمسافات البادئة (Indentation) كما في المؤلف الأصلي تماماً.</small></div></div>
+    <div class="feat"><i class="ms">auto_stories</i><div><b>عرض مطابق لتخطيط الكتاب الأصلي</b><small>استخراج كامل النص دون حذف أي حرف، مع الحفاظ على الأعمدة، العناوين، التوسيط، والمسافات البادئة كما في المؤلف الأصلي تماماً.</small></div></div>
     <div class="feat"><i class="ms">psychology</i><div><b>تحليل سياقي كامل للجملة والكلمة</b><small>تحديد الجملة الكاملة من بدايتها حتى نقطتها لضمان ترجمة الكلمة حسب سياقها الحقيقي دون تحريف.</small></div></div>
     <div class="feat"><i class="ms">style</i><div><b>فلاش كاردز تلقائية لـ 10 جلسات</b><small>كل كلمة تنقر عليها لترجمتها تُحفظ في بطاقات المراجعة الجانبية لمدة 10 جلسات مع إمكانية التجديد.</small></div></div>
     <button class="btn pri lg" style="justify-content:center" onclick="closeWelcome()">الدخول إلى مساحة القراءة</button>
@@ -536,7 +543,7 @@ function resetToDefaultHome(){
  $('empty').hidden=false;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص كاملاً دون اجتزاء وبتخطيط الفقرات والمسافات البادئة كما في المستند الأصلي، مع ترجمة سياقية مشكولة.';
  closePanel();
  clearReadingState();
  renderTabStrip();
@@ -859,12 +866,12 @@ function detect(t){if(S.override!=='auto')return S.override;const s=t.slice(0,30
  const en=(s.match(/\b(the|and|that|have|for|not|with|you|this|but|his|from|they|which|their|would|about|there|into|could|were|been)\b/g)||[]).length;return fr>en?'fr':'en'}
 function setLang(v){S.override=v;S.lang=detect(S.pages.slice(0,5).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));Speech.fill(S.lang);saveReadingState();toast(`اللغة المختارة: ${S.lang==='fr'?'الفرنسية (FR)':'الإنجليزية (EN)'}`)}
 
-/* ---------- Authentic Book-Layout Ingestion (Zero Mid-Sentence Paragraph Breaks) ---------- */
+/* ---------- Lossless & Layout-Faithful Document Ingestion ---------- */
 const stripInvisible=t=>t.replace(/[\u200B-\u200D\uFEFF]/g,'');
 
 function verbatimLines(t){
  const rawLines=stripInvisible(t).replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
- return rawLines.map(line=>line.trim().length===0?{type:'gap',text:''}:{type:'line',text:line,indent:0});
+ return rawLines.map(line=>line.trim().length===0?{type:'gap',text:''}:{type:'line',text:line,indented:false,align:'left'});
 }
 
 function progress(v,t='',p=0){$('prog').hidden=!v;if(!v)return;$('pgText').textContent=t;$('pgPct').textContent=Math.round(p)+'%';$('pgBar').style.width=Math.round(p)+'%'}
@@ -879,80 +886,165 @@ async function ingest(f){
  try{if(isPDF)await readPDF(f);else if(isDOCX)await readDOCX(f);else if(isImage)await readImage(f);else openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(await f.text())}])}
  catch(e){console.error('File import failed:',e);progress(false);toast(e.message==='lib'?'تعذر تحميل مكتبة القراءة، تحقق من الاتصال.':e.name==='PasswordException'?'ملف PDF محمي بكلمة مرور.':'تعذر استخراج محتوى الملف؛ جرّب ملفاً آخر أو نسخة غير محمية.')}}
 
-/* ---------- pdfBlocks: Never breaks an open sentence across lines ---------- */
-function pdfBlocks(items){
+/* ---------- Lossless PDF Layout & Multi-Column Extractor ---------- */
+function buildColumnBlocks(items,pageWidth){
  if(!items||!items.length)return[];
- const fsA=items.map(i=>i.fs).filter(f=>f>0).sort((a,b)=>a-b),med=fsA[fsA.length>>1]||12,tol=Math.max(2.5,med*.45);
+ const fsA=items.map(i=>i.fs).filter(f=>f>0).sort((a,b)=>a-b);
+ const med=fsA[fsA.length>>1]||12;
+ const tol=Math.max(2.2,med*0.42);
+
+ // Group items into horizontal visual lines without dropping ANY character
  const groups=[];let g=null;
  items.slice().sort((a,b)=>b.y-a.y||a.x-b.x).forEach(it=>{
   if(g&&Math.abs(it.y-g.y)<=tol){g.it.push(it);g.y+=(it.y-g.y)/g.it.length}
   else{g={y:it.y,it:[it]};groups.push(g)}
  });
+
  const lines=groups.map(gr=>{
-  const l=gr.it.filter(i=>!(i.fs<med*.72&&/^[\d*†‡§]{1,3}$/.test(i.s.trim()))).sort((a,b)=>a.x-b.x);
+  const l=gr.it.slice().sort((a,b)=>a.x-b.x);
   if(!l.length)return null;
   let len=0,fsum=0;
   l.forEach(i=>{const n=Math.max(1,i.s.trim().length);len+=n;fsum+=i.fs*n});
-  const fs=fsum/len;let t='';
+  const fs=fsum/len;
+  let t='';
   l.forEach((it,j)=>{
    const s=stripInvisible(it.s).replace(/[\u00A0\u202F\u2009]/g,' ');
-   if(j){const p=l[j-1],gap=it.x-(p.x+p.w);if(gap>Math.max(1.4,fs*.16)&&!/\s$/.test(t)&&!/^\s/.test(s))t+=' '}
+   if(j){
+    const p=l[j-1];
+    const gap=it.x-(p.x+p.w);
+    if(gap>Math.max(1.2,fs*0.14)&&!/\s$/.test(t)&&!/^\s/.test(s))t+=' ';
+   }
    t+=s;
   });
-  const e=l[l.length-1];
-  return{text:t.replace(/\s+/g,' ').trim(),x:l[0].x,right:e.x+e.w,y:gr.y,fs};
+  const first=l[0],last=l[l.length-1];
+  const right=last.x+Math.max(last.w,last.s.length*fs*0.45);
+  return{text:t.replace(/\s+/g,' ').trim(),x:first.x,right,y:gr.y,fs};
  }).filter(l=>l&&l.text);
 
- const isNum=t=>/^(?:[-–—]\s*)?(?:\d{1,4}|[IVXLC]{1,6}|[ivxl]{2,6})(?:\s*[-–—])?$/.test(t);
- if(lines.length>1&&isNum(lines[0].text))lines.shift();
- if(lines.length>1&&isNum(lines[lines.length-1].text))lines.pop();
  if(!lines.length)return[];
 
- const cnt={};lines.forEach(l=>{const k=Math.round(l.x/2)*2;cnt[k]=(cnt[k]||0)+1});
- const L=+Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||a-b)[0];
- const dy=[];for(let i=1;i<lines.length;i++){const d=lines[i-1].y-lines[i].y;if(d>0)dy.push(d)}
- dy.sort((a,b)=>a-b);
- const pitch=dy.length?dy[dy.length>>1]:med*1.3;
+ // Compute column bounds & dominant left margin
+ const minX=Math.min(...lines.map(l=>l.x));
+ const maxR=Math.max(...lines.map(l=>l.right));
+ const colW=Math.max(120,maxR-minX,pageWidth*0.65);
 
- const blocks=[];let para='',paraInd=false,prev=null,drop='';
- const flush=()=>{if(para.trim())blocks.push({type:'para',text:para.trim(),indented:paraInd});para='';paraInd=false};
+ const cnt={};
+ lines.forEach(l=>{const k=Math.round(l.x/3)*3;cnt[k]=(cnt[k]||0)+1});
+ const L=+Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||a-b)[0];
+
+ const dy=[];
+ for(let i=1;i<lines.length;i++){const d=lines[i-1].y-lines[i].y;if(d>0&&d<med*4)dy.push(d)}
+ dy.sort((a,b)=>a-b);
+ const pitch=dy.length?dy[dy.length>>1]:med*1.35;
+
+ const blocks=[];
+ let para='',paraInd=false,paraAlign='justify',prev=null;
+ const flush=()=>{
+  if(para.trim()){
+   blocks.push({type:'para',text:para.trim(),indented:paraInd,align:paraAlign});
+  }
+  para='';paraInd=false;paraAlign='justify';
+ };
 
  for(let i=0;i<lines.length;i++){
   const line=lines[i];
-  if(/^\p{Lu}$/u.test(line.text)&&line.fs>=med*1.6&&lines[i+1]&&/^\p{Ll}/u.test(lines[i+1].text)){drop=line.text;continue}
-  if(drop){line.text=drop+line.text;drop=''}
+  const lineW=Math.max(10,line.right-line.x);
+  const centerDiff=Math.abs(((line.x+line.right)/2)-((minX+maxR)/2));
+  const isCentered=(lineW<colW*0.72)&&(line.x-L>med*1.5)&&(centerDiff<colW*0.08);
+  const isRightAligned=(lineW<colW*0.65)&&Math.abs(line.right-maxR)<med*1.5&&(line.x-L>colW*0.25);
+  const indented=!isCentered&&!isRightAligned&&(line.x-L>Math.max(8,line.fs*0.75));
 
-  const lower=/^\p{Ll}/u.test(line.text);
-  const open=para&&!endsSentence(para);
-  const h1=line.fs>=med*1.45&&line.text.length<120,h2=!h1&&line.fs>=med*1.22&&line.text.length<140;
+  const isH1=line.fs>=med*1.42&&line.text.length<160;
+  const isH2=!isH1&&line.fs>=med*1.18&&line.text.length<180;
 
-  if((h1||h2)&&!open){
+  // Headings (titles, chapter headers, section headers) stay standalone
+  if(isH1||isH2){
+   const hType=isH1?'h1':'h2';
+   const hAlign=isCentered?'center':isRightAligned?'right':'left';
+   const last=blocks[blocks.length-1];
+   if(!para&&last&&last.type===hType&&prev&&(prev.y-line.y)<=pitch*1.45){
+    last.text+=' '+line.text;
+   }else{
+    flush();
+    blocks.push({type:hType,text:line.text,indented:false,align:hAlign});
+   }
+   prev=line;
+   continue;
+  }
+
+  // Standalone centered or right-aligned lines (epigraphs, dates, signatures, subtitles)
+  if(isCentered||isRightAligned){
    flush();
-   const t=h1?'h1':'h2',last=blocks[blocks.length-1];
-   if(last&&last.type===t&&prev&&prev.y-line.y<=pitch*1.3)last.text+=' '+line.text;
-   else blocks.push({type:t,text:line.text,indented:false});
-   prev=line;continue;
+   blocks.push({type:'para',text:line.text,indented:false,align:isCentered?'center':'right'});
+   prev=line;
+   continue;
   }
 
-  const indented=line.x-L>Math.max(8,line.fs*.8);
-  let brk=!para,bigGap=false;
-  if(para){
+  // Check paragraph boundary based on authentic vertical spacing or indentation
+  let startNewPara=!para;
+  let hasVisualGap=false;
+  if(para&&prev){
    const yGap=prev.y-line.y;
-   bigGap=yGap>Math.max(pitch*1.55,pitch+line.fs*.55);
-   brk=!open&&!lower&&(indented||bigGap);
+   hasVisualGap=yGap>Math.max(pitch*1.5,pitch+line.fs*0.48);
+   const prevShort=(prev.right-prev.x)<colW*0.72&&endsSentence(prev.text);
+   if(indented||hasVisualGap||prevShort){
+    startNewPara=true;
+   }
   }
-  if(brk){
-   const had=!!para;flush();
-   if(had&&bigGap&&blocks.length&&blocks[blocks.length-1].type==='para')blocks.push({type:'gap',text:''});
-   para=line.text;paraInd=indented;
-  }else if(/[-\u00AD¬]$/.test(para)&&/^\p{Ll}/u.test(line.text)){
-   para=para.slice(0,-1)+line.text;
+
+  if(startNewPara){
+   const hadPrev=!!para;
+   flush();
+   if(hadPrev&&hasVisualGap)blocks.push({type:'gap',text:''});
+   para=line.text;
+   paraInd=indented;
+   paraAlign=(lineW<colW*0.62&&endsSentence(line.text))?'left':'justify';
   }else{
-   para+=' '+line.text;
+   // Join wrapped lines within the same paragraph cleanly
+   if(/[-\u00AD¬]$/.test(para)&&/^\p{Ll}/u.test(line.text)){
+    para=para.slice(0,-1)+line.text;
+   }else{
+    para+=' '+line.text;
+   }
+   paraAlign='justify';
   }
   prev=line;
  }
- flush();return blocks;
+ flush();
+ return blocks;
+}
+
+function pdfBlocks(items,pageWidth=600){
+ if(!items||!items.length)return[];
+ // Detect genuine 2-column academic/book layouts without corrupting full-width headers
+ const mid=pageWidth*0.5;
+ const bodyItems=items.filter(it=>it.w<pageWidth*0.48);
+ const leftCount=bodyItems.filter(it=>(it.x+it.w)<mid+8).length;
+ const rightCount=bodyItems.filter(it=>it.x>mid-8).length;
+ const isTwoCol=items.length>30&&leftCount>12&&rightCount>12&&(leftCount+rightCount)>items.length*0.65;
+
+ if(isTwoCol){
+  // Separate full-width top/bottom headers from left and right columns
+  const topHeaders=[],leftCol=[],rightCol=[],bottomFooters=[];
+  const yVals=bodyItems.map(i=>i.y);
+  const maxColY=Math.max(...yVals)+4;
+  const minColY=Math.min(...yVals)-4;
+  items.forEach(it=>{
+   if(it.w>=pageWidth*0.48&&it.y>=maxColY)topHeaders.push(it);
+   else if(it.w>=pageWidth*0.48&&it.y<=minColY)bottomFooters.push(it);
+   else if((it.x+it.w*0.5)<mid)leftCol.push(it);
+   else rightCol.push(it);
+  });
+  const out=[];
+  if(topHeaders.length)out.push(...buildColumnBlocks(topHeaders,pageWidth));
+  if(leftCol.length)out.push(...buildColumnBlocks(leftCol,pageWidth*0.48));
+  if(leftCol.length&&rightCol.length)out.push({type:'colsep',text:''});
+  if(rightCol.length)out.push(...buildColumnBlocks(rightCol,pageWidth*0.48));
+  if(bottomFooters.length)out.push(...buildColumnBlocks(bottomFooters,pageWidth));
+  return out;
+ }
+
+ return buildColumnBlocks(items,pageWidth);
 }
 
 async function readPDF(f){
@@ -963,15 +1055,26 @@ async function readPDF(f){
  try{
   for(let n=1;n<=pdf.numPages;n++){
    progress(true,`استخراج الصفحة ${n} من ${pdf.numPages}...`,8+n/pdf.numPages*70);
-   const pg=await pdf.getPage(n),ct=await pg.getTextContent();
-   const items=ct.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0,fs:Math.round(Math.hypot(i.transform[0],i.transform[1])*10)/10}));
-   let blocks=items.length?pdfBlocks(items):[];
+   const pg=await pdf.getPage(n);
+   const vp=pg.getViewport({scale:1});
+   const ct=await pg.getTextContent();
+   // Preserve EVERY non-empty text item without dropping short tokens or small fonts
+   const items=ct.items
+    .filter(i=>typeof i.str==='string'&&i.str.length>0&&stripInvisible(i.str).trim().length>0)
+    .map(i=>({
+     s:i.str,
+     x:i.transform[4],
+     y:i.transform[5],
+     w:Math.abs(i.width||0),
+     fs:Math.max(6,Math.round(Math.hypot(i.transform[0],i.transform[1])*10)/10)
+    }));
+   let blocks=items.length?pdfBlocks(items,vp.width||600):[];
    const selectableChars=items.reduce((sum,item)=>sum+item.s.trim().length,0);
    if(selectableChars<15){
     if(window.Tesseract){
      try{
       if(!worker)worker=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,`التعرّف الضوئي على الصفحة ${n}...`,78+((n-1)/Math.max(1,pdf.numPages))*18+m.progress*3)}});
-      const viewport=pg.getViewport({scale:1.6}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+      const viewport=pg.getViewport({scale:1.75}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
       canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
       await pg.render({canvasContext:ctx,viewport}).promise;
       const result=await worker.recognize(canvas),ocrText=result.data.text||'';
@@ -989,9 +1092,31 @@ async function readPDF(f){
  openDoc(f.name,pages);
  if(ocrDone||ocrSkipped)toast(ocrSkipped?`اكتمل OCR لـ ${ocrDone} صفحة، وتعذّر على ${ocrSkipped} صفحة.`:`اكتمل OCR لـ ${ocrDone} صفحة ممسوحة ضوئياً.`);
 }
-async function readDOCX(f){need(window.mammoth);progress(true,'جاري تحليل مستند Word...',45);
- const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()});
- openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(r.value||'')}])}
+
+async function readDOCX(f){
+ need(window.mammoth);
+ progress(true,'جاري تحليل مستند Word بالتنسيق الأصلي...',45);
+ const buf=await f.arrayBuffer();
+ const res=await mammoth.convertToHtml({arrayBuffer:buf});
+ const tmp=document.createElement('div');
+ tmp.innerHTML=res.value||'';
+ const blocks=[];
+ tmp.querySelectorAll('h1,h2,h3,h4,p,li,blockquote').forEach(el=>{
+  const txt=stripInvisible(el.textContent||'').replace(/\s+/g,' ').trim();
+  if(!txt)return;
+  const tag=el.tagName.toLowerCase();
+  if(tag==='h1')blocks.push({type:'h1',text:txt,indented:false,align:'left'});
+  else if(tag==='h2'||tag==='h3'||tag==='h4')blocks.push({type:'h2',text:txt,indented:false,align:'left'});
+  else blocks.push({type:'para',text:txt,indented:false,align:'justify'});
+ });
+ if(!blocks.length){
+  const raw=await mammoth.extractRawText({arrayBuffer:buf});
+  openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(raw.value||'')}]);
+  return;
+ }
+ openDoc(f.name,[{pageNumber:1,blocks}]);
+}
+
 async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
  const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
  try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text||'')}])}finally{await w.terminate()}}
@@ -1053,11 +1178,11 @@ function openDoc(title,pages,opts={}){progress(false);
  if(opts.restore?.override)S.override=opts.restore.override;
  S.lang=detect(pages.slice(0,6).flatMap(p=>p.blocks.map(b=>b.text)).join(' '));$('langSel').value=S.override;Speech.fill(S.lang);
  pages.forEach((pg,pi)=>pg.blocks.forEach(b=>{
-  if(b.type==='gap'||!b.text.trim()){b.sents=[];return}
+  if(b.type==='gap'||b.type==='colsep'||!b.text.trim()){b.sents=[];return}
   b.sents=splitSentences(b.text).map(raw=>{const text=raw.trim();if(!text)return null;S.recs.push({text,tokens:[],page:pi});return{raw,id:S.recs.length-1}}).filter(Boolean)
  }));
  if(!opts.skipSave){
-  const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indented:!!b.indented,indent:b.indent||0}))}));
+  const cleanPages=pages.map(pg=>({pageNumber:pg.pageNumber,blocks:pg.blocks.map(b=>({type:b.type,text:b.text,indented:!!b.indented,align:b.align||'left'}))}));
   DocDB.save({id:S.docId,title:S.title,lang:S.lang,pages:cleanPages,updatedAt:Date.now()});
  }
  $('empty').hidden=true;$('work').hidden=false;document.body.classList.add('has-doc');$('jump').max=pages.length;$('jump').value=opts.restore?.page||1;$('pgCount').textContent=`/ ${pages.length}`;
@@ -1104,10 +1229,13 @@ function renderPage(pi){const a=$('pages').children[pi];if(!a||a.dataset.done)re
  const saved=new Set(S.saved.map(w=>w.word.toLowerCase())),body=a.firstChild,tag={h1:'h1',h2:'h2',para:'p'};
  S.pages[pi].blocks.forEach(b=>{
   if(b.type==='gap'){const g=document.createElement('div');g.className='raw-gap';body.append(g);return}
+  if(b.type==='colsep'){const hr=document.createElement('hr');hr.className='col-sep';body.append(hr);return}
   const el=document.createElement(tag[b.type]||'div');
   if(b.type==='para'){
-   el.className='book-para'+(b.indented?' indented':'');
-  }else if(!tag[b.type]){
+   el.className='book-para'+(b.indented?' indented':'')+(b.align?' align-'+b.align:'');
+  }else if(b.type==='h1'||b.type==='h2'){
+   if(b.align)el.className='align-'+b.align;
+  }else{
    el.className='raw-line';
   }
   if(!b.sents||!b.sents.length){el.textContent=b.text;body.append(el);return}
@@ -1133,7 +1261,7 @@ function goHome(preserveRegistry=true){
  $('work').hidden=true;
  document.body.classList.remove('has-doc');
  $('heroTitle').textContent='اقرأ المستندات الإنجليزية والفرنسية بذكاء';
- $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص بتخطيط الفقرات والمسافات البادئة كما في الكتاب الأصلي، مع ترجمة سياقية مشكولة.';
+ $('heroSub').textContent='ارفع ملف PDF أو مستند Word أو صورة نصية، ليُستخرج النص كاملاً دون اجتزاء وبتخطيط الفقرات والمسافات البادئة كما في المستند الأصلي، مع ترجمة سياقية مشكولة.';
  closePanel();
  renderTabStrip();
  renderRecentDocs();
@@ -1925,29 +2053,17 @@ function exportCSV(){if(!S.saved.length){toast('لا توجد كلمات محف�
 function saveKey(){S.gem=$('gemKey').value.trim();S.gem?session.set(K.gem,S.gem):session.del(K.gem);show('apiModal',0);toast(S.gem?'تم تفعيل Gemini لهذه الجلسة':'تم اعتماد المحركات المدمجة')}
 function clearCache(){S.cache.clear();store.del(K.cache);toast('تم مسح الذاكرة المؤقتة')}
 
-/* ---------- Reflow & Re-analyze Stored Documents (EX_VER = 3) ---------- */
-const EX_VER=3;
-function joinLn(a,b){return/[-\u00AD¬]$/.test(a)&&/^\p{Ll}/u.test(b)?a.slice(0,-1)+b:a+' '+b}
+/* ---------- Cross-Page Sentence Context Linking (Non-Destructive) ---------- */
+const EX_VER=4;
 function reflowPages(pages){
- pages.forEach(pg=>{
-  const out=[];
-  pg.blocks.forEach(b=>{
-   let p=out[out.length-1],gap=null;
-   if(p&&p.type==='gap'&&out.length>1){gap=p;p=out[out.length-2]}
-   const lower=/^\p{Ll}/u.test(b.text||'');
-   const cont=p&&p.type==='para'&&!endsSentence(p.text)&&!b.indented&&(b.type==='para'||((b.type==='h1'||b.type==='h2')&&lower));
-   if(cont){p.text=joinLn(p.text,b.text);if(gap)out.splice(out.indexOf(gap),1)}
-   else out.push(b);
-  });
-  pg.blocks=out;
- });
+ // Preserve authentic block structure without swallowing headings or separate paragraphs
  return pages;
 }
 function linkContexts(){
  S.recs.forEach(r=>{delete r.ctx;delete r.grp});
  let prev=null;
  S.pages.forEach(pg=>pg.blocks.forEach(b=>{
-  if(b.type==='gap'||!b.sents||!b.sents.length)return;
+  if(b.type==='gap'||b.type==='colsep'||!b.sents||!b.sents.length)return;
   if(b.type!=='para'){prev=null;return}
   const f=S.recs[b.sents[0].id],l=S.recs[b.sents[b.sents.length-1].id];
   if(prev&&prev.page!==f.page&&!b.indented&&!endsSentence(prev.text)){
@@ -1961,21 +2077,18 @@ const _dbGet=DocDB.get.bind(DocDB),_dbSave=DocDB.save.bind(DocDB);
 DocDB.save=doc=>_dbSave({...doc,ev:EX_VER});
 DocDB.get=async id=>{
  const d=await _dbGet(id);
- if(d&&d.ev!==EX_VER){reflowPages(d.pages);d.ev=EX_VER;await _dbSave(d)}
+ if(d&&d.ev!==EX_VER){d.ev=EX_VER;await _dbSave(d)}
  return d;
 };
 const _openDoc=openDoc;
 openDoc=function(title,pages,opts={}){
- reflowPages(pages);
  _openDoc(title,pages,opts);
  try{linkContexts()}catch(e){console.warn('linkContexts',e)}
 };
 async function reanalyze(all){
  const docs=all?await DocDB.list():[await DocDB.get(S.docId)].filter(Boolean);
- if(!docs.length){toast('لا توجد مستندات لإعادة تحليلها');return}
- const cnt=d=>d.pages.reduce((n,p)=>n+p.blocks.length,0);
- let merged=0;
- for(const d of docs){const b=cnt(d);reflowPages(d.pages);merged+=b-cnt(d);d.ev=EX_VER;await _dbSave(d)}
+ if(!docs.length){toast('لا توجد مستندات لإعادة تحديثها');return}
+ for(const d of docs){d.ev=EX_VER;await _dbSave(d)}
  if(S.docId&&!$('work').hidden){
   const d=docs.find(x=>x.id===S.docId);
   if(d){
@@ -1985,7 +2098,7 @@ async function reanalyze(all){
   }
  }
  renderRecentDocs();
- toast(merged>0?'تمت إعادة التحليل ودُمجت '+merged+' كتلة مقطوعة':'تمت إعادة التحليل — لا توجد جمل مقطوعة');
+ toast('تم تحديث عرض المستند بالتخطيط الأصلي الكامل');
 }
 
 /* ---------- init & auto-restore last session on page reload ---------- */
