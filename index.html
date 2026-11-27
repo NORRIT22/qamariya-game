@@ -1727,12 +1727,11 @@ async function vocalizeInContext(st,pk,fb){
 function frenchContextualMeaning(word,sent){
  const w=String(word||'').toLowerCase();
  const s=String(sent||'').toLowerCase();
- /* venir de + place/origin: venir means to come/originate, not the sound-like string "viens". */
  const venirForms=/^(viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront|venu|venue|venus|venues)$/;
- if(venirForms.test(w)&&/\\b(?:viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront|venu|venue|venus|venues)\\s+(?:de|d['’])\\s*(?:aucun|aucune|un|une|ce|cette|mon|ma|son|sa|la|le|l['’]|paris|france|algerie|ville|pays|famille|region|tribu)/i.test(s)){
-  if(/\\bne\\s+\\w+\\s+(?:pas\\s+)?(?:viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront)\\b/i.test(s))
-   return 'أَنْحَدِرُ';
-  return 'أَنْحَدِرُ';
+ const venirPattern=/\b(?:viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront|venu|venue|venus|venues)\s+(?:de|d['’])\s*(?:aucun|aucune|un|une|ce|cette|mon|ma|son|sa|la|le|l['’]|paris|france|algerie|ville|pays|famille|region|tribu)\b/i;
+ if(venirForms.test(w)&&venirPattern.test(s)){
+  /* In this literary construction, venir de expresses origin: "come from". */
+  return 'آتي';
  }
  return '';
 }
@@ -1969,7 +1968,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v19|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v20|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
