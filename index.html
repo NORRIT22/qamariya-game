@@ -268,7 +268,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
         </div>
         <div class="card"><div class="lbl2"><span>الترجمة السياقية المشكولة</span><button onclick="copyTr()"><i class="ms" style="font-size:14px">content_copy</i>نسخ</button></div><p id="pTr"></p><div id="pAlts" class="alt-row" hidden></div><p id="pLemma" class="sm2"></p></div>
         <div class="card"><h3>التحليل السياقي والمعنى</h3><p id="pExp" style="font-size:13px;line-height:1.85;white-space:pre-line"></p></div>
-        <div id="relBox" class="card" hidden><div class="lbl2 g"><span>مرادفات وأضداد بالعربية</span></div><div id="pRels" class="lex-chips"></div></div>
+        <div id="relBox" class="card" hidden><div class="lbl2 g"><span id="relTitle">مرادفات وأضداد باللغة الأصلية</span></div><div id="pRels" class="lex-chips"></div></div>
         <div id="exBox" class="card"><div class="lbl2 g"><span>مثال تطبيقي</span><span><button class="mini" onclick="sayEx(1)"><i class="ms" style="font-size:14px">volume_up</i>1x</button><button class="mini g" onclick="sayEx(.65)">0.65x</button></span></div><p id="pExO" class="ex"></p><p id="pExA" class="exa"></p></div>
         <div style="border-top:1px solid var(--bd);padding-top:12px;display:grid;gap:8px">
           <div class="lbl2 g"><span>الجملة الكاملة في النص (انقر أي كلمة)</span><span><button class="mini" onclick="saySent(1)"><i class="ms" style="font-size:15px">volume_up</i>1x</button><button class="mini g" onclick="saySent(.65)">0.65x</button><button id="sRepeat" class="mini g" onclick="loopSent()" aria-label="تكرار الجملة"><i class="ms" style="font-size:15px">repeat</i></button></span></div>
@@ -1516,7 +1516,7 @@ async function translateLexListToArabic(words,srcLang){
 }
 
 async function lexMeta(w,lang){
- const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms_ar:[],antonyms_ar:[],cefr:''};
+ const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms:[],antonyms:[],cefr:''};
  const low=w.toLowerCase();
  let rawSyns=[],rawAnts=[];
  try{
@@ -1550,7 +1550,7 @@ async function lexMeta(w,lang){
   }else{
    const [frWiki,dmFr]=await Promise.allSettled([
     jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,3200),
-    jfetch(`https://api.datamuse.com/words?v=fr&ml=${encodeURIComponent(low)}&max=6`,2600)
+    jfetch(`https://api.datamuse.com/words?v=fr&rel_syn=${encodeURIComponent(low)}&max=6`,2600)
    ]);
    if(frWiki.status==='fulfilled' && frWiki.value?.fr?.[0]){
     const d=frWiki.value.fr[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase();
@@ -1563,12 +1563,16 @@ async function lexMeta(w,lang){
     rawSyns=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low);
    }
   }
-  const[synsAr,antsAr]=await Promise.all([
-   translateLexListToArabic(rawSyns,lang),
-   translateLexListToArabic(rawAnts,lang)
-  ]);
-  o.synonyms_ar=synsAr;
-  o.antonyms_ar=antsAr;
+  /* Keep lexical relations in the source language (English/French), never translate them into Arabic. */
+  if(lang==='en' && rawAnts.length===0){
+   try{const antRes=await jfetch(`https://api.datamuse.com/words?rel_ant=${encodeURIComponent(low)}&max=5`,2600);if(Array.isArray(antRes))rawAnts=antRes.map(x=>x.word).filter(Boolean)}catch{}
+  }
+  if(lang==='fr'){
+   try{const antRes=await jfetch(`https://api.datamuse.com/words?v=fr&rel_ant=${encodeURIComponent(low)}&max=5`,2600);if(Array.isArray(antRes))rawAnts=antRes.map(x=>x.word).filter(Boolean)}catch{}
+  }
+  const cleanLex=list=>[...new Set((list||[]).map(x=>String(x||'').trim()).filter(x=>x&&x.toLowerCase()!==low))].slice(0,6).map(x=>({ar:x,orig:''}));
+  o.synonyms=cleanLex(rawSyns);
+  o.antonyms=cleanLex(rawAnts);
  }catch{}
  return o;
 }
@@ -1710,7 +1714,7 @@ async function hybrid(word,sent,lang,occ=0){
  const[voc,exA,defA]=await Promise.all([vocalizeInContext(st,pk,chosen),m.ex?trText(m.ex,lang):'',m.def?trText(m.def,lang):'']);
  const plain=stripTashkeel(chosen),pn=arNorm(plain);
  const alts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x&&arNorm(x)!==pn).slice(0,5);
- const finalSyns=m.synonyms_ar.length?m.synonyms_ar:alts.slice(0,4).map(ar=>({ar,orig:''}));
+ const finalSyns=m.synonyms.length?m.synonyms:[];
  const posAr=preferNom?'اسم مفعول / صفة':(m.pos_ar||(wt.posHint?POS_MAP[wt.posHint.toLowerCase()]||wt.posHint:'')||(lang==='fr'?'مفردة فرنسية':'مفردة إنجليزية'));
  const morph=detectMorphology(w,lang);
  const how={diff:'مطابقة سياقية: مقارنة ترجمة الجملة بحذف الكلمة وبدونها',cand:'مطابقة سياقية: معنى من القاموس يوافق السياق النحوي للجملة',iso:'ترجمة الكلمة منفردة — لم تُرصد مطابقة واضحة داخل الجملة'}[pk.how];
@@ -1730,7 +1734,7 @@ async function hybrid(word,sent,lang,occ=0){
   pos_ar:stripTashkeel(posAr),
   morph_ar:[sp.tag,morph].filter(Boolean).join(' ، '),
   lemma:m.lemma,
-  synonyms_ar:finalSyns,antonyms_ar:m.antonyms_ar,
+  synonyms:finalSyns,antonyms:m.antonyms,
   example_original:m.ex,example_ar:stripTashkeel(exA),
   sentence_ar:stripTashkeel(st)
  };
@@ -1738,15 +1742,15 @@ async function hybrid(word,sent,lang,occ=0){
 
 async function gemini(word,sent,lang,key){
  const sl=lang==='fr'?'French':'English',str={type:'STRING'},arr={type:'ARRAY',items:str};
- const keys=['translation_ar','alternatives_ar','explanation_ar','ipa','cefr','pos_ar','morph_ar','lemma','synonyms_ar','antonyms_ar','example_original','example_ar','sentence_ar'];
- const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide a comprehensive bilingual contextual analysis:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. alternatives_ar: Array of 2-4 other common Arabic meanings of "${word}" in PLAIN unvocalized Arabic (NO Tashkeel).\n3. explanation_ar: Clear Arabic explanation of why it means this in this context and its nuance, written in PLAIN unvocalized Arabic (NO Tashkeel).\n4. ipa: IPA pronunciation.\n5. cefr: CEFR proficiency level (A1, A2, B1, B2, C1, or C2).\n6. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n7. morph_ar: Grammatical form in PLAIN unvocalized Arabic (e.g., جمع، ماضٍ، اسم مفعول، مصدر).\n8. lemma: Dictionary base/root form in ${sl}.\n9. synonyms_ar: Array of 3-5 synonyms IN ARABIC (PLAIN unvocalized Arabic) matching this contextual sense.\n10. antonyms_ar: Array of 1-3 antonyms IN ARABIC (PLAIN unvocalized Arabic) if applicable.\n11. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n12. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n13. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
+ const keys=['translation_ar','alternatives_ar','explanation_ar','ipa','cefr','pos_ar','morph_ar','lemma','synonyms','antonyms','example_original','example_ar','sentence_ar'];
+ const prompt=`Target word: "${word}" (${sl})\nFull sentence context: "${sent}"\n\nProvide a comprehensive bilingual contextual analysis:\n1. translation_ar: The exact, natural Arabic translation of "${word}" as used specifically in this sentence, FULLY VOCALIZED WITH COMPLETE ARABIC DIACRITICS / TASHKEEL (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) matching its grammatical case in context.\n2. alternatives_ar: Array of 2-4 other common Arabic meanings of "${word}" in PLAIN unvocalized Arabic (NO Tashkeel).\n3. explanation_ar: Clear Arabic explanation of why it means this in this context and its nuance, written in PLAIN unvocalized Arabic (NO Tashkeel).\n4. ipa: IPA pronunciation.\n5. cefr: CEFR proficiency level (A1, A2, B1, B2, C1, or C2).\n6. pos_ar: Part of speech in PLAIN unvocalized Arabic (e.g., اسم، فعل، صفة، ظرف).\n7. morph_ar: Grammatical form in PLAIN unvocalized Arabic (e.g., جمع، ماضٍ، اسم مفعول، مصدر).\n8. lemma: Dictionary base/root form in ${sl}.\n9. synonyms: Array of 3-5 accurate synonyms IN THE SAME SOURCE LANGUAGE (${sl}) as the target word, matching this contextual sense. Never translate them into Arabic.\n10. antonyms: Array of 1-3 accurate antonyms IN THE SAME SOURCE LANGUAGE (${sl}) as the target word, if applicable. Never translate them into Arabic.\n11. example_original: A fresh, natural ${sl} sentence illustrating "${word}" with the exact same contextual meaning.\n12. example_ar: Natural Arabic translation of example_original in PLAIN unvocalized Arabic (NO Tashkeel).\n13. sentence_ar: Accurate, fluent Arabic translation of the full sentence context in PLAIN unvocalized Arabic (NO Tashkeel).`;
  const d=await jfetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',12000,{
   method:'POST',
   headers:{'Content-Type':'application/json','x-goog-api-key':key},
   body:JSON.stringify({
    contents:[{parts:[{text:prompt}]}],
    systemInstruction:{parts:[{text:`You are an expert bilingual contextual lexicographer and literary translator from ${sl} into natural Modern Standard Arabic. Include full Arabic Tashkeel (diacritical marks) ONLY on translation_ar, and keep all other Arabic fields completely unvocalized (plain Arabic without diacritics). Return valid JSON only.`}]},
-   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,['alternatives_ar','synonyms_ar','antonyms_ar'].includes(k)?arr:str])),required:keys}}
+   generationConfig:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:Object.fromEntries(keys.map(k=>[k,['alternatives_ar','synonyms','antonyms'].includes(k)?arr:str])),required:keys}}
   })
  });
  const parsed=JSON.parse(d.candidates[0].content.parts[0].text);
@@ -1757,8 +1761,8 @@ async function gemini(word,sent,lang,key){
  parsed.explanation_ar=stripTashkeel(parsed.explanation_ar);
  parsed.pos_ar=stripTashkeel(parsed.pos_ar);
  parsed.morph_ar=stripTashkeel(parsed.morph_ar);
- parsed.synonyms_ar=(parsed.synonyms_ar||[]).map(s=>({ar:stripTashkeel(s),orig:''}));
- parsed.antonyms_ar=(parsed.antonyms_ar||[]).map(a=>({ar:stripTashkeel(a),orig:''}));
+ parsed.synonyms=(parsed.synonyms||[]).map(s=>({ar:String(s).trim(),orig:''}));
+ parsed.antonyms=(parsed.antonyms||[]).map(a=>({ar:String(a).trim(),orig:''}));
  parsed.example_ar=stripTashkeel(parsed.example_ar);
  parsed.sentence_ar=stripTashkeel(parsed.sentence_ar);
  return parsed;
@@ -1911,7 +1915,7 @@ function lexRec(word,sent,lang){
  const own=k=>Object.prototype.hasOwnProperty.call(T,k)?T[k]:null;
  const whole=own(low),hit=whole||(sp.tag?own(sp.core.toLowerCase()):null);
  if(!hit)return null;
- return{word:whole?word:sp.core,lang,source_label:'قاموس سياقي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:[sp.note,hit.pos+(hit.lemma!==low?' — من الأصل «'+hit.lemma+'»':'')+'.'].filter(Boolean).join('\n'),ipa:'',cefr:'A2',pos_ar:hit.pos,morph_ar:sp.tag,lemma:hit.lemma,synonyms_ar:(hit.syns||[]).map(ar=>({ar,orig:''})),antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
+ return{word:whole?word:sp.core,lang,source_label:'قاموس سياقي',translation_ar:hit.tr,alternatives_ar:[],explanation_ar:[sp.note,hit.pos+(hit.lemma!==low?' — من الأصل «'+hit.lemma+'»':'')+'.'].filter(Boolean).join('\n'),ipa:'',cefr:'A2',pos_ar:hit.pos,morph_ar:sp.tag,lemma:hit.lemma,synonyms:(hit.syns||[]).map(ar=>({ar,orig:''})),antonyms:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''};
 }
 function showRec(rec,tok){
  renderPanel(rec);
@@ -1926,7 +1930,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v15|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v16|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
@@ -1940,7 +1944,7 @@ async function runLookup(word,sent,lang,occ){
   showRec(rec,word);addToFlashcards(rec);
  }catch{
   if(req!==S.req)return;
-  showRec({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',morph_ar:'',lemma:low,synonyms_ar:[],antonyms_ar:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''},word);
+  showRec({word,lang,source_label:'Offline',translation_ar:'تعذر الاتصال بخدمة الترجمة',alternatives_ar:[],explanation_ar:'تحقق من اتصال الإنترنت ثم انقر على الكلمة مجدداً.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',morph_ar:'',lemma:low,synonyms:[],antonyms:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''},word);
  }
 }
 async function lookupCustomWord(customWord,sent,lang){openPanel();return runLookup(customWord,sent,lang,0)}
@@ -2010,15 +2014,16 @@ function renderPanel(d){
  $('pExp').textContent=d.explanation_ar;
 
  const relBox=$('relBox'),relEl=$('pRels');
- const syns=(d.synonyms_ar||[]).map(item=>{
+ $('relTitle').textContent='مرادفات وأضداد باللغة '+(d.lang==='fr'?'الفرنسية':'الإنجليزية');
+ const syns=(d.synonyms||[]).map(item=>{
   const ar=typeof item==='string'?item:item.ar;
   const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
-  return `<button type="button" class="lex-chip" data-lex-ar="${esc(ar)}" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="انقر لاعتماد هذا المرادف">${esc(ar)}${orig}</button>`;
+  return `<button type="button" class="lex-chip" data-lex-ar="${esc(ar)}" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="استمع إلى المرادف باللغة الأصلية">${esc(ar)}${orig}</button>`;
  });
- const ants=(d.antonyms_ar||[]).map(item=>{
+ const ants=(d.antonyms||[]).map(item=>{
   const ar=typeof item==='string'?item:item.ar;
   const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
-  return `<button type="button" class="lex-chip ant" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="ضد الكلمة">ضد: ${esc(ar)}${orig}</button>`;
+  return `<button type="button" class="lex-chip ant" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="استمع إلى الضد باللغة الأصلية">ضد: ${esc(ar)}${orig}</button>`;
  });
  const chips=[...syns,...ants];
  if(chips.length){
@@ -2051,21 +2056,11 @@ $('pAlts').addEventListener('click',async e=>{
  toast('تم اعتماد المعنى المختار وتحديث البطاقة');
 });
 
-$('pRels').addEventListener('click',async e=>{
+$('pRels').addEventListener('click',e=>{
  const btn=e.target.closest('.lex-chip');
  if(!btn||!S.sel)return;
- const orig=btn.dataset.lexOrig;
- const ar=btn.dataset.lexAr;
- if(ar){
-  const voc=await vocalizeWordOnly(ar);
-  S.sel.translation_ar=voc||ar;
-  $('pTr').textContent=S.sel.translation_ar;
-  addToFlashcards(S.sel);
-  if(orig)Speech.speak(orig,S.sel.lang);
-  toast(`تم اعتماد المرادف «${ar}»`);
- }else if(orig){
-  Speech.speak(orig,S.sel.lang);
- }
+ const word=btn.dataset.lexAr||btn.dataset.lexOrig;
+ if(word)Speech.speak(word,S.sel.lang);
 });
 
 $('pSO').addEventListener('click',e=>{
