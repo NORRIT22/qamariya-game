@@ -37,28 +37,24 @@ function createSplash() {
   splashWindow = new BrowserWindow({
     width: 540, height: 430, frame: false, resizable: false,
     transparent: false, alwaysOnTop: true, center: true,
-    show: false, backgroundColor: "#0B0D12",
+    show: false, backgroundColor: '#0B0D12',
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
   });
-  splashWindow.loadURL("data:text/html;charset=utf-8," + encodeURIComponent(splashMarkup()));
-  splashWindow.once("ready-to-show", () => splashWindow.show());
+  splashWindow.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(splashMarkup()));
+  splashWindow.once('ready-to-show', () => splashWindow.show());
+  splashWindow.webContents.on('page-title-updated', async (event, title) => {
+    if (title === 'CONTINUE_OFFLINE') revealMain();
+    if (title === 'RETRY_CONNECTION') {
+      const online = await checkInternet();
+      if (online) revealMain(); else showOfflinePrompt();
+    }
+  });
 }
 
 function showOfflinePrompt() {
   if (!splashWindow || splashWindow.isDestroyed()) return;
-  splashWindow.loadURL("data:text/html;charset=utf-8," + encodeURIComponent(splashMarkup("offline")));
-  splashWindow.webContents.once("did-finish-load", () => {
-    splashWindow.webContents.executeJavaScript(`
-      document.querySelectorAll('.btn').forEach((b)=>b.addEventListener('click',()=>{}));
-      document.querySelector('.actions').children[0].onclick=()=>location.reload();
-      document.querySelector('.actions').children[1].onclick=()=>document.title='CONTINUE_OFFLINE';
-    `);
-  });
-  splashWindow.webContents.on("page-title-updated", (event, title) => {
-    if (title === "CONTINUE_OFFLINE") revealMain();
-  });
+  splashWindow.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(splashMarkup('offline')));
 }
-
 function revealMain() {
   if (startupFinished) return;
   startupFinished = true;
