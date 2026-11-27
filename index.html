@@ -1139,9 +1139,67 @@ async function readDOCX(f){
  }
  openDoc(f.name,[{pageNumber:1,blocks}]);
 }
-async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
- const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
- try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text||'')}])}finally{await w.terminate()}}
+async function readImage(f){
+ need(window.Tesseract);
+ progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
+ const w=await Tesseract.createWorker(['eng','fra'],1,{
+  logger:m=>{
+   if(m.status==='recognizing text')
+    progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80);
+  }
+ });
+ let canvas=null;
+ try{
+  // Enlarge small scans before OCR to improve short words and punctuation.
+  const source=await createImageBitmap(f);
+  const scale=Math.min(3,Math.max(2,1800/Math.max(source.width,source.height)));
+  canvas=document.createElement('canvas');
+  canvas.width=Math.round(source.width*scale);
+  canvas.height=Math.round(source.height*scale);
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality='high';
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(source,0,0,canvas.width,canvas.height);
+  source.close();
+
+  // Mild grayscale/contrast normalization preserves thin accents and punctuation.
+  const frame=ctx.getImageData(0,0,canvas.width,canvas.height);
+  const px=frame.data;
+  for(let i=0;i<px.length;i+=4){
+   const gray=0.299*px[i]+0.587*px[i+1]+0.114*px[i+2];
+   const contrast=Math.max(0,Math.min(255,(gray-128)*1.22+128));
+   px[i]=px[i+1]=px[i+2]=contrast;
+  }
+  ctx.putImageData(frame,0,0);
+
+  // Compare a uniform text-block pass with a sparse-layout pass; retain the
+  // result that contains the most readable characters, weighted by confidence.
+  const candidates=[];
+  for(const psm of ['6','11']){
+   await w.setParameters({
+    tessedit_pageseg_mode:psm,
+    preserve_interword_spaces:'1'
+   });
+   const result=await w.recognize(canvas);
+   const data=result.data||{};
+   const textValue=String(data.text||'').trim();
+   if(textValue){
+    const chars=textValue.replace(/\s/g,'').length;
+    const confidence=Number(data.confidence)||0;
+    candidates.push({text:textValue,score:chars+confidence*0.25});
+   }
+  }
+  candidates.sort((a,b)=>b.score-a.score);
+  const best=candidates[0]?.text||'';
+  if(!best)throw new Error('OCR_EMPTY');
+  openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(best)}]);
+ }finally{
+  if(canvas){canvas.width=0;canvas.height=0}
+  await w.terminate();
+ }
+}
 function readPasted(){const t=$('pasteInput').value;if(!t.trim())return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),[{pageNumber:1,blocks:verbatimLines(t)}])}
 
 /* ---------- splitSentences: Never splits on commas, titles, or abbreviations ---------- */
