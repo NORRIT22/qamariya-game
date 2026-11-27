@@ -1548,19 +1548,37 @@ async function lexMeta(w,lang){
     }
    }
   }else{
-   const [frWiki,dmFr]=await Promise.allSettled([
-    jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,3200),
-    jfetch(`https://api.datamuse.com/words?v=fr&rel_syn=${encodeURIComponent(low)}&max=6`,2600)
+   const [frWiki,frLex]=await Promise.allSettled([
+    jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,4200),
+    jfetch(`https://lexique.lectura.world/lexique/v2/mot/${encodeURIComponent(low)}`,4200)
    ]);
    if(frWiki.status==='fulfilled' && frWiki.value?.fr?.[0]){
     const d=frWiki.value.fr[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase();
     const st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,220);
-    o.pos_ar=POS_MAP[pr]||pr;
-    o.def=st(i?.definition);
-    o.ex=st(i?.examples?.[0]);
+    o.pos_ar=POS_MAP[pr]||pr;o.def=st(i?.definition);o.ex=st(i?.examples?.[0]);
    }
-   if(dmFr.status==='fulfilled' && Array.isArray(dmFr.value)){
-    rawSyns=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low);
+   /* Extract French synonym/antonym relations from WikiLeXiK. */
+   if(frLex.status==='fulfilled' && frLex.value){
+    const roots=[frLex.value,frLex.value.resultat,frLex.value.result,frLex.value.data].filter(Boolean);
+    const syn=[],ant=[],seenSyn=new Set(),seenAnt=new Set();
+    const add=(arr,seen,v)=>{
+     if(Array.isArray(v)){v.forEach(x=>add(arr,seen,x));return}
+     const z=typeof v==='string'?v:(v&&typeof v==='object'?(v.lemme||v.lemma||v.ortho||v.forme||v.word||v.terme||v.label||v.graphie):'');
+     const t=String(z||'').trim().replace(/<[^>]*>/g,'');
+     if(t&&t.toLowerCase()!==low&&!seen.has(t.toLowerCase())){seen.add(t.toLowerCase());arr.push(t)}
+    };
+    const walk=(node,depth=0)=>{
+     if(!node||typeof node!=='object'||depth>9)return;
+     if(Array.isArray(node)){node.forEach(x=>walk(x,depth+1));return}
+     for(const [k,v] of Object.entries(node)){
+      const key=k.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');
+      if(/^(synonyme|synonymes|synonym|synonyms)$/.test(key))add(syn,seenSyn,v);
+      else if(/^(antonyme|antonymes|antonym|antonyms)$/.test(key))add(ant,seenAnt,v);
+      else if(v&&typeof v==='object')walk(v,depth+1);
+     }
+    };
+    roots.forEach(x=>walk(x));
+    rawSyns=syn.slice(0,8);rawAnts=ant.slice(0,6);
    }
   }
   /* Keep lexical relations in the source language (English/French), never translate them into Arabic. */
