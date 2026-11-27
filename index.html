@@ -188,6 +188,33 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 @media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}.spill{max-width:110px}}
 @media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Readdy Motion Layer — subtle, non-destructive enhancements */
+@keyframes rdFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rdGlow{0%,100%{box-shadow:0 0 0 0 rgba(26,115,232,0)}50%{box-shadow:0 0 0 5px rgba(26,115,232,.08)}}
+@keyframes rdShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.hero{animation:rdFadeUp .65s cubic-bezier(.2,.7,.2,1) both}
+.big svg{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.big:hover svg{transform:translateY(-4px) rotate(-5deg)}
+.brand svg{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.brand:hover svg{transform:rotate(-8deg) scale(1.08)}
+.btn,.ibtn,.sadd-btn,.spill,.alt-chip,.lex-chip,.rdoc,.fc-card{transition:transform .22s cubic-bezier(.2,.8,.2,1),border-color .22s,background-color .22s,box-shadow .22s}
+.btn:hover,.ibtn:hover,.sadd-btn:hover{transform:translateY(-2px)}
+.btn:active,.ibtn:active,.sadd-btn:active,.alt-chip:active,.lex-chip:active{transform:scale(.96)}
+.spill:hover,.rdoc:hover,.fc-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.sheet{animation:rdFadeUp .42s cubic-bezier(.2,.7,.2,1) both}
+.card{transition:transform .22s ease,border-color .22s,box-shadow .22s}
+.card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--ac) 40%,var(--bd));box-shadow:var(--sh)}
+.feat{transition:transform .22s ease,border-color .22s}
+.feat:hover{transform:translateX(-3px);border-color:var(--ac)}
+.chips span{transition:transform .25s ease,box-shadow .25s}
+.chips span:hover{transform:translateY(-4px) scale(1.04);box-shadow:var(--sh)}
+.bar i{background-image:linear-gradient(100deg,var(--ac) 0%,color-mix(in srgb,var(--ac) 65%,white) 48%,var(--ac) 100%);background-size:220% 100%;animation:rdShimmer 3s linear infinite}
+button:focus-visible,[role=button]:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
 </style>
 </head>
 <body>
