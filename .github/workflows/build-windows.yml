@@ -5,6 +5,11 @@ on:
   push:
     paths:
       - "electron/**"
+      - "index.html"
+      - "french-library.html"
+      - "scripts/**"
+      - "build/**"
+      - "assets/**"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/build-windows.yml"

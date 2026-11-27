@@ -3,6 +3,7 @@ const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 
 const APP_URL = "https://norrit22.github.io/readdy_3/";
+const APP_ICON = path.join(app.getAppPath(), "build", "icon.png");
 let mainWindow = null;
 let splashWindow = null;
 let startupFinished = false;
@@ -82,7 +83,7 @@ function createMainWindow() {
 
   mainWindow = new BrowserWindow({
     width: 1440, height: 900, minWidth: 900, minHeight: 650,
-    show: false, autoHideMenuBar: true, backgroundColor: "#0B0B0C", title: "Readdy 3",
+    show: false, autoHideMenuBar: true, backgroundColor: "#0B0B0C", title: "Readdy 3", icon: APP_ICON,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true, nodeIntegration: false, sandbox: true

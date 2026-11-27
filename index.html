@@ -5,12 +5,38 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <title>Readdy — القراءة الذكية والترجمة السياقية</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Outfit:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0..1,0&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
+<script>
+(function(){
+ const desktop=location.protocol==='file:';
+ if(desktop){
+  const links=[
+   './node_modules/@fontsource/ibm-plex-sans-arabic/400.css',
+   './node_modules/@fontsource/inter/400.css',
+   './node_modules/@fontsource/literata/400.css',
+   './node_modules/@fontsource/outfit/600.css',
+   './node_modules/@fontsource/outfit/700.css',
+   './node_modules/@fontsource/outfit/800.css',
+   './node_modules/@fontsource/material-symbols-outlined/400.css'
+  ];
+  links.forEach(h=>{const l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l)});
+ }else{
+  const pre=document.createElement('link');pre.rel='preconnect';pre.href='https://fonts.googleapis.com';document.head.appendChild(pre);
+  const fonts=document.createElement('link');fonts.rel='stylesheet';
+  fonts.href='https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Outfit:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0..1,0&display=swap';
+  document.head.appendChild(fonts);
+ }
+ const scripts=desktop?[
+  './node_modules/pdfjs-dist/legacy/build/pdf.min.js',
+  './node_modules/mammoth/mammoth.browser.min.js',
+  './node_modules/tesseract.js/dist/tesseract.min.js'
+ ]:[
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js',
+  'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'
+ ];
+ scripts.forEach(src=>document.write('<script defer src="'+src+'"><'+ '/script>'));
+})();
+</script>
 <script>
 try{
  const t=localStorage.getItem('readdy_theme_mode_v1');
@@ -239,6 +265,7 @@ button:focus-visible,[role=button]:focus-visible{outline:2px solid var(--ac);out
 #fclist .vitem:hover{transform:translateX(-3px);border-color:var(--ac);box-shadow:var(--sh)}
 @media(prefers-reduced-motion:reduce){.fc-card.is-flipped{animation:none}}
 
+#networkStatus{position:fixed;right:14px;bottom:14px;z-index:90;padding:7px 12px;border:1px solid var(--bd);border-radius:99px;background:var(--s1);color:var(--sub);box-shadow:var(--sh);font-size:11px;display:flex;align-items:center;gap:7px;direction:rtl}#networkStatus i{width:7px;height:7px;border-radius:50%;background:#188038}#networkStatus.offline i{background:#d99000}#networkStatus.offline{border-color:#d99000}
 </style>
 </head>
 <body>
@@ -1138,8 +1165,17 @@ async function recognizePrepared(worker,source){
  return best||{data:{text:'',confidence:0}};
 }
 
+function tesseractLocalOptions(){
+ if(location.protocol!=='file:')return {};
+ return {
+  workerPath:new URL('./node_modules/tesseract.js/dist/worker.min.js',location.href).href,
+  corePath:new URL('./node_modules/tesseract.js-core/',location.href).href,
+  langPath:new URL('./assets/tessdata/',location.href).href,
+  workerBlobURL:false
+ };
+}
 async function readPDF(f){
- need(window.pdfjsLib);pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ need(window.pdfjsLib);pdfjsLib.GlobalWorkerOptions.workerSrc=location.protocol==='file:'?new URL('./node_modules/pdfjs-dist/legacy/build/pdf.worker.min.js',location.href).href:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
  progress(true,'جاري فتح ملف PDF...',5);
  const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,pages=[];
  let worker=null,ocrDone=0,ocrSkipped=0;
@@ -1164,7 +1200,7 @@ async function readPDF(f){
    if(selectableChars<80){
     if(window.Tesseract){
      try{
-      if(!worker)worker=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,`التعرّف الضوئي على الصفحة ${n}...`,78+((n-1)/Math.max(1,pdf.numPages))*18+m.progress*3)}});
+      if(!worker)worker=await Tesseract.createWorker(['eng','fra'],1,{...tesseractLocalOptions(),logger:m=>{if(m.status==='recognizing text')progress(true,`التعرّف الضوئي على الصفحة ${n}...`,78+((n-1)/Math.max(1,pdf.numPages))*18+m.progress*3)}});
       const viewport=pg.getViewport({scale:2.1}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
       canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
       await pg.render({canvasContext:ctx,viewport}).promise;
@@ -1216,7 +1252,7 @@ async function readImage(f){
  try{
   if(window.createImageBitmap)bitmap=await createImageBitmap(f);
   else{bitmap=await new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(f);img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('تعذّر فتح الصورة'))};img.src=url})}
-  worker=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
+  worker=await Tesseract.createWorker(['eng','fra'],1,{...tesseractLocalOptions(),logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
   const result=await recognizePrepared(worker,bitmap),text=result.data.text||'';
   if(!text.trim())toast('لم يتم العثور على نص واضح في الصورة. جرّب صورة أعلى دقة.');
   openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text)}]);
@@ -2021,6 +2057,10 @@ async function runLookup(word,sent,lang,occ){
  }
  const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v22|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
+ if(!navigator.onLine){
+  showRec({word,lang,source_label:'Offline • محلي',translation_ar:'هذا المعنى غير محفوظ محلياً بعد. اتصل بالإنترنت مرة واحدة لتحليله وحفظه للمراجعة دون اتصال.',alternatives_ar:[],explanation_ar:'يعمل Readdy دون اتصال في فتح المستندات المحفوظة وإدارة المفردات والبطاقات والنتائج المخزنة. التحليل السياقي الجديد يحتاج إلى خدمة الترجمة عبر الإنترنت.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',morph_ar:'',lemma:low,synonyms:[],antonyms:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''},word);
+  return;
+ }
  showSkel(true);
  try{
   let a;
@@ -2241,6 +2281,19 @@ async function reanalyze(all){
 /* ---------- init & auto-restore last session on page reload ---------- */
 setThemeIcon();Speech.init();updBadge();updFcBadge();renderTabStrip();
 Promise.race([document.fonts.load('20px "Material Symbols Outlined"','search'),new Promise(r=>setTimeout(r,3000))]).catch(()=>{}).then(()=>document.documentElement.classList.add('icons'));
+
+const networkBadge=document.createElement('div');
+networkBadge.id='networkStatus';
+networkBadge.innerHTML='<i></i><span></span>';
+document.body.appendChild(networkBadge);
+function updateNetworkBadge(){
+ const offline=!navigator.onLine;
+ networkBadge.classList.toggle('offline',offline);
+ networkBadge.querySelector('span').textContent=offline?'دون اتصال • المحتوى المحلي متاح':'متصل بالإنترنت';
+}
+window.addEventListener('online',updateNetworkBadge);
+window.addEventListener('offline',updateNetworkBadge);
+updateNetworkBadge();
 
 (async function bootstrap(){
  await renderRecentDocs();
