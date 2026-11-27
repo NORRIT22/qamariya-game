@@ -1557,36 +1557,34 @@ async function lexMeta(w,lang){
     const st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,220);
     o.pos_ar=POS_MAP[pr]||pr;o.def=st(i?.definition);o.ex=st(i?.examples?.[0]);
    }
-   /* WikiLeXiK API returns lemmes -> lexèmes -> relations; also resolve inflected forms. */
+   /* API schema: lemmes[].lexemes[].relations = [[relationType, [{cible,...}]], ...] */
    if(frLex.status==='fulfilled' && frLex.value){
     const root=frLex.value;
-    const norm=x=>String(x||'').trim().replace(/<[^>]*>/g,'');
     const syn=[],ant=[],ss=new Set(),as=new Set(),lemmas=[];
     const add=(arr,set,v)=>{
-     if(Array.isArray(v)){v.forEach(x=>add(arr,set,x));return}
-     const z=typeof v==='string'?v:(v&&typeof v==='object'?(v.lemme||v.lemma||v.ortho||v.forme||v.word||v.terme||v.cible||v.graphie||v.libelle||v.label||v.mot):'');
-     const t=norm(z);if(t&&t.toLowerCase()!==low&&!set.has(t.toLowerCase())){set.add(t.toLowerCase());arr.push(t)}
+     const t=String(v||'').trim();
+     if(t&&t.toLowerCase()!==low&&!set.has(t.toLowerCase())){set.add(t.toLowerCase());arr.push(t)}
     };
-    const seen=new Set();
-    const walk=(node,depth=0)=>{
-     if(!node||typeof node!=='object'||depth>12||seen.has(node))return;
-     seen.add(node);
-     if(Array.isArray(node)){node.forEach(x=>walk(x,depth+1));return}
-     for(const [k,v] of Object.entries(node)){
-      const key=k.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');
-      if(/^(lemme|lemma)$/.test(key)&&typeof v==='string')lemmas.push(v);
-      if(/^(synonyme|synonymes|synonyms|syn)$/.test(key))add(syn,ss,v);
-      else if(/^(antonyme|antonymes|antonyms|ant)$/.test(key))add(ant,as,v);
-      else if(/^(type|relation|nature|nom_relation)$/.test(key)&&typeof v==='string'&&/synonym|antonym/i.test(v)){
-       const target=node.cible||node.terme||node.lemme||node.lemma||node.ortho||node.mot||node.graphie||node.target;
-       if(/synonym/i.test(v))add(syn,ss,target);else add(ant,as,target);
-      }else if(v&&typeof v==='object')walk(v,depth+1);
+    for(const lemma of (root.lemmes||[])){
+     if(lemma.lemme)lemmas.push(lemma.lemme);
+     for(const lexeme of (lemma.lexemes||[])){
+      for(const rel of (lexeme.relations||[])){
+       if(!Array.isArray(rel)||rel.length<2)continue;
+       const type=String(rel[0]||'').toLowerCase();
+       const targets=Array.isArray(rel[1])?rel[1]:[];
+       for(const target of targets){
+        const value=target?.cible||target?.lemme||target?.lemma||target?.mot||'';
+        if(type==='synonyme'||type==='synonymes')add(syn,ss,value);
+        if(type==='antonyme'||type==='antonymes')add(ant,as,value);
+       }
+      }
      }
-    };
-    walk(root);
-    const lemma=[...new Set(lemmas)].find(x=>x&&x.toLowerCase()!==low);
+    }
+    /* A selected inflected form can map to its dictionary lemma; use that lemma's relations. */
+    const lemma=[...new Set(lemmas)].find(x=>x);
     if(lemma)o.lemma=lemma;
-    rawSyns=syn.slice(0,8);rawAnts=ant.slice(0,6);
+    rawSyns=syn.slice(0,8);
+    rawAnts=ant.slice(0,6);
    }
   }
   /* Keep lexical relations in the source language (English/French), never translate them into Arabic. */
@@ -1968,7 +1966,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v21|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v22|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
