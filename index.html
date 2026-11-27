@@ -1507,7 +1507,7 @@ async function lexMeta(w,lang){
     const extra=dmSynRes.value.map(x=>x.word).filter(Boolean);
     rawSyns=[...new Set([...rawSyns,...extra])];
    }
-     }else{
+  }else{
    const [frWiki,dmFr]=await Promise.allSettled([
     jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,3200),
     jfetch(`https://api.datamuse.com/words?v=fr&ml=${encodeURIComponent(low)}&max=6`,2600)
