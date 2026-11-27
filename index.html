@@ -215,6 +215,30 @@ button:focus-visible,[role=button]:focus-visible{outline:2px solid var(--ac);out
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* Flashcards motion polish — keeps the existing layout and controls */
+@keyframes fcEnter{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fcFlipIn{0%{opacity:0;transform:perspective(700px) rotateY(-13deg) scale(.985)}100%{opacity:1;transform:perspective(700px) rotateY(0) scale(1)}}
+@keyframes fcFlipOut{0%{opacity:0;transform:perspective(700px) rotateY(13deg) scale(.985)}100%{opacity:1;transform:perspective(700px) rotateY(0) scale(1)}}
+@keyframes fcPulse{0%,100%{box-shadow:0 8px 24px rgba(26,115,232,.04)}50%{box-shadow:0 12px 30px rgba(26,115,232,.12)}}
+.fc-stage{animation:fcEnter .38s cubic-bezier(.2,.75,.25,1) both}
+.fc-card{transform-style:preserve-3d;transition:transform .32s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s}
+.fc-card:hover{transform:translateY(-3px) perspective(900px) rotateX(1deg);border-color:var(--ac);box-shadow:var(--sh)}
+.fc-card:active{transform:scale(.992)}
+.fc-card.is-flipped{animation:fcPulse 2.8s ease-in-out infinite}
+.fc-front,.fc-back{animation:fcEnter .28s cubic-bezier(.2,.75,.25,1) both;backface-visibility:hidden}
+.fc-card.is-flipped .fc-back{animation:fcFlipIn .34s cubic-bezier(.2,.75,.25,1) both}
+.fc-card:not(.is-flipped) .fc-front{animation:fcFlipOut .34s cubic-bezier(.2,.75,.25,1) both}
+.fc-front h3{transition:color .2s,transform .25s}
+.fc-card:hover .fc-front h3{color:var(--ac);transform:scale(1.035)}
+.fc-back .tr{animation:fcEnter .38s .04s both}
+.fc-back .ex{animation:fcEnter .38s .1s both}
+.fc-nav .ibtn,.fc-nav .btn{transition:transform .2s ease,background-color .2s,border-color .2s}
+.fc-nav .ibtn:hover,.fc-nav .btn:hover{transform:translateY(-2px)}
+#fclist .vitem{transition:transform .2s ease,border-color .2s,box-shadow .2s}
+#fclist .vitem:hover{transform:translateX(-3px);border-color:var(--ac);box-shadow:var(--sh)}
+@media(prefers-reduced-motion:reduce){.fc-card.is-flipped{animation:none}}
+
 </style>
 </head>
 <body>
@@ -1874,6 +1898,7 @@ function fcDrawer(o){
 function closeAllDrawers(){drawer(0);fcDrawer(0)}
 function flipFlashcard(){
  S.fcFlipped=!S.fcFlipped;
+ $('fcCard').classList.toggle('is-flipped',S.fcFlipped);
  $('fcFront').hidden=S.fcFlipped;
  $('fcBack').hidden=!S.fcFlipped;
 }
@@ -1897,6 +1922,7 @@ function renderFlashcardStage(){
  $('fcIpa').hidden=!c.ipa;
  $('fcTr').textContent=c.translation_ar;
  $('fcEx').textContent=c.sentence_original||'';
+ $('fcCard').classList.toggle('is-flipped',S.fcFlipped);
  $('fcFront').hidden=S.fcFlipped;
  $('fcBack').hidden=!S.fcFlipped;
  $('fcIdx').textContent=`${S.fcIdx+1} / ${S.flashcards.length}`;
