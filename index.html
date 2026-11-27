@@ -1585,9 +1585,7 @@ async function lexMeta(w,lang){
   if(lang==='en' && rawAnts.length===0){
    try{const antRes=await jfetch(`https://api.datamuse.com/words?rel_ant=${encodeURIComponent(low)}&max=5`,2600);if(Array.isArray(antRes))rawAnts=antRes.map(x=>x.word).filter(Boolean)}catch{}
   }
-  if(lang==='fr'){
-   try{const antRes=await jfetch(`https://api.datamuse.com/words?v=fr&rel_ant=${encodeURIComponent(low)}&max=5`,2600);if(Array.isArray(antRes))rawAnts=antRes.map(x=>x.word).filter(Boolean)}catch{}
-  }
+  /* French antonyms are loaded from WikiLeXiK above; Datamuse has no reliable French relation coverage. */
   const cleanLex=list=>[...new Set((list||[]).map(x=>String(x||'').trim()).filter(x=>x&&x.toLowerCase()!==low))].slice(0,6).map(x=>({ar:x,orig:''}));
   o.synonyms=cleanLex(rawSyns);
   o.antonyms=cleanLex(rawAnts);
