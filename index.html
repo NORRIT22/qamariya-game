@@ -1748,7 +1748,7 @@ async function hybrid(word,sent,lang,occ=0){
  ]);
  const contextualMeaning=lang==='fr'?frenchContextualMeaning(w,sent):'';
  if(contextualMeaning){wt.primary=contextualMeaning;wt.alternatives=[...(wt.alternatives||[]),'آتي','أجيء'].filter((x,i,a)=>a.indexOf(x)===i);}
- const pk=pickContextual(wt,pt,st,sm,preferNom),chosen=pk.surface||wt.primary;
+ const pk=contextualMeaning?{surface:contextualMeaning,idx:[],raw:[],how:'iso'}:pickContextual(wt,pt,st,sm,preferNom),chosen=pk.surface||wt.primary;
  const[voc,exA,defA]=await Promise.all([vocalizeInContext(st,pk,chosen),m.ex?trText(m.ex,lang):'',m.def?trText(m.def,lang):'']);
  const plain=stripTashkeel(chosen),pn=arNorm(plain);
  const alts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x&&arNorm(x)!==pn).slice(0,5);
@@ -1968,7 +1968,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v20|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v21|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
