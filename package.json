@@ -21,6 +21,8 @@
     },
     "files": [
       "electron/**/*",
+      "index.html",
+      "french-library.html",
       "package.json"
     ],
     "win": {
