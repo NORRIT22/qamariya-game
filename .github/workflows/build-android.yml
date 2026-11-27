@@ -8,7 +8,7 @@ on:
       - "french-library.html"
       - "package.json"
       - "package-lock.json"
-      - "capacitor.config.ts"
+      - "capacitor.config.json"
       - ".github/workflows/build-android.yml"
 
 permissions:
