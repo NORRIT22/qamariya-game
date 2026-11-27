@@ -1048,6 +1048,45 @@ function pdfBlocks(items,pageWidth=600){
  return buildColumnBlocks(items,pageWidth);
 }
 
+
+/* ---------- OCR preprocessing: upscale, normalize contrast, and compare grayscale/binary ---------- */
+function prepareOCRCanvases(source,maxSide=3200){
+ const sw=source.width||source.naturalWidth||source.videoWidth,sh=source.height||source.naturalHeight||source.videoHeight;
+ if(!sw||!sh)throw new Error('تعذّر قراءة أبعاد الصورة');
+ const scale=Math.min(2.2,maxSide/Math.max(sw,sh),Math.max(1,3200/Math.max(sw,sh)));
+ const w=Math.max(1,Math.round(sw*scale)),h=Math.max(1,Math.round(sh*scale));
+ const gray=document.createElement('canvas');gray.width=w;gray.height=h;
+ const g=gray.getContext('2d',{willReadFrequently:true});g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(source,0,0,w,h);
+ const im=g.getImageData(0,0,w,h),d=im.data,hist=new Uint32Array(256);
+ for(let i=0;i<d.length;i+=4){const v=Math.round(.299*d[i]+.587*d[i+1]+.114*d[i+2]);d[i]=d[i+1]=d[i+2]=v;hist[v]++}
+ const total=w*h,loTarget=Math.floor(total*.01),hiTarget=Math.floor(total*.99);let sum=0,lo=0,hi=255;
+ for(let i=0;i<256;i++){sum+=hist[i];if(sum>=loTarget){lo=i;break}}
+ sum=0;for(let i=0;i<256;i++){sum+=hist[i];if(sum>=hiTarget){hi=i;break}}
+ const range=Math.max(32,hi-lo);
+ for(let i=0;i<d.length;i+=4){const v=Math.max(0,Math.min(255,Math.round((d[i]-lo)*255/range)));d[i]=d[i+1]=d[i+2]=v}
+ g.putImageData(im,0,0);
+ /* Otsu is calculated from the contrast-normalized pixels, not the original histogram. */
+ const normHist=new Uint32Array(256);for(let i=0;i<d.length;i+=4)normHist[d[i]]++;
+ let weighted=0;for(let i=0;i<256;i++)weighted+=i*normHist[i];
+ let bgWeight=0,bgSum=0,best=-1,threshold=128;
+ for(let i=0;i<256;i++){bgWeight+=normHist[i];if(!bgWeight)continue;const fgWeight=total-bgWeight;if(!fgWeight)break;bgSum+=i*normHist[i];const meanB=bgSum/bgWeight,meanF=(weighted-bgSum)/fgWeight;const variance=bgWeight*fgWeight*(meanB-meanF)*(meanB-meanF);if(variance>best){best=variance;threshold=i}}
+ const binary=document.createElement('canvas');binary.width=w;binary.height=h;const b=binary.getContext('2d',{willReadFrequently:true}),bi=b.createImageData(w,h),bd=bi.data;
+ for(let i=0;i<d.length;i+=4){const v=d[i]>threshold?255:0;bd[i]=bd[i+1]=bd[i+2]=v;bd[i+3]=255}
+ b.putImageData(bi,0,0);
+ return [gray,binary];
+}
+function ocrQuality(result){
+ const t=String(result?.data?.text||'').trim(),confidence=Number(result?.data?.confidence)||0;
+ const useful=(t.match(/[\p{L}\p{N}]/gu)||[]).length,noise=(t.match(/[^\p{L}\p{N}\s.,;:!?()\-]/gu)||[]).length;
+ return confidence+Math.min(30,useful/12)-Math.min(20,noise/8)+(t.length?5:0);
+}
+async function recognizePrepared(worker,source){
+ const candidates=prepareOCRCanvases(source);let best=null,bestScore=-Infinity;
+ try{for(const canvas of candidates){const result=await worker.recognize(canvas),score=ocrQuality(result);if(score>bestScore){best=result;bestScore=score}}}
+ finally{for(const c of candidates){c.width=0;c.height=0}}
+ return best||{data:{text:'',confidence:0}};
+}
+
 async function readPDF(f){
  need(window.pdfjsLib);pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
  progress(true,'جاري فتح ملف PDF...',5);
@@ -1071,15 +1110,17 @@ async function readPDF(f){
     }));
    let blocks=items.length?pdfBlocks(items,vp.width||600):[];
    const selectableChars=items.reduce((sum,item)=>sum+item.s.trim().length,0);
-   if(selectableChars<15){
+   if(selectableChars<80){
     if(window.Tesseract){
      try{
       if(!worker)worker=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,`التعرّف الضوئي على الصفحة ${n}...`,78+((n-1)/Math.max(1,pdf.numPages))*18+m.progress*3)}});
-      const viewport=pg.getViewport({scale:1.75}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
+      const viewport=pg.getViewport({scale:2.1}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
       canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
       await pg.render({canvasContext:ctx,viewport}).promise;
-      const result=await worker.recognize(canvas),ocrText=result.data.text||'';
-      if(ocrText.trim().length>selectableChars)blocks=verbatimLines(ocrText);
+      const result=await recognizePrepared(worker,canvas),ocrText=result.data.text||'';
+      const selectableUseful=(items.map(i=>i.s).join(' ').match(/[\\p{L}\\p{N}]/gu)||[]).length;
+      const ocrUseful=(ocrText.match(/[\\p{L}\\p{N}]/gu)||[]).length;
+      if(ocrUseful>selectableUseful)blocks=verbatimLines(ocrText);
       canvas.width=0;canvas.height=0;ocrDone++;
      }catch(ocrError){console.warn(`OCR skipped on PDF page ${n}:`,ocrError);ocrSkipped++}
     }else ocrSkipped++;
@@ -1118,9 +1159,21 @@ async function readDOCX(f){
  openDoc(f.name,[{pageNumber:1,blocks}]);
 }
 
-async function readImage(f){need(window.Tesseract);progress(true,'تهيئة محرك التعرف الضوئي (OCR)...',10);
- const w=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
- try{const{data:{text}}=await w.recognize(f);openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text||'')}])}finally{await w.terminate()}}
+async function readImage(f){
+ need(window.Tesseract);progress(true,'تهيئة الصورة وتحسين وضوح النص...',8);
+ let worker=null,bitmap=null;
+ try{
+  if(window.createImageBitmap)bitmap=await createImageBitmap(f);
+  else{bitmap=await new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(f);img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('تعذّر فتح الصورة'))};img.src=url})}
+  worker=await Tesseract.createWorker(['eng','fra'],1,{logger:m=>{if(m.status==='recognizing text')progress(true,'جاري استخراج النص من الصورة...',15+m.progress*80)}});
+  const result=await recognizePrepared(worker,bitmap),text=result.data.text||'';
+  if(!text.trim())toast('لم يتم العثور على نص واضح في الصورة. جرّب صورة أعلى دقة.');
+  openDoc(f.name,[{pageNumber:1,blocks:verbatimLines(text)}]);
+ }finally{
+  if(bitmap&&typeof bitmap.close==='function')bitmap.close();
+  if(worker)try{await worker.terminate()}catch{}
+ }
+}
 function readPasted(){const t=$('pasteInput').value;if(!t.trim())return;$('pasteInput').value='';show('pasteModal',0);openDoc('مستند نصي '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}),[{pageNumber:1,blocks:verbatimLines(t)}])}
 
 /* ---------- splitSentences: Never splits on commas, titles, or abbreviations ---------- */
