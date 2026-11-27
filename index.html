@@ -1724,6 +1724,19 @@ async function vocalizeInContext(st,pk,fb){
  return down?fb:vocalizeWordOnly(fb);
 }
 
+function frenchContextualMeaning(word,sent){
+ const w=String(word||'').toLowerCase();
+ const s=String(sent||'').toLowerCase();
+ /* venir de + place/origin: venir means to come/originate, not the sound-like string "viens". */
+ const venirForms=/^(viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront|venu|venue|venus|venues)$/;
+ if(venirForms.test(w)&&/\\b(?:viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront|venu|venue|venus|venues)\\s+(?:de|d['’])\\s*(?:aucun|aucune|un|une|ce|cette|mon|ma|son|sa|la|le|l['’]|paris|france|algerie|ville|pays|famille|region|tribu)/i.test(s)){
+  if(/\\bne\\s+\\w+\\s+(?:pas\\s+)?(?:viens|vient|venons|venez|viennent|venais|venait|venions|veniez|venaient|viendrai|viendras|viendra|viendrons|viendrez|viendront)\\b/i.test(s))
+   return 'أَنْحَدِرُ';
+  return 'أَنْحَدِرُ';
+ }
+ return '';
+}
+
 async function hybrid(word,sent,lang,occ=0){
  const sp=splitClitic(word,lang),w=sp.core,ph=ctxWindow(sent,word,occ),minus=removeTok(sent,word,occ);
  const preferNom=isAppositiveParticiple(sent,w,occ,lang);
@@ -1734,6 +1747,8 @@ async function hybrid(word,sent,lang,occ=0){
   minus&&minus!==sent?trLong(minus,lang):'',
   lexMeta(w,lang)
  ]);
+ const contextualMeaning=lang==='fr'?frenchContextualMeaning(w,sent):'';
+ if(contextualMeaning){wt.primary=contextualMeaning;wt.alternatives=[...(wt.alternatives||[]),'آتي','أجيء'].filter((x,i,a)=>a.indexOf(x)===i);}
  const pk=pickContextual(wt,pt,st,sm,preferNom),chosen=pk.surface||wt.primary;
  const[voc,exA,defA]=await Promise.all([vocalizeInContext(st,pk,chosen),m.ex?trText(m.ex,lang):'',m.def?trText(m.def,lang):'']);
  const plain=stripTashkeel(chosen),pn=arNorm(plain);
@@ -1954,7 +1969,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v18|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v19|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
