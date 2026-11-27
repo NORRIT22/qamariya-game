@@ -1,0 +1,9 @@
+{
+  "appId": "com.norrit22.readdy3",
+  "appName": "Readdy 3",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0B0B0C",
+    "allowMixedContent": false
+  }
+}
