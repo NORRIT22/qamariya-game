@@ -11,7 +11,12 @@
  if(desktop){
   const links=[
    './node_modules/@fontsource/ibm-plex-sans-arabic/400.css',
-   './node_modules/@fontsource/@fontsource/inter/400.css'
+   './node_modules/@fontsource/inter/400.css',
+   './node_modules/@fontsource/literata/400.css',
+   './node_modules/@fontsource/outfit/600.css',
+   './node_modules/@fontsource/outfit/700.css',
+   './node_modules/@fontsource/outfit/800.css',
+   './node_modules/@fontsource/material-symbols-outlined/400.css'
   ];
   links.forEach(h=>{const l=document.createElement('link');l.rel='stylesheet';l.href=h;document.head.appendChild(l)});
  }
@@ -2051,16 +2056,6 @@ async function runLookup(word,sent,lang,occ){
   showRec({word,lang,source_label:'Offline • محلي',translation_ar:'هذا المعنى غير محفوظ محلياً بعد. اتصل بالإنترنت مرة واحدة لتحليله وحفظه للمراجعة دون اتصال.',alternatives_ar:[],explanation_ar:'يعمل Readdy دون اتصال في فتح المستندات المحفوظة وإدارة المفردات والبطاقات والنتائج المخزنة. التحليل السياقي الجديد يحتاج إلى خدمة الترجمة عبر الإنترنت.',ipa:'',cefr:'',pos_ar:lang==='fr'?'كلمة فرنسية':'كلمة إنجليزية',morph_ar:'',lemma:low,synonyms:[],antonyms:[],example_original:'',example_ar:'',sentence_original:sent,sentence_ar:''},word);
   return;
  }
-
- const req=++S.req;
- const q=lexRec(word,sent,lang);
- if(q){
-  showRec(q,word);addToFlashcards(q);
-  trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
-  return;
- }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v22|'+lang+'|'+low+'|'+occ+'|'+sent;
- if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
   let a;
