@@ -1,9 +1,15 @@
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
-
-const APP_URL = "https://norrit22.github.io/readdy_3/";
+const { pathToFileURL } = require("node:url");
 
 function createWindow() {
+  const siteRoot = app.isPackaged
+    ? path.join(process.resourcesPath, "app-site")
+    : path.join(__dirname, "..");
+
+  const startPage = path.join(siteRoot, "index.html");
+  const startUrl = pathToFileURL(startPage).href;
+
   const win = new BrowserWindow({
     width: 1440,
     height: 900,
@@ -22,18 +28,20 @@ function createWindow() {
   });
 
   win.once("ready-to-show", () => win.show());
+
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("https://") || url.startsWith("http://")) shell.openExternal(url);
+    if (/^https?:\\/\\//i.test(url)) shell.openExternal(url);
     return { action: "deny" };
   });
+
   win.webContents.on("will-navigate", (event, url) => {
-    if (!url.startsWith(APP_URL)) {
+    if (url.startsWith("http://") || url.startsWith("https://")) {
       event.preventDefault();
-      if (url.startsWith("https://") || url.startsWith("http://")) shell.openExternal(url);
+      shell.openExternal(url);
     }
   });
 
-  win.loadURL(APP_URL);
+  win.loadURL(startUrl);
 }
 
 app.whenReady().then(() => {
