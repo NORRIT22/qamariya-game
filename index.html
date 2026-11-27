@@ -1164,7 +1164,7 @@ function tesseractLocalOptions(){
  if(location.protocol!=='file:')return {};
  return {
   workerPath:new URL('./node_modules/tesseract.js/dist/worker.min.js',location.href).href,
-  corePath:new URL('./node_modules/tesseract.js-core',location.href).href,
+  corePath:new URL('./node_modules/tesseract.js-core/',location.href).href,
   langPath:new URL('./assets/tessdata/',location.href).href,
   workerBlobURL:false
  };
