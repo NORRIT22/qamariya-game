@@ -29,8 +29,8 @@ function splashMarkup(mode = "loading") {
   .foot{position:absolute;bottom:18px;font-size:10px;color:#68778b;letter-spacing:.5px}
   @keyframes pulse{50%{opacity:.35;transform:scale(.8)}}@keyframes load{0%{transform:translateX(250%)}100%{transform:translateX(-300%)}}
   </style></head><body><main class="card"><div class="glow"></div><div class="logo">${APP_LOGO}</div><h1>Readdy 3</h1>
-  ${offline ? '<div class="offlineIcon">⌁</div><p class="message"><b style="color:#f2c27c">تعذّر الاتصال بالإنترنت</b><br>يمكنك متابعة استخدام المحتوى والملفات المحفوظة محلياً. قد لا تتوفر حالياً ميزات الذكاء الاصطناعي والمزامنة والخدمات السحابية.</p><div class="actions"><button class="btn" onclick="window.startupAction('retry')">إعادة المحاولة</button><button class="btn primary" onclick="window.startupAction('offline')">المتابعة دون اتصال</button></div>' : '<p class="sub">مساحة تعلمك، جاهزة للانطلاق</p><div class="status"><span class="dot"></span><span>جارٍ تجهيز التطبيق والتحقق من الاتصال…</span></div><div class="bar"><div class="fill"></div></div>'}
-  <div class="foot">YOUR LEARNING SPACE</div></main><script>const{ipcRenderer}=require('electron');</script></body></html>`;
+  ${offline ? '<div class="offlineIcon">⌁</div><p class="message"><b style="color:#f2c27c">تعذّر الاتصال بالإنترنت</b><br>يمكنك متابعة استخدام المحتوى والملفات المحفوظة محلياً. قد لا تتوفر حالياً ميزات الذكاء الاصطناعي والمزامنة والخدمات السحابية.</p><div class="actions"><button class="btn" >إعادة المحاولة</button><button class="btn primary" >المتابعة دون اتصال</button></div>' : '<p class="sub">مساحة تعلمك، جاهزة للانطلاق</p><div class="status"><span class="dot"></span><span>جارٍ تجهيز التطبيق والتحقق من الاتصال…</span></div><div class="bar"><div class="fill"></div></div>'}
+  <div class="foot">YOUR LEARNING SPACE</div></main><script>document.querySelectorAll('.btn').forEach((b)=>b.addEventListener('click',()=>{document.title=b.textContent.includes('إعادة')?'RETRY_CONNECTION':'CONTINUE_OFFLINE'}));</script></body></html>`;
 }
 
 function createSplash() {
