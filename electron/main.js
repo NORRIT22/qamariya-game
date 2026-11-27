@@ -7,6 +7,8 @@ let mainWindow = null;
 let splashWindow = null;
 let startupFinished = false;
 let offlineState = false;
+let splashShownAt = Date.now();
+const MIN_SPLASH_MS = 1600;
 
 const APP_LOGO = '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg>';
 
@@ -34,6 +36,7 @@ function splashMarkup(mode = "loading") {
 }
 
 function createSplash() {
+  splashShownAt = Date.now();
   splashWindow = new BrowserWindow({
     width: 540, height: 430, frame: false, resizable: false,
     transparent: false, alwaysOnTop: true, center: true,
@@ -58,14 +61,17 @@ function showOfflinePrompt() {
 function revealMain() {
   if (startupFinished) return;
   startupFinished = true;
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show();
-  if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close();
-  splashWindow = null;
+  const wait = Math.max(0, MIN_SPLASH_MS - (Date.now() - splashShownAt));
+  setTimeout(() => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show();
+    if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close();
+    splashWindow = null;
+  }, wait);
 }
 
 async function checkInternet() {
   try {
-    const response = await net.fetch(APP_URL, { method: "HEAD", signal: AbortSignal.timeout(4500) });
+    const response = await net.fetch(APP_URL, { method: "GET", signal: AbortSignal.timeout(6000) });
     return response.ok;
   } catch { return false; }
 }
