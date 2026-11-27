@@ -1,17 +1,24 @@
 {
   "name": "readdy-3-desktop",
   "version": "1.0.0",
-  "description": "Readdy 3 desktop application for Windows",
+  "description": "Readdy 3 desktop and Android application",
   "main": "electron/main.js",
   "author": "NORRIT22",
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win nsis --x64 --publish never"
+    "dist": "electron-builder --win nsis --x64 --publish never",
+    "android:prepare": "mkdir -p www && cp index.html french-library.html www/ && npx cap sync android",
+    "android:build": "npm run android:prepare && cd android && ./gradlew assembleDebug"
   },
   "devDependencies": {
     "electron": "^37.2.6",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "@capacitor/cli": "^7.4.3"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
   },
   "build": {
     "appId": "com.norrit22.readdy3",
