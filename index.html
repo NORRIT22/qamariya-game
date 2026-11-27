@@ -1550,34 +1550,42 @@ async function lexMeta(w,lang){
   }else{
    const [frWiki,frLex]=await Promise.allSettled([
     jfetch(`https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(low)}`,4200),
-    jfetch(`https://lexique.lectura.world/lexique/v2/mot/${encodeURIComponent(low)}`,4200)
+    jfetch(`https://api.lectura.world/lexique/mot/${encodeURIComponent(low)}`,5200)
    ]);
    if(frWiki.status==='fulfilled' && frWiki.value?.fr?.[0]){
     const d=frWiki.value.fr[0],i=d?.definitions?.[0],pr=(d?.partOfSpeech||'').toLowerCase();
     const st=s=>(s||'').replace(/<[^>]+>/g,'').trim().slice(0,220);
     o.pos_ar=POS_MAP[pr]||pr;o.def=st(i?.definition);o.ex=st(i?.examples?.[0]);
    }
-   /* Extract French synonym/antonym relations from WikiLeXiK. */
+   /* WikiLeXiK API returns lemmes -> lexèmes -> relations; also resolve inflected forms. */
    if(frLex.status==='fulfilled' && frLex.value){
-    const roots=[frLex.value,frLex.value.resultat,frLex.value.result,frLex.value.data].filter(Boolean);
-    const syn=[],ant=[],seenSyn=new Set(),seenAnt=new Set();
-    const add=(arr,seen,v)=>{
-     if(Array.isArray(v)){v.forEach(x=>add(arr,seen,x));return}
-     const z=typeof v==='string'?v:(v&&typeof v==='object'?(v.lemme||v.lemma||v.ortho||v.forme||v.word||v.terme||v.label||v.graphie):'');
-     const t=String(z||'').trim().replace(/<[^>]*>/g,'');
-     if(t&&t.toLowerCase()!==low&&!seen.has(t.toLowerCase())){seen.add(t.toLowerCase());arr.push(t)}
+    const root=frLex.value;
+    const norm=x=>String(x||'').trim().replace(/<[^>]*>/g,'');
+    const syn=[],ant=[],ss=new Set(),as=new Set(),lemmas=[];
+    const add=(arr,set,v)=>{
+     if(Array.isArray(v)){v.forEach(x=>add(arr,set,x));return}
+     const z=typeof v==='string'?v:(v&&typeof v==='object'?(v.lemme||v.lemma||v.ortho||v.forme||v.word||v.terme||v.cible||v.graphie||v.libelle||v.label||v.mot):'');
+     const t=norm(z);if(t&&t.toLowerCase()!==low&&!set.has(t.toLowerCase())){set.add(t.toLowerCase());arr.push(t)}
     };
+    const seen=new Set();
     const walk=(node,depth=0)=>{
-     if(!node||typeof node!=='object'||depth>9)return;
+     if(!node||typeof node!=='object'||depth>12||seen.has(node))return;
+     seen.add(node);
      if(Array.isArray(node)){node.forEach(x=>walk(x,depth+1));return}
      for(const [k,v] of Object.entries(node)){
       const key=k.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');
-      if(/^(synonyme|synonymes|synonym|synonyms)$/.test(key))add(syn,seenSyn,v);
-      else if(/^(antonyme|antonymes|antonym|antonyms)$/.test(key))add(ant,seenAnt,v);
-      else if(v&&typeof v==='object')walk(v,depth+1);
+      if(/^(lemme|lemma)$/.test(key)&&typeof v==='string')lemmas.push(v);
+      if(/^(synonyme|synonymes|synonyms|syn)$/.test(key))add(syn,ss,v);
+      else if(/^(antonyme|antonymes|antonyms|ant)$/.test(key))add(ant,as,v);
+      else if(/^(type|relation|nature|nom_relation)$/.test(key)&&typeof v==='string'&&/synonym|antonym/i.test(v)){
+       const target=node.cible||node.terme||node.lemme||node.lemma||node.ortho||node.mot||node.graphie||node.target;
+       if(/synonym/i.test(v))add(syn,ss,target);else add(ant,as,target);
+      }else if(v&&typeof v==='object')walk(v,depth+1);
      }
     };
-    roots.forEach(x=>walk(x));
+    walk(root);
+    const lemma=[...new Set(lemmas)].find(x=>x&&x.toLowerCase()!==low);
+    if(lemma)o.lemma=lemma;
     rawSyns=syn.slice(0,8);rawAnts=ant.slice(0,6);
    }
   }
@@ -1946,7 +1954,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v17|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v18|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
