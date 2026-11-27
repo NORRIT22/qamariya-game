@@ -7,23 +7,33 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win nsis --x64 --publish never"
+    "dist": "electron-builder --win nsis --x64 --publish never",
+    "predist": "node scripts/prepare-desktop-assets.cjs"
   },
   "devDependencies": {
     "electron": "^37.2.6",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "sharp": "0.34.4",
+    "png-to-ico": "2.1.8"
   },
   "build": {
     "appId": "com.norrit22.readdy3",
     "productName": "Readdy 3",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "build"
     },
     "files": [
       "electron/**/*",
       "index.html",
       "french-library.html",
-      "package.json"
+      "package.json",
+      "build/**/*",
+      "assets/**/*",
+      "node_modules/pdfjs-dist/**/*",
+      "node_modules/mammoth/**/*",
+      "node_modules/tesseract.js/**/*",
+      "node_modules/tesseract.js-core/**/*"
     ],
     "win": {
       "target": [
@@ -34,7 +44,8 @@
           ]
         }
       ],
-      "artifactName": "Readdy-3-Setup-${version}.${ext}"
+      "artifactName": "Readdy-3-Setup-${version}.${ext}",
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -43,5 +54,12 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Readdy 3"
     }
+  },
+  "dependencies": {
+    "pdfjs-dist": "3.11.174",
+    "mammoth": "1.8.0",
+    "tesseract.js": "5.1.1",
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/fra": "1.0.0"
   }
 }
