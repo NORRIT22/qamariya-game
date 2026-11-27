@@ -339,7 +339,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const K={
  vocab:'readdy_saved_vocabulary_prod_v5',
- cache:'readdy_ai_cache_prod_v15',
+ cache:'readdy_ai_cache_prod_v16',
  fc:'readdy_flashcards_10sessions_v1',
  sess:'readdy_session_counter_v1',
  state:'readdy_reading_state_v1',
@@ -1787,7 +1787,7 @@ function sayFlashcard(){
 function renewFlashcard(){
  const c=S.flashcards[S.fcIdx];
  if(!c)return;
- c.expiresAt=CURRENT_SESSION+MAX_FC_SESSIONS;
+ c.expiresAt=CURRENT_SESSION+MAX_FC_SESSIONS-1;
  saveFlashcards();
  renderFlashcards();
  toast(`تم تمديد «${c.word}» لـ 10 جلسات قادمة`);
@@ -1872,7 +1872,7 @@ async function runLookup(word,sent,lang,occ){
   trLong(sent,lang).then(t=>{if(req===S.req&&t){q.sentence_ar=stripTashkeel(t);$('pSA').textContent=q.sentence_ar}});
   return;
  }
- const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v15|'+lang+'|'+low+'|'+occ+'|'+sent;
+ const low=word.toLowerCase().replace(/^['’-]+|['’-]+$/g,''),key='v16|'+lang+'|'+low+'|'+occ+'|'+sent;
  if(S.cache.has(key)){const c=S.cache.get(key);showRec(c,word);addToFlashcards(c);return}
  showSkel(true);
  try{
