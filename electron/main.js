@@ -71,9 +71,7 @@ async function checkInternet() {
 }
 
 function createMainWindow() {
-  const siteRoot = app.isPackaged
-    ? path.join(process.resourcesPath, "app-site")
-    : path.join(__dirname, "..");
+  const siteRoot = app.isPackaged ? app.getAppPath() : path.join(__dirname, "..");
   const startUrl = pathToFileURL(path.join(siteRoot, "index.html")).href;
 
   mainWindow = new BrowserWindow({
