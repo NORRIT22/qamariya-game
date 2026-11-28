@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "electron/**"
+      - "landing.html"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/build-windows.yml"
