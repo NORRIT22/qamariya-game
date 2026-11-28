@@ -1823,7 +1823,7 @@ async function hybrid(word,sent,lang,occ=0){
   pos_ar:stripTashkeel(posAr),
   morph_ar:[sp.tag,morph].filter(Boolean).join(' ، '),
   lemma:m.lemma,
-  synonyms_ar:finalSyns,antonyms_ar:m.antonyms_ar,
+  synonyms:finalSyns,antonyms:m.antonyms,
   example_original:m.ex,example_ar:stripTashkeel(exA),
   sentence_ar:stripTashkeel(st)
  };
@@ -2103,11 +2103,11 @@ function renderPanel(d){
  $('pExp').textContent=d.explanation_ar;
 
  const relBox=$('relBox'),relEl=$('pRels');
- const syns=(d.synonyms||[]).map(item=>{
+ const syns=(d.synonyms||d.synonyms_ar||[]).map(item=>{
   const word=typeof item==='string'?item:item.word||item.orig||'';
   return word?`<button type="button" class="lex-chip" data-lex-orig="${esc(word)}" title="استمع إلى المرادف باللغة الأصلية">${esc(word)}</button>`:'';
  }).filter(Boolean);
- const ants=(d.antonyms||[]).map(item=>{
+ const ants=(d.antonyms||d.antonyms_ar||[]).map(item=>{
   const word=typeof item==='string'?item:item.word||item.orig||'';
   return word?`<button type="button" class="lex-chip ant" data-lex-orig="${esc(word)}" title="استمع إلى الضد باللغة الأصلية">ضد · ${esc(word)}</button>`:'';
  }).filter(Boolean);
