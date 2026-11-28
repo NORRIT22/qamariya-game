@@ -74,7 +74,26 @@ h1 em,.kicker,.micro b{color:#1a73e8}
 .footer .brand{color:#1f1f1f}
 @media(max-width:600px){.nav{background:rgba(255,255,255,.96)}}
 
-</style>
+
+/* Device-aware download panel */
+.download-section{padding:0 0 92px}
+.download-panel{max-width:900px;margin:auto;padding:42px;border:1px solid #dfe3eb;border-radius:22px;background:#fff;box-shadow:0 8px 30px rgba(60,64,67,.06)}
+.download-panel>.kicker,.download-panel>h2,.download-intro{text-align:center;display:block}
+.download-panel>h2{font-size:clamp(28px,4vw,38px);margin:12px 0 8px;color:#1f1f1f}
+.download-intro{color:#5f6368;font-size:13px;margin:0 0 28px}
+.download-choice{display:flex;align-items:center;gap:18px;padding:20px;border:1px solid #dfe3eb;border-radius:16px;background:#f8fafd;margin-top:12px}
+.download-choice[hidden]{display:none}
+.download-symbol{width:52px;height:52px;display:grid;place-items:center;flex:none;border-radius:15px;background:#e8f0fe;color:#1a73e8;font:28px Inter,sans-serif}
+.download-copy{flex:1;min-width:0}
+.download-platform{font:600 9px Inter,sans-serif;letter-spacing:1.2px;color:#1a73e8}
+.download-copy h3{font-size:17px;margin:5px 0;color:#1f1f1f}
+.download-copy p{font-size:12px;line-height:1.8;color:#5f6368;margin:0}
+.download-btn{white-space:nowrap}
+.download-note{text-align:center;font-size:10px;line-height:1.8;color:#80868b;margin:18px auto 0}
+.download-other{text-align:center;margin-top:16px;font-size:11px;color:#5f6368}
+.download-other a{color:#1a73e8;font-weight:700;margin-right:5px}
+@media(max-width:650px){.download-section{padding-bottom:65px}.download-panel{padding:28px 16px}.download-choice{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:15px}.download-symbol{width:44px;height:44px}.download-btn{grid-column:1/-1;width:100%}}
+\n</style>
 </head>
 <body>
 <header class="nav"><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
@@ -111,7 +130,29 @@ h1 em,.kicker,.micro b{color:#1a73e8}
 <a class="btn primary" href="./index.html" style="margin-top:24px">ابدأ تجربة القراءة <span>↗</span></a></div>
 <div class="study-card reveal" id="vocabulary"><div class="study-top"><span>VOCABULARY SNAPSHOT</span><span class="tag">WORD STUDY</span></div><div class="progress"><i></i></div><div class="word">Flourish</div><div class="phonetic">/ˈflʌrɪʃ/ &nbsp; · &nbsp; verb</div><div class="meaning"><span>MEANING IN ARABIC</span>يزدهر، ينمو أو يتطور بنجاح، خاصة في بيئة مناسبة.</div><div class="word-meta"><b>Synonym · thrive</b><b>Level · B2</b><b>Verb</b></div><div style="margin-top:24px;border-top:1px solid #303a31;padding-top:18px;display:flex;justify-content:space-between;color:#93a091;font:10px Inter,sans-serif"><span>YOUR WORD COLLECTION</span><strong style="color:var(--lime)">Keep learning →</strong></div></div>
 </div></section>
-<section class="cta"><div class="wrap"><div class="cta-box reveal"><span class="kicker">START WITH YOUR NEXT PAGE</span><h2>كل قراءة تقرّبك من هدفك.</h2><p>افتح Readdy وابدأ بتحويل النصوص التي تقرؤها إلى معرفة ومفردات تبقى معك.</p><a class="btn primary" href="./index.html">افتح Readdy 3 الآن <span>↗</span></a></div></div></section>
+
+<section class="download-section" id="download">
+ <div class="wrap">
+  <div class="download-panel reveal">
+   <span class="kicker">GET READDY 3</span>
+   <h2>تجربتك تبدأ من جهازك.</h2>
+   <p class="download-intro">اكتشف النسخة المناسبة لجهازك وحمّل Readdy 3.</p>
+   <div class="download-choice" id="download-desktop">
+    <div class="download-symbol" aria-hidden="true">▣</div>
+    <div class="download-copy"><span class="download-platform">DESKTOP EDITION</span><h3>Readdy 3 للكمبيوتر</h3><p>نسخة Windows — ثبّت التطبيق على جهازك واستمتع بتجربة سطح المكتب.</p></div>
+    <a class="btn primary download-btn" href="https://github.com/NORRIT22/readdy_3/actions/runs/46139296509" target="_blank" rel="noopener">تحميل نسخة Windows <span>↓</span></a>
+   </div>
+   <div class="download-choice" id="download-mobile">
+    <div class="download-symbol" aria-hidden="true">▯</div>
+    <div class="download-copy"><span class="download-platform">MOBILE EDITION</span><h3>Readdy 3 للهاتف</h3><p>نسخة Android بصيغة APK — حمّل الملف وثبّته على هاتفك.</p></div>
+    <a class="btn primary download-btn" href="https://github.com/NORRIT22/readdy_3/actions/runs/46139296400" target="_blank" rel="noopener">تحميل نسخة Android <span>↓</span></a>
+   </div>
+   <p class="download-note">سيتم توجيهك إلى صفحة إصدار التطبيق على GitHub لتنزيل ملف التثبيت من قسم Artifacts.</p>
+   <div class="download-other"><span>تبحث عن نسخة جهاز آخر؟</span><a href="https://github.com/NORRIT22/readdy_3/actions" target="_blank" rel="noopener">عرض جميع الإصدارات</a></div>
+  </div>
+ </div>
+</section>
+\n<section class="cta"><div class="wrap"><div class="cta-box reveal"><span class="kicker">START WITH YOUR NEXT PAGE</span><h2>كل قراءة تقرّبك من هدفك.</h2><p>افتح Readdy وابدأ بتحويل النصوص التي تقرؤها إلى معرفة ومفردات تبقى معك.</p><a class="btn primary" href="./index.html">افتح Readdy 3 الآن <span>↗</span></a></div></div></section>
 </main>
 <footer class="footer"><div class="wrap footer-row"><a class="brand" href="./landing.html"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M10 18C10 15.8 11.8 14 14 14H30V50H14C11.8 50 10 48.2 10 46V18Z" fill="#1A73E8"/><path d="M34 14H50C52.2 14 54 15.8 54 18V46C54 48.2 52.2 50 50 50H34V14Z" fill="#8AB4F8"/><path d="M30 14H34V50H30V14Z" fill="#D3E3FD"/><rect x="15" y="22" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="28.5" width="10" height="2.6" rx="1.3" fill="#fff"/><rect x="15" y="35" width="7" height="2.6" rx="1.3" fill="#fff"/><path d="M40 25.5L48.5 32L40 38.5V25.5Z" fill="#041E49"/></svg><span>Readdy 3</span></a><span>© 2026 Readdy. اقرأ بذكاء، وتعلّم بعمق.</span><div class="footer-links"><a href="#features">المزايا</a><a href="#workflow">طريقة العمل</a><a href="./index.html">التطبيق</a></div></div></footer>
 <script>
