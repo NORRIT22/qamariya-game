@@ -6,6 +6,7 @@ on:
     paths:
       - "electron/**"
       - "landing.html"
+      - "index.html"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/build-windows.yml"
