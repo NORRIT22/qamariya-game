@@ -196,13 +196,16 @@ $('sessionArea').addEventListener('click',e=>{
 });
 function nextDailyQuestion(){if(!dailyLocked)return;if(dailyIndex<dailyQueue.length-1){dailyIndex++;renderDailyQuestion();return}finishDailyReview()}
 function finishDailyReview(){
- const passed=dailyCorrect>=3,today=dateKey();
+ const passed=dailyCorrect>=3,today=dateKey();let earned=0;
  if(courseState.dailyReviewAttemptDate!==today){
-   courseState.xp+=dailyCorrect*6+(passed?20:0);courseState.todayXp+=dailyCorrect*6+(passed?20:0);courseState.dailyReviewAttemptDate=today;
-   if(passed){if(courseState.lastDay!==today){const y=new Date();y.setDate(y.getDate()-1);courseState.streak=courseState.lastDay===y.toLocaleDateString('en-CA')?courseState.streak+1:1;courseState.lastDay=today}courseState.dailyReviewDate=today}
+   earned+=dailyCorrect*6;courseState.xp+=dailyCorrect*6;courseState.todayXp+=dailyCorrect*6;courseState.dailyReviewAttemptDate=today;
+ }
+ if(passed&&courseState.dailyReviewBonusDate!==today){
+   earned+=20;courseState.xp+=20;courseState.todayXp+=20;courseState.dailyReviewBonusDate=today;courseState.dailyReviewDate=today;
+   if(courseState.lastDay!==today){const y=new Date();y.setDate(y.getDate()-1);courseState.streak=courseState.lastDay===y.toLocaleDateString('en-CA')?courseState.streak+1:1;courseState.lastDay=today}
  }
  saveCourse();
- $('sessionArea').innerHTML='<div class="lesson-session result-panel"><div class="path-emblem" style="margin:auto">'+(passed?'✓':'↻')+'</div><h2>'+(passed?'أحسنت! أنهيت تحدّي اليوم':'محاولة جيدة، واصل التدريب')+'</h2><div class="result-xp">+'+(dailyCorrect*6+(passed?20:0))+' XP</div><p>أجبت إجابة صحيحة عن '+dailyCorrect+' من 5 أسئلة. '+(passed?'تم تسجيل إنجاز اليوم ومكافأتك.':'تحتاج إلى 3 إجابات صحيحة على الأقل لتسجيل التحدّي. يمكنك المحاولة مجدداً.')+'</p><button class="btn primary" onclick="exitUnit()">العودة إلى المكتبة</button></div>';
+ $('sessionArea').innerHTML='<div class="lesson-session result-panel"><div class="path-emblem" style="margin:auto">'+(passed?'✓':'↻')+'</div><h2>'+(passed?'أحسنت! أنهيت تحدّي اليوم':'محاولة جيدة، واصل التدريب')+'</h2><div class="result-xp">+'+earned+' XP</div><p>أجبت إجابة صحيحة عن '+dailyCorrect+' من 5 أسئلة. '+(passed?'تم تسجيل إنجاز اليوم ومكافأتك.':'تحتاج إلى 3 إجابات صحيحة على الأقل لتسجيل التحدّي. يمكنك المحاولة مجدداً.')+'</p><button class="btn primary" onclick="exitUnit()">العودة إلى المكتبة</button></div>';
 }
 
 const pronouns=['je','tu','il / elle / on','nous','vous','ils / elles'];
