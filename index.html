@@ -1621,7 +1621,7 @@ async function translateLexListToArabic(words,srcLang){
 }
 
 async function lexMeta(w,lang){
- const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms_ar:[],antonyms_ar:[],cefr:''};
+ const o={ipa:'',pos_ar:'',lemma:w.toLowerCase(),def:'',ex:'',synonyms:[],antonyms:[],cefr:''};
  const low=w.toLowerCase();
  let rawSyns=[],rawAnts=[];
  try{
@@ -1660,12 +1660,8 @@ async function lexMeta(w,lang){
     rawSyns=dmFr.value.map(x=>x.word).filter(x=>x&&x.toLowerCase()!==low);
    }
   }
-  const[synsAr,antsAr]=await Promise.all([
-   translateLexListToArabic(rawSyns,lang),
-   translateLexListToArabic(rawAnts,lang)
-  ]);
-  o.synonyms_ar=synsAr;
-  o.antonyms_ar=antsAr;
+  o.synonyms=[...new Set(rawSyns.map(x=>String(x||'').trim()).filter(Boolean))].slice(0,5);
+  o.antonyms=[...new Set(rawAnts.map(x=>String(x||'').trim()).filter(Boolean))].slice(0,5);
  }catch{}
  return o;
 }
@@ -1807,7 +1803,7 @@ async function hybrid(word,sent,lang,occ=0){
  const[voc,exA,defA]=await Promise.all([vocalizeInContext(st,pk,chosen),m.ex?trText(m.ex,lang):'',m.def?trText(m.def,lang):'']);
  const plain=stripTashkeel(chosen),pn=arNorm(plain);
  const alts=[...new Set([wt.primary,...wt.alternatives].map(stripTashkeel))].filter(x=>x&&arNorm(x)!==pn).slice(0,5);
- const finalSyns=m.synonyms_ar.length?m.synonyms_ar:alts.slice(0,4).map(ar=>({ar,orig:''}));
+ const finalSyns=m.synonyms;
  const posAr=preferNom?'اسم مفعول / صفة':(m.pos_ar||(wt.posHint?POS_MAP[wt.posHint.toLowerCase()]||wt.posHint:'')||(lang==='fr'?'مفردة فرنسية':'مفردة إنجليزية'));
  const morph=detectMorphology(w,lang);
  const how={diff:'مطابقة سياقية: مقارنة ترجمة الجملة بحذف الكلمة وبدونها',cand:'مطابقة سياقية: معنى من القاموس يوافق السياق النحوي للجملة',iso:'ترجمة الكلمة منفردة — لم تُرصد مطابقة واضحة داخل الجملة'}[pk.how];
@@ -2107,16 +2103,14 @@ function renderPanel(d){
  $('pExp').textContent=d.explanation_ar;
 
  const relBox=$('relBox'),relEl=$('pRels');
- const syns=(d.synonyms_ar||[]).map(item=>{
-  const ar=typeof item==='string'?item:item.ar;
-  const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
-  return `<button type="button" class="lex-chip" data-lex-ar="${esc(ar)}" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="انقر لاعتماد هذا المرادف">${esc(ar)}${orig}</button>`;
- });
- const ants=(d.antonyms_ar||[]).map(item=>{
-  const ar=typeof item==='string'?item:item.ar;
-  const orig=typeof item==='object'&&item.orig?`<small>(${esc(item.orig)})</small>`:'';
-  return `<button type="button" class="lex-chip ant" data-lex-orig="${esc(typeof item==='object'?item.orig||'':'')}" title="ضد الكلمة">ضد: ${esc(ar)}${orig}</button>`;
- });
+ const syns=(d.synonyms||[]).map(item=>{
+  const word=typeof item==='string'?item:item.word||item.orig||'';
+  return word?`<button type="button" class="lex-chip" data-lex-orig="${esc(word)}" title="استمع إلى المرادف باللغة الأصلية">${esc(word)}</button>`:'';
+ }).filter(Boolean);
+ const ants=(d.antonyms||[]).map(item=>{
+  const word=typeof item==='string'?item:item.word||item.orig||'';
+  return word?`<button type="button" class="lex-chip ant" data-lex-orig="${esc(word)}" title="استمع إلى الضد باللغة الأصلية">ضد · ${esc(word)}</button>`:'';
+ }).filter(Boolean);
  const chips=[...syns,...ants];
  if(chips.length){
   relBox.hidden=false;
@@ -2302,6 +2296,34 @@ addEventListener('keydown',e=>{
 });
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
 
+
+/* Translation memoization and request de-duplication */
+const _readdyTranslate=translate;
+const _readdyTranslationCache=new Map(),_readdyTranslationPending=new Map();
+translate=async function(q,sl,tl='ar',max=900){
+ const text=String(q||'').trim();
+ if(!text)return{primary:'',alternatives:[],posHint:'',provider:'—'};
+ if(!['en','fr','ar'].includes(sl)||!['ar','en','fr'].includes(tl))throw new Error('Unsupported language pair');
+ const key=sl+'>'+tl+'|'+text.slice(0,max).toLowerCase();
+ if(_readdyTranslationCache.has(key))return _readdyTranslationCache.get(key);
+ if(_readdyTranslationPending.has(key))return _readdyTranslationPending.get(key);
+ const task=(async()=>{
+  let last;
+  for(let attempt=0;attempt<2;attempt++){
+   try{
+    const out=await _readdyTranslate(text,sl,tl,max);
+    if(!out||typeof out.primary!=='string'||!out.primary.trim())throw new Error('Empty translation');
+    const safe={...out,primary:out.primary.trim(),alternatives:Array.isArray(out.alternatives)?out.alternatives.filter(x=>typeof x==='string'&&x.trim()).slice(0,6):[]};
+    _readdyTranslationCache.set(key,safe);
+    if(_readdyTranslationCache.size>350)_readdyTranslationCache.delete(_readdyTranslationCache.keys().next().value);
+    return safe;
+   }catch(e){last=e;if(attempt===0)await new Promise(r=>setTimeout(r,250))}
+  }
+  throw last||new Error('Translation unavailable');
+ })();
+ _readdyTranslationPending.set(key,task);
+ try{return await task}finally{_readdyTranslationPending.delete(key)}
+};
 /* ---------- TOEFL iBT 2026 practice centre ---------- */
 const TF_BANK={
  reading:[
