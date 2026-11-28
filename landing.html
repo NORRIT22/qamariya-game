@@ -23,6 +23,57 @@
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:50px}.hero-copy{max-width:700px}.preview{max-width:650px;width:100%;margin:auto}.split{grid-template-columns:1fr;gap:35px}.split-copy{max-width:650px}.features{grid-template-columns:repeat(2,1fr)}.trust-row{flex-direction:column;align-items:flex-start}.navlinks{gap:15px}}
 @media(max-width:600px){.wrap{width:min(100% - 30px,var(--max))}.nav{height:65px}.navlinks{display:none}.nav-actions .ghost{display:none}.btn{height:40px;padding:0 13px;font-size:12px}.hero{padding:62px 0 55px}h1{font-size:42px;letter-spacing:-1.2px}.lead{font-size:14px}.micro{gap:10px;flex-wrap:wrap}.app-window{transform:none}.mock-content{grid-template-columns:78px 1fr;min-height:285px}.mock-side{padding:13px 7px}.mock-brand{font-size:10px}.side-item{font-size:9px;padding:8px 5px}.mock-main{padding:16px 12px}.mock-heading{font-size:16px;margin-top:19px}.passage{padding:12px}.passage p{font-size:10px}.mock-foot{flex-direction:column}.section{padding:70px 0}.section-head{margin-bottom:30px}.features{grid-template-columns:1fr}.feature{min-height:0;padding:21px}.split-copy h2{font-size:31px}.study-card{padding:19px}.cta{padding-bottom:65px}.cta-box{padding:48px 18px}.footer-row{flex-direction:column;align-items:flex-start}.footer-links{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
+
+/* READDY BRAND ALIGNMENT — matches the actual reader UI */
+:root{--bg:#fff;--panel:#f8fafd;--panel2:#f0f4f9;--line:#dfe3eb;--text:#1f1f1f;--muted:#444746;--lime:#1a73e8;--gold:#5f6368;--max:1160px}
+body{background:var(--bg);color:var(--text)}
+.nav{background:rgba(255,255,255,.92);border-bottom-color:var(--line)}
+.navlinks{color:#5f6368}.navlinks a:hover{color:#1a73e8}
+.btn{border-radius:99px;border-color:var(--line);font-weight:600}
+.btn.primary{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.btn.primary:hover{background:#1765cc}
+.btn.ghost{background:#f8fafd;color:#1f1f1f}
+.hero:before{background:radial-gradient(circle,rgba(26,115,232,.10),transparent 68%)}
+.eyebrow{border-color:#d3e3fd;background:#e8f0fe;color:#174ea6}
+.dot{background:#1a73e8;box-shadow:0 0 12px #1a73e866}
+h1 em,.kicker,.micro b{color:#1a73e8}
+.lead{color:#5f6368}
+.app-window{background:#fff;border-color:#dfe3eb;box-shadow:0 20px 60px rgba(60,64,67,.15)}
+.windowbar{border-bottom-color:#dfe3eb}
+.traffic{background:#c4c7c5}.window-title{color:#5f6368}
+.mock-side{border-right-color:#dfe3eb}
+.mock-brand{color:#1f1f1f}.mock-brand i{background:#1a73e8}
+.side-item{color:#5f6368}.side-item.active{background:#e8f0fe;color:#174ea6}
+.mock-top{color:#5f6368}.tag{border-color:#d3e3fd;color:#174ea6;background:#e8f0fe}
+.mock-heading{color:#1f1f1f}.mock-sub{color:#5f6368}
+.passage{background:#f8fafd;border-color:#dfe3eb}
+.passage small{color:#1a73e8}.passage p{color:#3c4043}
+.highlight{background:#d3e3fd;color:#174ea6}
+.translate{border-color:#d3e3fd;background:#f1f6fe}
+.translate label{color:#1a73e8}.translate p{color:#3c4043}
+.mini-card{background:#f8fafd;border-color:#dfe3eb;color:#5f6368}
+.mini-card strong{color:#1f1f1f}
+.trust{border-color:#dfe3eb}.trust-row{color:#5f6368}.trust-logos{color:#5f6368}
+.feature{background:#fff;border-color:#dfe3eb;box-shadow:0 2px 8px rgba(60,64,67,.05)}
+.feature:hover{border-color:#8ab4f8;box-shadow:0 8px 24px rgba(60,64,67,.09)}
+.icon{background:#e8f0fe;color:#1a73e8}
+.feature p,.section-head p,.split-copy p{color:#5f6368}
+.section h2{color:#1f1f1f}
+.step{border-bottom-color:#dfe3eb}.num{background:#e8f0fe;color:#174ea6}
+.step small{color:#5f6368}
+.study-card{background:#fff;border-color:#dfe3eb;box-shadow:0 2px 12px rgba(60,64,67,.06)}
+.study-card:after{background:#1a73e80c}
+.study-top,.phonetic{color:#5f6368}
+.progress{background:#e8eaed}.progress i{background:#1a73e8}
+.meaning{background:#f8fafd;border-color:#dfe3eb;color:#3c4043}
+.meaning span,.word-meta b{color:#174ea6}
+.word-meta b{background:#e8f0fe}
+.cta-box{border-color:#d3e3fd;background:radial-gradient(ellipse at 50% 0%,#e8f0fe 0%,#f8fafd 55%,#fff 100%)}
+.cta-box p{color:#5f6368}
+.footer{border-top-color:#dfe3eb;color:#5f6368}
+.footer .brand{color:#1f1f1f}
+@media(max-width:600px){.nav{background:rgba(255,255,255,.96)}}
+
 </style>
 </head>
 <body>
