@@ -8,7 +8,7 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win nsis --x64 --publish never",
-    "android:prepare": "mkdir -p www && cp index.html french-library.html www/ && npx cap sync android",
+    "android:prepare": "mkdir -p www && cp index.html landing.html french-library.html www/ && npx cap sync android",
     "android:build": "npm run android:prepare && cd android && ./gradlew assembleDebug"
   },
   "devDependencies": {
@@ -29,6 +29,7 @@
     "files": [
       "electron/**/*",
       "index.html",
+      "landing.html",
       "french-library.html",
       "package.json"
     ],
