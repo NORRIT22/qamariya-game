@@ -189,6 +189,37 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 @media(max-width:640px){.lbl,.hide-sm{display:none}.btn.pri{padding:8px 10px}input,textarea{font-size:16px!important}.spill{max-width:110px}}
 @media(max-width:520px){.brand span{display:none}.hdr{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* TOEFL 2026 learning centre */
+.toefl-modal{position:fixed;inset:0;z-index:75;background:var(--bg);display:none;flex-direction:column;overflow:auto}
+.toefl-modal.open{display:flex}
+.tf-head{position:sticky;top:0;z-index:3;background:var(--s1);border-bottom:1px solid var(--bd);padding:12px clamp(14px,3vw,28px);display:flex;align-items:center;gap:12px}
+.tf-head h2{margin:0;font:700 20px Outfit,'IBM Plex Sans Arabic',sans-serif;direction:ltr}
+.tf-head .sp{flex:1}
+.tf-wrap{width:min(100%,1000px);margin:24px auto;padding:0 16px 48px;display:grid;gap:18px}
+.tf-intro,.tf-card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:clamp(16px,3vw,26px);box-shadow:var(--sh)}
+.tf-intro p,.tf-muted{color:var(--sub);line-height:1.8;font-size:13px}
+.tf-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tf-stat{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:12px;text-align:center}
+.tf-stat b{display:block;font:700 20px Outfit,sans-serif;color:var(--ac)}
+.tf-stat small{font-size:11px;color:var(--sub)}
+.tf-tabs{display:flex;gap:8px;overflow:auto;padding:2px 0}
+.tf-tab{border:1px solid var(--bd);background:var(--s1);border-radius:99px;padding:9px 16px;white-space:nowrap;font-size:13px}
+.tf-tab.active{background:var(--acs);border-color:var(--ac);color:var(--onact);font-weight:700}
+.tf-task-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.tf-task-title h3{margin:0;font-size:17px}
+.tf-passage{direction:ltr;text-align:left;font:16px/1.9 Literata,Georgia,serif;background:var(--bg);border:1px solid var(--bd);padding:16px;border-radius:14px;white-space:pre-wrap}
+.tf-options{display:grid;gap:8px;margin-top:14px}
+.tf-option{display:flex;align-items:flex-start;gap:10px;text-align:left;direction:ltr;border:1px solid var(--bd);background:var(--bg);border-radius:12px;padding:12px;font-size:14px}
+.tf-option:has(input:checked){border-color:var(--ac);background:var(--hl)}
+.tf-input,.tf-textarea{width:100%;border:1px solid var(--bd);background:var(--bg);border-radius:12px;padding:12px;font-size:15px;outline:0}
+.tf-textarea{min-height:150px;resize:vertical;direction:ltr;text-align:left;line-height:1.7}
+.tf-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tf-feedback{margin-top:12px;padding:12px;border-radius:12px;background:var(--s2);font-size:13px;line-height:1.8}
+.tf-feedback.good{border:1px solid var(--ok)}
+.tf-progress{height:7px;background:var(--s2);border-radius:9px;overflow:hidden}.tf-progress i{display:block;height:100%;background:var(--ac);width:0;transition:width .25s}
+@media(max-width:600px){.tf-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.tf-head h2{font-size:17px}.tf-wrap{margin:14px auto}}
+
 </style>
 </head>
 <body>
@@ -209,6 +240,7 @@ body.drag::after{content:'أفلت الملف هنا';position:fixed;inset:12px;
 
   <label class="pill" title="لغة المستند"><i class="ms hide-sm" style="font-size:16px">language</i>
     <select id="langSel" onchange="setLang(this.value)"><option value="auto">Auto</option><option value="en">English</option><option value="fr">Français</option></select></label>
+  <button class="btn" onclick="openTOEFL()" aria-label="مركز التحضير لاختبار TOEFL" title="TOEFL iBT 2026"><i class="ms">school</i><span class="lbl">TOEFL</span></button>
   <button class="btn pri" onclick="$('fileInput').click()" aria-label="رفع ملف"><i class="ms">upload_file</i><span class="lbl">رفع ملف</span></button>
   <button class="ibtn" onclick="toggleTheme()" aria-label="تبديل الوضع"><i id="themeIcon" class="ms">dark_mode</i></button>
   <button class="ibtn hide-sm" onclick="openWelcome(true)" aria-label="دليل المنصة"><i class="ms">info</i></button>
@@ -2269,6 +2301,113 @@ addEventListener('keydown',e=>{
  }
 });
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.hidden=true}));
+
+/* ---------- TOEFL iBT 2026 practice centre ---------- */
+const TF_BANK={
+ reading:[
+  {kind:'daily',title:'Read in Daily Life',passage:'NOTICE — Biology Laboratory\nThe laboratory will be closed on Thursday morning for equipment maintenance. Students who need to submit their samples should use Room 214 between 1:00 and 4:00 p.m. on Thursday. Regular opening hours resume on Friday.',q:'Why should students go to Room 214?',opts:['To attend a lecture','To submit their samples','To collect new equipment','To meet the laboratory director'],a:1,hint:'ابحث عن الغرض من الغرفة البديلة والوقت المحدد.'},
+  {kind:'academic',title:'Read an Academic Passage',passage:'Urban trees influence local climates through shade and evapotranspiration. By blocking direct sunlight, tree canopies reduce the amount of heat absorbed by roads and buildings. In addition, water released from leaves cools the surrounding air. However, the effectiveness of these processes depends on species, soil conditions, and access to water.',q:'Which factor is NOT mentioned as influencing the cooling effect?',opts:['Tree species','Soil conditions','Access to water','The age of nearby buildings'],a:3,hint:'ميّز بين المعلومات المذكورة والاستنتاج الذي لا يدعمه النص.'},
+  {kind:'complete',title:'Complete the Words',passage:'Researchers often collab_____ across disciplines to solve complex problems. Their find_____ can influence public policy and improve the quality of life.',q:'Complete both missing words.',answers:['collaborate','findings'],hint:'الأولى فعل بعد often، والثانية اسم جمع بعد Their.'}
+ ],
+ listening:[
+  {title:'Listen and Choose a Response',audio:'Could you tell me whether the seminar has been moved to another room?',q:'Choose the most natural response.',opts:['Yes, it is now in Lecture Hall B.','I moved here last year.','The seminar was very informative.','I prefer reading in the evening.'],a:0,hint:'اختر إجابة تستجيب مباشرة للسؤال عن تغيير القاعة.'},
+  {title:'Listen to a Conversation',audio:'Student: I have been trying to access the online journal, but the university login keeps rejecting my password.\nLibrarian: Your account may need to be renewed. I can check its status at the help desk.\nStudent: That would be great. I need an article for my research paper.',q:'What will the librarian probably do?',opts:['Recommend another university','Renew the student’s library account','Print the research paper','Contact the article’s author'],a:1,hint:'استمع إلى ما عرضت أمينة المكتبة أن تفعله.'},
+  {title:'Listen to an Announcement',audio:'Attention, students. The north entrance of the science building will remain closed this afternoon because of maintenance work. Please use the east entrance. All scheduled classes will take place as usual.',q:'What are students asked to do?',opts:['Attend classes online','Use a different entrance','Avoid the science building all day','Reschedule their afternoon classes'],a:1,hint:'ركّز على التعليمات العملية لا على سبب الإعلان.'}
+ ],
+ writing:[
+  {kind:'build',title:'Build a Sentence',prompt:'Arrange these words into a grammatically correct sentence:',words:['the','results','will','researchers','publish','tomorrow'],answer:'The researchers will publish the results tomorrow.',hint:'ابدأ بالفاعل، ثم الفعل المساعد والفعل الرئيسي.'},
+  {kind:'email',title:'Write an Email',prompt:'You registered for a university workshop, but you have a timetable conflict. Write an email to the organiser explaining the problem and asking whether you can attend another session.',hint:'اكتب تحية مناسبة، اشرح التعارض بوضوح، واطلب حلاً محدداً.'},
+  {kind:'discussion',title:'Write for an Academic Discussion',prompt:'Professor: Should universities make community-service courses a graduation requirement? Explain your position and support it with reasons or examples.',hint:'قدّم موقفاً واضحاً، ثم سببين مدعومين بمثال، وتجنب التكرار.'}
+ ],
+ speaking:[
+  {kind:'repeat',title:'Listen and Repeat',audio:'Although the experiment was successful, the researchers decided to collect additional data before publishing their conclusions.',hint:'استمع إلى الجملة ثم أعد قولها بصوت واضح مع الحفاظ على الكلمات والترتيب.'},
+  {kind:'interview',title:'Take an Interview',prompt:'Describe a skill you would like to develop during your university studies. Explain why it matters to you and how you plan to improve it.',hint:'أجب مباشرة، ثم اذكر سبباً وخطة واقعية ومثالاً.'},
+  {kind:'interview',title:'Take an Interview',prompt:'Some students prefer studying alone, while others learn better in groups. Which approach works better for you, and why?',hint:'اختر موقفاً واحداً وادعمه بتفصيل شخصي أو أكاديمي.'}
+ ]
+};
+let tfSkill='reading',tfCurrent=null,tfCompleted=Number(localStorage.getItem('readdy_tf_done')||0),tfPoints=Number(localStorage.getItem('readdy_tf_points')||0),tfRecorder=null,tfStream=null,tfTimer=null;
+function openTOEFL(){const m=$('toeflModal');m.classList.add('open');document.body.style.overflow='hidden';$('tfDone').textContent=tfCompleted;$('tfStreak').textContent=tfPoints;tfNewTask()}
+function closeTOEFL(){ $('toeflModal').classList.remove('open');document.body.style.overflow='';tfStopRecording()}
+function tfSetSkill(skill){tfSkill=skill;document.querySelectorAll('[data-tf-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tfTab===skill));tfNewTask()}
+function tfNewTask(){
+ const bank=TF_BANK[tfSkill],task=bank[Math.floor(Math.random()*bank.length)];tfCurrent=task;
+ const labels={reading:'Reading',listening:'Listening',writing:'Writing',speaking:'Speaking'};
+ $('tfSkillTitle').textContent=labels[tfSkill]+' · '+task.title;$('tfTaskTag').textContent=task.title;$('tfFeedback').hidden=true;$('tfProgress').style.width='0%';
+ let html='';
+ if(tfSkill==='reading'){
+  if(task.kind==='complete'){html='<div class="tf-passage">'+task.passage.replace('collab_____','<strong>collab_____</strong>').replace('find_____','<strong>find_____</strong>')+'</div><p>'+task.q+'</p><input id="tfAnswer" class="tf-input" placeholder="collaborate; findings" dir="ltr">';}
+  else html='<div class="tf-passage">'+task.passage+'</div><p>'+task.q+'</p>'+tfOptions(task.opts);
+ }else if(tfSkill==='listening'){
+  html='<p class="tf-muted">استمع إلى المقطع مرة أو أكثر، ثم أجب عن السؤال.</p><button class="btn pri" onclick="tfPlayAudio()"><i class="ms">volume_up</i> تشغيل المقطع</button><p>'+task.q+'</p>'+tfOptions(task.opts);
+ }else if(tfSkill==='writing'){
+  if(task.kind==='build')html='<p>'+task.prompt+'</p><div class="tf-passage">'+task.words.join('  ·  ')+'</div><input id="tfAnswer" class="tf-input" dir="ltr" placeholder="Write the complete sentence">';
+  else html='<p>'+task.prompt+'</p><textarea id="tfAnswer" class="tf-textarea" placeholder="Write your response in English..."></textarea><p class="tf-muted" id="tfWordCount">0 words</p>';
+ }else{
+  html='<p>'+task.prompt+'</p><button class="btn" onclick="tfPlayAudio()"><i class="ms">volume_up</i> '+(task.kind==='repeat'?'استمع إلى الجملة':'اقرأ السؤال بصوت مسموع')+'</button><div class="tf-actions"><button class="btn pri" id="tfRecordBtn" onclick="tfRecord()"><i class="ms">mic</i> بدء التسجيل</button><span class="tf-muted" id="tfRecordStatus">التسجيل محلي في المتصفح</span></div><audio id="tfAudioPreview" controls hidden style="width:100%;margin-top:10px"></audio><p class="tf-muted">قيّم إجابتك ذاتياً: الوضوح، النطق، الطلاقة، اكتمال الفكرة، والقواعد.</p>';
+ }
+ $('tfTask').innerHTML=html;
+ if(tfSkill==='writing'&&task.kind!=='build')$('tfAnswer').addEventListener('input',()=>{$('tfWordCount').textContent=$('tfAnswer').value.trim().split(/\s+/).filter(Boolean).length+' words'});
+ if(tfSkill==='writing'||tfSkill==='reading')$('tfTask').insertAdjacentHTML('beforeend','<div class="tf-actions"><button class="btn pri" onclick="tfCheckAnswer()">تحقق من الإجابة</button></div>');
+ if(tfSkill==='speaking')$('tfProgress').style.width='25%';
+}
+function tfOptions(opts){return '<div class="tf-options">'+opts.map((o,i)=>'<label class="tf-option"><input type="radio" name="tfChoice" value="'+i+'"><span>'+o+'</span></label>').join('')+'</div>'}
+function tfPlayAudio(){if(!tfCurrent)return; if(!('speechSynthesis'in window)){tfFeedback('ميزة النطق غير مدعومة في هذا المتصفح.','');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(tfCurrent.audio||tfCurrent.prompt||'');u.lang='en-US';u.rate=.92;speechSynthesis.speak(u)}
+function tfFeedback(msg,kind){const f=$('tfFeedback');f.hidden=false;f.className='tf-feedback '+(kind||'');f.textContent=msg}
+function tfReward(){tfCompleted++;tfPoints+=10;localStorage.setItem('readdy_tf_done',tfCompleted);localStorage.setItem('readdy_tf_points',tfPoints);$('tfDone').textContent=tfCompleted;$('tfStreak').textContent=tfPoints;$('tfProgress').style.width='100%'}
+function tfCheckAnswer(){
+ const v=$('tfAnswer')?.value?.trim()||'';
+ if(!v){tfFeedback('أدخل إجابتك أولاً.');return}
+ if(tfSkill==='reading'&&tfCurrent.kind!=='complete'){
+  const chosen=document.querySelector('input[name="tfChoice"]:checked');if(!chosen){tfFeedback('اختر إجابة قبل التحقق.');return}
+  const ok=Number(chosen.value)===tfCurrent.a;tfFeedback(ok?'إجابة صحيحة. '+tfCurrent.hint:'ليست الإجابة الصحيحة. راجع النص ثم حاول مجدداً. التفسير: '+tfCurrent.hint,ok?'good':'');if(ok)tfReward();return;
+ }
+ if(tfSkill==='reading'&&tfCurrent.kind==='complete'){
+  const parts=v.toLowerCase().split(/[;,]/).map(x=>x.trim());const ok=parts[0]==='collaborate'&&parts[1]==='findings';tfFeedback(ok?'إجابتان صحيحتان. '+tfCurrent.hint:'راجع الصيغة النحوية للكلمتين. '+tfCurrent.hint,ok?'good':'');if(ok)tfReward();return;
+ }
+ if(tfSkill==='writing'&&tfCurrent.kind==='build'){
+  const norm=x=>x.toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim();const ok=norm(v)===norm(tfCurrent.answer);tfFeedback(ok?'ترتيب صحيح. '+tfCurrent.hint:'تحقق من ترتيب الفاعل والفعل والمفعول والظرف. '+tfCurrent.hint,ok?'good':'');if(ok)tfReward();return;
+ }
+ const words=v.split(/\s+/).filter(Boolean).length;tfFeedback('تم حفظ تقييمك محلياً. عدد الكلمات: '+words+'. راجع وضوح الفكرة، التنظيم، الدقة النحوية، المفردات، وتحقيق المطلوب. لا يصدر هذا التمرين درجة TOEFL رسمية. '+tfCurrent.hint,'');tfReward();
+}
+function tfShowHint(){if(tfCurrent)tfFeedback('استراتيجية: '+tfCurrent.hint)}
+async function tfRecord(){
+ if(tfRecorder&&tfRecorder.state==='recording'){tfStopRecording();return}
+ try{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw new Error('unsupported');
+  tfStream=await navigator.mediaDevices.getUserMedia({audio:true});const chunks=[];tfRecorder=new MediaRecorder(tfStream);
+  tfRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  tfRecorder.onstop=()=>{const blob=new Blob(chunks,{type:tfRecorder.mimeType||'audio/webm'}),url=URL.createObjectURL(blob);$('tfAudioPreview').src=url;$('tfAudioPreview').hidden=false;$('tfRecordStatus').textContent='اكتمل التسجيل — استمع إليه وقيّم أداءك.';tfStream?.getTracks().forEach(t=>t.stop());tfStream=null;$('tfRecordBtn').innerHTML='<i class="ms">mic</i> إعادة التسجيل'};
+  tfRecorder.start();$('tfRecordBtn').textContent='إيقاف التسجيل';$('tfRecordStatus').textContent='جارٍ التسجيل...';
+ }catch(e){tfFeedback(e.message==='unsupported'?'التسجيل الصوتي غير مدعوم في هذا المتصفح.':'تعذر الوصول إلى الميكروفون. تحقق من إذن الموقع أو استخدم HTTPS.')}
+}
+function tfStopRecording(){try{if(tfRecorder&&tfRecorder.state==='recording')tfRecorder.stop()}catch{}if(tfStream){tfStream.getTracks().forEach(t=>t.stop());tfStream=null}}
+document.querySelectorAll('[data-tf-tab]').forEach(b=>b.addEventListener('click',()=>tfSetSkill(b.dataset.tfTab)));
+$('toeflModal').addEventListener('click',e=>{if(e.target===$('toeflModal'))closeTOEFL()});
+/* Global fault containment: report recoverable failures without blanking the interface. */
+window.addEventListener('error',e=>{console.error('Readdy runtime error:',e.error||e.message);const t=$('toast');if(t){t.textContent='حدث خطأ غير متوقع. لم تُحذف بياناتك؛ أعد المحاولة.';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3600)}});
+window.addEventListener('unhandledrejection',e=>{console.error('Readdy async error:',e.reason);e.preventDefault();const t=$('toast');if(t){t.textContent='تعذر إكمال العملية. تحقق من الاتصال ثم أعد المحاولة.';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3600)}});
+
 </script>
+
+<section id="toeflModal" class="toefl-modal" role="dialog" aria-modal="true" aria-label="مركز التحضير لاختبار TOEFL">
+ <div class="tf-head"><button class="ibtn" onclick="closeTOEFL()" aria-label="إغلاق"><i class="ms">close</i></button><h2>TOEFL iBT · 2026</h2><span class="sp"></span><span class="tag ac">Study mode</span></div>
+ <div class="tf-wrap">
+  <div class="tf-intro"><div class="tf-task-title"><h3>مركز التحضير الأكاديمي</h3><span class="tag">نسخة الاختبار بعد 21 يناير 2026</span></div>
+   <p>تدريب عملي على أنواع المهام الحالية: إكمال الكلمات والقراءة اليومية والأكاديمية، الاستماع، بناء الجمل والبريد والنقاش الأكاديمي، ثم التحدث بالتكرار والمقابلة. التمارين هنا تدريبية وليست أسئلة ETS رسمية، ولا تمثل درجة اختبار معتمدة.</p>
+   <div class="tf-stats"><div class="tf-stat"><b>1–6</b><small>مقياس الدرجات الحالي</small></div><div class="tf-stat"><b>4</b><small>مهارات الاختبار</small></div><div class="tf-stat"><b id="tfDone">0</b><small>تمارين مكتملة</small></div><div class="tf-stat"><b id="tfStreak">0</b><small>نقاط تدريب</small></div></div>
+  </div>
+  <div class="tf-tabs" role="tablist">
+   <button class="tf-tab active" data-tf-tab="reading">Reading</button><button class="tf-tab" data-tf-tab="listening">Listening</button><button class="tf-tab" data-tf-tab="writing">Writing</button><button class="tf-tab" data-tf-tab="speaking">Speaking</button>
+  </div>
+  <div class="tf-card"><div class="tf-task-title"><h3 id="tfSkillTitle">Reading · Read in Daily Life</h3><span class="tag" id="tfTaskTag">Practice 01</span></div>
+   <div class="tf-progress"><i id="tfProgress"></i></div>
+   <div id="tfTask" style="margin-top:16px"></div>
+   <div class="tf-actions"><button class="btn pri" onclick="tfNewTask()">تمرين جديد <i class="ms">refresh</i></button><button class="btn" onclick="tfShowHint()">تلميح / استراتيجية</button></div>
+   <div id="tfFeedback" class="tf-feedback" hidden aria-live="polite"></div>
+  </div>
+  <div class="tf-muted">المحتوى التدريبي مبني على أنواع المهام المنشورة من ETS للاختبار المحدّث. القراءة والاستماع التكيفيان في الاختبار الحقيقي؛ هذه النسخة لا تحاكي خوارزمية التكيّف أو التصحيح الرسمي.</div>
+ </div>
+</section>
+
 </body>
 </html>
